@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.codeartisans</groupId>
+        <artifactId>codeartisans-parent</artifactId>
+        <version>2</version>
+    </parent>
+
+    <groupId>org.codeartisans.qipki</groupId>
+    <artifactId>qipki</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>${project.artifactId}</name>
+    <packaging>pom</packaging>
+
+    <scm>
+        <developerConnection>scm:git:ssh://gitosis@codebox.codeartisans.org/${project.artifactId}.git</developerConnection>
+    </scm>
+
+    <properties>
+        <qi4j.version>1.1-SNAPSHOT</qi4j.version>
+        <version.restlet>2.0-M6</version.restlet>
+        <!--version.restlet>2.0-RC1</version.restlet-->
+    </properties>
+
+    <modules>
+        <module>core</module>
+        <module>server</module>
+        <module>swing</module>
+        <module>main</module>
+        <module>dist</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.0.1</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.org</url>
+        </repository>
+        <repository>
+            <id>ops4j-repository</id>
+            <url>http://repository.ops4j.org/maven2</url>
+        </repository>
+        <repository>
+            <id>ops4j-snapshots-repository</id>
+            <url>http://repository.ops4j.org/mvn-snapshots</url>
+        </repository>
+        <repository>
+            <id>architect-rules-repo</id>
+            <name>architecture-rules repository</name>
+            <layout>default</layout>
+            <url>http://architecturerules.googlecode.com/svn/maven2/</url>
+            <releases>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <checksumPolicy>ignore</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+</project>
