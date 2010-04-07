@@ -10,12 +10,19 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-core</artifactId>
+    <artifactId>qipki-client</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
+
+        <!-- Consuming HTTP -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${version.httpclient}</version>
+        </dependency>
 
         <!-- Libraries -->
         <dependency>
@@ -27,13 +34,6 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk16</artifactId>
             <version>${version.bouncy}</version>
-        </dependency>
-
-        <!-- Qi4j runtime -->
-        <dependency>
-            <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-bootstrap</artifactId>
-            <version>${version.qi4j}</version>
         </dependency>
 
         <!-- Logging -->
