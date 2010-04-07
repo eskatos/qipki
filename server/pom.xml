@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
-            <version>4.2.0</version>
+            <version>${version.osgi}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -103,36 +103,36 @@
         <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>qi4j-core-runtime</artifactId>
-            <version>${qi4j.version}</version>
+            <version>${version.qi4j}</version>
         </dependency>
 
         <!-- Qi4j storage -->
         <dependency>
             <groupId>org.qi4j.library</groupId>
             <artifactId>qi4j-lib-rdf</artifactId>
-            <version>${qi4j.version}</version>
+            <version>${version.qi4j}</version>
         </dependency>
         <dependency>
             <groupId>org.qi4j.extension</groupId>
             <artifactId>qi4j-indexing-rdf</artifactId>
-            <version>${qi4j.version}</version>
+            <version>${version.qi4j}</version>
         </dependency>
 
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>1.5.8</version>
+            <version>${version.slf4j}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.5.8</version>
+            <version>${version.slf4j}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
-            <version>1.5.8</version>
+            <version>${version.slf4j}</version>
         </dependency>
 
         <!-- test -->
@@ -140,25 +140,19 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.seventytwomiles</groupId>
-            <artifactId>architecture-rules</artifactId>
-            <version>2.1.1</version>
+            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.1-alpha1</version>
+            <version>${version.httpclient}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>qi4j-core-testsupport</artifactId>
-            <version>${qi4j.version}</version>
+            <version>${version.qi4j}</version>
             <scope>test</scope>
         </dependency>
 
