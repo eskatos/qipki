@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import java.util.Collections;
-import org.codeartisans.qipki.ca.presentation.rest.values.RestListValue;
+import org.codeartisans.qipki.commons.rest.RestListValue;
 import org.restlet.data.Method;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;

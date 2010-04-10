@@ -19,13 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.fragments;
+package org.codeartisans.qipki.commons.rest;
 
-import org.qi4j.api.property.Property;
+import org.codeartisans.qipki.commons.fragments.HasURI;
+import org.qi4j.api.value.ValueComposite;
 
-public interface Nameable
+public interface RestValue
+        extends HasURI, ValueComposite
 {
-
-    Property<String> name();
-
 }

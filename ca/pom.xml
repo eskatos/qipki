@@ -39,6 +39,11 @@
             <artifactId>qipki-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- OSGI -->
         <dependency>

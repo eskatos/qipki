@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.commons.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptIO;
 import org.codeartisans.qipki.core.dci.InteractionContext;
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;

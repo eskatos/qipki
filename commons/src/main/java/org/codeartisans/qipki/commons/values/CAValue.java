@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.values;
+package org.codeartisans.qipki.commons.values;
 
-import org.codeartisans.qipki.core.fragments.Listable;
-import org.codeartisans.qipki.core.fragments.Nameable;
+import org.codeartisans.qipki.commons.rest.RestValue;
+import org.codeartisans.qipki.commons.fragments.Listable;
+import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.value.ValueComposite;
