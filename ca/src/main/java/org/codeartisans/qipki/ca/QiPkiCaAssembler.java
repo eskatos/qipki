@@ -59,9 +59,9 @@ import org.qi4j.library.http.UnitOfWorkFilterService;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
 /**
- * TODO Dépendre de qi4j-extension-rest et retirer le code dupliqué --> l'assembly y est pourrie il faudra la fixer avant tout
- * TODO Trouver où stocker les paramètres d'assembly (une mini qi4j app qui se passivate après ? -> permet les hot restarts)
- * TODO Ajouter un paramètre d'assembly pour activer ou pas les endpoints REST entity & finder
+ * TODO Dependre de qi4j-extension-rest et retirer le code duplique --> l'assembly y est pourrie il faudra la fixer avant tout
+ * TODO Trouver ou stocker les parametres d'assembly (une mini qi4j app qui se passivate apres ? -> permet les hot restarts)
+ * TODO Ajouter un parametre d'assembly pour activer ou pas les endpoints REST entity & finder
  */
 public class QiPkiCaAssembler
         implements ApplicationAssembler {
