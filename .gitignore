@@ -1,5 +1,6 @@
 core/target
 dist/target
 main/target
-server/target
+ca/target
 swing/target
+client/target

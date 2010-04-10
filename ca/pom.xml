@@ -10,7 +10,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-server</artifactId>
+    <artifactId>qipki-ca</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>bundle</packaging>

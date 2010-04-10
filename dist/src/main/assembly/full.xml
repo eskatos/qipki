@@ -17,7 +17,7 @@
             <useTransitiveDependencies>false</useTransitiveDependencies>
             <outputDirectory>bundles</outputDirectory>
             <includes>
-                <include>${groupId}:qipki-server</include>
+                <include>${groupId}:qipki-ca</include>
                 <include>${groupId}:qipki-swing</include>
             </includes>
         </dependencySet>

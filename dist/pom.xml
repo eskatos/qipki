@@ -17,23 +17,6 @@
 
     <build>
         <plugins>
-            <!--plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <id>unpack-bundles</id>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <phase>test-compile</phase>
-                        <configuration>
-                            <outputDirectory>target/bundles/full</outputDirectory>
-                            <includeArtifactIds>qipki-server,qipki-swing</includeArtifactIds>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.2-beta-5</version>
@@ -65,7 +48,7 @@
 
         <dependency>
             <groupId>org.codeartisans.qipki</groupId>
-            <artifactId>qipki-server</artifactId>
+            <artifactId>qipki-ca</artifactId>
             <version>${project.version}</version>
         </dependency>
 
