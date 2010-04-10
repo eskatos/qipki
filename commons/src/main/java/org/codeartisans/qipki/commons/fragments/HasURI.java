@@ -19,11 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.fragments;
+package org.codeartisans.qipki.commons.fragments;
 
-public interface Listable
+import org.qi4j.api.property.Property;
+
+public interface HasURI
 {
 
-    String listTitle();
+    Property<String> uri();
 
 }

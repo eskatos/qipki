@@ -23,9 +23,9 @@ package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.presentation.rest.values.RestListValue;
-import org.codeartisans.qipki.ca.presentation.rest.values.RestValuesFactory;
-import org.codeartisans.qipki.ca.presentation.rest.values.RestValue;
+import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.commons.rest.RestListValue;
+import org.codeartisans.qipki.commons.rest.RestValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.query.Query;
 

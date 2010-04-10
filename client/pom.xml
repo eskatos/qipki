@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Consuming HTTP -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

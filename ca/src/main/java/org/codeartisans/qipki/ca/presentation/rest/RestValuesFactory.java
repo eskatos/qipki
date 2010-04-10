@@ -19,11 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.values;
+package org.codeartisans.qipki.ca.presentation.rest;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.commons.rest.RestListValue;
+import org.codeartisans.qipki.commons.rest.RestValue;
+import org.codeartisans.qipki.commons.values.CAValue;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;

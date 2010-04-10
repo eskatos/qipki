@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons;
+package org.codeartisans.qipki.core.crypto;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -43,12 +43,12 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import org.codeartisans.qipki.core.QiPkiFailure;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Hours;
 import org.qi4j.api.composite.TransientComposite;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.library.shiro.crypto.CryptoException;
 
 @Mixins( CryptGEN.Mixin.class )
 public interface CryptGEN
@@ -87,7 +87,7 @@ public interface CryptGEN
                 keyGen.initialize( 2048 );
                 return keyGen.generateKeyPair();
             } catch ( GeneralSecurityException ex ) {
-                throw new CryptoException( "Unable to generate RSA KeyPair", ex );
+                throw new QiPkiFailure( "Unable to generate RSA KeyPair", ex );
             }
         }
 
@@ -107,7 +107,7 @@ public interface CryptGEN
                                                        keyPair.getPrivate(),
                                                        BouncyCastleProvider.PROVIDER_NAME );
             } catch ( GeneralSecurityException ex ) {
-                throw new CryptoException( "Unable to generate PKCS10", ex );
+                throw new QiPkiFailure( "Unable to generate PKCS10", ex );
             }
         }
 
@@ -147,9 +147,9 @@ public interface CryptGEN
                 return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );
 
             } catch ( GeneralSecurityException ex ) {
-                throw new CryptoException( "Unable to generate X509Certificate", ex );
+                throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
             } catch ( IllegalStateException ex ) {
-                throw new CryptoException( "Unable to generate X509Certificate", ex );
+                throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
             }
         }
 

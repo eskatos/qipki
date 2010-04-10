@@ -36,6 +36,7 @@
 
     <modules>
         <module>core</module>
+        <module>commons</module>
         <module>client</module>
         <module>ca</module>
         <module>swing</module>

@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.presentation.rest.values.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.qi4j.api.injection.scope.Service;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;

@@ -19,11 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.values;
+package org.codeartisans.qipki.commons.rest;
 
+import org.codeartisans.qipki.commons.rest.RestValue;
+import java.util.List;
+import org.qi4j.api.common.UseDefaults;
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface RestValue
-        extends HasURI, ValueComposite
+public interface RestListValue
+        extends RestValue, ValueComposite
 {
+
+    @UseDefaults
+    Property<Integer> start();
+
+    @UseDefaults
+    Property<List<RestValue>> items();
+
 }
