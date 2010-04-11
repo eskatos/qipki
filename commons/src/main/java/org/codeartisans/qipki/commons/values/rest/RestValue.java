@@ -19,18 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.codeartisans.qipki.commons.fragments.HasURI;
+import org.qi4j.api.value.ValueComposite;
 
-public class AbstractCreationalResource
+public interface RestValue
+        extends HasURI, ValueComposite
 {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger( AbstractCreationalResource.class );
-
-    private AbstractCreationalResource()
-    {
-    }
-
 }

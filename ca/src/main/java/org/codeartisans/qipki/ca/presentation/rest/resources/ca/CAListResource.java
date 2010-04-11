@@ -19,33 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
-import java.util.Collections;
+import org.codeartisans.qipki.ca.application.contexts.CAListContext;
+import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import org.qi4j.api.query.Query;
 
-public abstract class AbstractListResource
-        extends AbstractEntityResource
+public class CAListResource
+        extends AbstractListResource
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf )
+    @Service
+    private RestValuesFactory valuesFactory;
+
+    public CAListResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
     }
 
     @Override
-    protected final Representation representJson()
+    protected RestListValue list( int start )
     {
-        int start = 0;
-        return new StringRepresentation( list( start ).toJSON() );
-    }
+        // Context
+        CAListContext caListCtx = newRootContext().caListContext();
 
-    protected abstract RestListValue list( int start );
+        // Interaction
+        Query<CA> caList = caListCtx.list( start );
+
+        // Representation
+        Iterable<RestValue> values = valuesFactory.asValues( getReference(), caList );
+        return valuesFactory.newListRepresentationValue( getReference(), start, values );
+    }
 
 }

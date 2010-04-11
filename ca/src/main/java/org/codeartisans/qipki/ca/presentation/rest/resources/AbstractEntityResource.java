@@ -23,27 +23,28 @@ package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import java.io.IOException;
 import java.util.Arrays;
+import org.qi4j.api.object.ObjectBuilderFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public abstract class AbstractResource
-        extends ServerResource
+public abstract class AbstractEntityResource
+        extends AbstractResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( AbstractResource.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( AbstractEntityResource.class );
+    public static final String PARAM_IDENTITY = "identity";
 
-    protected AbstractResource()
+    protected AbstractEntityResource( ObjectBuilderFactory obf )
     {
-        super();
+        super( obf );
         getVariants().addAll( Arrays.asList(
                 new Variant( MediaType.TEXT_HTML ),
                 new Variant( MediaType.APPLICATION_JSON ) ) );
@@ -95,19 +96,6 @@ public abstract class AbstractResource
         } catch ( IOException ex ) {
             throw new ResourceException( ex );
         }
-    }
-
-    protected final <T> T ensureRequestAttribute( String key, Class<? extends T> type, Status ifAbsent )
-    {
-
-        Object obj = getRequest().getAttributes().get( key );
-        if ( obj == null ) {
-            LOGGER.debug( "{}: Required request attribute {} is null", ifAbsent.getCode(), key );
-            throw new ResourceException( ifAbsent );
-        }
-        LOGGER.trace( "Request attribute {} is not null", key );
-        return type.cast( obj );
-
     }
 
 }

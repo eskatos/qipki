@@ -19,51 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca;
+package org.codeartisans.qipki.ca.domain.keystore;
 
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.ca.CAFactory;
-import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.Activatable;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.query.QueryBuilder;
+import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-@Mixins( QiPkiCaFixtures.Mixin.class )
-public interface QiPkiCaFixtures
-        extends Activatable, ServiceComposite
+@Mixins( KeyStoreRepository.Mixin.class )
+public interface KeyStoreRepository
+        extends ServiceComposite
 {
 
-    public static final String ROOT_CA_NAME = "root";
-    public static final String USERS_CA_NAME = "users";
-    public static final String SERVICES_CA_NAME = "services";
+    KeyStoreEntity findByIdentity( String identity );
+
+    Query<KeyStoreEntity> findAllPaginated( int firstResult, int maxResults );
 
     abstract class Mixin
-            implements QiPkiCaFixtures
+            implements KeyStoreRepository
     {
 
         @Structure
         private UnitOfWorkFactory uowf;
-        @Service
-        private CAFactory caFactory;
+        @Structure
+        private QueryBuilderFactory qbf;
 
         @Override
-        public void activate()
-                throws Exception
+        public KeyStoreEntity findByIdentity( String identity )
         {
-            UnitOfWork uow = uowf.newUnitOfWork();
-            CA root = caFactory.create( ROOT_CA_NAME );
-            CA users = caFactory.create( USERS_CA_NAME );
-            CA services = caFactory.create( SERVICES_CA_NAME );
-            uow.complete();
+            return uowf.currentUnitOfWork().get( KeyStoreEntity.class, identity );
         }
 
         @Override
-        public void passivate()
-                throws Exception
+        public Query<KeyStoreEntity> findAllPaginated( int firstResult, int maxResults )
         {
+            UnitOfWork uow = uowf.currentUnitOfWork();
+            QueryBuilder<KeyStoreEntity> builder = qbf.newQueryBuilder( KeyStoreEntity.class );
+            Query<KeyStoreEntity> query = builder.newQuery( uow ).
+                    firstResult( firstResult ).
+                    maxResults( maxResults );
+            return query;
         }
 
     }

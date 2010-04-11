@@ -22,30 +22,24 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import java.util.Collections;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.restlet.data.Method;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import org.restlet.resource.ResourceException;
 
-public abstract class AbstractListResource
-        extends AbstractEntityResource
+public abstract class AbstractFactoryResource
+        extends AbstractResource
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf )
+    public AbstractFactoryResource( ObjectBuilderFactory obf )
     {
         super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
+        setAllowedMethods( Collections.singleton( Method.POST ) );
+        setNegotiated( false );
     }
 
     @Override
-    protected final Representation representJson()
-    {
-        int start = 0;
-        return new StringRepresentation( list( start ).toJSON() );
-    }
-
-    protected abstract RestListValue list( int start );
+    protected abstract Representation post( Representation entity )
+            throws ResourceException;
 
 }

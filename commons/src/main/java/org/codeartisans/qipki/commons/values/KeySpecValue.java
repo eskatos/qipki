@@ -21,31 +21,15 @@
  */
 package org.codeartisans.qipki.commons.values;
 
-import org.codeartisans.qipki.commons.rest.RestValue;
-import org.codeartisans.qipki.commons.fragments.Listable;
-import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.qi4j.api.injection.scope.This;
-import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-@Mixins( CAValue.Mixin.class )
-public interface CAValue
-        extends RestValue, Nameable, Listable, ValueComposite
+public interface KeySpecValue
+        extends ValueComposite
 {
 
-    abstract class Mixin
-            implements CAValue
-    {
+    Property<String> algorithm();
 
-        @This
-        private CAValue ca;
-
-        @Override
-        public String listTitle()
-        {
-            return ca.name().get();
-        }
-
-    }
+    Property<Integer> length();
 
 }

@@ -22,24 +22,30 @@
 package org.codeartisans.qipki.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.CAListContext;
+import org.codeartisans.qipki.ca.application.contexts.KeyStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
+import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
 import org.codeartisans.qipki.ca.domain.ca.CAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.domain.crypto.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
 import org.codeartisans.qipki.ca.presentation.rest.RestletFinder;
 import org.codeartisans.qipki.ca.presentation.rest.RestletServletServerService;
-import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.RAResource;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
-import org.codeartisans.qipki.ca.presentation.rest.resources.CAsResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.CAResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.PKCS10SignerResource;
-import org.codeartisans.qipki.commons.values.CAValue;
-import org.codeartisans.qipki.commons.rest.RestListValue;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreResource;
+import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
 import org.qi4j.api.common.Visibility;
@@ -64,167 +70,193 @@ import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
  * TODO Ajouter un parametre d'assembly pour activer ou pas les endpoints REST entity & finder
  */
 public class QiPkiCaAssembler
-        implements ApplicationAssembler {
+        implements ApplicationAssembler
+{
 
     @Override
-    public final ApplicationAssembly assemble(ApplicationAssemblyFactory applicationFactory)
-            throws AssemblyException {
+    public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
+            throws AssemblyException
+    {
 
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
 
-        app.setName("QiPKIServer");
-        app.setVersion("1.0.0-SNAPSHOT");
+        app.setName( "QiPKIServer" );
+        app.setVersion( "1.0.0-SNAPSHOT" );
 
-        LayerAssembly presentation = app.layerAssembly("presentation");
+        LayerAssembly presentation = app.layerAssembly( "presentation" );
         {
+            assembleDevTestModule( presentation.moduleAssembly( "test" ) );
+
             new Assembler() // REST
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addObjects(RestletApplication.class).
-                            visibleIn(Visibility.layer);
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addObjects( RestletApplication.class ).
+                            visibleIn( Visibility.layer );
 
-                    module.addObjects(RestletFinder.class,
-                            ApiRootResource.class,
-                            RAResource.class,
-                            CAsResource.class,
-                            CAResource.class,
-                            PKCS10SignerResource.class).
-                            visibleIn(Visibility.module);
+                    module.addObjects( RestletFinder.class,
+                                       ApiRootResource.class,
+                                       KeyStoreListResource.class,
+                                       KeyStoreFactoryResource.class,
+                                       KeyStoreResource.class,
+                                       CAListResource.class,
+                                       CAFactoryResource.class,
+                                       CAResource.class,
+                                       PKCS10SignerResource.class ).
+                            visibleIn( Visibility.module );
 
-                    module.addValues(RestListValue.class,
-                            CAValue.class);
+                    new QiPkiCommonsValuesAssembler( Visibility.layer ).assemble( module );
 
-                    module.addServices(RestValuesFactory.class).
-                            visibleIn(Visibility.module);
+                    module.addServices( RestValuesFactory.class ).
+                            visibleIn( Visibility.module );
 
-                    addServlets(serve("/api/*").with(RestletServletServerService.class)).
-                            to(module);
+                    addServlets( serve( "/api/*" ).with( RestletServletServerService.class ) ).
+                            to( module );
 
-                    addFilters(filter("/api/*").through(UnitOfWorkFilterService.class).
-                            on(REQUEST)).
-                            to(module);
+                    addFilters( filter( "/api/*" ).through( UnitOfWorkFilterService.class ).
+                            on( REQUEST ) ).
+                            to( module );
                 }
-            }.assemble(presentation.moduleAssembly("rest"));
+
+            }.assemble( presentation.moduleAssembly( "rest" ) );
 
             new Assembler() // Http Service
             {
 
                 // NOTE Servlets are added with layer visibility
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addServices(HttpService.class).
-                            visibleIn(Visibility.module).
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addServices( HttpService.class ).
+                            visibleIn( Visibility.module ).
                             instantiateOnStartup();
 
-                    addServlets(serve("/").with(RootServletService.class)).
-                            to(module);
+                    addServlets( serve( "/" ).with( RootServletService.class ) ).
+                            to( module );
                 }
-            }.assemble(presentation.moduleAssembly("http"));
+
+            }.assemble( presentation.moduleAssembly( "http" ) );
 
             new Assembler() // UI Configuration
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addServices(MemoryEntityStoreService.class).
-                            visibleIn(Visibility.layer);
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addServices( MemoryEntityStoreService.class ).
+                            visibleIn( Visibility.layer );
 
-                    module.addEntities(JettyConfiguration.class).
-                            visibleIn(Visibility.layer);
+                    module.addEntities( JettyConfiguration.class ).
+                            visibleIn( Visibility.layer );
                 }
-            }.assemble(presentation.moduleAssembly("config"));
+
+            }.assemble( presentation.moduleAssembly( "config" ) );
 
         }
 
-        LayerAssembly application = app.layerAssembly("application");
+        LayerAssembly application = app.layerAssembly( "application" );
         {
-            new Assembler() {
-
-                @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addObjects(RootContext.class,
-                            CAContext.class).
-                            visibleIn(Visibility.application);
-                }
-            }.assemble(application.moduleAssembly("dci"));
-        }
-
-        LayerAssembly domain = app.layerAssembly("domain");
-        {
-            new Assembler() // RequestAuthority
+            new Assembler()
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addObjects( RootContext.class,
+                                       KeyStoreListContext.class,
+                                       CAListContext.class,
+                                       CAContext.class ).
+                            visibleIn( Visibility.application );
                 }
-            }.assemble(domain.moduleAssembly("ra"));
 
+            }.assemble( application.moduleAssembly( "dci" ) );
+        }
+
+        LayerAssembly domain = app.layerAssembly( "domain" );
+        {
             new Assembler() // CertificateAuthority
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addEntities(CAEntity.class);
-                    module.addServices(CARepository.class,
-                            CAFactory.class).
-                            visibleIn(Visibility.application);
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addEntities( CAEntity.class );
+                    module.addServices( CARepository.class,
+                                        CAFactory.class ).
+                            visibleIn( Visibility.application );
                 }
-            }.assemble(domain.moduleAssembly("ca"));
 
-            new Assembler() // Base crypto domain
+            }.assemble( domain.moduleAssembly( "ca" ) );
+
+            new Assembler() // CryptoStore / KeyStore ???
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addEntities(KeyStoreEntity.class).
-                            visibleIn(Visibility.layer);
-                    module.addTransients(CryptIO.class,
-                            CryptGEN.class).
-                            visibleIn(Visibility.application);
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addEntities( KeyStoreEntity.class );
+                    module.addServices( KeyStoreRepository.class,
+                                        KeyStoreFactory.class ).
+                            visibleIn( Visibility.application );
                 }
-            }.assemble(domain.moduleAssembly("crypto"));
+
+            }.assemble( domain.moduleAssembly( "cryptostore" ) );
         }
 
-        LayerAssembly infrastructure = app.layerAssembly("infrastructure");
+        LayerAssembly crypto = app.layerAssembly( "crypto" );
+        {
+            new Assembler() // Crypto
+            {
+
+                @Override
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addTransients( CryptIO.class,
+                                          CryptGEN.class ).
+                            visibleIn( Visibility.application );
+                }
+
+            }.assemble( crypto.moduleAssembly( "crypto" ) );
+
+        }
+        LayerAssembly infrastructure = app.layerAssembly( "infrastructure" );
         {
             new Assembler() // Store
             {
 
                 @Override
-                public void assemble(ModuleAssembly module)
-                        throws AssemblyException {
-                    module.addServices(MemoryEntityStoreService.class,
-                            UuidIdentityGeneratorService.class).
-                            visibleIn(Visibility.application);
-                    new RdfMemoryStoreAssembler(null, Visibility.application, Visibility.application).assemble(module);
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    module.addServices( MemoryEntityStoreService.class,
+                                        UuidIdentityGeneratorService.class ).
+                            visibleIn( Visibility.application );
+                    new RdfMemoryStoreAssembler( null, Visibility.application, Visibility.application ).assemble( module );
                 }
-            }.assemble(infrastructure.moduleAssembly("store"));
+
+            }.assemble( infrastructure.moduleAssembly( "store" ) );
         }
 
-        LayerAssembly development = app.layerAssembly("development");
-        {
-            assembleDevTestModule(development.moduleAssembly("test"));
-        }
-
-        presentation.uses(application);
-        presentation.uses(domain);
-        application.uses(domain);
-        development.uses(domain);
-        domain.uses(infrastructure);
+        presentation.uses( application, crypto );
+        presentation.uses( domain ); // TODO remove
+        application.uses( domain );
+        domain.uses( crypto, infrastructure );
 
         return app;
     }
 
-    protected void assembleDevTestModule(ModuleAssembly test)
-            throws AssemblyException {
+    protected void assembleDevTestModule( ModuleAssembly devTestModule )
+            throws AssemblyException
+    {
     }
+
 }

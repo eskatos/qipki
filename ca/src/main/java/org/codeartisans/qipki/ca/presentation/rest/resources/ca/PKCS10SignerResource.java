@@ -19,19 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.Collections;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.codeartisans.qipki.core.dci.InteractionContext;
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
+import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
 import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -45,42 +49,45 @@ public class PKCS10SignerResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PKCS10SignerResource.class );
-    private final CryptIO cryptIO;
-    private final RootContext rootCtx;
+    @Structure
+    private TransientBuilderFactory tbf;
 
-    public PKCS10SignerResource( @Structure TransientBuilderFactory tbf,
-                                 @Structure ObjectBuilderFactory obf )
+    public PKCS10SignerResource( @Structure ObjectBuilderFactory obf )
     {
-        super();
+        super( obf );
+        setAllowedMethods( Collections.singleton( Method.POST ) );
+        setNegotiated( false );
         getVariants().add( new Variant( MediaType.TEXT_PLAIN ) );
-        this.cryptIO = tbf.newTransient( CryptIO.class );
-        this.rootCtx = obf.newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
     }
 
     @Override
-    protected Representation post( Representation entity, Variant variant )
+    protected Representation post( Representation entity )
             throws ResourceException
     {
         try {
 
-            String identity = ensureRequestAttribute( CAResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            // Data
+            String identity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            CryptIO cryptIO = tbf.newTransient( CryptIO.class );
+            PKCS10CertificationRequest pkcs10 = cryptIO.readPKCS10PEM( entity.getReader() );
+
+            // Context
+            RootContext rootCtx = newRootContext();
             CAContext caCtx = rootCtx.caContext( identity );
-            X509Certificate cert = caCtx.sign( cryptIO.readPKCS10PEM( entity.getReader() ) );
+
+            // Interaction
+            X509Certificate cert = caCtx.sign( pkcs10 );
+
+            // Representation
             return new StringRepresentation( cryptIO.asPEM( cert ), MediaType.TEXT_PLAIN );
 
         } catch ( NoSuchEntityException ex ) {
-            LOGGER.trace( "404: {}", ex.getMessage() );
+            LOGGER.trace( "404: {}", ex.getMessage(), ex );
             throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND );
         } catch ( IOException ex ) {
-            LOGGER.trace( "500: {}", ex.getMessage(), ex );
+            LOGGER.warn( "500: {}", ex.getMessage(), ex );
             throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted entity", ex );
         }
-    }
-
-    @Override
-    protected Representation representJson()
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
     }
 
 }
