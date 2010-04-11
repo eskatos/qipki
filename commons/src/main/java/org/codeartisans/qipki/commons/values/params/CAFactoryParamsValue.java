@@ -19,12 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.rest;
+package org.codeartisans.qipki.commons.values.params;
 
-import org.codeartisans.qipki.commons.fragments.HasURI;
+import org.codeartisans.qipki.commons.constraints.X500Name;
+import org.codeartisans.qipki.commons.values.KeySpecValue;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface RestValue
-        extends HasURI, ValueComposite
+public interface CAFactoryParamsValue
+        extends ValueComposite
 {
+
+    @X500Name
+    Property<String> distinguishedName();
+
+    Property<KeySpecValue> keySpec();
+
+    @Optional
+    Property<String> parentCaIdentity();
+
 }

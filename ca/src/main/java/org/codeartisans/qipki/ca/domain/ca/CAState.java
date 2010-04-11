@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.domain.ca;
 
 import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.codeartisans.qipki.ca.domain.crypto.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.association.Association;

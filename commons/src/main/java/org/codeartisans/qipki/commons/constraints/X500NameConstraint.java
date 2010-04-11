@@ -19,33 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.constraints;
 
-import java.util.Collections;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import javax.security.auth.x500.X500Principal;
+import org.qi4j.api.constraint.Constraint;
+import org.qi4j.library.constraints.annotation.Contains;
 
-public abstract class AbstractListResource
-        extends AbstractEntityResource
+public class X500NameConstraint
+        implements Constraint<Contains, String>
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf )
-    {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
-    }
-
     @Override
-    protected final Representation representJson()
+    public boolean isValid( Contains annotation, String value )
     {
-        int start = 0;
-        return new StringRepresentation( list( start ).toJSON() );
+        try {
+            X500Principal x500Principal = new X500Principal( value );
+            return true;
+        } catch ( IllegalArgumentException ex ) {
+            return false;
+        }
     }
-
-    protected abstract RestListValue list( int start );
 
 }

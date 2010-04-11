@@ -19,31 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.fragments;
 
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
-import org.codeartisans.qipki.commons.rest.RestListValue;
-import org.codeartisans.qipki.commons.rest.RestValue;
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.query.Query;
+import static org.codeartisans.qipki.commons.constants.KeyStoreType.*;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.property.Property;
+import org.qi4j.library.constraints.annotation.OneOf;
 
-public class CAsResource
-        extends AbstractListResource
+public interface KeyStoreState
+        extends Nameable
 {
 
-    @Service
-    private RestValuesFactory valuesFactory;
-    @Service
-    private CARepository caRepos;
+    @OneOf( { JCEKS, JKS, PKCS11, PKCS12 } )
+    Property<String> storeType();
 
-    @Override
-    protected RestListValue list( int start )
-    {
-        Query<CA> caList = caRepos.findAllPaginated( start, 25 );
-        Iterable<RestValue> values = valuesFactory.asValues( getReference(), caList );
-        return valuesFactory.newListRepresentationValue( getReference(), start, values );
-    }
+    @Optional
+    Property<char[]> password();
 
 }

@@ -19,33 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.values.rest;
 
-import java.util.Collections;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.fragments.Listable;
+import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.injection.scope.This;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.value.ValueComposite;
 
-public abstract class AbstractListResource
-        extends AbstractEntityResource
+@Mixins( CAValue.Mixin.class )
+public interface CAValue
+        extends RestValue, Nameable, Listable, ValueComposite
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf )
+    abstract class Mixin
+            implements CAValue
     {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
-    }
 
-    @Override
-    protected final Representation representJson()
-    {
-        int start = 0;
-        return new StringRepresentation( list( start ).toJSON() );
-    }
+        @This
+        private CAValue ca;
 
-    protected abstract RestListValue list( int start );
+        @Override
+        public String listTitle()
+        {
+            return ca.name().get();
+        }
+
+    }
 
 }

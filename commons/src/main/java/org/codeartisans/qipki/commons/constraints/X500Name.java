@@ -19,17 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.crypto;
+package org.codeartisans.qipki.commons.constraints;
 
-import org.qi4j.api.property.Property;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import org.qi4j.api.constraint.ConstraintDeclaration;
+import org.qi4j.library.constraints.annotation.NotEmpty;
 
-public interface KeyStoreState
+@ConstraintDeclaration
+@Retention( RetentionPolicy.RUNTIME )
+@NotEmpty
+public @interface X500Name
 {
-
-    Property<KeyStoreTypes> storeType();
-
-    Property<char[]> password();
-
-    Property<String> path();
-
 }

@@ -19,22 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.rest;
+package org.codeartisans.qipki.ca.application.contexts;
 
-import org.codeartisans.qipki.commons.rest.RestValue;
-import java.util.List;
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
+import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
+import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.query.Query;
 
-public interface RestListValue
-        extends RestValue, ValueComposite
+public class KeyStoreListContext
+        extends Context
 {
 
-    @UseDefaults
-    Property<Integer> start();
+    public Query<KeyStoreEntity> list( int start )
+    {
+        return context.role( KeyStoreRepository.class ).findAllPaginated( start, 25 );
+    }
 
-    @UseDefaults
-    Property<List<RestValue>> items();
+    public KeyStoreEntity createKeyStore( KeyStoreFactoryParamsValue params )
+    {
+        return context.role( KeyStoreFactory.class ).create( params );
+    }
 
 }

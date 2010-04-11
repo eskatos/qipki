@@ -19,23 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.crypto;
+package org.codeartisans.qipki.commons.constants;
 
-import java.security.KeyPair;
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
-
-public interface KeyStoreBehavior
+public interface KeyStoreType
 {
 
-    KeyStore asKeyStore();
-
-    String storeCertificate( X509Certificate certificate );
-
-    void storeCertificate( String slotId, X509Certificate certificate );
-
-    String storeKeyPair( KeyPair keyPair );
-
-    void storeKeyPair( String slotId, KeyPair keyPair );
-
+    String JCEKS = "JCEKS";
+    String JKS = "JKS";
+    String PKCS12 = "PKCS12";
+    String PKCS11 = "PKCS11";
 }

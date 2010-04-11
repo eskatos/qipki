@@ -19,22 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
+import java.util.List;
+import org.qi4j.api.common.UseDefaults;
+import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
 
-public class RAResource
-        extends ServerResource
+public interface RestListValue
+        extends RestValue, ValueComposite
 {
 
-    @Override
-    protected Representation get()
-            throws ResourceException
-    {
-        return new StringRepresentation( "RA Resource" );
-    }
+    @UseDefaults
+    Property<Integer> start();
+
+    @UseDefaults
+    Property<List<RestValue>> items();
 
 }

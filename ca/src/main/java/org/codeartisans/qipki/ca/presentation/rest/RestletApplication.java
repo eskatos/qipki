@@ -21,11 +21,15 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest;
 
+import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.CAsResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.CAResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.PKCS10SignerResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.RAResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreResource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.Uses;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -64,10 +68,15 @@ public class RestletApplication
         Router router = new Router( getContext() );
 
         router.attach( "/", createFinder( ApiRootResource.class ) );
-        router.attach( "/ra", createFinder( RAResource.class ) );
-        router.attach( "/ca", createFinder( CAsResource.class ) );
-        router.attach( "/ca/{" + CAResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
-        router.attach( "/ca/{" + CAResource.PARAM_IDENTITY + "}/pkcs10signer", createFinder( PKCS10SignerResource.class ) );
+
+        router.attach( "/keystore", createFinder( KeyStoreListResource.class ) );
+        router.attach( "/keystore/factory", createFinder( KeyStoreFactoryResource.class ) );
+        router.attach( "/keystore/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( KeyStoreResource.class ) );
+
+        router.attach( "/ca", createFinder( CAListResource.class ) );
+        router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
+        router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
+        router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}/pkcs10signer", createFinder( PKCS10SignerResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );
     }

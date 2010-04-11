@@ -19,33 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.ca.domain.keystore;
 
-import java.util.Collections;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import org.codeartisans.qipki.commons.fragments.KeyStoreState;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.property.Property;
 
-public abstract class AbstractListResource
-        extends AbstractEntityResource
+@Mixins( KeyStoreMixin.class )
+public interface KeyStoreEntity
+        extends KeyStoreState, KeyStoreBehavior, EntityComposite
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf )
-    {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
-    }
-
-    @Override
-    protected final Representation representJson()
-    {
-        int start = 0;
-        return new StringRepresentation( list( start ).toJSON() );
-    }
-
-    protected abstract RestListValue list( int start );
+    Property<String> path();
 
 }

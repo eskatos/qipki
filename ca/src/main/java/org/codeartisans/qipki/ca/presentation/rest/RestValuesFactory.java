@@ -24,9 +24,12 @@ package org.codeartisans.qipki.ca.presentation.rest;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.commons.rest.RestListValue;
-import org.codeartisans.qipki.commons.rest.RestValue;
-import org.codeartisans.qipki.commons.values.CAValue;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.commons.values.rest.RestListValue;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.codeartisans.qipki.commons.values.rest.KeyStoreValue;
+import org.qi4j.api.entity.Identity;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -42,6 +45,8 @@ public interface RestValuesFactory
 {
 
     CAValue ca( Reference parentRef, CA ca );
+
+    KeyStoreValue keyStore( Reference parentRef, KeyStoreEntity ks );
 
     Iterable<RestValue> asValues( Reference parentRef, Iterable objects );
 
@@ -60,9 +65,21 @@ public interface RestValuesFactory
         {
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
             CAValue caValue = caValueBuilder.prototype();
-            caValue.uri().set( new StringBuilder( parentRef.toString() ).append( "/" ).append( ca.identity().get() ).toString() );
+            caValue.uri().set( appendIdentity( parentRef, ca ) );
             caValue.name().set( ca.name().get() );
             return caValueBuilder.newInstance();
+        }
+
+        @Override
+        public KeyStoreValue keyStore( Reference parentRef, KeyStoreEntity ks )
+        {
+            ValueBuilder<KeyStoreValue> ksValueBuilder = vbf.newValueBuilder( KeyStoreValue.class );
+            KeyStoreValue ksValue = ksValueBuilder.prototype();
+            ksValue.name().set( ks.name().get() );
+            ksValue.uri().set( appendIdentity( parentRef, ks ) );
+            ksValue.storeType().set( ks.storeType().get() );
+            ksValue.password().set( ks.password().get() );
+            return ksValueBuilder.newInstance();
         }
 
         @Override
@@ -74,7 +91,13 @@ public interface RestValuesFactory
                     set.add( ca( parentRef, ( CA ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a CA", ex );
+                    LOGGER.trace( "Object is not a CA: {}", ex.getMessage() );
+                }
+                try {
+                    set.add( keyStore( parentRef, ( KeyStoreEntity ) eachObj ) );
+                    continue;
+                } catch ( ClassCastException ex ) {
+                    LOGGER.trace( "Object is not a KeyStore: {}", ex.getMessage() );
                 }
                 throw new IllegalArgumentException( "Entity is of unsupported Type: " + eachObj );
             }
@@ -92,6 +115,11 @@ public interface RestValuesFactory
                 listRepresentation.items().get().add( eachItem );
             }
             return builder.newInstance();
+        }
+
+        private String appendIdentity( Reference parentRef, Identity identity )
+        {
+            return new StringBuilder( parentRef.toString() ).append( "/" ).append( identity.identity().get() ).toString();
         }
 
     }

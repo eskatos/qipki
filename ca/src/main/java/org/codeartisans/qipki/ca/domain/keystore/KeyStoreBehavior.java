@@ -19,51 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.crypto;
+package org.codeartisans.qipki.ca.domain.keystore;
 
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import org.qi4j.api.injection.scope.This;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class KeyStoreMixin
-        implements KeyStoreBehavior
+public interface KeyStoreBehavior
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( KeyStoreMixin.class );
-    @This
-    private KeyStoreState state;
+    KeyStore loadKeyStore();
 
-    @Override
-    public KeyStore asKeyStore()
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
+    String storeCertificate( X509Certificate certificate );
 
-    @Override
-    public String storeCertificate( X509Certificate certificate )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
+    void storeCertificate( String slotId, X509Certificate certificate );
 
-    @Override
-    public void storeCertificate( String slotId, X509Certificate certificate )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
+    String storeKeyPair( KeyPair keyPair );
 
-    @Override
-    public String storeKeyPair( KeyPair keyPair )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    @Override
-    public void storeKeyPair( String slotId, KeyPair keyPair )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
+    void storeKeyPair( String slotId, KeyPair keyPair );
 
 }

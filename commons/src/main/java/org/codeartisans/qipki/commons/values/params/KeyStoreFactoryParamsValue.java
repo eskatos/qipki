@@ -19,10 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.crypto;
+package org.codeartisans.qipki.commons.values.params;
 
-public enum KeyStoreTypes
+import org.codeartisans.qipki.commons.fragments.KeyStoreState;
+import org.qi4j.api.value.ValueComposite;
+
+public interface KeyStoreFactoryParamsValue
+        extends KeyStoreState, ValueComposite
 {
-
-    jks, jceks, pkcs12, pkcs11
 }

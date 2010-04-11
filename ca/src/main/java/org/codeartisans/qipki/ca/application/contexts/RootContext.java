@@ -21,25 +21,46 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
+import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
 import org.codeartisans.qipki.ca.application.roles.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
 import org.qi4j.api.injection.scope.Service;
 
+/**
+ * TODO Use ServiceReference for lazy service instanciation ?
+ */
 public class RootContext
         extends Context
 {
 
     @Service
     private CARepository caRepos;
+    @Service
+    private KeyStoreRepository ksRepos;
+    @Service
+    private KeyStoreFactory ksFactory;
+
+    public KeyStoreListContext ksListContext()
+    {
+        context.playRoles( ksRepos, KeyStoreRepository.class );
+        context.playRoles( ksFactory, KeyStoreFactory.class );
+        return subContext( KeyStoreListContext.class );
+    }
+
+    public CAListContext caListContext()
+    {
+        context.playRoles( caRepos, CARepository.class );
+        return subContext( CAListContext.class );
+    }
 
     public CAContext caContext( String identity )
     {
         CA ca = caRepos.findByIdentity( identity );
         context.playRoles( ca, PKCS10Signer.class );
         return subContext( CAContext.class );
-
     }
 
 }

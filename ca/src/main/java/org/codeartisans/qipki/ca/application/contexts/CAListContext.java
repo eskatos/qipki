@@ -19,13 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.crypto;
+package org.codeartisans.qipki.ca.application.contexts;
 
-import org.qi4j.api.entity.EntityComposite;
-import org.qi4j.api.mixin.Mixins;
+import org.codeartisans.qipki.ca.application.roles.CAFactory;
+import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.query.Query;
 
-@Mixins( KeyStoreMixin.class )
-public interface KeyStoreEntity
-        extends KeyStoreState, KeyStoreBehavior, EntityComposite
+public class CAListContext
+        extends Context
 {
+
+    public Query<CA> list( int start )
+    {
+        return context.role( CARepository.class ).findAllPaginated( start, 25 );
+    }
+
+    public CA createCA( CAFactoryParamsValue params )
+    {
+        return context.role( CAFactory.class ).create( params );
+    }
+
 }
