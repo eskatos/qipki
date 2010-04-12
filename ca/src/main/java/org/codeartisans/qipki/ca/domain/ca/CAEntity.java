@@ -21,11 +21,17 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.mixin.Mixins;
 
 @Mixins( CAMixin.class )
 public interface CAEntity
-        extends CA, EntityComposite
+        extends Nameable, CABehavior, EntityComposite
 {
+
+    Association<CryptoStoreEntity> cryptoStore();
+
 }

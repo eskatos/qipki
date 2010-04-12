@@ -35,9 +35,9 @@ public interface CARepository
         extends ServiceComposite
 {
 
-    CA findByIdentity( String identity );
+    CAEntity findByIdentity( String identity );
 
-    Query<CA> findAllPaginated( int firstResult, int maxResults );
+    Query<CAEntity> findAllPaginated( int firstResult, int maxResults );
 
     abstract class Mixin
             implements CARepository
@@ -49,17 +49,17 @@ public interface CARepository
         private QueryBuilderFactory qbf;
 
         @Override
-        public CA findByIdentity( String identity )
+        public CAEntity findByIdentity( String identity )
         {
-            return uowf.currentUnitOfWork().get( CA.class, identity );
+            return uowf.currentUnitOfWork().get( CAEntity.class, identity );
         }
 
         @Override
-        public Query<CA> findAllPaginated( int firstResult, int maxResults )
+        public Query<CAEntity> findAllPaginated( int firstResult, int maxResults )
         {
             UnitOfWork uow = uowf.currentUnitOfWork();
-            QueryBuilder<CA> builder = qbf.newQueryBuilder( CA.class );
-            Query<CA> query = builder.newQuery( uow ).
+            QueryBuilder<CAEntity> builder = qbf.newQueryBuilder( CAEntity.class );
+            Query<CAEntity> query = builder.newQuery( uow ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

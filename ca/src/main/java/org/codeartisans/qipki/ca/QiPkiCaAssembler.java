@@ -23,14 +23,15 @@ package org.codeartisans.qipki.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.CAListContext;
-import org.codeartisans.qipki.ca.application.contexts.KeyStoreListContext;
+import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
+import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
 import org.codeartisans.qipki.ca.domain.ca.CAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
@@ -42,9 +43,9 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResourc
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreFactoryResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreListResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
@@ -64,11 +65,6 @@ import static org.qi4j.library.http.Servlets.*;
 import org.qi4j.library.http.UnitOfWorkFilterService;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
-/**
- * TODO Dependre de qi4j-extension-rest et retirer le code duplique --> l'assembly y est pourrie il faudra la fixer avant tout
- * TODO Trouver ou stocker les parametres d'assembly (une mini qi4j app qui se passivate apres ? -> permet les hot restarts)
- * TODO Ajouter un parametre d'assembly pour activer ou pas les endpoints REST entity & finder
- */
 public class QiPkiCaAssembler
         implements ApplicationAssembler
 {
@@ -81,7 +77,7 @@ public class QiPkiCaAssembler
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
 
         app.setName( "QiPKIServer" );
-        app.setVersion( "1.0.0-SNAPSHOT" );
+        app.setVersion( "1.0-SNAPSHOT" );
 
         LayerAssembly presentation = app.layerAssembly( "presentation" );
         {
@@ -99,9 +95,9 @@ public class QiPkiCaAssembler
 
                     module.addObjects( RestletFinder.class,
                                        ApiRootResource.class,
-                                       KeyStoreListResource.class,
-                                       KeyStoreFactoryResource.class,
-                                       KeyStoreResource.class,
+                                       CryptoStoreListResource.class,
+                                       CryptoStoreFactoryResource.class,
+                                       CryptoStoreResource.class,
                                        CAListResource.class,
                                        CAFactoryResource.class,
                                        CAResource.class,
@@ -169,7 +165,8 @@ public class QiPkiCaAssembler
                         throws AssemblyException
                 {
                     module.addObjects( RootContext.class,
-                                       KeyStoreListContext.class,
+                                       CryptoStoreListContext.class,
+                                       CryptoStoreContext.class,
                                        CAListContext.class,
                                        CAContext.class ).
                             visibleIn( Visibility.application );
@@ -195,16 +192,16 @@ public class QiPkiCaAssembler
 
             }.assemble( domain.moduleAssembly( "ca" ) );
 
-            new Assembler() // CryptoStore / KeyStore ???
+            new Assembler() // CryptoStore
             {
 
                 @Override
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( KeyStoreEntity.class );
-                    module.addServices( KeyStoreRepository.class,
-                                        KeyStoreFactory.class ).
+                    module.addEntities( CryptoStoreEntity.class );
+                    module.addServices( CryptoStoreRepository.class,
+                                        CryptoStoreFactory.class ).
                             visibleIn( Visibility.application );
                 }
 
@@ -247,9 +244,10 @@ public class QiPkiCaAssembler
         }
 
         presentation.uses( application, crypto );
-        presentation.uses( domain ); // TODO remove
         application.uses( domain );
         domain.uses( crypto, infrastructure );
+
+        presentation.uses( domain ); // TODO remove .. needed by fixtures .. need to rewrite fixtures to use DCI application code directly
 
         return app;
     }

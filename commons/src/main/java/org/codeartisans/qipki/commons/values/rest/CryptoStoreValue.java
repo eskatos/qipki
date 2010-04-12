@@ -19,23 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.entity.Identity;
-import org.qi4j.api.entity.association.Association;
-import org.qi4j.library.shiro.domain.x509.X509;
+import org.codeartisans.qipki.commons.fragments.CryptoStoreState;
+import org.qi4j.api.value.ValueComposite;
 
-public interface CAState
-        extends Nameable, Identity
+public interface CryptoStoreValue
+        extends RestValue, CryptoStoreState, ValueComposite
 {
-
-    @Optional
-    Association<X509> x509();
-
-    @Optional
-    Association<KeyStoreEntity> keyStore();
-
 }

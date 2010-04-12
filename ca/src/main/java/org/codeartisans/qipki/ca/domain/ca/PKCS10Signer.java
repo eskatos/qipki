@@ -19,21 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.fragments;
+package org.codeartisans.qipki.ca.domain.ca;
 
-import static org.codeartisans.qipki.commons.constants.KeyStoreType.*;
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.property.Property;
-import org.qi4j.library.constraints.annotation.OneOf;
+import java.security.cert.X509Certificate;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 
-public interface KeyStoreState
-        extends Nameable
+public interface PKCS10Signer
 {
 
-    @OneOf( { JCEKS, JKS, PKCS11, PKCS12 } )
-    Property<String> storeType();
-
-    @Optional
-    Property<char[]> password();
+    X509Certificate sign( PKCS10CertificationRequest pkcs10 );
 
 }

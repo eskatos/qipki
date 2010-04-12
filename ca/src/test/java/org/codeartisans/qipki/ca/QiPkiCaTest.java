@@ -64,7 +64,7 @@ public class QiPkiCaTest
         String ca = httpClient.execute( httpHost, get, strResponseHandler );
         LOGGER.debug( "FirstCA.html:\n{}", ca );
 
-        KeyPair keyPair = cryptgen.generateRSAKeyPair( 2048 );
+        KeyPair keyPair = cryptgen.generateRSAKeyPair( 512 );
         PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10(
                 new X500Principal( "CN=qipki" ), keyPair,
                 new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );

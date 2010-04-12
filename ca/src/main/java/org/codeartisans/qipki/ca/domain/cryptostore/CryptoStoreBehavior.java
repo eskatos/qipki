@@ -19,18 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.roles;
+package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
-import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.ServiceComposite;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 
-@Mixins( KeyStoreFactoryMixin.class )
-public interface KeyStoreFactory
-        extends ServiceComposite
+public interface CryptoStoreBehavior
 {
 
-    KeyStoreEntity create( KeyStoreFactoryParamsValue params );
+    KeyStore loadKeyStore();
+
+    String storeCertificate( X509Certificate certificate );
+
+    void storeCertificate( String slotId, X509Certificate certificate );
+
+    String storeKeyPair( KeyPair keyPair );
+
+    void storeKeyPair( String slotId, KeyPair keyPair );
 
 }

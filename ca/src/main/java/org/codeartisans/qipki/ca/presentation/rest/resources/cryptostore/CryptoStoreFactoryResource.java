@@ -19,37 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
+package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
 import java.io.IOException;
-import org.codeartisans.qipki.ca.application.contexts.CAListContext;
-import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CAFactoryResource
+public class CryptoStoreFactoryResource
         extends AbstractFactoryResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CAFactoryResource.class );
-    @Service
-    private RestValuesFactory restValuesFactory;
+    private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreFactoryResource.class );
     @Structure
     private ValueBuilderFactory vbf;
+    @Service
+    private RestValuesFactory restValuesFactory;
 
-    public CAFactoryResource( @Structure ObjectBuilderFactory obf )
+    public CryptoStoreFactoryResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
@@ -61,18 +61,18 @@ public class CAFactoryResource
         try {
 
             // Data
-            CAFactoryParamsValue data = vbf.newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
+            CryptoStoreFactoryParamsValue data = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
 
             // Context
-            CAListContext caListCtx = newRootContext().caListContext();
+            CryptoStoreListContext csListCtx = newRootContext().ksListContext();
 
             // Interaction
-            CAEntity ca = caListCtx.createCA( data );
+            CryptoStoreEntity cs = csListCtx.createCryptoStore( data );
 
             // Representation
-            getResponse().setStatus( Status.SUCCESS_CREATED );
-            return new StringRepresentation( restValuesFactory.ca( getReference(), ca ).uri().get(),
-                                             MediaType.TEXT_URI_LIST );
+            CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef().addSegment( "cryptostore" ), cs );
+            getResponse().redirectSeeOther( csValue.uri().get() );
+            return new EmptyRepresentation();
 
         } catch ( IOException ex ) {
             LOGGER.trace( "500: {}", ex.getMessage(), ex );

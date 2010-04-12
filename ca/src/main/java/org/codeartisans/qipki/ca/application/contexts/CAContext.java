@@ -23,12 +23,18 @@ package org.codeartisans.qipki.ca.application.contexts;
 
 import java.security.cert.X509Certificate;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.ca.application.roles.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
 
 public class CAContext
         extends Context
 {
+
+    public CAEntity caEntity()
+    {
+        return context.role( CAEntity.class );
+    }
 
     public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
     {

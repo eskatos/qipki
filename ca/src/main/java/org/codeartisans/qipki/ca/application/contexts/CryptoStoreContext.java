@@ -21,25 +21,16 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
-import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
-import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.core.dci.Context;
-import org.qi4j.api.query.Query;
 
-public class KeyStoreListContext
+public class CryptoStoreContext
         extends Context
 {
 
-    public Query<KeyStoreEntity> list( int start )
+    public CryptoStoreEntity cryptoStore()
     {
-        return context.role( KeyStoreRepository.class ).findAllPaginated( start, 25 );
-    }
-
-    public KeyStoreEntity createKeyStore( KeyStoreFactoryParamsValue params )
-    {
-        return context.role( KeyStoreFactory.class ).create( params );
+        return context.role( CryptoStoreEntity.class );
     }
 
 }

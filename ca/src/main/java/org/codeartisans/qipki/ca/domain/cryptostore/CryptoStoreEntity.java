@@ -19,12 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.commons.fragments.KeyStoreState;
-import org.qi4j.api.value.ValueComposite;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.property.Property;
 
-public interface KeyStoreValue
-        extends RestValue, KeyStoreState, ValueComposite
+@Mixins( CryptoStoreMixin.class )
+public interface CryptoStoreEntity
+        extends CryptoStore, EntityComposite
 {
+
+    Property<String> payload();
+
 }

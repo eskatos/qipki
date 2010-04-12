@@ -21,12 +21,14 @@
  */
 package org.codeartisans.qipki.ca.utils;
 
-import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
-import org.codeartisans.qipki.ca.domain.ca.CA;
+import java.security.KeyStore;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.KeySpecValue;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -41,10 +43,13 @@ public interface QiPkiCaFixtures
         extends Activatable, ServiceComposite
 {
 
-    String TEST_KEYSTORE_NAME = "Test KeyStore";
-    String ROOT_CA_NAME = "CN=root-test,OU=qipki,O=codeartisans";
-    String USERS_CA_NAME = "CN=users-test,OU=qipki,O=codeartisans";
-    String SERVICES_CA_NAME = "CN=services-test,OU=qipki,O=codeartisans";
+    String KEYSTORE_NAME = "Test KeyStore";
+    String ROOT_CA_NAME = "RootCA";
+    String ROOT_CA_DN = "CN=root-test,OU=qipki,O=codeartisans";
+    String USERS_CA_NAME = "UsersCA";
+    String USERS_CA_DN = "CN=users-test,OU=qipki,O=codeartisans";
+    String SERVICES_CA_NAME = "ServicesCA";
+    String SERVICES_CA_DN = "CN=services-test,OU=qipki,O=codeartisans";
 
     abstract class Mixin
             implements QiPkiCaFixtures
@@ -53,29 +58,42 @@ public interface QiPkiCaFixtures
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CAFactory caFactory;
-        @Service
         private ParamsFactory paramsFactory;
         @Service
-        private KeyStoreFactory ksFactory;
+        private CAFactory caFactory;
+        @Service
+        private CryptoStoreFactory csFactory;
 
         @Override
         public void activate()
                 throws Exception
         {
             UnitOfWork uow = uowf.newUnitOfWork();
-            // Create a test keystore
-            KeyStoreFactoryParamsValue ksParams = paramsFactory.createKeyStoreFactoryParams( TEST_KEYSTORE_NAME,
-                                                                                             KeyStoreType.JKS,
-                                                                                             "changeit".toCharArray() );
-            KeyStoreEntity ks = ksFactory.create( ksParams );
 
-            // Create some CAs
-            CA root = caFactory.create( ROOT_CA_NAME );
-            CA users = caFactory.create( USERS_CA_NAME );
-            CA services = caFactory.create( SERVICES_CA_NAME );
+            // Create a test keystore
+            CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
+            CryptoStoreEntity cryptoStore = csFactory.create( csParams );
+            // KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
+            
+            // Create some test CAs
+            KeySpecValue keySpec = paramsFactory.createKeySpec( "SHA256WITHRSA", 512 );
+            CAEntity rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
+            CAEntity usersCa = caFactory.createRootCA( USERS_CA_NAME, USERS_CA_DN, keySpec, cryptoStore );
+            CAEntity servicesCa = caFactory.createRootCA( SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, cryptoStore );
+
+            String rootId = rootCa.identity().get();
 
             uow.complete();
+
+            
+
+            uow = uowf.newUnitOfWork();
+
+            cryptoStore = uow.get( cryptoStore );
+            rootCa = uow.get( CAEntity.class, rootId );
+
+            uow.complete();
+
         }
 
         @Override

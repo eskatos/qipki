@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.keystore;
+package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
-import org.codeartisans.qipki.ca.application.contexts.KeyStoreListContext;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
@@ -32,14 +32,14 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 
-public class KeyStoreListResource
+public class CryptoStoreListResource
         extends AbstractListResource
 {
 
     @Service
     private RestValuesFactory restValuesFactory;
 
-    public KeyStoreListResource( @Structure ObjectBuilderFactory obf )
+    public CryptoStoreListResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
@@ -48,13 +48,13 @@ public class KeyStoreListResource
     protected RestListValue list( int start )
     {
         // Context
-        KeyStoreListContext ksListCtx = newRootContext().ksListContext();
+        CryptoStoreListContext csListCtx = newRootContext().ksListContext();
 
         // Interaction
-        Query<KeyStoreEntity> ksList = ksListCtx.list( start );
+        Query<CryptoStoreEntity> csList = csListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getReference(), ksList );
+        Iterable<RestValue> values = restValuesFactory.asValues( getReference(), csList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 

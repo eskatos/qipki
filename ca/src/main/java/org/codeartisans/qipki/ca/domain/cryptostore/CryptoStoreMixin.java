@@ -19,28 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.keystore;
+package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.commons.fragments.KeyStoreState;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import org.bouncycastle.util.encoders.Base64;
+import org.codeartisans.qipki.core.QiPkiFailure;
 import org.qi4j.api.injection.scope.This;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class KeyStoreMixin
-        implements KeyStoreBehavior
+public class CryptoStoreMixin
+        implements CryptoStoreBehavior
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( KeyStoreMixin.class );
     @This
-    private KeyStoreState state;
+    private CryptoStoreEntity state;
 
     @Override
     public KeyStore loadKeyStore()
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        try {
+            KeyStore keystore = KeyStore.getInstance( state.storeType().get() );
+            keystore.load( new ByteArrayInputStream( Base64.decode( state.payload().get().getBytes( "UTF-8" ) ) ), state.password().get() );
+            return keystore;
+
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to load " + state.storeType().get() + " CryptoStore", ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to load " + state.storeType().get() + " CryptoStore", ex );
+        }
     }
 
     @Override

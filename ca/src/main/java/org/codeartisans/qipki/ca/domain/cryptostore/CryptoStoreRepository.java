@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.keystore;
+package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -30,17 +30,17 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-@Mixins( KeyStoreRepository.Mixin.class )
-public interface KeyStoreRepository
+@Mixins( CryptoStoreRepository.Mixin.class )
+public interface CryptoStoreRepository
         extends ServiceComposite
 {
 
-    KeyStoreEntity findByIdentity( String identity );
+    CryptoStoreEntity findByIdentity( String identity );
 
-    Query<KeyStoreEntity> findAllPaginated( int firstResult, int maxResults );
+    Query<CryptoStoreEntity> findAllPaginated( int firstResult, int maxResults );
 
     abstract class Mixin
-            implements KeyStoreRepository
+            implements CryptoStoreRepository
     {
 
         @Structure
@@ -49,17 +49,17 @@ public interface KeyStoreRepository
         private QueryBuilderFactory qbf;
 
         @Override
-        public KeyStoreEntity findByIdentity( String identity )
+        public CryptoStoreEntity findByIdentity( String identity )
         {
-            return uowf.currentUnitOfWork().get( KeyStoreEntity.class, identity );
+            return uowf.currentUnitOfWork().get( CryptoStoreEntity.class, identity );
         }
 
         @Override
-        public Query<KeyStoreEntity> findAllPaginated( int firstResult, int maxResults )
+        public Query<CryptoStoreEntity> findAllPaginated( int firstResult, int maxResults )
         {
             UnitOfWork uow = uowf.currentUnitOfWork();
-            QueryBuilder<KeyStoreEntity> builder = qbf.newQueryBuilder( KeyStoreEntity.class );
-            Query<KeyStoreEntity> query = builder.newQuery( uow ).
+            QueryBuilder<CryptoStoreEntity> builder = qbf.newQueryBuilder( CryptoStoreEntity.class );
+            Query<CryptoStoreEntity> query = builder.newQuery( uow ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

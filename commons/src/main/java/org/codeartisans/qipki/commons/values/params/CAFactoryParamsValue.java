@@ -22,14 +22,17 @@
 package org.codeartisans.qipki.commons.values.params;
 
 import org.codeartisans.qipki.commons.constraints.X500Name;
+import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface CAFactoryParamsValue
-        extends ValueComposite
+        extends Nameable, ValueComposite
 {
+
+    Property<String> keyStoreIdentity();
 
     @X500Name
     Property<String> distinguishedName();

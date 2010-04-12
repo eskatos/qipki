@@ -23,12 +23,12 @@ package org.codeartisans.qipki.ca.presentation.rest;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreEntity;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
-import org.codeartisans.qipki.commons.values.rest.KeyStoreValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -44,9 +44,9 @@ public interface RestValuesFactory
         extends ServiceComposite
 {
 
-    CAValue ca( Reference parentRef, CA ca );
+    CAValue ca( Reference parentRef, CAEntity ca );
 
-    KeyStoreValue keyStore( Reference parentRef, KeyStoreEntity ks );
+    CryptoStoreValue cryptoStore( Reference parentRef, CryptoStoreEntity ks );
 
     Iterable<RestValue> asValues( Reference parentRef, Iterable objects );
 
@@ -61,20 +61,21 @@ public interface RestValuesFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public CAValue ca( Reference parentRef, CA ca )
+        public CAValue ca( Reference parentRef, CAEntity ca )
         {
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
             CAValue caValue = caValueBuilder.prototype();
             caValue.uri().set( appendIdentity( parentRef, ca ) );
             caValue.name().set( ca.name().get() );
+            caValue.keystoreIdentity().set( ca.cryptoStore().get().identity().get() );
             return caValueBuilder.newInstance();
         }
 
         @Override
-        public KeyStoreValue keyStore( Reference parentRef, KeyStoreEntity ks )
+        public CryptoStoreValue cryptoStore( Reference parentRef, CryptoStoreEntity ks )
         {
-            ValueBuilder<KeyStoreValue> ksValueBuilder = vbf.newValueBuilder( KeyStoreValue.class );
-            KeyStoreValue ksValue = ksValueBuilder.prototype();
+            ValueBuilder<CryptoStoreValue> ksValueBuilder = vbf.newValueBuilder( CryptoStoreValue.class );
+            CryptoStoreValue ksValue = ksValueBuilder.prototype();
             ksValue.name().set( ks.name().get() );
             ksValue.uri().set( appendIdentity( parentRef, ks ) );
             ksValue.storeType().set( ks.storeType().get() );
@@ -88,16 +89,16 @@ public interface RestValuesFactory
             Set<RestValue> set = new LinkedHashSet<RestValue>();
             for ( Object eachObj : objects ) {
                 try {
-                    set.add( ca( parentRef, ( CA ) eachObj ) );
+                    set.add( ca( parentRef, ( CAEntity ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a CA: {}", ex.getMessage() );
+                    LOGGER.trace( "Object is not a CAEntity: {}", ex.getMessage() );
                 }
                 try {
-                    set.add( keyStore( parentRef, ( KeyStoreEntity ) eachObj ) );
+                    set.add( cryptoStore( parentRef, ( CryptoStoreEntity ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a KeyStore: {}", ex.getMessage() );
+                    LOGGER.trace( "Object is not a CryptoStoreEntity: {}", ex.getMessage() );
                 }
                 throw new IllegalArgumentException( "Entity is of unsupported Type: " + eachObj );
             }

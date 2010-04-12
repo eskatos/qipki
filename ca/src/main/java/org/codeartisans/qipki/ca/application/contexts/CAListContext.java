@@ -21,25 +21,42 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
-import org.codeartisans.qipki.ca.application.roles.CAFactory;
-import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.query.Query;
+import org.qi4j.api.unitofwork.NoSuchEntityException;
 
 public class CAListContext
         extends Context
 {
 
-    public Query<CA> list( int start )
+    public Query<CAEntity> list( int start )
     {
         return context.role( CARepository.class ).findAllPaginated( start, 25 );
     }
 
-    public CA createCA( CAFactoryParamsValue params )
+    public CAEntity createCA( CAFactoryParamsValue params )
     {
-        return context.role( CAFactory.class ).create( params );
+        CryptoStoreEntity keyStore = context.role( CryptoStoreRepository.class ).findByIdentity( params.keyStoreIdentity().get() );
+        CAEntity parentCA = fetchParentCA( params.parentCaIdentity().get() );
+        if ( parentCA == null ) {
+            return context.role( CAFactory.class ).createRootCA( params.name().get(), params.distinguishedName().get(), params.keySpec().get(), keyStore );
+        }
+        return context.role( CAFactory.class ).createSubCA( parentCA, params.name().get(), params.distinguishedName().get(), params.keySpec().get(), keyStore );
+    }
+
+    private CAEntity fetchParentCA( String identity )
+    {
+        try {
+            return context.role( CARepository.class ).findByIdentity( identity );
+        } catch ( NoSuchEntityException ex ) {
+            return null;
+        }
     }
 
 }
