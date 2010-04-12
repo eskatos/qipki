@@ -19,23 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.keystore;
+package org.codeartisans.qipki.ca.application.contexts;
 
-import java.security.KeyPair;
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.query.Query;
 
-public interface KeyStoreBehavior
+public class CryptoStoreListContext
+        extends Context
 {
 
-    KeyStore loadKeyStore();
+    public Query<CryptoStoreEntity> list( int start )
+    {
+        return context.role( CryptoStoreRepository.class ).findAllPaginated( start, 25 );
+    }
 
-    String storeCertificate( X509Certificate certificate );
-
-    void storeCertificate( String slotId, X509Certificate certificate );
-
-    String storeKeyPair( KeyPair keyPair );
-
-    void storeKeyPair( String slotId, KeyPair keyPair );
+    public CryptoStoreEntity createCryptoStore( CryptoStoreFactoryParamsValue params )
+    {
+        return context.role( CryptoStoreFactory.class ).create( params );
+    }
 
 }

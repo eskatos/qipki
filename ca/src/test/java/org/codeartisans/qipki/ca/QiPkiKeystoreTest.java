@@ -27,8 +27,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.codeartisans.qipki.ca.utils.QiPkiCaFixtures;
 import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.KeyStoreValue;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
 import static org.junit.Assert.*;
@@ -46,7 +46,7 @@ public class QiPkiKeystoreTest
     public void testListKeystores()
             throws IOException
     {
-        HttpGet get = new HttpGet( "/api/keystore" );
+        HttpGet get = new HttpGet( "/api/cryptostore" );
         get.addHeader( "Accept", "application/json" );
 
         String jsonKsList = httpClient.execute( httpHost, get, strResponseHandler );
@@ -59,9 +59,9 @@ public class QiPkiKeystoreTest
 
         RestValue value = ksList.items().get().get( 0 );
 
-        KeyStoreValue ks = ( KeyStoreValue ) value;
+        CryptoStoreValue ks = ( CryptoStoreValue ) value;
 
-        assertEquals( QiPkiCaFixtures.TEST_KEYSTORE_NAME, ks.name().get() );
+        assertEquals( QiPkiCaFixtures.KEYSTORE_NAME, ks.name().get() );
 
     }
 
@@ -69,12 +69,12 @@ public class QiPkiKeystoreTest
     public void testCreateKeystore()
             throws IOException
     {
-        HttpPost post = new HttpPost( "/api/keystore/factory" );
+        HttpPost post = new HttpPost( "/api/cryptostore/factory" );
         post.addHeader( "Accept", "application/json" );
 
         String ksName = "Another KeyStore";
 
-        KeyStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
+        CryptoStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
                                                                                        KeyStoreType.JKS,
                                                                                        "changeit".toCharArray() );
 
@@ -83,7 +83,7 @@ public class QiPkiKeystoreTest
         // POST / Redirect 303 / GET Pattern
         String ksJson = httpClient.execute( httpHost, post, strResponseHandler );
 
-        KeyStoreValue ks = valueBuilderFactory.newValueFromJSON( KeyStoreValue.class, ksJson );
+        CryptoStoreValue ks = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, ksJson );
 
         assertEquals( ksName, ks.name().get() );
 

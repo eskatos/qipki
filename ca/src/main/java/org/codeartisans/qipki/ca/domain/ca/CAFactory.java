@@ -21,11 +21,29 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.util.encoders.Base64;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.commons.values.KeySpecValue;
+import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.crypto.CryptGEN;
+import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.joda.time.Duration;
+import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( CAFactory.Mixin.class )
@@ -33,7 +51,9 @@ public interface CAFactory
         extends ServiceComposite
 {
 
-    CA create( String name );
+    CAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
+
+    CAEntity createSubCA( CAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
 
     abstract class Mixin
             implements CAFactory
@@ -41,12 +61,54 @@ public interface CAFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Structure
+        private TransientBuilderFactory tbf;
 
         @Override
-        public CA create( String name )
+        public CAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
         {
-            UnitOfWork uow = uowf.currentUnitOfWork();
-            EntityBuilder<CAEntity> caBuilder = uow.newEntityBuilder( CAEntity.class );
+            try {
+                CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
+                CryptIO cryptio = tbf.newTransient( CryptIO.class );
+                KeyPair keyPair = cryptgen.generateRSAKeyPair( keySpec.length().get() );
+                X500Principal dn = new X500Principal( distinguishedName );
+                PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10( dn, keyPair );
+                X509Certificate cert = cryptgen.generateX509Certificate( keyPair.getPrivate(),
+                                                                         dn,
+                                                                         BigInteger.probablePrime( 120, new SecureRandom() ),
+                                                                         pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                         pkcs10.getPublicKey(),
+                                                                         Duration.standardDays( 3650 ),
+                                                                         cryptio.extractRequestedExtensions( pkcs10 ) );
+
+                EntityBuilder<CAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( CAEntity.class );
+                CAEntity ca = caBuilder.instance();
+
+                KeyStore ks = keyStore.loadKeyStore();
+                ks.setEntry( ca.identity().get(),
+                             new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
+                             new KeyStore.PasswordProtection( keyStore.password().get() ) );
+
+                ByteArrayOutputStream boas = new ByteArrayOutputStream();
+                ks.store( boas, keyStore.password().get() );
+                boas.flush();
+                keyStore.payload().set( new String( Base64.encode( boas.toByteArray() ), "UTF-8" ) );
+
+                ca.name().set( name );
+                ca.cryptoStore().set( keyStore );
+
+                return caBuilder.newInstance();
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
+            }
+        }
+
+        @Override
+        public CAEntity createSubCA( CAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
+        {
+            EntityBuilder<CAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( CAEntity.class );
             CAEntity ca = caBuilder.instance();
             ca.name().set( name );
             return caBuilder.newInstance();

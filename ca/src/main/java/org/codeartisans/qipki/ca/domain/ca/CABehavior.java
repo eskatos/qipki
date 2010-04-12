@@ -21,9 +21,8 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.ca.application.roles.PKCS10Signer;
 
 public interface CABehavior
         extends PKCS10Signer
@@ -31,6 +30,6 @@ public interface CABehavior
 
     X509Certificate certificate();
 
-    KeyPair keyPair();
+    PrivateKey privateKey();
 
 }

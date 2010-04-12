@@ -19,14 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.roles;
+package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.fragments.CryptoStoreState;
 
-public interface CAFactory
+public interface CryptoStore
+        extends CryptoStoreState, CryptoStoreBehavior
 {
-
-    CA create( CAFactoryParamsValue params );
-
 }

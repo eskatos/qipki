@@ -19,9 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.commons.values.params;
 
-public interface CA
-        extends CAState, CABehavior
+import org.codeartisans.qipki.commons.fragments.CryptoStoreState;
+import org.qi4j.api.value.ValueComposite;
+
+public interface CryptoStoreFactoryParamsValue
+        extends CryptoStoreState, ValueComposite
 {
 }

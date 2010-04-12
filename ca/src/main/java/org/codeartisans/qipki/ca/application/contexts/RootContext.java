@@ -21,12 +21,14 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
-import org.codeartisans.qipki.ca.application.roles.KeyStoreFactory;
-import org.codeartisans.qipki.ca.application.roles.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
+import org.codeartisans.qipki.ca.domain.ca.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
-import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.domain.keystore.KeyStoreRepository;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.qi4j.api.injection.scope.Service;
 
 /**
@@ -37,28 +39,40 @@ public class RootContext
 {
 
     @Service
+    private CryptoStoreRepository ksRepos;
+    @Service
+    private CryptoStoreFactory ksFactory;
+    @Service
     private CARepository caRepos;
     @Service
-    private KeyStoreRepository ksRepos;
-    @Service
-    private KeyStoreFactory ksFactory;
+    private CAFactory caFactory;
 
-    public KeyStoreListContext ksListContext()
+    public CryptoStoreListContext ksListContext()
     {
-        context.playRoles( ksRepos, KeyStoreRepository.class );
-        context.playRoles( ksFactory, KeyStoreFactory.class );
-        return subContext( KeyStoreListContext.class );
+        context.playRoles( ksRepos, CryptoStoreRepository.class );
+        context.playRoles( ksFactory, CryptoStoreFactory.class );
+        return subContext( CryptoStoreListContext.class );
+    }
+
+    public CryptoStoreContext ksContext( String identity )
+    {
+        CryptoStoreEntity ks = ksRepos.findByIdentity( identity );
+        context.playRoles( ks, CryptoStoreEntity.class );
+        return subContext( CryptoStoreContext.class );
     }
 
     public CAListContext caListContext()
     {
         context.playRoles( caRepos, CARepository.class );
+        context.playRoles( caFactory, CAFactory.class );
+        context.playRoles( ksRepos, CryptoStoreRepository.class );
         return subContext( CAListContext.class );
     }
 
     public CAContext caContext( String identity )
     {
-        CA ca = caRepos.findByIdentity( identity );
+        CAEntity ca = caRepos.findByIdentity( identity );
+        context.playRoles( ca, CAEntity.class );
         context.playRoles( ca, PKCS10Signer.class );
         return subContext( CAContext.class );
     }

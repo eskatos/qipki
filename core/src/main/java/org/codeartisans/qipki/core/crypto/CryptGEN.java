@@ -47,6 +47,7 @@ import org.codeartisans.qipki.core.QiPkiFailure;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Hours;
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.composite.TransientComposite;
 import org.qi4j.api.mixin.Mixins;
 
@@ -73,7 +74,7 @@ public interface CryptGEN
                                              X509Name subjectDN,
                                              PublicKey publicKey,
                                              Duration validity,
-                                             X509Extensions x509Extensions );
+                                             @Optional X509Extensions x509Extensions );
 
     abstract class Mixin
             implements CryptGEN
@@ -84,7 +85,7 @@ public interface CryptGEN
         {
             try {
                 KeyPairGenerator keyGen = KeyPairGenerator.getInstance( "RSA", BouncyCastleProvider.PROVIDER_NAME );
-                keyGen.initialize( 2048 );
+                keyGen.initialize( size );
                 return keyGen.generateKeyPair();
             } catch ( GeneralSecurityException ex ) {
                 throw new QiPkiFailure( "Unable to generate RSA KeyPair", ex );
@@ -94,7 +95,15 @@ public interface CryptGEN
         @Override
         public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
         {
-            return generatePKCS10( distinguishedName, keyPair, null );
+            try {
+                return new PKCS10CertificationRequest( CryptGEN.AsymAlgs.SHA256WITHRSA,
+                                                       distinguishedName, keyPair.getPublic(),
+                                                       null,
+                                                       keyPair.getPrivate(),
+                                                       BouncyCastleProvider.PROVIDER_NAME );
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to generate PKCS10", ex );
+            }
         }
 
         @Override
@@ -130,18 +139,20 @@ public interface CryptGEN
                 x509v3Generator.setSubjectDN( subjectDN );
                 x509v3Generator.setIssuerDN( issuerDN );
                 x509v3Generator.setNotBefore( now.minus( Hours.ONE ).toDate() );
-                x509v3Generator.setNotAfter( now.plusYears( 1 ).toDate() );
+                x509v3Generator.setNotAfter( now.plus( validity ).minus( Hours.ONE ).toDate() );
                 x509v3Generator.setSignatureAlgorithm( CryptGEN.AsymAlgs.SHA256WITHRSA );
                 x509v3Generator.setPublicKey( publicKey );
 
-                // Adding requested X509Extensions
-                Enumeration oids = x509Extensions.oids();
-                while ( oids.hasMoreElements() ) {
-                    DERObjectIdentifier eachOid = ( DERObjectIdentifier ) oids.nextElement();
-                    X509Extension eachExtension = x509Extensions.getExtension( eachOid );
-                    x509v3Generator.addExtension( eachOid,
-                                                  eachExtension.isCritical(),
-                                                  X509Extension.convertValueToObject( eachExtension ) );
+                if ( x509Extensions != null ) {
+                    // Adding requested X509Extensions
+                    Enumeration oids = x509Extensions.oids();
+                    while ( oids.hasMoreElements() ) {
+                        DERObjectIdentifier eachOid = ( DERObjectIdentifier ) oids.nextElement();
+                        X509Extension eachExtension = x509Extensions.getExtension( eachOid );
+                        x509v3Generator.addExtension( eachOid,
+                                                      eachExtension.isCritical(),
+                                                      X509Extension.convertValueToObject( eachExtension ) );
+                    }
                 }
 
                 return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );

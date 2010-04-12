@@ -25,9 +25,9 @@ import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
-import org.codeartisans.qipki.commons.values.params.KeyStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
-import org.codeartisans.qipki.commons.values.rest.KeyStoreValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -56,12 +56,12 @@ public class QiPkiCommonsValuesAssembler
         // Params
         module.addServices( ParamsFactory.class ).
                 visibleIn( visibility );
-        module.addValues( KeyStoreFactoryParamsValue.class,
+        module.addValues( CryptoStoreFactoryParamsValue.class,
                           CAFactoryParamsValue.class ).
                 visibleIn( visibility );
         // Rest values
         module.addValues( RestListValue.class,
-                          KeyStoreValue.class,
+                          CryptoStoreValue.class,
                           CAValue.class,
                           KeySpecValue.class ).
                 visibleIn( visibility );

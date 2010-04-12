@@ -26,10 +26,10 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreFactoryResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.keystore.KeyStoreResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.Uses;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -69,9 +69,9 @@ public class RestletApplication
 
         router.attach( "/", createFinder( ApiRootResource.class ) );
 
-        router.attach( "/keystore", createFinder( KeyStoreListResource.class ) );
-        router.attach( "/keystore/factory", createFinder( KeyStoreFactoryResource.class ) );
-        router.attach( "/keystore/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( KeyStoreResource.class ) );
+        router.attach( "/cryptostore", createFinder( CryptoStoreListResource.class ) );
+        router.attach( "/cryptostore/factory", createFinder( CryptoStoreFactoryResource.class ) );
+        router.attach( "/cryptostore/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
 
         router.attach( "/ca", createFinder( CAListResource.class ) );
         router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );

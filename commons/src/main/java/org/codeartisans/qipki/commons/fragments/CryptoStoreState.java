@@ -19,12 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.params;
+package org.codeartisans.qipki.commons.fragments;
 
-import org.codeartisans.qipki.commons.fragments.KeyStoreState;
-import org.qi4j.api.value.ValueComposite;
+import static org.codeartisans.qipki.commons.constants.KeyStoreType.*;
+import org.qi4j.api.property.Property;
+import org.qi4j.library.constraints.annotation.OneOf;
 
-public interface KeyStoreFactoryParamsValue
-        extends KeyStoreState, ValueComposite
+public interface CryptoStoreState
+        extends Nameable
 {
+
+    @OneOf( { JCEKS, JKS, PKCS11, PKCS12 } )
+    Property<String> storeType();
+
+    Property<char[]> password();
+
 }

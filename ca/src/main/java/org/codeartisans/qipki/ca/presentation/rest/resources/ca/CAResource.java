@@ -21,8 +21,8 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.application.contexts.CAContext;
+import org.codeartisans.qipki.ca.domain.ca.CAEntity;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
@@ -44,8 +44,6 @@ public class CAResource
     private static final Logger LOGGER = LoggerFactory.getLogger( CAResource.class );
     @Service
     private RestValuesFactory valuesFactory;
-    @Service
-    private CARepository caRepos;
 
     public CAResource( @Structure ObjectBuilderFactory obf )
     {
@@ -55,16 +53,25 @@ public class CAResource
     @Override
     protected Representation representJson()
     {
-        String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+        String identity = null;
         try {
 
-            CA ca = caRepos.findByIdentity( identity );
+            // Data
+            identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+
+            // Context
+            CAContext caCtx = newRootContext().caContext( identity );
+
+            // Interaction
+            CAEntity ca = caCtx.caEntity();
+
+            // Representation
             return new StringRepresentation( valuesFactory.ca( getReference(), ca ).toJSON(),
                                              MediaType.APPLICATION_JSON );
 
         } catch ( NoSuchEntityException ex ) {
-            LOGGER.debug( "No CA found for the requested identity ('{}'), sending {}", identity, Status.CLIENT_ERROR_NOT_FOUND );
-            throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND );
+            LOGGER.debug( "{}: No CA found for the requested identity ('{}')", new Object[]{ Status.CLIENT_ERROR_NOT_FOUND, identity }, ex );
+            throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND, ex );
         }
     }
 

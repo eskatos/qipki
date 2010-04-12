@@ -98,6 +98,9 @@ public interface CryptIO
         {
             final CertificationRequestInfo certificationRequestInfo = pkcs10.getCertificationRequestInfo();
             final ASN1Set attributesAsn1Set = certificationRequestInfo.getAttributes();
+            if ( attributesAsn1Set == null ) {
+                return null;
+            }
             // The `Extension Request` attribute is contained within an ASN.1 Set,
             // usually as the first element.
             X509Extensions certificateRequestExtensions = null;
