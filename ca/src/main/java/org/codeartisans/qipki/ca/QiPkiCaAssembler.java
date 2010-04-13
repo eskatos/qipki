@@ -184,7 +184,8 @@ public class QiPkiCaAssembler
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( CAEntity.class );
+                    module.addEntities( CAEntity.class ).
+                            visibleIn( Visibility.application );
                     module.addServices( CARepository.class,
                                         CAFactory.class ).
                             visibleIn( Visibility.application );
@@ -199,7 +200,8 @@ public class QiPkiCaAssembler
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( CryptoStoreEntity.class );
+                    module.addEntities( CryptoStoreEntity.class ).
+                            visibleIn( Visibility.application );
                     module.addServices( CryptoStoreRepository.class,
                                         CryptoStoreFactory.class ).
                             visibleIn( Visibility.application );
@@ -244,7 +246,7 @@ public class QiPkiCaAssembler
         }
 
         presentation.uses( application, crypto );
-        application.uses( domain );
+        application.uses( domain, crypto );
         domain.uses( crypto, infrastructure );
 
         presentation.uses( domain ); // TODO remove .. needed by fixtures .. need to rewrite fixtures to use DCI application code directly
