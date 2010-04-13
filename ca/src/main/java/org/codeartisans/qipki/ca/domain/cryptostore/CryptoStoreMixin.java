@@ -21,36 +21,30 @@
  */
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import org.bouncycastle.util.encoders.Base64;
-import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.qi4j.api.composite.TransientBuilderFactory;
+import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.This;
 
 public class CryptoStoreMixin
         implements CryptoStoreBehavior
 {
 
+    @Structure
+    private TransientBuilderFactory tbf;
     @This
     private CryptoStoreEntity state;
 
     @Override
     public KeyStore loadKeyStore()
     {
-        try {
-            KeyStore keystore = KeyStore.getInstance( state.storeType().get() );
-            keystore.load( new ByteArrayInputStream( Base64.decode( state.payload().get().getBytes( "UTF-8" ) ) ), state.password().get() );
-            return keystore;
-
-        } catch ( IOException ex ) {
-            throw new QiPkiFailure( "Unable to load " + state.storeType().get() + " CryptoStore", ex );
-        } catch ( GeneralSecurityException ex ) {
-            throw new QiPkiFailure( "Unable to load " + state.storeType().get() + " CryptoStore", ex );
-        }
+        CryptIO cryptio = tbf.newTransient( CryptIO.class );
+        return cryptio.base64DecodeKeyStore( state.payload().get(),
+                                             state.storeType().get(),
+                                             state.password().get() );
     }
 
     @Override

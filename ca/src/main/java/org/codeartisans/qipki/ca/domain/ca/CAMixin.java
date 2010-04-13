@@ -55,8 +55,10 @@ public class CAMixin
     public X509Certificate certificate()
     {
         try {
+
             KeyStore ks = state.cryptoStore().get().loadKeyStore();
             return ( X509Certificate ) ks.getCertificate( state.identity().get() );
+
         } catch ( KeyStoreException ex ) {
             throw new QiPkiFailure( "Unable to load " + state.name().get() + " X509Certificate", ex );
         }
@@ -66,8 +68,10 @@ public class CAMixin
     public PrivateKey privateKey()
     {
         try {
+
             KeyStore ks = state.cryptoStore().get().loadKeyStore();
             return ( PrivateKey ) ks.getKey( state.identity().get(), state.cryptoStore().get().password().get() );
+
         } catch ( GeneralSecurityException ex ) {
             throw new QiPkiFailure( "Unable to load " + state.name().get() + " PrivateKey", ex );
         }
@@ -76,34 +80,29 @@ public class CAMixin
     @Override
     public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
     {
-        CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
-        CryptIO cryptio = tbf.newTransient( CryptIO.class );
+        LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
         try {
-            LOGGER.debug( "Handling a PKCS10 Certificate Signing Request" );
+
+            CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
+            CryptIO cryptio = tbf.newTransient( CryptIO.class );
+
             X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
-            return cryptgen.generateX509Certificate( privateKey(),
-                                                     certificate().getSubjectX500Principal(),
-                                                     BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                     pkcs10.getCertificationRequestInfo().getSubject(),
-                                                     pkcs10.getPublicKey(),
-                                                     Duration.standardDays( 365 ),
-                                                     requestedExtensions );
-//            KeyPair keyPair = cryptgen.generateRSAKeyPair( 512 );
-//            X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
-//            return cryptgen.generateX509Certificate( keyPair.getPrivate(),
-//                                                     new X500Principal( "CN=" + state.identity().get() ),
-//                                                     BigInteger.probablePrime( 120, new SecureRandom() ),
-//                                                     pkcs10.getCertificationRequestInfo().getSubject(),
-//                                                     pkcs10.getPublicKey(),
-//                                                     Duration.ZERO,
-//                                                     requestedExtensions );
+            X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),
+                                                                            certificate().getSubjectX500Principal(),
+                                                                            BigInteger.probablePrime( 120, new SecureRandom() ),
+                                                                            pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                            pkcs10.getPublicKey(),
+                                                                            Duration.standardDays( 365 ),
+                                                                            requestedExtensions );
+
+            return certificate;
 
         } catch ( GeneralSecurityException ex ) {
             LOGGER.error( ex.getMessage(), ex );
-            throw new CryptoException( "Unable to enroll pkcs10", ex );
+            throw new CryptoException( "Unable to enroll PKCS#10", ex );
         } catch ( IllegalStateException ex ) {
             LOGGER.error( ex.getMessage(), ex );
-            throw new CryptoException( "Unable to enroll pkcs10", ex );
+            throw new CryptoException( "Unable to enroll PKCS#10", ex );
         }
     }
 
