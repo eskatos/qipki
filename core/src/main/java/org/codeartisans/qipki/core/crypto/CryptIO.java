@@ -21,9 +21,15 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchProviderException;
 import java.security.cert.X509Certificate;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
@@ -34,8 +40,10 @@ import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Attribute;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
+import org.bouncycastle.util.encoders.Base64;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.qi4j.api.composite.TransientComposite;
 import org.qi4j.api.mixin.Mixins;
@@ -44,6 +52,12 @@ import org.qi4j.api.mixin.Mixins;
 public interface CryptIO
         extends TransientComposite
 {
+
+    KeyStore createEmptyKeyStore( String storeType );
+
+    String base64Encode( KeyStore keystore, char[] password );
+
+    KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password );
 
     PKCS10CertificationRequest readPKCS10PEM( Reader reader );
 
@@ -58,12 +72,55 @@ public interface CryptIO
     {
 
         @Override
+        public KeyStore createEmptyKeyStore( String storeType )
+        {
+            try {
+                KeyStore keystore = getKeyStoreInstance( storeType );
+                keystore.load( null, null );
+                return keystore;
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            }
+        }
+
+        @Override
+        public String base64Encode( KeyStore keystore, char[] password )
+        {
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                keystore.store( baos, password );
+                baos.flush();
+                return new String( Base64.encode( baos.toByteArray() ), "UTF-8" );
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
+            }
+        }
+
+        @Override
+        public KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password )
+        {
+            try {
+                KeyStore keystore = getKeyStoreInstance( storeType );
+                keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( "UTF-8" ) ) ), password );
+                return keystore;
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
+            }
+        }
+
+        @Override
         public PKCS10CertificationRequest readPKCS10PEM( Reader reader )
         {
             try {
                 return ( PKCS10CertificationRequest ) new PEMReader( reader ).readObject();
             } catch ( IOException ex ) {
-                throw new IllegalArgumentException( "Unable to read pkcs10 from PEM", ex );
+                throw new IllegalArgumentException( "Unable to read PKCS#10 from PEM", ex );
             }
         }
 
@@ -127,6 +184,15 @@ public interface CryptIO
                 }
             }
             return certificateRequestExtensions;
+        }
+
+        private KeyStore getKeyStoreInstance( String storeType )
+                throws KeyStoreException, NoSuchProviderException
+        {
+            if ( "PKCS12".equals( storeType ) ) {
+                return KeyStore.getInstance( storeType, BouncyCastleProvider.PROVIDER_NAME );
+            }
+            return KeyStore.getInstance( storeType );
         }
 
     }

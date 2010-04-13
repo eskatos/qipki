@@ -21,13 +21,10 @@
  */
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import org.bouncycastle.util.encoders.Base64;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -50,41 +47,25 @@ public interface CryptoStoreFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Structure
+        private TransientBuilderFactory tbf;
 
         @Override
         public CryptoStoreEntity create( CryptoStoreFactoryParamsValue params )
         {
+            CryptIO cryptio = tbf.newTransient( CryptIO.class );
             EntityBuilder<CryptoStoreEntity> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStoreEntity.class );
+
             CryptoStoreEntity ksEntity = ksBuilder.instance();
 
             ksEntity.name().set( params.name().get() );
             ksEntity.storeType().set( params.storeType().get() );
             ksEntity.password().set( params.password().get() );
 
-            setEmptyKeyStore( ksEntity );
+            KeyStore keystore = cryptio.createEmptyKeyStore( ksEntity.storeType().get() );
+            ksEntity.payload().set( cryptio.base64Encode( keystore, ksEntity.password().get() ) );
 
             return ksBuilder.newInstance();
-        }
-
-        private void setEmptyKeyStore( CryptoStoreEntity ksEntity )
-        {
-            try {
-
-                KeyStore keystore = KeyStore.getInstance( ksEntity.storeType().get() );
-                keystore.load( null, null );
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                keystore.store( baos, ksEntity.password().get() );
-
-                baos.flush();
-
-                ksEntity.payload().set( new String( Base64.encode( baos.toByteArray() ), "UTF-8" ) );
-
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to create " + ksEntity.storeType().get() + " KeyStore", ex );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to create " + ksEntity.storeType().get() + " KeyStore", ex );
-            }
         }
 
     }
