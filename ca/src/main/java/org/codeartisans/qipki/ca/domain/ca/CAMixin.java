@@ -87,6 +87,9 @@ public class CAMixin
             CryptIO cryptio = tbf.newTransient( CryptIO.class );
 
             X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
+
+            // TODO add CRL Distribution point !
+
             X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),
                                                                             certificate().getSubjectX500Principal(),
                                                                             BigInteger.probablePrime( 120, new SecureRandom() ),

@@ -29,6 +29,8 @@ import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.domain.ca.CAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
+import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
@@ -42,6 +44,7 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
@@ -101,6 +104,7 @@ public class QiPkiCaAssembler
                                        CAListResource.class,
                                        CAFactoryResource.class,
                                        CAResource.class,
+                                       CRLResource.class,
                                        PKCS10SignerResource.class ).
                             visibleIn( Visibility.module );
 
@@ -184,10 +188,12 @@ public class QiPkiCaAssembler
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( CAEntity.class ).
+                    module.addEntities( CAEntity.class,
+                                        CRLEntity.class ).
                             visibleIn( Visibility.application );
                     module.addServices( CARepository.class,
-                                        CAFactory.class ).
+                                        CAFactory.class,
+                                        CRLFactory.class ).
                             visibleIn( Visibility.application );
                 }
 

@@ -67,13 +67,13 @@ public class PKCS10SignerResource
         try {
 
             // Data
-            String identity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            String caIdentity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
             CryptIO cryptIO = tbf.newTransient( CryptIO.class );
             PKCS10CertificationRequest pkcs10 = cryptIO.readPKCS10PEM( entity.getReader() );
 
             // Context
             RootContext rootCtx = newRootContext();
-            CAContext caCtx = rootCtx.caContext( identity );
+            CAContext caCtx = rootCtx.caContext( caIdentity );
 
             // Interaction
             X509Certificate cert = caCtx.sign( pkcs10 );

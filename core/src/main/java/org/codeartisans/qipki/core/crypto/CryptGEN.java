@@ -21,6 +21,8 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
+import org.codeartisans.qipki.core.crypto.constants.AsymetricAlgorithm;
+import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -44,6 +46,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.crypto.constants.TimeRelated;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Hours;
@@ -55,12 +58,6 @@ import org.qi4j.api.mixin.Mixins;
 public interface CryptGEN
         extends TransientComposite
 {
-
-    interface AsymAlgs
-    {
-
-        String SHA256WITHRSA = "SHA256WITHRSA";
-    }
 
     KeyPair generateRSAKeyPair( int size );
 
@@ -84,7 +81,7 @@ public interface CryptGEN
         public KeyPair generateRSAKeyPair( int size )
         {
             try {
-                KeyPairGenerator keyGen = KeyPairGenerator.getInstance( "RSA", BouncyCastleProvider.PROVIDER_NAME );
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance( AsymetricAlgorithm.RSA, BouncyCastleProvider.PROVIDER_NAME );
                 keyGen.initialize( size );
                 return keyGen.generateKeyPair();
             } catch ( GeneralSecurityException ex ) {
@@ -96,13 +93,13 @@ public interface CryptGEN
         public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
         {
             try {
-                return new PKCS10CertificationRequest( CryptGEN.AsymAlgs.SHA256WITHRSA,
+                return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
                                                        distinguishedName, keyPair.getPublic(),
                                                        null,
                                                        keyPair.getPrivate(),
                                                        BouncyCastleProvider.PROVIDER_NAME );
             } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate PKCS10", ex );
+                throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
             }
         }
 
@@ -110,13 +107,13 @@ public interface CryptGEN
         public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
         {
             try {
-                return new PKCS10CertificationRequest( CryptGEN.AsymAlgs.SHA256WITHRSA,
+                return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
                                                        distinguishedName, keyPair.getPublic(),
                                                        generateSANAttribute( subjectAlternativeNames ),
                                                        keyPair.getPrivate(),
                                                        BouncyCastleProvider.PROVIDER_NAME );
             } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate PKCS10", ex );
+                throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
             }
         }
 
@@ -138,9 +135,9 @@ public interface CryptGEN
                 x509v3Generator.setSerialNumber( serialNumber );
                 x509v3Generator.setSubjectDN( subjectDN );
                 x509v3Generator.setIssuerDN( issuerDN );
-                x509v3Generator.setNotBefore( now.minus( Hours.ONE ).toDate() );
-                x509v3Generator.setNotAfter( now.plus( validity ).minus( Hours.ONE ).toDate() );
-                x509v3Generator.setSignatureAlgorithm( CryptGEN.AsymAlgs.SHA256WITHRSA );
+                x509v3Generator.setNotBefore( now.minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
+                x509v3Generator.setNotAfter( now.plus( validity ).minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
+                x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA );
                 x509v3Generator.setPublicKey( publicKey );
 
                 if ( x509Extensions != null ) {

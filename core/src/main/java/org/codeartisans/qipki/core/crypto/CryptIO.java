@@ -30,6 +30,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchProviderException;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
@@ -64,6 +65,8 @@ public interface CryptIO
     CharSequence asPEM( X509Certificate certificate );
 
     CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
+
+    CharSequence asPEM( X509CRL x509CRL );
 
     X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
 
@@ -134,6 +137,12 @@ public interface CryptIO
         public CharSequence asPEM( PKCS10CertificationRequest pkcs10 )
         {
             return asPEM( pkcs10.getClass().getSimpleName(), pkcs10 );
+        }
+
+        @Override
+        public CharSequence asPEM( X509CRL x509CRL )
+        {
+            return asPEM( x509CRL.getClass().getSimpleName(), x509CRL );
         }
 
         private CharSequence asPEM( String ilk, Object object )
