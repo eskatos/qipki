@@ -19,18 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.root;
 
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.ca.CAMixin;
+import org.codeartisans.qipki.ca.domain.ca.CAState;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.mixin.Mixins;
 
-public interface CABehavior
-        extends PKCS10Signer
+@Mixins( { CAMixin.class, RootCAMixin.class } )
+public interface RootCAEntity
+        extends CAState, RootCABehavior, EntityComposite
 {
-
-    X509Certificate certificate();
-
-    PrivateKey privateKey();
-
 }

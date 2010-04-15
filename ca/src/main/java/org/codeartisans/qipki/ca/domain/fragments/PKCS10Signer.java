@@ -19,18 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.fragments;
 
-import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 
-public interface CABehavior
-        extends PKCS10Signer
+public interface PKCS10Signer
 {
 
-    X509Certificate certificate();
-
-    PrivateKey privateKey();
+    X509Certificate sign( PKCS10CertificationRequest pkcs10 );
 
 }

@@ -21,35 +21,20 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
-import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.CryptGEN;
-import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
-import org.joda.time.Duration;
-import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
-import org.qi4j.library.shiro.crypto.CryptoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class CAMixin
+public abstract class CAMixin
         implements CABehavior
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CAMixin.class );
-    @Service
-    private CryptoToolFactory cryptoToolFactory;
     @This
-    private CAEntity state;
+    private CAState state;
 
     @Override
     public X509Certificate certificate()
@@ -74,38 +59,6 @@ public class CAMixin
 
         } catch ( GeneralSecurityException ex ) {
             throw new QiPkiFailure( "Unable to load " + state.name().get() + " PrivateKey", ex );
-        }
-    }
-
-    @Override
-    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
-    {
-        LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
-        try {
-
-            CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
-            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
-
-            X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
-
-            // TODO add CRL Distribution point !
-
-            X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),
-                                                                            certificate().getSubjectX500Principal(),
-                                                                            BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                            pkcs10.getCertificationRequestInfo().getSubject(),
-                                                                            pkcs10.getPublicKey(),
-                                                                            Duration.standardDays( 365 ),
-                                                                            requestedExtensions );
-
-            return certificate;
-
-        } catch ( GeneralSecurityException ex ) {
-            LOGGER.error( ex.getMessage(), ex );
-            throw new CryptoException( "Unable to enroll PKCS#10", ex );
-        } catch ( IllegalStateException ex ) {
-            LOGGER.error( ex.getMessage(), ex );
-            throw new CryptoException( "Unable to enroll PKCS#10", ex );
         }
     }
 

@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -56,14 +57,17 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
+/**
+ * TODO Handle CRL nextUpdate
+ */
 @Mixins( CAFactory.Mixin.class )
 public interface CAFactory
         extends ServiceComposite
 {
 
-    CAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
+    RootCAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
 
-    CAEntity createSubCA( CAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
+    RootCAEntity createSubCA( RootCAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
 
     abstract class Mixin
             implements CAFactory
@@ -77,7 +81,7 @@ public interface CAFactory
         private CRLFactory crlFactory;
 
         @Override
-        public CAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
+        public RootCAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
         {
             try {
                 // Self signed CA
@@ -94,8 +98,8 @@ public interface CAFactory
                                                                          Duration.standardDays( 3650 ),
                                                                          cryptio.extractRequestedExtensions( pkcs10 ) );
 
-                EntityBuilder<CAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( CAEntity.class );
-                CAEntity ca = caBuilder.instance();
+                EntityBuilder<RootCAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCAEntity.class );
+                RootCAEntity ca = caBuilder.instance();
                 ca.name().set( name );
                 ca.cryptoStore().set( keyStore );
 
@@ -137,10 +141,10 @@ public interface CAFactory
 
         // TODO
         @Override
-        public CAEntity createSubCA( CAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
+        public RootCAEntity createSubCA( RootCAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
         {
-            EntityBuilder<CAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( CAEntity.class );
-            CAEntity ca = caBuilder.instance();
+            EntityBuilder<RootCAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCAEntity.class );
+            RootCAEntity ca = caBuilder.instance();
             ca.name().set( name );
             return caBuilder.newInstance();
         }

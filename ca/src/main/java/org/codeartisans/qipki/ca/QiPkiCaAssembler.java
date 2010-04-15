@@ -26,9 +26,10 @@ import org.codeartisans.qipki.ca.application.contexts.CAListContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.ca.sub.SubCAEntity;
 import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
 import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
@@ -182,39 +183,30 @@ public class QiPkiCaAssembler
 
         LayerAssembly domain = app.layerAssembly( "domain" );
         {
-            new Assembler() // CertificateAuthority
+            new Assembler() // PKI/CA Domain
             {
 
                 @Override
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( CAEntity.class,
+                    // Entities
+                    module.addEntities( CryptoStoreEntity.class,
+                                        RootCAEntity.class,
+                                        SubCAEntity.class,
                                         CRLEntity.class ).
                             visibleIn( Visibility.application );
-                    module.addServices( CARepository.class,
+                    // Services
+                    module.addServices( CryptoStoreRepository.class,
+                                        CryptoStoreFactory.class,
+                                        CARepository.class,
                                         CAFactory.class,
                                         CRLFactory.class ).
                             visibleIn( Visibility.application );
                 }
 
-            }.assemble( domain.moduleAssembly( "ca" ) );
+            }.assemble( domain.moduleAssembly( "domain" ) );
 
-            new Assembler() // CryptoStore
-            {
-
-                @Override
-                public void assemble( ModuleAssembly module )
-                        throws AssemblyException
-                {
-                    module.addEntities( CryptoStoreEntity.class ).
-                            visibleIn( Visibility.application );
-                    module.addServices( CryptoStoreRepository.class,
-                                        CryptoStoreFactory.class ).
-                            visibleIn( Visibility.application );
-                }
-
-            }.assemble( domain.moduleAssembly( "cryptostore" ) );
         }
 
         LayerAssembly crypto = app.layerAssembly( "crypto" );

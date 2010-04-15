@@ -22,9 +22,9 @@
 package org.codeartisans.qipki.ca.application.contexts;
 
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.ca.domain.ca.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
-import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
@@ -71,8 +71,8 @@ public class RootContext
 
     public CAContext caContext( String identity )
     {
-        CAEntity ca = caRepos.findByIdentity( identity );
-        context.playRoles( ca, CAEntity.class );
+        RootCAEntity ca = caRepos.findByIdentity( identity );
+        context.playRoles( ca, RootCAEntity.class );
         context.playRoles( ca, PKCS10Signer.class );
         return subContext( CAContext.class );
     }

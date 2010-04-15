@@ -32,19 +32,24 @@ import java.security.KeyStoreException;
 import java.security.NoSuchProviderException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
+import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
 import org.bouncycastle.asn1.DEREncodable;
+import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Attribute;
+import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.codeartisans.qipki.core.QiPkiFailure;
 
 public class CryptIO
@@ -152,7 +157,35 @@ public class CryptIO
                     // The X509Extensions are contained as a value of the ASN.1 Set.
                     // Assume that it is the first value of the set.
                     if ( attributeValues.size() >= 1 ) {
-                        certificateRequestExtensions = new X509Extensions( ( ASN1Sequence ) attributeValues.getObjectAt( 0 ) );
+                        DEREncodable extensionsDEREncodable = attributeValues.getObjectAt( 0 );
+                        ASN1Sequence extensionsASN1Sequence = ( ASN1Sequence ) extensionsDEREncodable;
+
+                        System.out.println( "#################################################################################################" );
+
+                        System.out.println( extensionsDEREncodable );
+                        System.out.println( extensionsASN1Sequence );
+
+                        X509ExtensionUtil plop;
+
+                        Enumeration enume = extensionsASN1Sequence.getObjects();
+                        while ( enume.hasMoreElements() ) {
+                            Object obj = enume.nextElement();
+                            DEREncodable der = ( DEREncodable ) obj;
+                            System.out.println( "\t" + obj );
+                            System.out.println( "\t" + der );
+                        }
+
+                        System.out.println( "#################################################################################################" );
+
+                        certificateRequestExtensions = new X509Extensions( extensionsASN1Sequence );
+
+                        Enumeration e = certificateRequestExtensions.oids();
+                        while ( e.hasMoreElements() ) {
+                            DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
+                            X509Extension ext = certificateRequestExtensions.getExtension( oid );
+                            boolean critical = ext.isCritical();
+                            ASN1OctetString value = ext.getValue();
+                        }
 
                         // No need to search any more.
                         break;
