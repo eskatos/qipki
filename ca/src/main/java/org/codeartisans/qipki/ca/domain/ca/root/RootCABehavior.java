@@ -19,12 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.root;
 
+import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-public interface CABehavior
+public interface RootCABehavior
         extends PKCS10Signer
 {
 

@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
@@ -35,9 +36,9 @@ public interface CARepository
         extends ServiceComposite
 {
 
-    CAEntity findByIdentity( String identity );
+    RootCAEntity findByIdentity( String identity );
 
-    Query<CAEntity> findAllPaginated( int firstResult, int maxResults );
+    Query<RootCAEntity> findAllPaginated( int firstResult, int maxResults );
 
     abstract class Mixin
             implements CARepository
@@ -49,17 +50,17 @@ public interface CARepository
         private QueryBuilderFactory qbf;
 
         @Override
-        public CAEntity findByIdentity( String identity )
+        public RootCAEntity findByIdentity( String identity )
         {
-            return uowf.currentUnitOfWork().get( CAEntity.class, identity );
+            return uowf.currentUnitOfWork().get( RootCAEntity.class, identity );
         }
 
         @Override
-        public Query<CAEntity> findAllPaginated( int firstResult, int maxResults )
+        public Query<RootCAEntity> findAllPaginated( int firstResult, int maxResults )
         {
             UnitOfWork uow = uowf.currentUnitOfWork();
-            QueryBuilder<CAEntity> builder = qbf.newQueryBuilder( CAEntity.class );
-            Query<CAEntity> query = builder.newQuery( uow ).
+            QueryBuilder<RootCAEntity> builder = qbf.newQueryBuilder( RootCAEntity.class );
+            Query<RootCAEntity> query = builder.newQuery( uow ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

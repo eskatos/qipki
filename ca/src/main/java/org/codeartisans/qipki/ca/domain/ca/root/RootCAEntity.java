@@ -19,14 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.root;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.entity.Aggregated;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.entity.association.Association;
+import org.qi4j.api.mixin.Mixins;
 
-public interface PKCS10Signer
+@Mixins( RootCAMixin.class )
+public interface RootCAEntity
+        extends Nameable, RootCABehavior, EntityComposite
 {
 
-    X509Certificate sign( PKCS10CertificationRequest pkcs10 );
+    Association<CryptoStoreEntity> cryptoStore();
+
+    @Optional // TODO REMOVE
+    @Aggregated
+    Association<CRLEntity> crl();
 
 }

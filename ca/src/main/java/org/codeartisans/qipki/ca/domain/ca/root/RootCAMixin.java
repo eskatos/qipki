@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.root;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -41,15 +41,15 @@ import org.qi4j.library.shiro.crypto.CryptoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CAMixin
-        implements CABehavior
+public class RootCAMixin
+        implements RootCABehavior
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CAMixin.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( RootCAMixin.class );
     @Service
     private CryptoToolFactory cryptoToolFactory;
     @This
-    private CAEntity state;
+    private RootCAEntity state;
 
     @Override
     public X509Certificate certificate()
