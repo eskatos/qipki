@@ -46,164 +46,130 @@ import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.qi4j.api.composite.TransientComposite;
-import org.qi4j.api.mixin.Mixins;
 
-@Mixins( CryptIO.Mixin.class )
-public interface CryptIO
-        extends TransientComposite
+public class CryptIO
 {
 
-    KeyStore createEmptyKeyStore( String storeType );
-
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
-
-    CharSequence asPEM( X509Certificate certificate );
-
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
-
-    CharSequence asPEM( X509CRL x509CRL );
-
-    X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
-
-    abstract class Mixin
-            implements CryptIO
+    public KeyStore createEmptyKeyStore( String storeType )
     {
+        try {
+            KeyStore keystore = getKeyStoreInstance( storeType );
+            keystore.load( null, null );
+            return keystore;
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+        }
+    }
 
-        @Override
-        public KeyStore createEmptyKeyStore( String storeType )
-        {
-            try {
-                KeyStore keystore = getKeyStoreInstance( storeType );
-                keystore.load( null, null );
-                return keystore;
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to create empty" + storeType + " KeyStore", ex );
-            }
+    public String base64Encode( KeyStore keystore, char[] password )
+    {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            keystore.store( baos, password );
+            baos.flush();
+            return new String( Base64.encode( baos.toByteArray() ), "UTF-8" );
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
+        }
+    }
+
+    public KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password )
+    {
+        try {
+            KeyStore keystore = getKeyStoreInstance( storeType );
+            keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( "UTF-8" ) ) ), password );
+            return keystore;
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
+        }
+    }
+
+    public PKCS10CertificationRequest readPKCS10PEM( Reader reader )
+    {
+        try {
+            return ( PKCS10CertificationRequest ) new PEMReader( reader ).readObject();
+        } catch ( IOException ex ) {
+            throw new IllegalArgumentException( "Unable to read PKCS#10 from PEM", ex );
+        }
+    }
+
+    public CharSequence asPEM( X509Certificate certificate )
+    {
+        return asPEM( certificate.getClass().getSimpleName(), certificate );
+    }
+
+    public CharSequence asPEM( PKCS10CertificationRequest pkcs10 )
+    {
+        return asPEM( pkcs10.getClass().getSimpleName(), pkcs10 );
+    }
+
+    public CharSequence asPEM( X509CRL x509CRL )
+    {
+        return asPEM( x509CRL.getClass().getSimpleName(), x509CRL );
+    }
+
+    private CharSequence asPEM( String ilk, Object object )
+    {
+        try {
+            StringWriter sw = new StringWriter();
+            PEMWriter pemWriter = new PEMWriter( sw );
+            pemWriter.writeObject( object );
+            pemWriter.flush();
+            return sw.getBuffer();
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to write " + ilk + " as PEM", ex );
         }
 
-        @Override
-        public String base64Encode( KeyStore keystore, char[] password )
-        {
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                keystore.store( baos, password );
-                baos.flush();
-                return new String( Base64.encode( baos.toByteArray() ), "UTF-8" );
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
-            }
+    }
+
+    public X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 )
+    {
+        final CertificationRequestInfo certificationRequestInfo = pkcs10.getCertificationRequestInfo();
+        final ASN1Set attributesAsn1Set = certificationRequestInfo.getAttributes();
+        if ( attributesAsn1Set == null ) {
+            return null;
         }
+        // The `Extension Request` attribute is contained within an ASN.1 Set,
+        // usually as the first element.
+        X509Extensions certificateRequestExtensions = null;
+        for ( int i = 0; i < attributesAsn1Set.size(); ++i ) {
+            // There should be only only one attribute in the set. (that is, only
+            // the `Extension Request`, but loop through to find it properly)
+            final DEREncodable derEncodable = attributesAsn1Set.getObjectAt( i );
+            if ( derEncodable instanceof DERSequence ) {
+                final Attribute attribute = new Attribute( ( DERSequence ) attributesAsn1Set.getObjectAt( i ) );
 
-        @Override
-        public KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password )
-        {
-            try {
-                KeyStore keystore = getKeyStoreInstance( storeType );
-                keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( "UTF-8" ) ) ), password );
-                return keystore;
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
-            }
-        }
+                if ( attribute.getAttrType().equals( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest ) ) {
+                    // The `Extension Request` attribute is present.
+                    final ASN1Set attributeValues = attribute.getAttrValues();
 
-        @Override
-        public PKCS10CertificationRequest readPKCS10PEM( Reader reader )
-        {
-            try {
-                return ( PKCS10CertificationRequest ) new PEMReader( reader ).readObject();
-            } catch ( IOException ex ) {
-                throw new IllegalArgumentException( "Unable to read PKCS#10 from PEM", ex );
-            }
-        }
+                    // The X509Extensions are contained as a value of the ASN.1 Set.
+                    // Assume that it is the first value of the set.
+                    if ( attributeValues.size() >= 1 ) {
+                        certificateRequestExtensions = new X509Extensions( ( ASN1Sequence ) attributeValues.getObjectAt( 0 ) );
 
-        @Override
-        public CharSequence asPEM( X509Certificate certificate )
-        {
-            return asPEM( certificate.getClass().getSimpleName(), certificate );
-        }
-
-        @Override
-        public CharSequence asPEM( PKCS10CertificationRequest pkcs10 )
-        {
-            return asPEM( pkcs10.getClass().getSimpleName(), pkcs10 );
-        }
-
-        @Override
-        public CharSequence asPEM( X509CRL x509CRL )
-        {
-            return asPEM( x509CRL.getClass().getSimpleName(), x509CRL );
-        }
-
-        private CharSequence asPEM( String ilk, Object object )
-        {
-            try {
-                StringWriter sw = new StringWriter();
-                PEMWriter pemWriter = new PEMWriter( sw );
-                pemWriter.writeObject( object );
-                pemWriter.flush();
-                return sw.getBuffer();
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to write " + ilk + " as PEM", ex );
-            }
-
-        }
-
-        @Override
-        public X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 )
-        {
-            final CertificationRequestInfo certificationRequestInfo = pkcs10.getCertificationRequestInfo();
-            final ASN1Set attributesAsn1Set = certificationRequestInfo.getAttributes();
-            if ( attributesAsn1Set == null ) {
-                return null;
-            }
-            // The `Extension Request` attribute is contained within an ASN.1 Set,
-            // usually as the first element.
-            X509Extensions certificateRequestExtensions = null;
-            for ( int i = 0; i < attributesAsn1Set.size(); ++i ) {
-                // There should be only only one attribute in the set. (that is, only
-                // the `Extension Request`, but loop through to find it properly)
-                final DEREncodable derEncodable = attributesAsn1Set.getObjectAt( i );
-                if ( derEncodable instanceof DERSequence ) {
-                    final Attribute attribute = new Attribute( ( DERSequence ) attributesAsn1Set.getObjectAt( i ) );
-
-                    if ( attribute.getAttrType().equals( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest ) ) {
-                        // The `Extension Request` attribute is present.
-                        final ASN1Set attributeValues = attribute.getAttrValues();
-
-                        // The X509Extensions are contained as a value of the ASN.1 Set.
-                        // Assume that it is the first value of the set.
-                        if ( attributeValues.size() >= 1 ) {
-                            certificateRequestExtensions = new X509Extensions( ( ASN1Sequence ) attributeValues.getObjectAt( 0 ) );
-
-                            // No need to search any more.
-                            break;
-                        }
+                        // No need to search any more.
+                        break;
                     }
                 }
             }
-            return certificateRequestExtensions;
         }
+        return certificateRequestExtensions;
+    }
 
-        private KeyStore getKeyStoreInstance( String storeType )
-                throws KeyStoreException, NoSuchProviderException
-        {
-            if ( "PKCS12".equals( storeType ) ) {
-                return KeyStore.getInstance( storeType, BouncyCastleProvider.PROVIDER_NAME );
-            }
-            return KeyStore.getInstance( storeType );
+    private KeyStore getKeyStoreInstance( String storeType )
+            throws KeyStoreException, NoSuchProviderException
+    {
+        if ( "PKCS12".equals( storeType ) ) {
+            return KeyStore.getInstance( storeType, BouncyCastleProvider.PROVIDER_NAME );
         }
-
+        return KeyStore.getInstance( storeType );
     }
 
 }

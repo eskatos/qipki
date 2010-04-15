@@ -21,8 +21,6 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
-import org.codeartisans.qipki.core.crypto.constants.AsymetricAlgorithm;
-import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -46,135 +44,108 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.crypto.constants.AsymetricAlgorithm;
+import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
 import org.codeartisans.qipki.core.crypto.constants.TimeRelated;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Hours;
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.composite.TransientComposite;
-import org.qi4j.api.mixin.Mixins;
 
-@Mixins( CryptGEN.Mixin.class )
-public interface CryptGEN
-        extends TransientComposite
+public class CryptGEN
 {
 
-    KeyPair generateRSAKeyPair( int size );
-
-    PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair );
-
-    PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames );
-
-    X509Certificate generateX509Certificate( PrivateKey privateKey,
-                                             X500Principal issuerDN,
-                                             BigInteger serialNumber,
-                                             X509Name subjectDN,
-                                             PublicKey publicKey,
-                                             Duration validity,
-                                             @Optional X509Extensions x509Extensions );
-
-    abstract class Mixin
-            implements CryptGEN
+    public KeyPair generateRSAKeyPair( int size )
     {
-
-        @Override
-        public KeyPair generateRSAKeyPair( int size )
-        {
-            try {
-                KeyPairGenerator keyGen = KeyPairGenerator.getInstance( AsymetricAlgorithm.RSA, BouncyCastleProvider.PROVIDER_NAME );
-                keyGen.initialize( size );
-                return keyGen.generateKeyPair();
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate RSA KeyPair", ex );
-            }
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( AsymetricAlgorithm.RSA, BouncyCastleProvider.PROVIDER_NAME );
+            keyGen.initialize( size );
+            return keyGen.generateKeyPair();
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to generate RSA KeyPair", ex );
         }
+    }
 
-        @Override
-        public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
-        {
-            try {
-                return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
-                                                       distinguishedName, keyPair.getPublic(),
-                                                       null,
-                                                       keyPair.getPrivate(),
-                                                       BouncyCastleProvider.PROVIDER_NAME );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
-            }
+    public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
+    {
+        try {
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
+                                                   distinguishedName, keyPair.getPublic(),
+                                                   null,
+                                                   keyPair.getPrivate(),
+                                                   BouncyCastleProvider.PROVIDER_NAME );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
         }
+    }
 
-        @Override
-        public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
-        {
-            try {
-                return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
-                                                       distinguishedName, keyPair.getPublic(),
-                                                       generateSANAttribute( subjectAlternativeNames ),
-                                                       keyPair.getPrivate(),
-                                                       BouncyCastleProvider.PROVIDER_NAME );
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
-            }
+    public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
+    {
+        try {
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
+                                                   distinguishedName, keyPair.getPublic(),
+                                                   generateSANAttribute( subjectAlternativeNames ),
+                                                   keyPair.getPrivate(),
+                                                   BouncyCastleProvider.PROVIDER_NAME );
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to generate PKCS#10", ex );
         }
+    }
 
-        @Override
-        public X509Certificate generateX509Certificate( PrivateKey privateKey,
-                                                        X500Principal issuerDN,
-                                                        BigInteger serialNumber,
-                                                        X509Name subjectDN,
-                                                        PublicKey publicKey,
-                                                        Duration validity,
-                                                        X509Extensions x509Extensions )
-        {
-            try {
+    public X509Certificate generateX509Certificate( PrivateKey privateKey,
+                                                    X500Principal issuerDN,
+                                                    BigInteger serialNumber,
+                                                    X509Name subjectDN,
+                                                    PublicKey publicKey,
+                                                    Duration validity,
+                                                    X509Extensions x509Extensions )
+    {
+        try {
 
-                X509V3CertificateGenerator x509v3Generator = new X509V3CertificateGenerator();
+            X509V3CertificateGenerator x509v3Generator = new X509V3CertificateGenerator();
 
-                DateTime now = new DateTime();
+            DateTime now = new DateTime();
 
-                x509v3Generator.setSerialNumber( serialNumber );
-                x509v3Generator.setSubjectDN( subjectDN );
-                x509v3Generator.setIssuerDN( issuerDN );
-                x509v3Generator.setNotBefore( now.minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
-                x509v3Generator.setNotAfter( now.plus( validity ).minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
-                x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA );
-                x509v3Generator.setPublicKey( publicKey );
+            x509v3Generator.setSerialNumber( serialNumber );
+            x509v3Generator.setSubjectDN( subjectDN );
+            x509v3Generator.setIssuerDN( issuerDN );
+            x509v3Generator.setNotBefore( now.minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
+            x509v3Generator.setNotAfter( now.plus( validity ).minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
+            x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA );
+            x509v3Generator.setPublicKey( publicKey );
 
-                if ( x509Extensions != null ) {
-                    // Adding requested X509Extensions
-                    Enumeration oids = x509Extensions.oids();
-                    while ( oids.hasMoreElements() ) {
-                        DERObjectIdentifier eachOid = ( DERObjectIdentifier ) oids.nextElement();
-                        X509Extension eachExtension = x509Extensions.getExtension( eachOid );
-                        x509v3Generator.addExtension( eachOid,
-                                                      eachExtension.isCritical(),
-                                                      X509Extension.convertValueToObject( eachExtension ) );
-                    }
+            if ( x509Extensions != null ) {
+                // Adding requested X509Extensions
+                Enumeration oids = x509Extensions.oids();
+                while ( oids.hasMoreElements() ) {
+                    DERObjectIdentifier eachOid = ( DERObjectIdentifier ) oids.nextElement();
+                    X509Extension eachExtension = x509Extensions.getExtension( eachOid );
+                    x509v3Generator.addExtension( eachOid,
+                                                  eachExtension.isCritical(),
+                                                  X509Extension.convertValueToObject( eachExtension ) );
                 }
-
-                return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );
-
-            } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
-            } catch ( IllegalStateException ex ) {
-                throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
             }
-        }
 
-        private DERSet generateSANAttribute( GeneralNames subGeneralNames )
-        {
-            if ( subGeneralNames == null ) {
-                return new DERSet();
-            }
-            Vector oids = new Vector();
-            Vector values = new Vector();
-            oids.add( X509Extensions.SubjectAlternativeName );
-            values.add( new X509Extension( false, new DEROctetString( subGeneralNames ) ) );
-            X509Extensions extensions = new X509Extensions( oids, values );
-            Attribute attribute = new Attribute( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest, new DERSet( extensions ) );
-            return new DERSet( attribute );
-        }
+            return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );
 
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
+        } catch ( IllegalStateException ex ) {
+            throw new QiPkiFailure( "Unable to generate X509Certificate", ex );
+        }
+    }
+
+    private DERSet generateSANAttribute( GeneralNames subGeneralNames )
+    {
+        if ( subGeneralNames == null ) {
+            return new DERSet();
+        }
+        Vector oids = new Vector();
+        Vector values = new Vector();
+        oids.add( X509Extensions.SubjectAlternativeName );
+        values.add( new X509Extension( false, new DEROctetString( subGeneralNames ) ) );
+        X509Extensions extensions = new X509Extensions( oids, values );
+        Attribute attribute = new Attribute( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest, new DERSet( extensions ) );
+        return new DERSet( attribute );
     }
 
 }
+

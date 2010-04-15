@@ -24,8 +24,9 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 import java.security.KeyStore;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.qi4j.api.composite.TransientBuilderFactory;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
 import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -47,13 +48,13 @@ public interface CryptoStoreFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
-        @Structure
-        private TransientBuilderFactory tbf;
+        @Service
+        private CryptoToolFactory cryptoToolFactory;
 
         @Override
         public CryptoStoreEntity create( CryptoStoreFactoryParamsValue params )
         {
-            CryptIO cryptio = tbf.newTransient( CryptIO.class );
+            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
             EntityBuilder<CryptoStoreEntity> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStoreEntity.class );
 
             CryptoStoreEntity ksEntity = ksBuilder.instance();

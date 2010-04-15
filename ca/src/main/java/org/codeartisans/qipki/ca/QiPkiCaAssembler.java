@@ -52,6 +52,7 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoS
 import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -225,8 +226,10 @@ public class QiPkiCaAssembler
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addTransients( CryptIO.class,
-                                          CryptGEN.class ).
+                    module.addServices( CryptoToolFactory.class ).
+                            visibleIn( Visibility.application );
+                    module.addObjects( CryptIO.class,
+                                       CryptGEN.class ).
                             visibleIn( Visibility.application );
                 }
 

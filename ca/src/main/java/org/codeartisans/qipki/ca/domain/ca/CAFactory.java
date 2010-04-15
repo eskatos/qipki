@@ -44,11 +44,11 @@ import org.codeartisans.qipki.commons.values.KeySpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
 import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
 import org.codeartisans.qipki.core.crypto.constants.TimeRelated;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -71,8 +71,8 @@ public interface CAFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
-        @Structure
-        private TransientBuilderFactory tbf;
+        @Service
+        private CryptoToolFactory cryptoToolFactory;
         @Service
         private CRLFactory crlFactory;
 
@@ -81,8 +81,8 @@ public interface CAFactory
         {
             try {
                 // Self signed CA
-                CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
-                CryptIO cryptio = tbf.newTransient( CryptIO.class );
+                CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
+                CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
                 KeyPair keyPair = cryptgen.generateRSAKeyPair( keySpec.length().get() );
                 X500Principal dn = new X500Principal( distinguishedName );
                 PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10( dn, keyPair );

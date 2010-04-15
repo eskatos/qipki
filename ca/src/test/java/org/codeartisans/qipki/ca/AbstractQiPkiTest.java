@@ -56,8 +56,8 @@ public abstract class AbstractQiPkiTest
             throws AssemblyException
     {
         new QiPkiCommonsValuesAssembler().assemble( module );
-        module.addTransients( CryptIO.class,
-                              CryptGEN.class );
+        module.addObjects( CryptIO.class,
+                           CryptGEN.class );
     }
 
     @Before
@@ -69,8 +69,8 @@ public abstract class AbstractQiPkiTest
         strResponseHandler = new BasicResponseHandler();
         httpHost = new HttpHost( "localhost", DEFAULT_PORT );
         httpClient = new DefaultHttpClient();
-        cryptio = transientBuilderFactory.newTransient( CryptIO.class );
-        cryptgen = transientBuilderFactory.newTransient( CryptGEN.class );
+        cryptio = objectBuilderFactory.newObject( CryptIO.class );
+        cryptgen = objectBuilderFactory.newObject( CryptGEN.class );
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
     }
 

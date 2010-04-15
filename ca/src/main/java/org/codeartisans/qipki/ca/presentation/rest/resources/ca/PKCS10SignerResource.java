@@ -25,12 +25,13 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.core.crypto.CryptIO;
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
-import org.qi4j.api.composite.TransientBuilderFactory;
+import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
@@ -49,8 +50,8 @@ public class PKCS10SignerResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PKCS10SignerResource.class );
-    @Structure
-    private TransientBuilderFactory tbf;
+    @Service
+    private CryptoToolFactory cryptoToolFactory;
 
     public PKCS10SignerResource( @Structure ObjectBuilderFactory obf )
     {
@@ -68,7 +69,7 @@ public class PKCS10SignerResource
 
             // Data
             String caIdentity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            CryptIO cryptIO = tbf.newTransient( CryptIO.class );
+            CryptIO cryptIO = cryptoToolFactory.newCryptIOInstance();
             PKCS10CertificationRequest pkcs10 = cryptIO.readPKCS10PEM( entity.getReader() );
 
             // Context
