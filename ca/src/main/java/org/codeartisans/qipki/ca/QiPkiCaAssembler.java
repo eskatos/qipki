@@ -26,7 +26,7 @@ import org.codeartisans.qipki.ca.application.contexts.CAListContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
@@ -182,14 +182,14 @@ public class QiPkiCaAssembler
 
         LayerAssembly domain = app.layerAssembly( "domain" );
         {
-            new Assembler() // CertificateAuthority
+            new Assembler() // RootCertificateAuthority
             {
 
                 @Override
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
-                    module.addEntities( CAEntity.class,
+                    module.addEntities( RootCAEntity.class,
                                         CRLEntity.class ).
                             visibleIn( Visibility.application );
                     module.addServices( CARepository.class,
@@ -198,7 +198,7 @@ public class QiPkiCaAssembler
                             visibleIn( Visibility.application );
                 }
 
-            }.assemble( domain.moduleAssembly( "ca" ) );
+            }.assemble( domain.moduleAssembly( "rootca" ) );
 
             new Assembler() // CryptoStore
             {
