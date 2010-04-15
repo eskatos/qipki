@@ -33,9 +33,9 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
 import org.joda.time.Duration;
-import org.qi4j.api.composite.TransientBuilderFactory;
-import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.library.shiro.crypto.CryptoException;
 import org.slf4j.Logger;
@@ -46,10 +46,10 @@ public class CAMixin
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CAMixin.class );
+    @Service
+    private CryptoToolFactory cryptoToolFactory;
     @This
     private CAEntity state;
-    @Structure
-    private TransientBuilderFactory tbf;
 
     @Override
     public X509Certificate certificate()
@@ -83,8 +83,8 @@ public class CAMixin
         LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
         try {
 
-            CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
-            CryptIO cryptio = tbf.newTransient( CryptIO.class );
+            CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
+            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
 
             X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
 

@@ -73,8 +73,8 @@ public interface QiPkiCaFixtures
             // Create a test keystore
             CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
             CryptoStoreEntity cryptoStore = csFactory.create( csParams );
-            // KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
-            
+            KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
+
             // Create some test CAs
             KeySpecValue keySpec = paramsFactory.createKeySpec( "SHA256WITHRSA", 512 );
             CAEntity rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
@@ -85,7 +85,7 @@ public interface QiPkiCaFixtures
 
             uow.complete();
 
-            
+
 
             uow = uowf.newUnitOfWork();
 

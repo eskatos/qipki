@@ -25,23 +25,23 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.qi4j.api.composite.TransientBuilderFactory;
-import org.qi4j.api.injection.scope.Structure;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 
 public class CryptoStoreMixin
         implements CryptoStoreBehavior
 {
 
-    @Structure
-    private TransientBuilderFactory tbf;
+    @Service
+    private CryptoToolFactory cryptoToolFactory;
     @This
     private CryptoStoreEntity state;
 
     @Override
     public KeyStore loadKeyStore()
     {
-        CryptIO cryptio = tbf.newTransient( CryptIO.class );
+        CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
         return cryptio.base64DecodeKeyStore( state.payload().get(),
                                              state.storeType().get(),
                                              state.password().get() );
