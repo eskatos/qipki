@@ -19,26 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.sub;
 
-import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
-import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.entity.Aggregated;
-import org.qi4j.api.entity.EntityComposite;
-import org.qi4j.api.entity.association.Association;
-import org.qi4j.api.mixin.Mixins;
+import java.security.cert.X509Certificate;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 
-@Mixins( CAMixin.class )
-public interface CAEntity
-        extends Nameable, CABehavior, EntityComposite
+public abstract class SubCAMixin
+        implements SubCABehavior
 {
 
-    Association<CryptoStoreEntity> cryptoStore();
-
-    @Optional // TODO REMOVE
-    @Aggregated
-    Association<CRLEntity> crl();
+    @Override
+    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
+    {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
 
 }

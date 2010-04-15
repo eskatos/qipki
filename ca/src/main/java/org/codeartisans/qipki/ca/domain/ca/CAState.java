@@ -21,16 +21,20 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.entity.Aggregated;
+import org.qi4j.api.entity.Identity;
+import org.qi4j.api.entity.association.Association;
 
-public interface CABehavior
-        extends PKCS10Signer
+public interface CAState
+        extends Nameable, Identity
 {
 
-    X509Certificate certificate();
+    Association<CryptoStoreEntity> cryptoStore();
 
-    PrivateKey privateKey();
+    @Aggregated
+    Association<CRLEntity> crl();
 
 }

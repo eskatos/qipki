@@ -19,14 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.ca.sub;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.qipki.ca.domain.ca.CAMixin;
+import org.codeartisans.qipki.ca.domain.ca.CAState;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.mixin.Mixins;
 
-public interface PKCS10Signer
+@Mixins( { CAMixin.class, SubCAMixin.class } )
+public interface SubCAEntity
+        extends CAState, SubCABehavior, EntityComposite
 {
-
-    X509Certificate sign( PKCS10CertificationRequest pkcs10 );
-
 }

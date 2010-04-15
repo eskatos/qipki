@@ -19,18 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.endentity;
 
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
-
-public interface CABehavior
-        extends PKCS10Signer
+/**
+ * @author Paul Merlin <p.merlin@nosphere.org>
+ */
+public interface EndEntityEntity
 {
-
-    X509Certificate certificate();
-
-    PrivateKey privateKey();
-
 }

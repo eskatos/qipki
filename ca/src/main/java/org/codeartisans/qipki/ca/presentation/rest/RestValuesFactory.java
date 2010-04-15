@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.codeartisans.qipki.ca.domain.ca.CAEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
@@ -44,7 +44,7 @@ public interface RestValuesFactory
         extends ServiceComposite
 {
 
-    CAValue ca( Reference parentRef, CAEntity ca );
+    CAValue ca( Reference parentRef, RootCAEntity ca );
 
     CryptoStoreValue cryptoStore( Reference parentRef, CryptoStoreEntity ks );
 
@@ -61,7 +61,7 @@ public interface RestValuesFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public CAValue ca( Reference parentRef, CAEntity ca )
+        public CAValue ca( Reference parentRef, RootCAEntity ca )
         {
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
             CAValue caValue = caValueBuilder.prototype();
@@ -89,7 +89,7 @@ public interface RestValuesFactory
             Set<RestValue> set = new LinkedHashSet<RestValue>();
             for ( Object eachObj : objects ) {
                 try {
-                    set.add( ca( parentRef, ( CAEntity ) eachObj ) );
+                    set.add( ca( parentRef, ( RootCAEntity ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
                     LOGGER.trace( "Object is not a CAEntity: {}", ex.getMessage() );
