@@ -21,26 +21,36 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.x509.X509V2CRLGenerator;
+import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
+import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
 import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
+import org.codeartisans.qipki.core.crypto.constants.TimeRelated;
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -63,11 +73,14 @@ public interface CAFactory
         private UnitOfWorkFactory uowf;
         @Structure
         private TransientBuilderFactory tbf;
+        @Service
+        private CRLFactory crlFactory;
 
         @Override
         public CAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
         {
             try {
+                // Self signed CA
                 CryptGEN cryptgen = tbf.newTransient( CryptGEN.class );
                 CryptIO cryptio = tbf.newTransient( CryptIO.class );
                 KeyPair keyPair = cryptgen.generateRSAKeyPair( keySpec.length().get() );
@@ -83,28 +96,46 @@ public interface CAFactory
 
                 EntityBuilder<CAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( CAEntity.class );
                 CAEntity ca = caBuilder.instance();
-
-                KeyStore ks = keyStore.loadKeyStore();
-                ks.setEntry( ca.identity().get(),
-                             new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
-                             new KeyStore.PasswordProtection( keyStore.password().get() ) );
-
-                ByteArrayOutputStream boas = new ByteArrayOutputStream();
-                ks.store( boas, keyStore.password().get() );
-                boas.flush();
-                keyStore.payload().set( new String( Base64.encode( boas.toByteArray() ), "UTF-8" ) );
-
                 ca.name().set( name );
                 ca.cryptoStore().set( keyStore );
 
+                // Store in associated CryptoStore
+                {
+                    KeyStore ks = keyStore.loadKeyStore();
+                    ks.setEntry( ca.identity().get(),
+                                 new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
+                                 new KeyStore.PasswordProtection( keyStore.password().get() ) );
+                    keyStore.payload().set( cryptio.base64Encode( ks, keyStore.password().get() ) );
+                }
+
+                // Generate initial CRL
+                {
+                    X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
+                    CRLEntity crl = crlFactory.create( cryptio.asPEM( x509CRL ).toString() );
+                    ca.crl().set( crl );
+                }
+
                 return caBuilder.newInstance();
+
             } catch ( GeneralSecurityException ex ) {
-                throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
-            } catch ( IOException ex ) {
                 throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
             }
         }
 
+        private X509CRL createInitialCRL( X509Certificate caCert, PrivateKey caPrivKey )
+                throws GeneralSecurityException
+        {
+            X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+            crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
+            crlGen.setThisUpdate( new DateTime().minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
+            crlGen.setNextUpdate( new DateTime().minus( TimeRelated.CLOCK_SKEW_DURATION ).plusHours( 12 ).toDate() );
+            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA );
+            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
+            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
+            return crlGen.generate( caPrivKey, BouncyCastleProvider.PROVIDER_NAME );
+        }
+
+        // TODO
         @Override
         public CAEntity createSubCA( CAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
         {

@@ -26,6 +26,7 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
@@ -76,6 +77,7 @@ public class RestletApplication
         router.attach( "/ca", createFinder( CAListResource.class ) );
         router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
         router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
+        router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
         router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}/pkcs10signer", createFinder( PKCS10SignerResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );

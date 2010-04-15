@@ -21,8 +21,11 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.mixin.Mixins;
@@ -33,5 +36,9 @@ public interface CAEntity
 {
 
     Association<CryptoStoreEntity> cryptoStore();
+
+    @Optional // TODO REMOVE
+    @Aggregated
+    Association<CRLEntity> crl();
 
 }

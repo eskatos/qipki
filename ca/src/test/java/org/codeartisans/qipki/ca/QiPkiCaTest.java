@@ -64,6 +64,10 @@ public class QiPkiCaTest
         String ca = httpClient.execute( httpHost, get, strResponseHandler );
         LOGGER.debug( "FirstCA.html:\n{}", ca );
 
+        get = new HttpGet( firstCaUri + "/crl" );
+        String crl = httpClient.execute( httpHost, get, strResponseHandler );
+        LOGGER.debug( "FirstCA CRL:\n{}", crl );
+
         KeyPair keyPair = cryptgen.generateRSAKeyPair( 512 );
         PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10(
                 new X500Principal( "CN=qipki" ), keyPair,
@@ -71,7 +75,9 @@ public class QiPkiCaTest
 
         HttpPost post = new HttpPost( firstCaUri + "/pkcs10signer" );
         post.addHeader( "Accept", "text/plain" );
-        post.setEntity( new StringEntity( cryptio.asPEM( pkcs10 ).toString() ) );
+        String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
+        LOGGER.debug( "PKCS10 as PEM:\n{}", pkcs10PEM );
+        post.setEntity( new StringEntity( pkcs10PEM ) );
 
         String newPem = httpClient.execute( httpHost, post, strResponseHandler );
         LOGGER.debug( "Signed certificate:\n{}", newPem );
