@@ -26,15 +26,19 @@ import org.codeartisans.qipki.ca.application.contexts.CAListContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.sub.SubCAEntity;
 import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
 import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
+import org.codeartisans.qipki.ca.domain.endentity.EndEntityEntity;
+import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
+import org.codeartisans.qipki.ca.domain.x509.X509Entity;
+import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
@@ -194,14 +198,19 @@ public class QiPkiCaAssembler
                     module.addEntities( CryptoStoreEntity.class,
                                         RootCAEntity.class,
                                         SubCAEntity.class,
-                                        CRLEntity.class ).
+                                        CRLEntity.class,
+                                        EndEntityEntity.class,
+                                        X509Entity.class ).
                             visibleIn( Visibility.application );
+
                     // Services
                     module.addServices( CryptoStoreRepository.class,
                                         CryptoStoreFactory.class,
                                         CARepository.class,
                                         CAFactory.class,
-                                        CRLFactory.class ).
+                                        CRLFactory.class,
+                                        EndEntityFactory.class,
+                                        X509Factory.class ).
                             visibleIn( Visibility.application );
                 }
 

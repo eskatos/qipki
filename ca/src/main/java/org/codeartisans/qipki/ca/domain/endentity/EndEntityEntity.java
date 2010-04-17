@@ -21,9 +21,9 @@
  */
 package org.codeartisans.qipki.ca.domain.endentity;
 
-/**
- * @author Paul Merlin <p.merlin@nosphere.org>
- */
+import org.qi4j.api.entity.EntityComposite;
+
 public interface EndEntityEntity
+        extends EndEntity, EntityComposite
 {
 }

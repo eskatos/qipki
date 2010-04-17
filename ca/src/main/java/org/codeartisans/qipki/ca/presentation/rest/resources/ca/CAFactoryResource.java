@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import java.io.IOException;
 import org.codeartisans.qipki.ca.application.contexts.CAListContext;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
+import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
@@ -67,7 +67,7 @@ public class CAFactoryResource
             CAListContext caListCtx = newRootContext().caListContext();
 
             // Interaction
-            RootCAEntity ca = caListCtx.createCA( data );
+            CA ca = caListCtx.createCA( data );
 
             // Representation
             getResponse().setStatus( Status.SUCCESS_CREATED );

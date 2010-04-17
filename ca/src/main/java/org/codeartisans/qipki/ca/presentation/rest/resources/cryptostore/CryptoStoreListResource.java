@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
@@ -51,7 +51,7 @@ public class CryptoStoreListResource
         CryptoStoreListContext csListCtx = newRootContext().ksListContext();
 
         // Interaction
-        Query<CryptoStoreEntity> csList = csListCtx.list( start );
+        Query<CryptoStore> csList = csListCtx.list( start );
 
         // Representation
         Iterable<RestValue> values = restValuesFactory.asValues( getReference(), csList );

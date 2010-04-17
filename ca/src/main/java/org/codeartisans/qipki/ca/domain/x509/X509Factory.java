@@ -19,50 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.cryptostore;
+package org.codeartisans.qipki.ca.domain.x509;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.security.cert.X509Certificate;
+import org.bouncycastle.openssl.PEMWriter;
+import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.core.QiPkiFailure;
+import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.query.QueryBuilder;
-import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-@Mixins( CryptoStoreRepository.Mixin.class )
-public interface CryptoStoreRepository
+@Mixins( X509Factory.Mixin.class )
+public interface X509Factory
         extends ServiceComposite
 {
 
-    CryptoStore findByIdentity( String identity );
-
-    Query<CryptoStore> findAllPaginated( int firstResult, int maxResults );
+    X509 create( X509Certificate cert, CA issuer );
 
     abstract class Mixin
-            implements CryptoStoreRepository
+            implements X509Factory
     {
 
         @Structure
         private UnitOfWorkFactory uowf;
-        @Structure
-        private QueryBuilderFactory qbf;
 
         @Override
-        public CryptoStore findByIdentity( String identity )
+        public X509 create( X509Certificate cert, CA issuer )
         {
-            return uowf.currentUnitOfWork().get( CryptoStore.class, identity );
-        }
+            try {
 
-        @Override
-        public Query<CryptoStore> findAllPaginated( int firstResult, int maxResults )
-        {
-            UnitOfWork uow = uowf.currentUnitOfWork();
-            QueryBuilder<CryptoStore> builder = qbf.newQueryBuilder( CryptoStore.class );
-            Query<CryptoStore> query = builder.newQuery( uow ).
-                    firstResult( firstResult ).
-                    maxResults( maxResults );
-            return query;
+                EntityBuilder<X509> x509Builder = uowf.currentUnitOfWork().newEntityBuilder( X509.class );
+                X509 x509 = x509Builder.instance();
+
+                StringWriter sw = new StringWriter();
+                new PEMWriter( sw ).writeObject( cert );
+                
+                x509.pem().set( sw.toString() );
+                x509.issuer().set( issuer );
+
+                return x509Builder.newInstance();
+
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to create X509Certificate pem", ex );
+            }
         }
 
     }

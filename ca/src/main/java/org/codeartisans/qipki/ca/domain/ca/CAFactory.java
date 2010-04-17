@@ -21,7 +21,6 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -38,9 +37,11 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
+import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
+import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
@@ -65,9 +66,9 @@ public interface CAFactory
         extends ServiceComposite
 {
 
-    RootCAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
+    RootCA createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore );
 
-    RootCAEntity createSubCA( RootCAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore );
+    SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore );
 
     abstract class Mixin
             implements CAFactory
@@ -81,7 +82,7 @@ public interface CAFactory
         private CRLFactory crlFactory;
 
         @Override
-        public RootCAEntity createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
+        public RootCA createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Self signed CA
@@ -98,24 +99,24 @@ public interface CAFactory
                                                                          Duration.standardDays( 3650 ),
                                                                          cryptio.extractRequestedExtensions( pkcs10 ) );
 
-                EntityBuilder<RootCAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCAEntity.class );
-                RootCAEntity ca = caBuilder.instance();
+                EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
+                RootCA ca = caBuilder.instance();
                 ca.name().set( name );
-                ca.cryptoStore().set( keyStore );
+                ca.cryptoStore().set( cryptoStore );
 
                 // Store in associated CryptoStore
                 {
-                    KeyStore ks = keyStore.loadKeyStore();
+                    KeyStore ks = cryptoStore.loadKeyStore();
                     ks.setEntry( ca.identity().get(),
                                  new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
-                                 new KeyStore.PasswordProtection( keyStore.password().get() ) );
-                    keyStore.payload().set( cryptio.base64Encode( ks, keyStore.password().get() ) );
+                                 new KeyStore.PasswordProtection( cryptoStore.password().get() ) );
+                    cryptoStore.payload().set( cryptio.base64Encode( ks, cryptoStore.password().get() ) );
                 }
 
                 // Generate initial CRL
                 {
                     X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
-                    CRLEntity crl = crlFactory.create( cryptio.asPEM( x509CRL ).toString() );
+                    CRL crl = crlFactory.create( cryptio.asPEM( x509CRL ).toString() );
                     ca.crl().set( crl );
                 }
 
@@ -141,10 +142,10 @@ public interface CAFactory
 
         // TODO
         @Override
-        public RootCAEntity createSubCA( RootCAEntity parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStoreEntity keyStore )
+        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore )
         {
-            EntityBuilder<RootCAEntity> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCAEntity.class );
-            RootCAEntity ca = caBuilder.instance();
+            EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );
+            SubCA ca = caBuilder.instance();
             ca.name().set( name );
             return caBuilder.newInstance();
         }

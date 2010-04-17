@@ -19,18 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.x509;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import java.io.IOException;
+import java.io.StringReader;
+import java.security.cert.X509Certificate;
+import org.bouncycastle.openssl.PEMReader;
+import org.codeartisans.qipki.core.QiPkiFailure;
+import org.qi4j.api.injection.scope.This;
 
-public class CryptoStoreContext
-        extends Context
+public class X509Mixin
+        implements X509Behavior
 {
 
-    public CryptoStore cryptoStore()
+    @This
+    private X509State state;
+
+    @Override
+    public X509Certificate x509Certificate()
     {
-        return context.role( CryptoStore.class );
+        try {
+            return ( X509Certificate ) new PEMReader( new StringReader( state.pem().get() ) ).readObject();
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to read X509 pem", ex );
+        }
     }
 
 }

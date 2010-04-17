@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.CAListContext;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
+import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
@@ -51,7 +51,7 @@ public class CAListResource
         CAListContext caListCtx = newRootContext().caListContext();
 
         // Interaction
-        Query<RootCAEntity> caList = caListCtx.list( start );
+        Query<CA> caList = caListCtx.list( start );
 
         // Representation
         Iterable<RestValue> values = valuesFactory.asValues( getReference(), caList );

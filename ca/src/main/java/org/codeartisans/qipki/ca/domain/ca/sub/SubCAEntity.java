@@ -22,12 +22,11 @@
 package org.codeartisans.qipki.ca.domain.ca.sub;
 
 import org.codeartisans.qipki.ca.domain.ca.CAMixin;
-import org.codeartisans.qipki.ca.domain.ca.CAState;
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
 
 @Mixins( { CAMixin.class, SubCAMixin.class } )
 public interface SubCAEntity
-        extends CAState, SubCABehavior, EntityComposite
+        extends SubCA, EntityComposite
 {
 }

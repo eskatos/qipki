@@ -19,18 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.x509;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import java.security.cert.X509Certificate;
 
-public class CryptoStoreContext
-        extends Context
+public interface X509Behavior
 {
 
-    public CryptoStore cryptoStore()
-    {
-        return context.role( CryptoStore.class );
-    }
+    X509Certificate x509Certificate();
 
 }

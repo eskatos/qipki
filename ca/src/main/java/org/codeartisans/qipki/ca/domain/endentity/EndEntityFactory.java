@@ -19,18 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.endentity;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-public class CryptoStoreContext
-        extends Context
+@Mixins( EndEntityFactory.Mixin.class )
+public interface EndEntityFactory
+        extends ServiceComposite
 {
 
-    public CryptoStore cryptoStore()
+    EndEntity create( X509 x509 );
+
+    abstract class Mixin
+            implements EndEntityFactory
     {
-        return context.role( CryptoStore.class );
+
+        @Structure
+        private UnitOfWorkFactory uowf;
+
+        @Override
+        public EndEntity create( X509 x509 )
+        {
+            EntityBuilder<EndEntity> endEntityBuilder = uowf.currentUnitOfWork().newEntityBuilder( EndEntity.class );
+            EndEntity endEntity = endEntityBuilder.instance();
+            endEntity.x509s().add( x509 );
+            return endEntityBuilder.newInstance();
+        }
+
     }
 
 }

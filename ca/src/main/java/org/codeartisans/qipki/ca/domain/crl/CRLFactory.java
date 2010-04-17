@@ -12,7 +12,7 @@ public interface CRLFactory
         extends ServiceComposite
 {
 
-    CRLEntity create( String pem );
+    CRL create( String pem );
 
     abstract class Mixin
             implements CRLFactory
@@ -22,10 +22,10 @@ public interface CRLFactory
         private UnitOfWorkFactory uowf;
 
         @Override
-        public CRLEntity create( String payload )
+        public CRL create( String payload )
         {
-            EntityBuilder<CRLEntity> crlBuilder = uowf.currentUnitOfWork().newEntityBuilder( CRLEntity.class );
-            CRLEntity crl = crlBuilder.instance();
+            EntityBuilder<CRL> crlBuilder = uowf.currentUnitOfWork().newEntityBuilder( CRL.class );
+            CRL crl = crlBuilder.instance();
             crl.pem().set( payload );
             crl.lastCRLNumber().set( BigInteger.ZERO );
             return crlBuilder.newInstance();

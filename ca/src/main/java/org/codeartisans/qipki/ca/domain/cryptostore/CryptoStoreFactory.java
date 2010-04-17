@@ -40,7 +40,7 @@ public interface CryptoStoreFactory
         extends ServiceComposite
 {
 
-    CryptoStoreEntity create( CryptoStoreFactoryParamsValue params );
+    CryptoStore create( CryptoStoreFactoryParamsValue params );
 
     abstract class Mixin
             implements CryptoStoreFactory
@@ -52,12 +52,12 @@ public interface CryptoStoreFactory
         private CryptoToolFactory cryptoToolFactory;
 
         @Override
-        public CryptoStoreEntity create( CryptoStoreFactoryParamsValue params )
+        public CryptoStore create( CryptoStoreFactoryParamsValue params )
         {
             CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
-            EntityBuilder<CryptoStoreEntity> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStoreEntity.class );
+            EntityBuilder<CryptoStore> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStore.class );
 
-            CryptoStoreEntity ksEntity = ksBuilder.instance();
+            CryptoStore ksEntity = ksBuilder.instance();
 
             ksEntity.name().set( params.name().get() );
             ksEntity.storeType().set( params.storeType().get() );
