@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
 import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
@@ -63,7 +63,7 @@ public class CryptoStoreResource
             CryptoStoreContext csCtx = newRootContext().ksContext( identity );
 
             // Interaction
-            CryptoStoreEntity cs = csCtx.cryptoStore();
+            CryptoStore cs = csCtx.cryptoStore();
 
             // Representation
             return new StringRepresentation( restValuesFactory.cryptoStore( getReference(), cs ).toJSON(),

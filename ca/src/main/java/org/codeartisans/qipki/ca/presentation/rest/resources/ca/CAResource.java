@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.CAContext;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
+import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
@@ -63,7 +63,7 @@ public class CAResource
             CAContext caCtx = newRootContext().caContext( identity );
 
             // Interaction
-            RootCAEntity ca = caCtx.caEntity();
+            CA ca = caCtx.ca();
 
             // Representation
             return new StringRepresentation( valuesFactory.ca( getReference(), ca ).toJSON(),

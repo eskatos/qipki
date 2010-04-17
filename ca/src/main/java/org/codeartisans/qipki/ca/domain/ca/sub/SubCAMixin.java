@@ -21,17 +21,7 @@
  */
 package org.codeartisans.qipki.ca.domain.ca.sub;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 public abstract class SubCAMixin
         implements SubCABehavior
 {
-
-    @Override
-    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
 }

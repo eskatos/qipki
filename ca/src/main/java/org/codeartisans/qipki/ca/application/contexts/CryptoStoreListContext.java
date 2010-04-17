@@ -21,8 +21,8 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
@@ -32,12 +32,12 @@ public class CryptoStoreListContext
         extends Context
 {
 
-    public Query<CryptoStoreEntity> list( int start )
+    public Query<CryptoStore> list( int start )
     {
         return context.role( CryptoStoreRepository.class ).findAllPaginated( start, 25 );
     }
 
-    public CryptoStoreEntity createCryptoStore( CryptoStoreFactoryParamsValue params )
+    public CryptoStore createCryptoStore( CryptoStoreFactoryParamsValue params )
     {
         return context.role( CryptoStoreFactory.class ).create( params );
     }

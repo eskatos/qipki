@@ -21,9 +21,6 @@
  */
 package org.codeartisans.qipki.ca.domain.ca.sub;
 
-import org.codeartisans.qipki.ca.domain.ca.CABehavior;
-
 public interface SubCABehavior
-        extends CABehavior
 {
 }

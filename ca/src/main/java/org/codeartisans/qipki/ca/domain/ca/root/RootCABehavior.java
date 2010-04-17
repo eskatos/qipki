@@ -21,9 +21,6 @@
  */
 package org.codeartisans.qipki.ca.domain.ca.root;
 
-import org.codeartisans.qipki.ca.domain.ca.CABehavior;
-
 public interface RootCABehavior
-        extends CABehavior
 {
 }

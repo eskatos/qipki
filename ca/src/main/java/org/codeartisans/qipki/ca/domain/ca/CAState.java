@@ -21,8 +21,8 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
-import org.codeartisans.qipki.ca.domain.crl.CRLEntity;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.crl.CRL;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.Identity;
@@ -32,9 +32,9 @@ public interface CAState
         extends Nameable, Identity
 {
 
-    Association<CryptoStoreEntity> cryptoStore();
+    Association<CryptoStore> cryptoStore();
 
     @Aggregated
-    Association<CRLEntity> crl();
+    Association<CRL> crl();
 
 }

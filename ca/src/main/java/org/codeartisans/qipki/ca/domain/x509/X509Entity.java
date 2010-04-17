@@ -19,18 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.x509;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.mixin.Mixins;
 
-public class CryptoStoreContext
-        extends Context
+@Mixins( X509Mixin.class )
+public interface X509Entity
+        extends X509, EntityComposite
 {
-
-    public CryptoStore cryptoStore()
-    {
-        return context.role( CryptoStore.class );
-    }
-
 }

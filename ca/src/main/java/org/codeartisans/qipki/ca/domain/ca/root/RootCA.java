@@ -19,18 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.ca.root;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.ca.domain.ca.CA;
 
-public class CryptoStoreContext
-        extends Context
+public interface RootCA
+        extends CA, RootCABehavior
 {
-
-    public CryptoStore cryptoStore()
-    {
-        return context.role( CryptoStore.class );
-    }
-
 }

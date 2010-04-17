@@ -22,9 +22,9 @@
 package org.codeartisans.qipki.ca.utils;
 
 import java.security.KeyStore;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.commons.constants.KeyStoreType;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
@@ -72,14 +72,14 @@ public interface QiPkiCaFixtures
 
             // Create a test keystore
             CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
-            CryptoStoreEntity cryptoStore = csFactory.create( csParams );
+            CryptoStore cryptoStore = csFactory.create( csParams );
             KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
 
             // Create some test CAs
             KeySpecValue keySpec = paramsFactory.createKeySpec( "SHA256WITHRSA", 512 );
-            RootCAEntity rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
-            RootCAEntity usersCa = caFactory.createRootCA( USERS_CA_NAME, USERS_CA_DN, keySpec, cryptoStore );
-            RootCAEntity servicesCa = caFactory.createRootCA( SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, cryptoStore );
+            RootCA rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
+            RootCA usersCa = caFactory.createRootCA( USERS_CA_NAME, USERS_CA_DN, keySpec, cryptoStore );
+            RootCA servicesCa = caFactory.createRootCA( SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, cryptoStore );
 
             String rootId = rootCa.identity().get();
 
@@ -90,7 +90,7 @@ public interface QiPkiCaFixtures
             uow = uowf.newUnitOfWork();
 
             cryptoStore = uow.get( cryptoStore );
-            rootCa = uow.get( RootCAEntity.class, rootId );
+            rootCa = uow.get( RootCA.class, rootId );
 
             uow.complete();
 

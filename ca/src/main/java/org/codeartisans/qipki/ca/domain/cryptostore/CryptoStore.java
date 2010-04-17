@@ -22,8 +22,13 @@
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import org.codeartisans.qipki.commons.fragments.CryptoStoreState;
+import org.qi4j.api.entity.Identity;
+import org.qi4j.api.property.Property;
 
 public interface CryptoStore
-        extends CryptoStoreState, CryptoStoreBehavior
+        extends CryptoStoreState, Identity, CryptoStoreBehavior
 {
+
+    Property<String> payload();
+
 }

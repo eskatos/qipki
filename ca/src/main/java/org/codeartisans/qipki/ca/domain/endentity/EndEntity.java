@@ -19,18 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.ca.domain.endentity;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.qi4j.api.common.UseDefaults;
+import org.qi4j.api.entity.association.ManyAssociation;
 
-public class CryptoStoreContext
-        extends Context
+public interface EndEntity
 {
 
-    public CryptoStore cryptoStore()
-    {
-        return context.role( CryptoStore.class );
-    }
+    @UseDefaults
+    ManyAssociation<X509> x509s();
 
 }

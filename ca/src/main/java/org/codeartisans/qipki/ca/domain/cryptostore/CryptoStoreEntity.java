@@ -23,13 +23,9 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.property.Property;
 
 @Mixins( CryptoStoreMixin.class )
 public interface CryptoStoreEntity
         extends CryptoStore, EntityComposite
 {
-
-    Property<String> payload();
-
 }

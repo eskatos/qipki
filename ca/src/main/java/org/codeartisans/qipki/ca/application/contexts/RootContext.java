@@ -21,13 +21,13 @@
  */
 package org.codeartisans.qipki.ca.application.contexts;
 
+import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
+import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.qi4j.api.injection.scope.Service;
 
@@ -56,8 +56,8 @@ public class RootContext
 
     public CryptoStoreContext ksContext( String identity )
     {
-        CryptoStoreEntity ks = ksRepos.findByIdentity( identity );
-        context.playRoles( ks, CryptoStoreEntity.class );
+        CryptoStore ks = ksRepos.findByIdentity( identity );
+        context.playRoles( ks, CryptoStore.class );
         return subContext( CryptoStoreContext.class );
     }
 
@@ -71,8 +71,8 @@ public class RootContext
 
     public CAContext caContext( String identity )
     {
-        RootCAEntity ca = caRepos.findByIdentity( identity );
-        context.playRoles( ca, RootCAEntity.class );
+        CA ca = caRepos.findByIdentity( identity );
+        context.playRoles( ca, CA.class );
         context.playRoles( ca, PKCS10Signer.class );
         return subContext( CAContext.class );
     }
