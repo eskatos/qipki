@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.core.crypto.algorithms;
 
 /**
  * See http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation

@@ -19,49 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.commons.values;
 
+import java.util.Date;
+import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.query.QueryBuilder;
-import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWork;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.api.value.ValueBuilder;
+import org.qi4j.api.value.ValueBuilderFactory;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
+@Mixins( CommonValuesFactory.Mixin.class )
+public interface CommonValuesFactory
         extends ServiceComposite
 {
 
-    CA findByIdentity( String identity );
+    ValidityPeriod buildValidityPeriod( Interval interval );
 
-    Query<CA> findAllPaginated( int firstResult, int maxResults );
+    ValidityPeriod buildValidityPeriod( Date notBefore, Date notAfter );
 
     abstract class Mixin
-            implements CARepository
+            implements CommonValuesFactory
     {
 
         @Structure
-        private UnitOfWorkFactory uowf;
-        @Structure
-        private QueryBuilderFactory qbf;
+        private ValueBuilderFactory vbf;
 
         @Override
-        public CA findByIdentity( String identity )
+        public ValidityPeriod buildValidityPeriod( Interval interval )
         {
-            return uowf.currentUnitOfWork().get( CA.class, identity );
+            return buildValidityPeriod( interval.getStart().toDate(), interval.getEnd().toDate() );
         }
 
         @Override
-        public Query<CA> findAllPaginated( int firstResult, int maxResults )
+        public ValidityPeriod buildValidityPeriod( Date notBefore, Date notAfter )
         {
-            QueryBuilder<CA> builder = qbf.newQueryBuilder( CA.class );
-            Query<CA> query = builder.newQuery( uowf.currentUnitOfWork() ).
-                    firstResult( firstResult ).
-                    maxResults( maxResults );
-            return query;
+            ValueBuilder<ValidityPeriod> builder = vbf.newValueBuilder( ValidityPeriod.class );
+            ValidityPeriod period = builder.prototype();
+            period.notBefore().set( notBefore );
+            period.notAfter().set( notAfter );
+            return builder.newInstance();
         }
 
     }

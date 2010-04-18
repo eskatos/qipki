@@ -19,26 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.core.crypto.algorithms;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
-import org.codeartisans.qipki.core.dci.Context;
-
-public class CAContext
-        extends Context
+public interface DigestAlgorithm
 {
 
-    public CA ca()
-    {
-        return context.role( CA.class );
-    }
-
-    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
-    {
-        return context.role( PKCS10Signer.class ).sign( pkcs10 );
-    }
-
+    String MD2 = "MD2";
+    String MD5 = "MD5";
+    String SHA_1 = "SHA-1";
+    String SHA_256 = "SHA-256";
+    String SHA_384 = "SHA-384";
+    String SHA_512 = "SHA-512";
 }

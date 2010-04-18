@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
-import org.codeartisans.qipki.ca.application.contexts.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
@@ -66,7 +66,7 @@ public class CAResource
             CA ca = caCtx.ca();
 
             // Representation
-            return new StringRepresentation( valuesFactory.ca( getReference(), ca ).toJSON(),
+            return new StringRepresentation( valuesFactory.ca( getReference().getParentRef(), ca ).toJSON(),
                                              MediaType.APPLICATION_JSON );
 
         } catch ( NoSuchEntityException ex ) {

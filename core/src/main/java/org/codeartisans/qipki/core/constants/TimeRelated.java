@@ -19,11 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.core.constants;
 
-public interface AsymetricAlgorithm
+import org.joda.time.Duration;
+
+public interface TimeRelated
 {
 
-    String RSA = "RSA";
-    String ECDSA = "ECDSA";
+    /**
+     * Used to prevent clock synchronization issues.
+     */
+    Duration CLOCK_SKEW_DURATION = Duration.standardMinutes( 10 );
 }

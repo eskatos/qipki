@@ -19,28 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.x509;
 
+import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.endentity.EndEntity;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
+import static org.qi4j.api.query.QueryExpressions.*;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
+@Mixins( X509Repository.Mixin.class )
+public interface X509Repository
         extends ServiceComposite
 {
 
-    CA findByIdentity( String identity );
+    X509 findByIdentity( String identity );
 
-    Query<CA> findAllPaginated( int firstResult, int maxResults );
+    Query<X509> findAllPaginated( int firstResult, int maxResults );
+
+    Query<X509> findPaginatedByCA( CA ca, int firstResult, int maxResults );
 
     abstract class Mixin
-            implements CARepository
+            implements X509Repository
     {
 
         @Structure
@@ -49,16 +53,30 @@ public interface CARepository
         private QueryBuilderFactory qbf;
 
         @Override
-        public CA findByIdentity( String identity )
+        public X509 findByIdentity( String identity )
         {
-            return uowf.currentUnitOfWork().get( CA.class, identity );
+            return uowf.currentUnitOfWork().get( X509.class, identity );
         }
 
         @Override
-        public Query<CA> findAllPaginated( int firstResult, int maxResults )
+        public Query<X509> findAllPaginated( int firstResult, int maxResults )
         {
-            QueryBuilder<CA> builder = qbf.newQueryBuilder( CA.class );
-            Query<CA> query = builder.newQuery( uowf.currentUnitOfWork() ).
+            QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
+            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() ).
+                    firstResult( firstResult ).
+                    maxResults( maxResults );
+            return query;
+        }
+
+        @Override
+        public Query<X509> findPaginatedByCA( CA ca, int firstResult, int maxResults )
+        {
+            QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
+            EndEntity ee = templateFor( EndEntity.class );
+            X509 x509 = templateFor( X509.class );
+            builder = builder.where( eq( x509.issuer(), ca ) );
+            builder = builder.where( contains( ee.x509s(), x509 ) );
+            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

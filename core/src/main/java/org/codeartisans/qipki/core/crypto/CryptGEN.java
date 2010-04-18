@@ -44,9 +44,9 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.constants.AsymetricAlgorithm;
-import org.codeartisans.qipki.core.crypto.constants.SignatureAlgorithm;
-import org.codeartisans.qipki.core.crypto.constants.TimeRelated;
+import org.codeartisans.qipki.core.crypto.algorithms.AsymetricAlgorithm;
+import org.codeartisans.qipki.core.crypto.algorithms.SignatureAlgorithm;
+import org.codeartisans.qipki.core.constants.TimeRelated;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 

@@ -19,27 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.application.contexts;
+package org.codeartisans.qipki.core.constants;
 
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.core.dci.Context;
-import org.qi4j.api.query.Query;
-
-public class CryptoStoreListContext
-        extends Context
+public interface IOConstants
 {
 
-    public Query<CryptoStore> list( int start )
-    {
-        return context.role( CryptoStoreRepository.class ).findAllPaginated( start, 25 );
-    }
-
-    public CryptoStore createCryptoStore( CryptoStoreFactoryParamsValue params )
-    {
-        return context.role( CryptoStoreFactory.class ).create( params );
-    }
-
+    String UTF_8 = "UTF-8";
 }

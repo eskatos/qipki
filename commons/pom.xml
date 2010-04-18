@@ -17,6 +17,17 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${version.bouncy}</version>
+        </dependency>
+        
         <!-- Qi4j -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
@@ -28,7 +39,6 @@
             <artifactId>qi4j-lib-constraints</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
-
     </dependencies>
 
 </project>

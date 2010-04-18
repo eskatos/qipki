@@ -27,7 +27,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
-import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.core.QiPkiApplication;
 import org.codeartisans.qipki.core.crypto.CryptGEN;
@@ -55,7 +55,7 @@ public abstract class AbstractQiPkiTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new QiPkiCommonsValuesAssembler().assemble( module );
+        new QiPkiRestValuesAssembler().assemble( module );
         module.addObjects( CryptIO.class,
                            CryptGEN.class );
     }

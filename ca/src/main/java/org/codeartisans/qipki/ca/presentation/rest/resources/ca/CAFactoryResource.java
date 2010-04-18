@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import java.io.IOException;
-import org.codeartisans.qipki.ca.application.contexts.CAListContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;

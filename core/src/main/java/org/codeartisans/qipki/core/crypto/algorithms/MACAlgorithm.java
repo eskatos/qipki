@@ -19,21 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.core.crypto.algorithms;
 
-public interface BlockCipherPadding
+public interface MACAlgorithm
 {
 
-    // Sun JCE
-    String NoPadding = "NoPadding";
-    String PKCS5Padding = "PKCS5Padding";
-    String SSL3Padding = "SSL3Padding";
-    String ISO10126Padding = "ISO10126Padding";
-    // Bouncy Castle
-    String PKCS7Padding = "PKCS7Padding";
-    String ISO10126d2Padding = "ISO10126d2Padding";
-    String ISO7816d4Padding = "ISO7816d4Padding";
-    String X932Padding = "X932Padding";
-    String ZeroBytePadding = "ZeroBytePadding";
-    String TBCPadding = "TBCPadding";
+    /**
+     * The HMAC-MD5 keyed-hashing algorithm as defined in RFC 2104: "HMAC: Keyed-Hashing for Message Authentication" (February 1997).
+     */
+    String HmacMD5 = "HmacMD5";
+    /**
+     * The HMAC-SHA1 keyed-hashing algorithm as defined in RFC 2104: "HMAC: Keyed-Hashing for Message Authentication" (February 1997).
+     */
+    String HmacSHA1 = "HmacSHA1";
+    /**
+     * The HmacSHA256 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-256 as the message digest algorithm.
+     */
+    String HmacSHA256 = "HmacSHA256";
+    /**
+     * The HmacSHA384 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-384 as the message digest algorithm.
+     */
+    String HmacSHA384 = "HmacSHA384";
+    /**
+     * The HmacSHA512 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-512 as the message digest algorithm.
+     */
+    String HmacSHA512 = "HmacSHA512";
 }

@@ -30,7 +30,10 @@ import org.apache.http.entity.StringEntity;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.json.JSONArray;
+import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.codeartisans.qipki.commons.values.rest.RestListValue;
+import org.codeartisans.qipki.commons.values.rest.x509.X509DetailValue;
+import org.codeartisans.qipki.commons.values.rest.x509.X509Value;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -52,21 +55,20 @@ public class QiPkiCaTest
         get.addHeader( "Accept", "application/json" );
 
         String jsonCaList = httpClient.execute( httpHost, get, strResponseHandler );
-        LOGGER.debug( "CAs List:\n{}", jsonCaList );
+        LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
 
-        JSONObject caList = new JSONObject( jsonCaList );
-        JSONArray items = caList.getJSONArray( "items" );
-        JSONObject firstCa = items.getJSONObject( 0 );
-        String firstCaUri = firstCa.getString( "uri" );
+        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
+        CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
+        String firstCaUri = firstCa.uri().get();
 
         get = new HttpGet( firstCaUri + ".html" );
         get.addHeader( "Accept", "text/html" );
         String ca = httpClient.execute( httpHost, get, strResponseHandler );
-        LOGGER.debug( "FirstCA.html:\n{}", ca );
+        LOGGER.debug( "First CA HTML:\n{}", ca );
 
         get = new HttpGet( firstCaUri + "/crl" );
         String crl = httpClient.execute( httpHost, get, strResponseHandler );
-        LOGGER.debug( "FirstCA CRL:\n{}", crl );
+        LOGGER.debug( "First CA CRL:\n{}", crl );
 
         KeyPair keyPair = cryptgen.generateRSAKeyPair( 512 );
         PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10(
@@ -82,6 +84,28 @@ public class QiPkiCaTest
         String newPem = httpClient.execute( httpHost, post, strResponseHandler );
         LOGGER.debug( "Signed certificate:\n{}", newPem );
 
+        get = new HttpGet( "/api/x509" );
+        get.addHeader( "Accept", "application/json" );
+
+        String jsonX509List = httpClient.execute( httpHost, get, strResponseHandler );
+        LOGGER.debug( "X509s List: {}", new JSONObject( jsonX509List ).toString( 2 ) );
+
+        RestListValue x509List = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonX509List );
+        X509Value firstX509 = ( X509Value ) x509List.items().get().get( 0 );
+
+        get = new HttpGet( firstX509.uri().get() );
+        get.addHeader( "Accept", "application/json" );
+        String jsonX509 = httpClient.execute( httpHost, get, strResponseHandler );
+        LOGGER.debug( "First X509: {}", new JSONObject( jsonX509 ).toString( 2 ) );
+
+        firstX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
+
+        get = new HttpGet( firstX509.uri().get() + "/detail" );
+        get.addHeader( "Accept", "application/json" );
+        String jsonX509Detail = httpClient.execute( httpHost, get, strResponseHandler );
+        LOGGER.debug( "First X509 detail: {}", new JSONObject( jsonX509Detail ).toString( 2 ) );
+
+        X509DetailValue firstX509Detail = valueBuilderFactory.newValueFromJSON( X509DetailValue.class, jsonX509Detail );
     }
 
 }

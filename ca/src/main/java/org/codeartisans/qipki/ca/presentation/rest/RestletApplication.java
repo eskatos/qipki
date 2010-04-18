@@ -30,7 +30,10 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.Uses;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -79,6 +82,10 @@ public class RestletApplication
         router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
         router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
         router.attach( "/ca/{" + AbstractEntityResource.PARAM_IDENTITY + "}/pkcs10signer", createFinder( PKCS10SignerResource.class ) );
+
+        router.attach( "/x509", createFinder( X509ListResource.class ) );
+        router.attach( "/x509/{" + AbstractEntityResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
+        router.attach( "/x509/{" + AbstractEntityResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );
     }

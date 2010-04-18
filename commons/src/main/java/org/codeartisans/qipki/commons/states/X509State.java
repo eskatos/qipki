@@ -19,12 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.commons.states;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.qi4j.api.property.Property;
 
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public interface X509State
 {
+
+    Property<String> canonicalSubjectDN();
+
+    Property<String> hexSerialNumber();
+
+    Property<String> canonicalIssuerDN();
+
+    Property<ValidityPeriod> validityPeriod();
+
 }

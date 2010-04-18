@@ -19,12 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.commons.values;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
+import java.util.Date;
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public interface ValidityPeriod
+        extends ValueComposite
 {
+
+    Property<Date> notBefore();
+
+    Property<Date> notAfter();
+
 }

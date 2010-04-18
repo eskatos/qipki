@@ -19,16 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.x509;
+package org.codeartisans.qipki.commons.constants;
 
-import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.fragments.HasPEM;
-import org.qi4j.api.entity.association.Association;
-
-public interface X509State
-        extends HasPEM
+public enum KeyUsage
 {
 
-    Association<CA> issuer();
+    digitalSignature( org.bouncycastle.asn1.x509.KeyUsage.digitalSignature ),
+    nonRepudiation( org.bouncycastle.asn1.x509.KeyUsage.nonRepudiation ),
+    keyEncipherment( org.bouncycastle.asn1.x509.KeyUsage.keyEncipherment ),
+    dataEncipherment( org.bouncycastle.asn1.x509.KeyUsage.dataEncipherment ),
+    keyAgreement( org.bouncycastle.asn1.x509.KeyUsage.keyAgreement ),
+    keyCertSign( org.bouncycastle.asn1.x509.KeyUsage.keyCertSign ),
+    cRLSign( org.bouncycastle.asn1.x509.KeyUsage.cRLSign ),
+    encipherOnly( org.bouncycastle.asn1.x509.KeyUsage.encipherOnly ),
+    decipherOnly( org.bouncycastle.asn1.x509.KeyUsage.decipherOnly );
+    private int usage;
+
+    private KeyUsage( int usage )
+    {
+        this.usage = usage;
+    }
+
+    public int usage()
+    {
+        return usage;
+    }
 
 }
