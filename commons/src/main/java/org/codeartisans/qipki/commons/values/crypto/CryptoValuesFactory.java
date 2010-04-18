@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values;
+package org.codeartisans.qipki.commons.values.crypto;
 
+import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import java.util.Date;
 import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Structure;
@@ -29,8 +30,8 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
 
-@Mixins( CommonValuesFactory.Mixin.class )
-public interface CommonValuesFactory
+@Mixins( CryptoValuesFactory.Mixin.class )
+public interface CryptoValuesFactory
         extends ServiceComposite
 {
 
@@ -39,7 +40,7 @@ public interface CommonValuesFactory
     ValidityIntervalValue buildValidityInterval( Date notBefore, Date notAfter );
 
     abstract class Mixin
-            implements CommonValuesFactory
+            implements CryptoValuesFactory
     {
 
         @Structure

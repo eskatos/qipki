@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values;
+package org.codeartisans.qipki.commons.values.crypto;
 
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;

@@ -1,7 +1,7 @@
 package org.codeartisans.qipki.commons.values.params;
 
 import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.KeySpecValue;
+import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;

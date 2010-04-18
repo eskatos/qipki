@@ -61,9 +61,9 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoS
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
-import org.codeartisans.qipki.commons.values.CommonValuesFactory;
-import org.codeartisans.qipki.commons.values.ValidityIntervalValue;
-import org.codeartisans.qipki.core.crypto.CryptoToolsAssembler;
+import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
+import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
+import org.codeartisans.qipki.core.crypto.CryptoAssembler;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -223,7 +223,7 @@ public class QiPkiCaAssembler
                                         EndEntityFactory.class,
                                         X509Repository.class,
                                         X509Factory.class,
-                                        CommonValuesFactory.class ).
+                                        CryptoValuesFactory.class ).
                             visibleIn( Visibility.application );
                 }
 
@@ -233,7 +233,7 @@ public class QiPkiCaAssembler
 
         LayerAssembly crypto = app.layerAssembly( "crypto" );
         {
-            new CryptoToolsAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
+            new CryptoAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
         }
 
         LayerAssembly infrastructure = app.layerAssembly( "infrastructure" );

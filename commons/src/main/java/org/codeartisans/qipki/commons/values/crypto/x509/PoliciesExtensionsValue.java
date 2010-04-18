@@ -19,84 +19,68 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest.x509;
+package org.codeartisans.qipki.commons.values.crypto.x509;
 
 import java.util.Set;
-import org.codeartisans.qipki.commons.constants.KeyUsage;
-import org.codeartisans.qipki.commons.constants.RevocationReason;
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
-import org.codeartisans.qipki.commons.values.ValidityIntervalValue;
+import org.codeartisans.qipki.commons.fragments.HasOID;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface KeysExtensionsValue
+public interface PoliciesExtensionsValue
         extends ValueComposite
 {
 
-    @UseDefaults
-    Property<KeyUsagesValue> keyUsages();
+    @Optional
+    Property<CertificatePoliciesValue> certificatePolicies();
 
     @Optional
-    Property<SubjectKeyIdentifierValue> subjectKeyIdentifier();
+    Property<PolicyMappingsValue> policyMappings();
 
-    @Optional
-    Property<AuthorityKeyIdentifierValue> authorityKeyIdentifier();
-
-    @Optional
-    Property<PrivateKeyUsageIntervalValue> privateKeyUsageInterval();
-
-    @Optional
-    Property<CRLDistributionPointsValue> crlDistributionPoints();
-
-    public interface KeyUsagesValue
+    public interface CertificatePoliciesValue
             extends HasCriticality, ValueComposite
     {
 
         @UseDefaults
-        Property<Set<KeyUsage>> keyUsages();
+        Property<Set<PolicyInformationValue>> policies();
 
     }
 
-    public interface SubjectKeyIdentifierValue
-            extends HasCriticality, ValueComposite
+    public interface PolicyInformationValue
+            extends HasOID, ValueComposite
     {
-
-        Property<String> keyIdentifier();
-
-    }
-
-    public interface AuthorityKeyIdentifierValue
-            extends HasCriticality, ValueComposite
-    {
-
-        Property<String> keyIdentifier();
-
-        Property<Long> serialNumber();
 
         @UseDefaults
-        Property<Set<X509GeneralNameValue>> names();
+        Property<Set<PolicyQualifierInfoValue>> policyQualifiers();
 
     }
 
-    public interface PrivateKeyUsageIntervalValue
-            extends HasCriticality, ValidityIntervalValue
+    public interface PolicyQualifierInfoValue
+            extends HasOID, ValueComposite
     {
+
+        Property<String> qualifier();
+
     }
 
-    public interface CRLDistributionPointsValue
+    public interface PolicyMappingsValue
             extends HasCriticality, ValueComposite
     {
 
         @UseDefaults
-        Property<Set<String>> endpoints();
+        Property<Set<PolicyMappingValue>> mappings();
 
-        @UseDefaults
-        Property<Set<RevocationReason>> reasons();
+    }
 
-        @UseDefaults
-        Property<Set<X509GeneralNameValue>> issuerNames();
+    public interface PolicyMappingValue
+            extends ValueComposite
+    {
+
+        Property<String> issuerDomainPolicyOID();
+
+        Property<String> subjectDomainPolicyOID();
 
     }
 

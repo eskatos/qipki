@@ -19,45 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest.x509;
+package org.codeartisans.qipki.commons.values.crypto.x509;
 
 import org.qi4j.api.common.Optional;
+import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
+import org.qi4j.library.constraints.annotation.GreaterThan;
 
-public interface X509DetailValue
-        extends X509Value
+public interface X509GeneralSubtreeValue
+        extends ValueComposite
 {
 
-    Property<Integer> certificateVersion();
+    Property<X509GeneralNameValue> base();
 
-    Property<String> signatureAlgorithm();
-
-    Property<String> publicKeyAlgorithm();
-
-    Property<Integer> publicKeySize();
-
-    Property<String> md5Fingerprint();
-
-    Property<String> sha1Fingerprint();
-
-    Property<String> sha256Fingerprint();
+    @UseDefaults
+    @GreaterThan( 0L )
+    Property<Long> minimum();
 
     @Optional
-    Property<String> hexSubjectUniqueIdentifier();
-
-    @Optional
-    Property<String> hexIssuerUniqueIdentifier();
-
-    @Optional
-    Property<KeysExtensionsValue> keysExtensions();
-
-    @Optional
-    Property<PoliciesExtensionsValue> policiesExtensions();
-
-    @Optional
-    Property<NamesExtensionsValue> namesExtensions();
-
-    @Optional
-    Property<ConstraintsExtensionsValue> constraintsExtensions();
+    @GreaterThan( 0L )
+    Property<Long> maximum();
 
 }
