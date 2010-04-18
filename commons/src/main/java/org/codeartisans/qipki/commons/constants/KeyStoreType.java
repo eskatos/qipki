@@ -21,11 +21,34 @@
  */
 package org.codeartisans.qipki.commons.constants;
 
-public interface KeyStoreType
+public enum KeyStoreType
 {
 
-    String JCEKS = "JCEKS";
-    String JKS = "JKS";
-    String PKCS12 = "PKCS12";
-    String PKCS11 = "PKCS11";
+    JCEKS( StringValues.JCEKS ),
+    JKS( StringValues.JKS ),
+    PKCS12( StringValues.PKCS12 ),
+    PKCS11( StringValues.PKCS11 );
+
+    // Needed ?
+    public interface StringValues
+    {
+
+        String JCEKS = "JCEKS";
+        String JKS = "JKS";
+        String PKCS12 = "PKCS12";
+        String PKCS11 = "PKCS11";
+    }
+
+    private String string;
+
+    private KeyStoreType( String string )
+    {
+        this.string = string;
+    }
+
+    public String asString()
+    {
+        return string;
+    }
+
 }

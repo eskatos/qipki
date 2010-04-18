@@ -19,18 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.states;
+package org.codeartisans.qipki.commons.constants;
 
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.qi4j.api.property.Property;
-
-public interface CryptoStoreState
-        extends Nameable
+public enum X509GeneralName
 {
 
-    Property<KeyStoreType> storeType();
+    otherName( org.bouncycastle.asn1.x509.GeneralName.otherName ),
+    rfc822Name( org.bouncycastle.asn1.x509.GeneralName.rfc822Name ),
+    dNSName( org.bouncycastle.asn1.x509.GeneralName.dNSName ),
+    x400Address( org.bouncycastle.asn1.x509.GeneralName.x400Address ),
+    directoryName( org.bouncycastle.asn1.x509.GeneralName.directoryName ),
+    ediPartyName( org.bouncycastle.asn1.x509.GeneralName.ediPartyName ),
+    uniformResourceIdentifier( org.bouncycastle.asn1.x509.GeneralName.uniformResourceIdentifier ),
+    iPAddress( org.bouncycastle.asn1.x509.GeneralName.iPAddress ),
+    registeredID( org.bouncycastle.asn1.x509.GeneralName.registeredID ),
+    unknownGeneralName( -1 );
+    private int tag;
 
-    Property<char[]> password();
+    private X509GeneralName( int tag )
+    {
+        this.tag = tag;
+    }
+
+    public int tag()
+    {
+        return tag;
+    }
 
 }

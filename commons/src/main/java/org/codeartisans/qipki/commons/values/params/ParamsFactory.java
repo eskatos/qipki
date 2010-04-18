@@ -1,5 +1,6 @@
 package org.codeartisans.qipki.commons.values.params;
 
+import org.codeartisans.qipki.commons.constants.KeyStoreType;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
@@ -13,7 +14,7 @@ public interface ParamsFactory
         extends ServiceComposite
 {
 
-    CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, String storeType, char[] password );
+    CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
 
     KeySpecValue createKeySpec( String algorithm, Integer length );
 
@@ -27,7 +28,7 @@ public interface ParamsFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, String storeType, char[] password )
+        public CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password )
         {
             ValueBuilder<CryptoStoreFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CryptoStoreFactoryParamsValue.class );
             CryptoStoreFactoryParamsValue params = paramsBuilder.prototype();

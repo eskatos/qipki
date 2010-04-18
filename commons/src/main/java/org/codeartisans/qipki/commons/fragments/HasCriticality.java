@@ -19,18 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.states;
+package org.codeartisans.qipki.commons.fragments;
 
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.qi4j.api.property.Property;
 
-public interface CryptoStoreState
-        extends Nameable
+public interface HasCriticality
 {
 
-    Property<KeyStoreType> storeType();
-
-    Property<char[]> password();
+    Property<Boolean> critical();
 
 }

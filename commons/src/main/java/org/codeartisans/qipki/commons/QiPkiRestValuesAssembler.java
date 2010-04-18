@@ -26,12 +26,17 @@ import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.KeySpecValue;
-import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.codeartisans.qipki.commons.values.ValidityIntervalValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
-import org.codeartisans.qipki.commons.values.rest.x509.KeysExtensions;
+import org.codeartisans.qipki.commons.values.rest.x509.ConstraintsExtensionsValue;
+import org.codeartisans.qipki.commons.values.rest.x509.KeysExtensionsValue;
+import org.codeartisans.qipki.commons.values.rest.x509.NamesExtensionsValue;
+import org.codeartisans.qipki.commons.values.rest.x509.PoliciesExtensionsValue;
 import org.codeartisans.qipki.commons.values.rest.x509.X509DetailValue;
+import org.codeartisans.qipki.commons.values.rest.x509.X509GeneralNameValue;
+import org.codeartisans.qipki.commons.values.rest.x509.X509GeneralSubtreeValue;
 import org.codeartisans.qipki.commons.values.rest.x509.X509Value;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
@@ -72,9 +77,28 @@ public class QiPkiRestValuesAssembler
                           KeySpecValue.class,
                           X509Value.class,
                           X509DetailValue.class,
-                          ValidityPeriod.class,
-                          KeysExtensions.class,
-                          KeysExtensions.AuthorityKeyIdentifier.class ).
+                          ValidityIntervalValue.class,
+                          X509GeneralNameValue.class,
+                          X509GeneralSubtreeValue.class,
+                          KeysExtensionsValue.class,
+                          KeysExtensionsValue.KeyUsagesValue.class,
+                          KeysExtensionsValue.SubjectKeyIdentifierValue.class,
+                          KeysExtensionsValue.AuthorityKeyIdentifierValue.class,
+                          KeysExtensionsValue.PrivateKeyUsageIntervalValue.class,
+                          KeysExtensionsValue.CRLDistributionPointsValue.class,
+                          PoliciesExtensionsValue.class,
+                          PoliciesExtensionsValue.CertificatePoliciesValue.class,
+                          PoliciesExtensionsValue.PolicyInformationValue.class,
+                          PoliciesExtensionsValue.PolicyQualifierInfoValue.class,
+                          PoliciesExtensionsValue.PolicyMappingsValue.class,
+                          PoliciesExtensionsValue.PolicyMappingValue.class,
+                          NamesExtensionsValue.class,
+                          NamesExtensionsValue.AlternativeNamesValue.class,
+                          ConstraintsExtensionsValue.class,
+                          ConstraintsExtensionsValue.BasicConstraintsValue.class,
+                          ConstraintsExtensionsValue.PolicyConstraintsValue.class,
+                          ConstraintsExtensionsValue.PolicyConstraintValue.class,
+                          ConstraintsExtensionsValue.NameConstraintsValue.class ).
                 visibleIn( visibility );
         module.addServices( CommonValuesFactory.class ).
                 visibleIn( visibility );

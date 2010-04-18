@@ -81,6 +81,7 @@ public abstract class CAMixin
 
             X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
 
+            // TODO add Basic Constraints
             // TODO add CRL Distribution point !
 
             X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),

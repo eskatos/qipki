@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.x509;
 
 import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.domain.x509.X509;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -43,7 +43,7 @@ public class X509DetailResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509DetailResource.class );
     @Service
-    private RestValuesFactory valuesFactory;
+    private RestletValuesFactory valuesFactory;
 
     public X509DetailResource( @Structure ObjectBuilderFactory obf )
     {

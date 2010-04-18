@@ -19,23 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.x509;
+package org.codeartisans.qipki.commons.values;
 
-public interface X509OIDs
+import java.util.Date;
+import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
+
+public interface ValidityIntervalValue
+        extends ValueComposite
 {
 
-    public interface X509Extensions
-    {
+    Property<Date> notBefore();
 
-        public interface KeyRelated
-        {
-
-            String AuthorityKeyIdentifier = "2.5.29.35";
-            String SubjectKeyIdentifier = "2.5.29.14";
-            String KeyUsages = "2.5.29.15";
-            String PrivateKeyUsagePeriod = "2.5.29.16";
-        }
-
-    }
+    Property<Date> notAfter();
 
 }

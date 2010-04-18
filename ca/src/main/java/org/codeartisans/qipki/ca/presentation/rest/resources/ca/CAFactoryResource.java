@@ -24,7 +24,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 import java.io.IOException;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.qi4j.api.injection.scope.Service;
@@ -45,7 +45,7 @@ public class CAFactoryResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CAFactoryResource.class );
     @Service
-    private RestValuesFactory restValuesFactory;
+    private RestletValuesFactory restValuesFactory;
     @Structure
     private ValueBuilderFactory vbf;
 

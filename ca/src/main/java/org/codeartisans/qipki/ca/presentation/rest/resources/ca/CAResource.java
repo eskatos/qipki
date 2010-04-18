@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -43,7 +43,7 @@ public class CAResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CAResource.class );
     @Service
-    private RestValuesFactory valuesFactory;
+    private RestletValuesFactory valuesFactory;
 
     public CAResource( @Structure ObjectBuilderFactory obf )
     {

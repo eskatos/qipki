@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
+import java.security.PublicKey;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -40,6 +41,8 @@ public interface CryptoToolFactory
     X509ExtensionsReader newX509ExtensionsReaderInstance();
 
     X509ExtensionsBuilder newX509ExtensionsBuilderInstance();
+
+    KeyInformation newKeyInformationInstance( PublicKey publicKey );
 
     abstract class Mixin
             implements CryptoToolFactory
@@ -76,6 +79,12 @@ public interface CryptoToolFactory
         public X509ExtensionsBuilder newX509ExtensionsBuilderInstance()
         {
             return obf.newObject( X509ExtensionsBuilder.class );
+        }
+
+        @Override
+        public KeyInformation newKeyInformationInstance( PublicKey publicKey )
+        {
+            return obf.newObjectBuilder( KeyInformation.class ).use( publicKey ).newInstance();
         }
 
     }
