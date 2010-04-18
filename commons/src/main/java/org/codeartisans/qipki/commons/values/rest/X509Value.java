@@ -19,18 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest.x509;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.codeartisans.qipki.commons.constants.X509GeneralName;
+import org.codeartisans.qipki.commons.states.X509State;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+public interface X509Value
+        extends RestValue, X509State, ValueComposite
 {
 
-    Property<X509GeneralName> nameType();
-
-    Property<String> nameValue();
+    @Optional // TODO REMOVE
+    Property<String> issuerIdentity();
 
 }

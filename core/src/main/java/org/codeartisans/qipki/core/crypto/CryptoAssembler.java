@@ -21,18 +21,25 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
+import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
+import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
+import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsBuilder;
+import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsReader;
+import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-public class CryptoToolsAssembler
+public class CryptoAssembler
         implements Assembler
 {
 
     private final Visibility visibility;
 
-    public CryptoToolsAssembler( Visibility visibility )
+    public CryptoAssembler( Visibility visibility )
     {
         this.visibility = visibility;
     }
@@ -41,7 +48,8 @@ public class CryptoToolsAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( CryptoToolFactory.class ).
+        module.addServices( CryptoToolFactory.class,
+                            X509ExtensionsValueFactory.class ).
                 visibleIn( visibility );
         module.addObjects( CryptIO.class,
                            CryptGEN.class,
@@ -50,6 +58,7 @@ public class CryptoToolsAssembler
                            X509ExtensionsBuilder.class,
                            KeyInformation.class ).
                 visibleIn( visibility );
+        new QiPkiCryptoValuesAssembler( visibility ).assemble( module );
     }
 
 }

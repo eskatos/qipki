@@ -24,8 +24,8 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 

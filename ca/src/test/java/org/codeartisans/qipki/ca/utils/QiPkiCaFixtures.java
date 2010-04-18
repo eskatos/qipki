@@ -27,7 +27,7 @@ import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.KeySpecValue;
+import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.qi4j.api.injection.scope.Service;

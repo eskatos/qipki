@@ -19,26 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest.x509;
+package org.codeartisans.qipki.commons.values.crypto;
 
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.common.UseDefaults;
+import java.util.Date;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
-import org.qi4j.library.constraints.annotation.GreaterThan;
 
-public interface X509GeneralSubtreeValue
+public interface ValidityIntervalValue
         extends ValueComposite
 {
 
-    Property<X509GeneralNameValue> base();
+    Property<Date> notBefore();
 
-    @UseDefaults
-    @GreaterThan( 0L )
-    Property<Long> minimum();
-
-    @Optional
-    @GreaterThan( 0L )
-    Property<Long> maximum();
+    Property<Date> notAfter();
 
 }

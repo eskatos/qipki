@@ -24,9 +24,9 @@ package org.codeartisans.qipki.ca.domain.x509;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.commons.values.CommonValuesFactory;
-import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
+import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
+import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -48,7 +48,7 @@ public interface X509Factory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CommonValuesFactory commonValuesFactory;
+        private CryptoValuesFactory commonValuesFactory;
         @Service
         private CryptoToolFactory cryptoToolFactory;
 

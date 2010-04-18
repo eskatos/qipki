@@ -19,19 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest.x509;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.codeartisans.qipki.commons.states.X509State;
-import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NamesExtensionsValue;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
 
-public interface X509Value
-        extends RestValue, X509State, ValueComposite
+public interface X509DetailValue
+        extends X509Value
 {
 
-    @Optional // TODO REMOVE
-    Property<String> issuerIdentity();
+    Property<Integer> certificateVersion();
+
+    Property<String> signatureAlgorithm();
+
+    Property<String> publicKeyAlgorithm();
+
+    Property<Integer> publicKeySize();
+
+    Property<String> md5Fingerprint();
+
+    Property<String> sha1Fingerprint();
+
+    Property<String> sha256Fingerprint();
+
+    @Optional
+    Property<String> hexSubjectUniqueIdentifier();
+
+    @Optional
+    Property<String> hexIssuerUniqueIdentifier();
+
+    @Optional
+    Property<KeysExtensionsValue> keysExtensions();
+
+    @Optional
+    Property<PoliciesExtensionsValue> policiesExtensions();
+
+    @Optional
+    Property<NamesExtensionsValue> namesExtensions();
+
+    @Optional
+    Property<ConstraintsExtensionsValue> constraintsExtensions();
 
 }
