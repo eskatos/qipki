@@ -19,12 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.ca.application.contexts.x509;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.ca.domain.x509.X509Repository;
+import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.query.Query;
 
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public class X509ListContext
+        extends Context
 {
+
+    public Query<X509> list( int start )
+    {
+        return context.role( X509Repository.class ).findAllPaginated( start, 25 );
+    }
+
 }

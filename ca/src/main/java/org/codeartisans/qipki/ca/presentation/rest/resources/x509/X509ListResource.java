@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
+package org.codeartisans.qipki.ca.presentation.rest.resources.x509;
 
-import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
-import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
+import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
@@ -32,14 +32,14 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 
-public class CAListResource
+public class X509ListResource
         extends AbstractListResource
 {
 
     @Service
     private RestValuesFactory valuesFactory;
 
-    public CAListResource( @Structure ObjectBuilderFactory obf )
+    public X509ListResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
@@ -48,13 +48,13 @@ public class CAListResource
     protected RestListValue list( int start )
     {
         // Context
-        CAListContext caListCtx = newRootContext().caListContext();
+        X509ListContext x509ListCtx = newRootContext().x509ListContext();
 
         // Interaction
-        Query<CA> caList = caListCtx.list( start );
+        Query<X509> x509List = x509ListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = valuesFactory.asValues( getReference(), caList );
+        Iterable<RestValue> values = valuesFactory.asValues( getReference(), x509List );
         return valuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 

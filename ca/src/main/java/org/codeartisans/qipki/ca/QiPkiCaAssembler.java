@@ -21,11 +21,13 @@
  */
 package org.codeartisans.qipki.ca;
 
-import org.codeartisans.qipki.ca.application.contexts.CAContext;
-import org.codeartisans.qipki.ca.application.contexts.CAListContext;
-import org.codeartisans.qipki.ca.application.contexts.CryptoStoreContext;
-import org.codeartisans.qipki.ca.application.contexts.CryptoStoreListContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
+import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
+import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
@@ -39,6 +41,7 @@ import org.codeartisans.qipki.ca.domain.endentity.EndEntityEntity;
 import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509Entity;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
+import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
@@ -51,13 +54,16 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
-import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
-import org.codeartisans.qipki.core.crypto.CryptGEN;
-import org.codeartisans.qipki.core.crypto.CryptIO;
-import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
+import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
+import org.codeartisans.qipki.commons.values.CommonValuesFactory;
+import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.codeartisans.qipki.core.crypto.CryptoToolsAssembler;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -69,9 +75,7 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.index.rdf.assembly.RdfMemoryStoreAssembler;
 import org.qi4j.library.http.JettyConfiguration;
-import static org.qi4j.library.http.Dispatchers.Dispatcher.*;
 import static org.qi4j.library.http.Servlets.*;
-import org.qi4j.library.http.UnitOfWorkFilterService;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
 public class QiPkiCaAssembler
@@ -111,10 +115,13 @@ public class QiPkiCaAssembler
                                        CAFactoryResource.class,
                                        CAResource.class,
                                        CRLResource.class,
-                                       PKCS10SignerResource.class ).
+                                       PKCS10SignerResource.class,
+                                       X509ListResource.class,
+                                       X509Resource.class,
+                                       X509DetailResource.class ).
                             visibleIn( Visibility.module );
 
-                    new QiPkiCommonsValuesAssembler( Visibility.layer ).assemble( module );
+                    new QiPkiRestValuesAssembler( Visibility.layer ).assemble( module );
 
                     module.addServices( RestValuesFactory.class ).
                             visibleIn( Visibility.module );
@@ -122,9 +129,8 @@ public class QiPkiCaAssembler
                     addServlets( serve( "/api/*" ).with( RestletServletServerService.class ) ).
                             to( module );
 
-                    addFilters( filter( "/api/*" ).through( UnitOfWorkFilterService.class ).
-                            on( REQUEST ) ).
-                            to( module );
+                    // Not needed, see RestletApplication
+                    // addFilters( filter( "/api/*" ).through( UnitOfWorkFilterService.class ).on( REQUEST ) ).to( module );
                 }
 
             }.assemble( presentation.moduleAssembly( "rest" ) );
@@ -178,7 +184,9 @@ public class QiPkiCaAssembler
                                        CryptoStoreListContext.class,
                                        CryptoStoreContext.class,
                                        CAListContext.class,
-                                       CAContext.class ).
+                                       CAContext.class,
+                                       X509ListContext.class,
+                                       X509Context.class ).
                             visibleIn( Visibility.application );
                 }
 
@@ -194,6 +202,9 @@ public class QiPkiCaAssembler
                 public void assemble( ModuleAssembly module )
                         throws AssemblyException
                 {
+                    // Values
+                    module.addValues( ValidityPeriod.class );
+
                     // Entities
                     module.addEntities( CryptoStoreEntity.class,
                                         RootCAEntity.class,
@@ -210,7 +221,9 @@ public class QiPkiCaAssembler
                                         CAFactory.class,
                                         CRLFactory.class,
                                         EndEntityFactory.class,
-                                        X509Factory.class ).
+                                        X509Repository.class,
+                                        X509Factory.class,
+                                        CommonValuesFactory.class ).
                             visibleIn( Visibility.application );
                 }
 
@@ -220,23 +233,9 @@ public class QiPkiCaAssembler
 
         LayerAssembly crypto = app.layerAssembly( "crypto" );
         {
-            new Assembler() // Crypto
-            {
-
-                @Override
-                public void assemble( ModuleAssembly module )
-                        throws AssemblyException
-                {
-                    module.addServices( CryptoToolFactory.class ).
-                            visibleIn( Visibility.application );
-                    module.addObjects( CryptIO.class,
-                                       CryptGEN.class ).
-                            visibleIn( Visibility.application );
-                }
-
-            }.assemble( crypto.moduleAssembly( "crypto" ) );
-
+            new CryptoToolsAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
         }
+
         LayerAssembly infrastructure = app.layerAssembly( "infrastructure" );
         {
             new Assembler() // Store

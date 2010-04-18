@@ -50,6 +50,8 @@ import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.codeartisans.qipki.core.constants.IOConstants;
+import org.codeartisans.qipki.commons.constants.KeyStoreType;
 import org.codeartisans.qipki.core.QiPkiFailure;
 
 public class CryptIO
@@ -74,7 +76,7 @@ public class CryptIO
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             keystore.store( baos, password );
             baos.flush();
-            return new String( Base64.encode( baos.toByteArray() ), "UTF-8" );
+            return new String( Base64.encode( baos.toByteArray() ), IOConstants.UTF_8 );
         } catch ( IOException ex ) {
             throw new QiPkiFailure( "Unable to Base64 encode KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
@@ -86,7 +88,7 @@ public class CryptIO
     {
         try {
             KeyStore keystore = getKeyStoreInstance( storeType );
-            keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( "UTF-8" ) ) ), password );
+            keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( IOConstants.UTF_8 ) ) ), password );
             return keystore;
         } catch ( IOException ex ) {
             throw new QiPkiFailure( "Unable to Base64 decode KeyStore", ex );
@@ -130,7 +132,6 @@ public class CryptIO
         } catch ( IOException ex ) {
             throw new QiPkiFailure( "Unable to write " + ilk + " as PEM", ex );
         }
-
     }
 
     public X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 )
@@ -199,7 +200,7 @@ public class CryptIO
     private KeyStore getKeyStoreInstance( String storeType )
             throws KeyStoreException, NoSuchProviderException
     {
-        if ( "PKCS12".equals( storeType ) ) {
+        if ( KeyStoreType.PKCS12.equals( storeType ) ) {
             return KeyStore.getInstance( storeType, BouncyCastleProvider.PROVIDER_NAME );
         }
         return KeyStore.getInstance( storeType );

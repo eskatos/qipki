@@ -19,12 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.ca.application.contexts.ca;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
-import org.qi4j.api.value.ValueComposite;
+import java.security.cert.X509Certificate;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.endentity.EndEntity;
+import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
+import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.ca.domain.x509.X509Factory;
+import org.codeartisans.qipki.core.dci.Context;
 
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public class CAContext
+        extends Context
 {
+
+    public CA ca()
+    {
+        return context.role( CA.class );
+    }
+
+    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
+    {
+        X509Certificate cert = context.role( PKCS10Signer.class ).sign( pkcs10 );
+        X509 x509 = context.role( X509Factory.class ).create( cert, context.role( CA.class ) );
+        EndEntity ee = context.role( EndEntityFactory.class ).create( x509 );
+        return cert;
+    }
+
 }

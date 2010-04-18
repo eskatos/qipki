@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
+package org.codeartisans.qipki.ca.presentation.rest.resources.x509;
 
-import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
+import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
@@ -37,15 +37,15 @@ import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CryptoStoreResource
+public class X509Resource
         extends AbstractEntityResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreResource.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( X509Resource.class );
     @Service
-    private RestValuesFactory restValuesFactory;
+    private RestValuesFactory valuesFactory;
 
-    public CryptoStoreResource( @Structure ObjectBuilderFactory obf )
+    public X509Resource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
@@ -60,17 +60,17 @@ public class CryptoStoreResource
             identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
 
             // Context
-            CryptoStoreContext csCtx = newRootContext().ksContext( identity );
+            X509Context x509Ctx = newRootContext().x509Context( identity );
 
             // Interaction
-            CryptoStore cs = csCtx.cryptoStore();
+            X509 x509 = x509Ctx.x509();
 
             // Representation
-            return new StringRepresentation( restValuesFactory.cryptoStore( getReference().getParentRef(), cs ).toJSON(),
+            return new StringRepresentation( valuesFactory.x509( getReference().getParentRef(), x509 ).toJSON(),
                                              MediaType.APPLICATION_JSON );
 
         } catch ( NoSuchEntityException ex ) {
-            LOGGER.debug( "{}: No CryptoStore found for the requested identity ('{}')", new Object[]{ Status.CLIENT_ERROR_NOT_FOUND, identity }, ex );
+            LOGGER.debug( "{}: No X509 found for the requested identity ('{}')", new Object[]{ Status.CLIENT_ERROR_NOT_FOUND, identity }, ex );
             throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND, ex );
         }
     }

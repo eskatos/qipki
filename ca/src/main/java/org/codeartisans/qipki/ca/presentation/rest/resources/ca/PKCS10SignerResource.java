@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.ca.application.contexts.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;

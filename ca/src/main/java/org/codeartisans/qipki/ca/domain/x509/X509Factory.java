@@ -21,13 +21,14 @@
  */
 package org.codeartisans.qipki.ca.domain.x509;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.security.cert.X509Certificate;
-import org.bouncycastle.openssl.PEMWriter;
+import javax.security.auth.x500.X500Principal;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.commons.values.CommonValuesFactory;
+import org.codeartisans.qipki.core.crypto.CryptIO;
+import org.codeartisans.qipki.core.crypto.CryptoToolFactory;
 import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -46,26 +47,27 @@ public interface X509Factory
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Service
+        private CommonValuesFactory commonValuesFactory;
+        @Service
+        private CryptoToolFactory cryptoToolFactory;
 
         @Override
         public X509 create( X509Certificate cert, CA issuer )
         {
-            try {
+            EntityBuilder<X509> x509Builder = uowf.currentUnitOfWork().newEntityBuilder( X509.class );
+            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
 
-                EntityBuilder<X509> x509Builder = uowf.currentUnitOfWork().newEntityBuilder( X509.class );
-                X509 x509 = x509Builder.instance();
+            X509 x509 = x509Builder.instance();
+            x509.pem().set( cryptio.asPEM( cert ).toString() );
+            x509.canonicalSubjectDN().set( cert.getSubjectX500Principal().getName( X500Principal.CANONICAL ) );
+            x509.canonicalIssuerDN().set( cert.getIssuerX500Principal().getName( X500Principal.CANONICAL ) );
+            x509.hexSerialNumber().set( cert.getSerialNumber().toString( 16 ) );
+            x509.validityPeriod().set( commonValuesFactory.buildValidityPeriod( cert.getNotBefore(), cert.getNotAfter() ) );
 
-                StringWriter sw = new StringWriter();
-                new PEMWriter( sw ).writeObject( cert );
-                
-                x509.pem().set( sw.toString() );
-                x509.issuer().set( issuer );
+            x509.issuer().set( issuer );
 
-                return x509Builder.newInstance();
-
-            } catch ( IOException ex ) {
-                throw new QiPkiFailure( "Unable to create X509Certificate pem", ex );
-            }
+            return x509Builder.newInstance();
         }
 
     }

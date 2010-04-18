@@ -26,9 +26,6 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 
-/**
- * @author Paul Merlin <p.merlin@nosphere.org>
- */
 @Mixins( CryptoToolFactory.Mixin.class )
 public interface CryptoToolFactory
         extends ServiceComposite
@@ -37,6 +34,12 @@ public interface CryptoToolFactory
     CryptIO newCryptIOInstance();
 
     CryptGEN newCryptGENInstance();
+
+    CryptCodex newCryptCodexInstance();
+
+    X509ExtensionsReader newX509ExtensionsReaderInstance();
+
+    X509ExtensionsBuilder newX509ExtensionsBuilderInstance();
 
     abstract class Mixin
             implements CryptoToolFactory
@@ -55,6 +58,24 @@ public interface CryptoToolFactory
         public CryptGEN newCryptGENInstance()
         {
             return obf.newObject( CryptGEN.class );
+        }
+
+        @Override
+        public CryptCodex newCryptCodexInstance()
+        {
+            return obf.newObject( CryptCodex.class );
+        }
+
+        @Override
+        public X509ExtensionsReader newX509ExtensionsReaderInstance()
+        {
+            return obf.newObjectBuilder( X509ExtensionsReader.class ).use( newCryptCodexInstance() ).newInstance();
+        }
+
+        @Override
+        public X509ExtensionsBuilder newX509ExtensionsBuilderInstance()
+        {
+            return obf.newObject( X509ExtensionsBuilder.class );
         }
 
     }

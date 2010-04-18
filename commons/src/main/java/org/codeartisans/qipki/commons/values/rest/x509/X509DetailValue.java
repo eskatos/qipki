@@ -19,15 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.commons.values.rest.x509;
 
-import org.joda.time.Duration;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.property.Property;
 
-public interface TimeRelated
+public interface X509DetailValue
+        extends X509Value
 {
 
-    /**
-     * Used to prevent clock synchronization issues.
-     */
-    Duration CLOCK_SKEW_DURATION = Duration.standardMinutes( 10 );
+    Property<Integer> certificateVersion();
+
+    Property<String> signatureAlgorithm();
+
+    @Optional
+    Property<String> hexSubjectUniqueIdentifier();
+
+    @Optional
+    Property<String> hexIssuerUniqueIdentifier();
+
+    Property<String> md5Fingerprint();
+
+    Property<String> sha1Fingerprint();
+
+    Property<String> sha256Fingerprint();
+
+    Property<KeysExtensions> keysExtensions();
+
 }

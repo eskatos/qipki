@@ -19,12 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.core.crypto.algorithms;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
-import org.qi4j.api.value.ValueComposite;
-
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public interface BlockCipherPadding
 {
+
+    // Sun JCE
+    String NoPadding = "NoPadding";
+    String PKCS5Padding = "PKCS5Padding";
+    String SSL3Padding = "SSL3Padding";
+    String ISO10126Padding = "ISO10126Padding";
+    // Bouncy Castle
+    String PKCS7Padding = "PKCS7Padding";
+    String ISO10126d2Padding = "ISO10126d2Padding";
+    String ISO7816d4Padding = "ISO7816d4Padding";
+    String X932Padding = "X932Padding";
+    String ZeroBytePadding = "ZeroBytePadding";
+    String TBCPadding = "TBCPadding";
 }

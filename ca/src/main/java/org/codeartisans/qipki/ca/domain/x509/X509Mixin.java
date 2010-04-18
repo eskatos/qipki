@@ -33,7 +33,7 @@ public class X509Mixin
 {
 
     @This
-    private X509State state;
+    private X509 state;
 
     @Override
     public X509Certificate x509Certificate()

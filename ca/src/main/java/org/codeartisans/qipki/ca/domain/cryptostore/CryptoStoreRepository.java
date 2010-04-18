@@ -27,7 +27,6 @@ import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( CryptoStoreRepository.Mixin.class )
@@ -57,9 +56,8 @@ public interface CryptoStoreRepository
         @Override
         public Query<CryptoStore> findAllPaginated( int firstResult, int maxResults )
         {
-            UnitOfWork uow = uowf.currentUnitOfWork();
             QueryBuilder<CryptoStore> builder = qbf.newQueryBuilder( CryptoStore.class );
-            Query<CryptoStore> query = builder.newQuery( uow ).
+            Query<CryptoStore> query = builder.newQuery( uowf.currentUnitOfWork() ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

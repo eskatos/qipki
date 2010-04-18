@@ -19,15 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.core.crypto.x509;
 
-public interface DigestAlgorithm
+public interface X509OIDs
 {
 
-    String MD2 = "MD2";
-    String MD5 = "MD5";
-    String SHA_1 = "SHA-1";
-    String SHA_256 = "SHA-256";
-    String SHA_384 = "SHA-384";
-    String SHA_512 = "SHA-512";
+    public interface X509Extensions
+    {
+
+        public interface KeyRelated
+        {
+
+            String AuthorityKeyIdentifier = "2.5.29.35";
+            String SubjectKeyIdentifier = "2.5.29.14";
+            String KeyUsages = "2.5.29.15";
+            String PrivateKeyUsagePeriod = "2.5.29.16";
+        }
+
+    }
+
 }

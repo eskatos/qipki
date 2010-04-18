@@ -1,7 +1,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import java.util.Collections;
-import org.codeartisans.qipki.ca.application.contexts.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;

@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.commons.fragments.CryptoStoreState;
+import org.codeartisans.qipki.commons.states.CryptoStoreState;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.property.Property;
 

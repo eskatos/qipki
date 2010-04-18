@@ -17,21 +17,17 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Libraries -->
         <dependency>
             <groupId>org.codeartisans.java</groupId>
             <artifactId>java-toolbox</artifactId>
             <version>${version.java-toolbox}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>${version.bouncy}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
         </dependency>
 
         <!-- Qi4j runtime -->

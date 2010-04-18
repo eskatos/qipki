@@ -26,7 +26,7 @@
         <version.restlet>2.0-M6</version.restlet>
         <!--version.restlet>2.0-RC1</version.restlet-->
         <version.bouncy>1.45</version.bouncy>
-        <version.slf4j>1.5.8</version.slf4j>
+        <version.slf4j>1.5.10</version.slf4j>
         <version.logback>0.9.18</version.logback>
         <version.httpclient>4.1-alpha1</version.httpclient>
         <version.osgi>4.2.0</version.osgi>

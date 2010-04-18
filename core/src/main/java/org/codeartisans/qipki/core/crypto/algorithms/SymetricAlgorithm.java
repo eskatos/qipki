@@ -19,12 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.core.crypto.algorithms;
 
-import org.codeartisans.qipki.commons.states.CryptoStoreState;
-import org.qi4j.api.value.ValueComposite;
-
-public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+public interface SymetricAlgorithm
 {
+
+    String AES = "AES";
+    String Blowfish = "Blowfish";
+    String DES = "DES";
+    String TripleDES = "DESede";
 }

@@ -19,13 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.constants;
+package org.codeartisans.qipki.commons.values.rest.x509;
 
-public interface SymetricAlgorithm
+import java.util.Set;
+import org.codeartisans.qipki.commons.constants.KeyUsage;
+import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.common.UseDefaults;
+import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
+
+public interface KeysExtensions
+        extends ValueComposite
 {
 
-    String AES = "AES";
-    String Blowfish = "Blowfish";
-    String DES = "DES";
-    String TripleDES = "DESede";
+    @UseDefaults
+    Property<Set<KeyUsage>> keyUsages();
+
+    @Optional
+    Property<String> subjectKeyIdentifier();
+
+    @Optional
+    Property<AuthorityKeyIdentifier> authorityKeyIdentifier();
+
+    @Optional
+    Property<ValidityPeriod> privateKeyUsagePeriod();
+
+    @Optional
+    Property<String> crlDistributionPoints();
+
+    public interface AuthorityKeyIdentifier
+            extends ValueComposite
+    {
+
+        Property<String> keyIdentifier();
+
+        Property<String> serialNumber();
+
+        @UseDefaults
+        Property<Set<String>> names();
+
+    }
+
 }

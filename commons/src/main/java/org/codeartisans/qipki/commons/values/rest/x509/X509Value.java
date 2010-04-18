@@ -19,19 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.fragments;
+package org.codeartisans.qipki.commons.values.rest.x509;
 
-import static org.codeartisans.qipki.commons.constants.KeyStoreType.*;
+import org.codeartisans.qipki.commons.states.X509State;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
-import org.qi4j.library.constraints.annotation.OneOf;
+import org.qi4j.api.value.ValueComposite;
 
-public interface CryptoStoreState
-        extends Nameable
+public interface X509Value
+        extends RestValue, X509State, ValueComposite
 {
 
-    @OneOf( { JCEKS, JKS, PKCS11, PKCS12 } )
-    Property<String> storeType();
-
-    Property<char[]> password();
+    @Optional // TODO REMOVE
+    Property<String> issuerIdentity();
 
 }
