@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
@@ -37,7 +37,7 @@ public class CryptoStoreListResource
 {
 
     @Service
-    private RestValuesFactory restValuesFactory;
+    private RestletValuesFactory restValuesFactory;
 
     public CryptoStoreListResource( @Structure ObjectBuilderFactory obf )
     {

@@ -63,7 +63,7 @@ public interface X509Factory
             x509.canonicalSubjectDN().set( cert.getSubjectX500Principal().getName( X500Principal.CANONICAL ) );
             x509.canonicalIssuerDN().set( cert.getIssuerX500Principal().getName( X500Principal.CANONICAL ) );
             x509.hexSerialNumber().set( cert.getSerialNumber().toString( 16 ) );
-            x509.validityPeriod().set( commonValuesFactory.buildValidityPeriod( cert.getNotBefore(), cert.getNotAfter() ) );
+            x509.validityInterval().set( commonValuesFactory.buildValidityInterval( cert.getNotBefore(), cert.getNotAfter() ) );
 
             x509.issuer().set( issuer );
 

@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
@@ -37,7 +37,7 @@ public class CAListResource
 {
 
     @Service
-    private RestValuesFactory valuesFactory;
+    private RestletValuesFactory valuesFactory;
 
     public CAListResource( @Structure ObjectBuilderFactory obf )
     {

@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -43,7 +43,7 @@ public class CryptoStoreResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreResource.class );
     @Service
-    private RestValuesFactory restValuesFactory;
+    private RestletValuesFactory restValuesFactory;
 
     public CryptoStoreResource( @Structure ObjectBuilderFactory obf )
     {

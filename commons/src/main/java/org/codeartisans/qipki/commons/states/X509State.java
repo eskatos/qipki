@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.commons.states;
 
-import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.codeartisans.qipki.commons.values.ValidityIntervalValue;
 import org.qi4j.api.property.Property;
 
 public interface X509State
@@ -33,6 +33,6 @@ public interface X509State
 
     Property<String> canonicalIssuerDN();
 
-    Property<ValidityPeriod> validityPeriod();
+    Property<ValidityIntervalValue> validityInterval();
 
 }

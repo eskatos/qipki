@@ -57,7 +57,7 @@ import org.codeartisans.qipki.core.QiPkiFailure;
 public class CryptIO
 {
 
-    public KeyStore createEmptyKeyStore( String storeType )
+    public KeyStore createEmptyKeyStore( KeyStoreType storeType )
     {
         try {
             KeyStore keystore = getKeyStoreInstance( storeType );
@@ -84,7 +84,7 @@ public class CryptIO
         }
     }
 
-    public KeyStore base64DecodeKeyStore( String payload, String storeType, char[] password )
+    public KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password )
     {
         try {
             KeyStore keystore = getKeyStoreInstance( storeType );
@@ -197,13 +197,13 @@ public class CryptIO
         return certificateRequestExtensions;
     }
 
-    private KeyStore getKeyStoreInstance( String storeType )
+    private KeyStore getKeyStoreInstance( KeyStoreType storeType )
             throws KeyStoreException, NoSuchProviderException
     {
-        if ( KeyStoreType.PKCS12.equals( storeType ) ) {
-            return KeyStore.getInstance( storeType, BouncyCastleProvider.PROVIDER_NAME );
+        if ( KeyStoreType.PKCS12 == storeType ) {
+            return KeyStore.getInstance( storeType.asString(), BouncyCastleProvider.PROVIDER_NAME );
         }
-        return KeyStore.getInstance( storeType );
+        return KeyStore.getInstance( storeType.asString() );
     }
 
 }

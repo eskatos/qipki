@@ -19,18 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.states;
+package org.codeartisans.qipki.commons.constants;
 
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.qi4j.api.property.Property;
+import org.bouncycastle.asn1.x509.ReasonFlags;
 
-public interface CryptoStoreState
-        extends Nameable
+public enum RevocationReason
 {
 
-    Property<KeyStoreType> storeType();
+    unused( ReasonFlags.unused ),
+    keyCompromise( ReasonFlags.keyCompromise ),
+    cACompromise( ReasonFlags.cACompromise ),
+    affiliationChanged( ReasonFlags.affiliationChanged ),
+    superseded( ReasonFlags.superseded ),
+    cessationOfOperation( ReasonFlags.cessationOfOperation ),
+    certificateHold( ReasonFlags.certificateHold ),
+    privilegeWithdrawn( ReasonFlags.privilegeWithdrawn ),
+    aACompromise( ReasonFlags.aACompromise );
+    private int reason;
 
-    Property<char[]> password();
+    private RevocationReason( int reason )
+    {
+        this.reason = reason;
+    }
+
+    public int reason()
+    {
+        return reason;
+    }
 
 }

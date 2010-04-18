@@ -34,9 +34,9 @@ public interface CommonValuesFactory
         extends ServiceComposite
 {
 
-    ValidityPeriod buildValidityPeriod( Interval interval );
+    ValidityIntervalValue buildValidityInterval( Interval interval );
 
-    ValidityPeriod buildValidityPeriod( Date notBefore, Date notAfter );
+    ValidityIntervalValue buildValidityInterval( Date notBefore, Date notAfter );
 
     abstract class Mixin
             implements CommonValuesFactory
@@ -46,18 +46,18 @@ public interface CommonValuesFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public ValidityPeriod buildValidityPeriod( Interval interval )
+        public ValidityIntervalValue buildValidityInterval( Interval interval )
         {
-            return buildValidityPeriod( interval.getStart().toDate(), interval.getEnd().toDate() );
+            return buildValidityInterval( interval.getStart().toDate(), interval.getEnd().toDate() );
         }
 
         @Override
-        public ValidityPeriod buildValidityPeriod( Date notBefore, Date notAfter )
+        public ValidityIntervalValue buildValidityInterval( Date notBefore, Date notAfter )
         {
-            ValueBuilder<ValidityPeriod> builder = vbf.newValueBuilder( ValidityPeriod.class );
-            ValidityPeriod period = builder.prototype();
-            period.notBefore().set( notBefore );
-            period.notAfter().set( notAfter );
+            ValueBuilder<ValidityIntervalValue> builder = vbf.newValueBuilder( ValidityIntervalValue.class );
+            ValidityIntervalValue interval = builder.prototype();
+            interval.notBefore().set( notBefore );
+            interval.notAfter().set( notAfter );
             return builder.newInstance();
         }
 

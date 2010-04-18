@@ -32,11 +32,9 @@ public interface X509DetailValue
 
     Property<String> signatureAlgorithm();
 
-    @Optional
-    Property<String> hexSubjectUniqueIdentifier();
+    Property<String> publicKeyAlgorithm();
 
-    @Optional
-    Property<String> hexIssuerUniqueIdentifier();
+    Property<Integer> publicKeySize();
 
     Property<String> md5Fingerprint();
 
@@ -44,6 +42,22 @@ public interface X509DetailValue
 
     Property<String> sha256Fingerprint();
 
-    Property<KeysExtensions> keysExtensions();
+    @Optional
+    Property<String> hexSubjectUniqueIdentifier();
+
+    @Optional
+    Property<String> hexIssuerUniqueIdentifier();
+
+    @Optional
+    Property<KeysExtensionsValue> keysExtensions();
+
+    @Optional
+    Property<PoliciesExtensionsValue> policiesExtensions();
+
+    @Optional
+    Property<NamesExtensionsValue> namesExtensions();
+
+    @Optional
+    Property<ConstraintsExtensionsValue> constraintsExtensions();
 
 }

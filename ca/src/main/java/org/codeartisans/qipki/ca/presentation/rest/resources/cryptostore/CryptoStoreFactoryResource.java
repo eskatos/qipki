@@ -24,7 +24,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 import java.io.IOException;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
@@ -47,7 +47,7 @@ public class CryptoStoreFactoryResource
     @Structure
     private ValueBuilderFactory vbf;
     @Service
-    private RestValuesFactory restValuesFactory;
+    private RestletValuesFactory restValuesFactory;
 
     public CryptoStoreFactoryResource( @Structure ObjectBuilderFactory obf )
     {

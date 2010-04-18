@@ -47,7 +47,7 @@ import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
 import org.codeartisans.qipki.ca.presentation.rest.RestletFinder;
 import org.codeartisans.qipki.ca.presentation.rest.RestletServletServerService;
-import org.codeartisans.qipki.ca.presentation.rest.RestValuesFactory;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
@@ -62,7 +62,7 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailReso
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.CommonValuesFactory;
-import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.codeartisans.qipki.commons.values.ValidityIntervalValue;
 import org.codeartisans.qipki.core.crypto.CryptoToolsAssembler;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
@@ -123,7 +123,7 @@ public class QiPkiCaAssembler
 
                     new QiPkiRestValuesAssembler( Visibility.layer ).assemble( module );
 
-                    module.addServices( RestValuesFactory.class ).
+                    module.addServices( RestletValuesFactory.class ).
                             visibleIn( Visibility.module );
 
                     addServlets( serve( "/api/*" ).with( RestletServletServerService.class ) ).
@@ -203,7 +203,7 @@ public class QiPkiCaAssembler
                         throws AssemblyException
                 {
                     // Values
-                    module.addValues( ValidityPeriod.class );
+                    module.addValues( ValidityIntervalValue.class );
 
                     // Entities
                     module.addEntities( CryptoStoreEntity.class,

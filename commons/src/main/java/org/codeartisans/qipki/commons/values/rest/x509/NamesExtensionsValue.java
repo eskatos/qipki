@@ -22,42 +22,28 @@
 package org.codeartisans.qipki.commons.values.rest.x509;
 
 import java.util.Set;
-import org.codeartisans.qipki.commons.constants.KeyUsage;
-import org.codeartisans.qipki.commons.values.ValidityPeriod;
+import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface KeysExtensions
+public interface NamesExtensionsValue
         extends ValueComposite
 {
 
-    @UseDefaults
-    Property<Set<KeyUsage>> keyUsages();
+    @Optional
+    Property<AlternativeNamesValue> subjectAlternativeNames();
 
     @Optional
-    Property<String> subjectKeyIdentifier();
+    Property<AlternativeNamesValue> issuerAlternativeNames();
 
-    @Optional
-    Property<AuthorityKeyIdentifier> authorityKeyIdentifier();
-
-    @Optional
-    Property<ValidityPeriod> privateKeyUsagePeriod();
-
-    @Optional
-    Property<String> crlDistributionPoints();
-
-    public interface AuthorityKeyIdentifier
-            extends ValueComposite
+    public interface AlternativeNamesValue
+            extends HasCriticality, ValueComposite
     {
 
-        Property<String> keyIdentifier();
-
-        Property<String> serialNumber();
-
         @UseDefaults
-        Property<Set<String>> names();
+        Property<Set<X509GeneralNameValue>> alternativeNames();
 
     }
 

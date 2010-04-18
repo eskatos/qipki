@@ -47,7 +47,8 @@ public class CryptoToolsAssembler
                            CryptGEN.class,
                            CryptCodex.class,
                            X509ExtensionsReader.class,
-                           X509ExtensionsBuilder.class ).
+                           X509ExtensionsBuilder.class,
+                           KeyInformation.class ).
                 visibleIn( visibility );
     }
 
