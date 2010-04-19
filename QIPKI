@@ -1,0 +1,73 @@
+
+QiPKI
+=====
+
+
+Next steps
+
+  DONE Finish applying DCI in every existing rest resource
+
+  DONE Finish KeyStoreFactory implementation
+
+  DONE Refactor CAFactory to use the role implementation
+
+  DONE Implement CA KeyPair generation and self-signing
+
+  DONE Refactored KeyStoreEntity in CryptoStore*
+
+  DONE Apply CAFactory refactoring to PKCS10 Signing
+
+  DONE Move roles into domain layer
+
+  DONE Serve crl on /ca/{identity}/crl
+
+  DONE Model RootCA, SubCA, EndEntity domain objects
+
+  DONE Store issued certificates locally and serve them on /ca/{identity}/x509 ???
+
+  DONE Add criticality handling on every X509Extension
+    Already done it on BasicConstraints, see implementation for details
+
+  Factorize Values factories ???
+    Common interfaces, Rest values having HasURI
+    Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
+
+  Refactor CryptoTools as services
+
+  Use plain BouncyCastle for hash calulations (see RestletValuesFactory)
+
+  Add /ca/{identity}/x509revoker
+
+  Fix domain objects visibility
+
+
+X.509 Extensions Documents
+
+	http://www.ietf.org/rfc/rfc2459.txt
+	http://www.openssl.org/docs/apps/x509.html#CERTIFICATE_EXTENSIONS
+
+	MORTELISSIME
+	http://www.redhat.com/docs/manuals/cert-system/8.0/admin/html/Certificate_and_CRL_Extensions.html
+
+	NETSCAPE
+	http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn3.html
+
+
+
+Task Scheduling
+
+  qi4j-lib-taskqueue
+    hard to implement in a typesafe way because of java type erasure
+    http://www.developpez.net/forums/d435282/java/general-java/langage/possibilite-dacceder-type-generique-runtime/#post2630861
+    -> find a less clever but more pragmatic way
+
+
+Client UI
+
+  resource my/tasks
+    list
+    horizontal sliding view
+    differenciate with tags so clients could choose icons/styling
+    provide (rss?) feed
+
+
