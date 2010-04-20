@@ -21,12 +21,15 @@
  */
 package org.codeartisans.qipki.core.crypto.tools;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DEREncodable;
 import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERString;
+import org.bouncycastle.util.encoders.Base64;
+import org.codeartisans.qipki.core.QiPkiFailure;
 
 public class CryptCodexImpl
         implements CryptCodex
@@ -77,6 +80,16 @@ public class CryptCodexImpl
             sb.append( bools[idx] ? "1" : "0" );
         }
         return Integer.toHexString( Integer.parseInt( sb.toString(), 2 ) );
+    }
+
+    @Override
+    public String toBase64( byte[] bytes )
+    {
+        try {
+            return new String( Base64.encode( bytes ), "UTF-8" );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new QiPkiFailure( "Unable to encode data in Base64", ex );
+        }
     }
 
 }

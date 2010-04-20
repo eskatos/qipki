@@ -19,33 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.algorithms;
+package org.codeartisans.qipki.core.crypto.mac;
 
-public enum BlockCipherPadding
+import java.io.InputStream;
+
+public interface MAC
 {
 
-    // Sun JCE
-    NoPadding( "NoPadding" ),
-    PKCS5Padding( "PKCS5Padding" ),
-    SSL3Padding( "SSL3Padding" ),
-    ISO10126Padding( "ISO10126Padding" ),
-    // Bouncy Castle
-    PKCS7Padding( "PKCS7Padding" ),
-    ISO10126d2Padding( "ISO10126d2Padding" ),
-    ISO7816d4Padding( "ISO7816d4Padding" ),
-    X932Padding( "X932Padding" ),
-    ZeroBytePadding( "ZeroBytePadding" ),
-    TBCPadding( "TBCPadding" );
-    private String algo;
+    byte[] mac( InputStream data, MACParameters params );
 
-    private BlockCipherPadding( String algo )
-    {
-        this.algo = algo;
-    }
+    String hexMac( InputStream data, MACParameters params );
 
-    public String algoString()
-    {
-        return algo;
-    }
+    String base64Mac( InputStream data, MACParameters params );
+
+    byte[] mac( byte[] data, MACParameters params );
+
+    String hexMac( byte[] data, MACParameters params );
+
+    String base64Mac( byte[] data, MACParameters params );
 
 }

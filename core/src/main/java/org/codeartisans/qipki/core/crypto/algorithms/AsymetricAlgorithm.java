@@ -21,9 +21,21 @@
  */
 package org.codeartisans.qipki.core.crypto.algorithms;
 
-public interface AsymetricAlgorithm
+public enum AsymetricAlgorithm
 {
 
-    String RSA = "RSA";
-    String ECDSA = "ECDSA";
+    RSA( "RSA" ),
+    ECDSA( "ECDSA" );
+    private String algo;
+
+    private AsymetricAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
+
 }

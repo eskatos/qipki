@@ -19,33 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.algorithms;
+package org.codeartisans.qipki.core.crypto.mac;
 
-public enum BlockCipherPadding
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+
+@Mixins( MACImpl.class )
+public interface MACService
+        extends MAC, ServiceComposite
 {
-
-    // Sun JCE
-    NoPadding( "NoPadding" ),
-    PKCS5Padding( "PKCS5Padding" ),
-    SSL3Padding( "SSL3Padding" ),
-    ISO10126Padding( "ISO10126Padding" ),
-    // Bouncy Castle
-    PKCS7Padding( "PKCS7Padding" ),
-    ISO10126d2Padding( "ISO10126d2Padding" ),
-    ISO7816d4Padding( "ISO7816d4Padding" ),
-    X932Padding( "X932Padding" ),
-    ZeroBytePadding( "ZeroBytePadding" ),
-    TBCPadding( "TBCPadding" );
-    private String algo;
-
-    private BlockCipherPadding( String algo )
-    {
-        this.algo = algo;
-    }
-
-    public String algoString()
-    {
-        return algo;
-    }
-
 }

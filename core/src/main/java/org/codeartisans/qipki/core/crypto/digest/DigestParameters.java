@@ -19,33 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.algorithms;
+package org.codeartisans.qipki.core.crypto.digest;
 
-public enum BlockCipherPadding
+import org.codeartisans.qipki.core.crypto.algorithms.DigestAlgorithm;
+
+public class DigestParameters
 {
 
-    // Sun JCE
-    NoPadding( "NoPadding" ),
-    PKCS5Padding( "PKCS5Padding" ),
-    SSL3Padding( "SSL3Padding" ),
-    ISO10126Padding( "ISO10126Padding" ),
-    // Bouncy Castle
-    PKCS7Padding( "PKCS7Padding" ),
-    ISO10126d2Padding( "ISO10126d2Padding" ),
-    ISO7816d4Padding( "ISO7816d4Padding" ),
-    X932Padding( "X932Padding" ),
-    ZeroBytePadding( "ZeroBytePadding" ),
-    TBCPadding( "TBCPadding" );
-    private String algo;
+    private final DigestAlgorithm algo;
+    private final byte[] salt;
+    private final int iterations;
 
-    private BlockCipherPadding( String algo )
+    public DigestParameters( DigestAlgorithm algo )
     {
-        this.algo = algo;
+        this( algo, null, 1 );
     }
 
-    public String algoString()
+    public DigestParameters( DigestAlgorithm algo, byte[] salt )
+    {
+        this( algo, salt, 1 );
+    }
+
+    public DigestParameters( DigestAlgorithm algo, int iterations )
+    {
+        this( algo, null, iterations );
+    }
+
+    public DigestParameters( DigestAlgorithm algo, byte[] salt, int iterations )
+    {
+        this.algo = algo;
+        this.salt = salt;
+        this.iterations = iterations;
+    }
+
+    public DigestAlgorithm algo()
     {
         return algo;
+    }
+
+    public int iterations()
+    {
+        return iterations;
+    }
+
+    public byte[] salt()
+    {
+        return salt;
     }
 
 }
