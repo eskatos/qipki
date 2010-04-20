@@ -26,19 +26,26 @@ Next steps
   DONE Store issued certificates locally and serve them on /ca/{identity}/x509 ???
 
   DONE Add criticality handling on every X509Extension
-    Already done it on BasicConstraints, see implementation for details
+
+  DONE Refactor CryptoTools as services
+
+  DONE Use plain BouncyCastle for hash calulations (see RestletValuesFactory)
+
+  Add /ca/{identity}/x509revoker
 
   Factorize Values factories ???
     Common interfaces, Rest values having HasURI
     Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
 
-  DONE Refactor CryptoTools as services
-
-  Use plain BouncyCastle for hash calulations (see RestletValuesFactory)
-
-  Add /ca/{identity}/x509revoker
+  State on commons/core modules and on basic crypto code/services location
 
   Fix domain objects visibility
+
+  Write qi4j client library for cryptostore/ca/csr/certificates/revocation
+
+  Package as a unix daemon
+
+  Release 0.1
 
 
 X.509 Extensions Documents
