@@ -71,3 +71,48 @@ Client UI
     provide (rss?) feed
 
 
+
+Basic Certificates Profiles
+    TODO: work on SubCAs profiles
+
+RootCAThatDoesEverything ...  :|
+
+    BC  CA, pathLen=0
+    KU  cRLSign | keyCertSign
+    NCT sslCA | objectSigningCA | smimeCA
+
+
+SSL Server Certificates
+
+    BC  NonCA, pathLen=0
+    KU  digitalSignature | keyEncipherment
+    EKU serverAuth, clientAuth
+    NCT sslServer
+
+
+SSL Client Certificates
+
+    BC  NonCA, pathLen=0
+    KU  digitalSignature | keyEncipherment
+    EKU clientAuth
+    NCT sslClient
+
+
+Object & S/MIME Signing Certificates
+
+    BC  NonCA, pathLen=0
+    KU  digitalSignature | nonRepudiation
+    EKU emailProtection
+    NCT objectSigning | smime
+
+
+Key Encipherment & S/MIME Encipherment Certificates
+
+    BC  NonCA, pathLen=0
+    KU  keyEncipherment
+    EKU emailProtection
+    NCT smime
+
+
+
+
