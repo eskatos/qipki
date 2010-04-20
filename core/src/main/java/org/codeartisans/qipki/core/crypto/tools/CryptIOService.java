@@ -21,31 +21,11 @@
  */
 package org.codeartisans.qipki.core.crypto.tools;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
 
-public interface CryptIO
+@Mixins( CryptIOImpl.class )
+public interface CryptIOService
+        extends CryptIO, ServiceComposite
 {
-
-    CharSequence asPEM( X509Certificate certificate );
-
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
-
-    CharSequence asPEM( X509CRL x509CRL );
-
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
-
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
-
 }

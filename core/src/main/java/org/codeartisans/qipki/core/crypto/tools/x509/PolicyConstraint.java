@@ -19,33 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.tools;
+package org.codeartisans.qipki.core.crypto.tools.x509;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-
-public interface CryptIO
+public class PolicyConstraint
 {
 
-    CharSequence asPEM( X509Certificate certificate );
+    private int requireExplicitPolicy;
+    private int inhibitPolicyMapping;
 
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
+    public int getInhibitPolicyMapping()
+    {
+        return inhibitPolicyMapping;
+    }
 
-    CharSequence asPEM( X509CRL x509CRL );
+    public void setInhibitPolicyMapping( int inhibitPolicyMapping )
+    {
+        this.inhibitPolicyMapping = inhibitPolicyMapping;
+    }
 
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
+    public int getRequireExplicitPolicy()
+    {
+        return requireExplicitPolicy;
+    }
 
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
+    public void setRequireExplicitPolicy( int requireExplicitPolicy )
+    {
+        this.requireExplicitPolicy = requireExplicitPolicy;
+    }
 
 }

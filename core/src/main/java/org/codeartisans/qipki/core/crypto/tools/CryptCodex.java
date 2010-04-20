@@ -21,61 +21,18 @@
  */
 package org.codeartisans.qipki.core.crypto.tools;
 
-import java.lang.reflect.Method;
 import java.math.BigInteger;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DEREncodable;
-import org.bouncycastle.asn1.DERInteger;
-import org.bouncycastle.asn1.DERString;
 
-public class CryptCodex
+public interface CryptCodex
 {
 
-    public String toString( DEREncodable obj )
-    {
-        if ( obj instanceof DERString ) {
-            return ( ( DERString ) obj ).getString();
-        } else if ( obj instanceof DERInteger ) {
-            return ( ( DERInteger ) obj ).getValue().toString();
-        } else if ( obj instanceof ASN1TaggedObject ) {
-            ASN1TaggedObject tagObj = ( ASN1TaggedObject ) obj;
-            return "[" + tagObj.getTagNo() + "] " + toString( tagObj.getObject() );
-        } else if ( obj instanceof ASN1Sequence ) {
-            ASN1Sequence aObj = ( ASN1Sequence ) obj;
-            StringBuilder sb = new StringBuilder( "[" );
-            for ( int i = 0, len = aObj.size(); i < len; i++ ) {
-                sb.append( toString( aObj.getObjectAt( i ) ) );
-                if ( i != len - 1 ) {
-                    sb.append( ", " );
-                }
-            }
-            return sb.append( "]" ).toString();
-        } else {
-            return obj.toString();
-        }
-    }
+    String toHexString( BigInteger bigInt );
 
-    public String toHexString( BigInteger bigInt )
-    {
-        return bigInt.toString( 16 );
-    }
+    String toHexString( byte[] bytes );
 
-    public String toHexString( byte[] bytes )
-    {
-        return toHexString( new BigInteger( 1, bytes ) );
-    }
+    String toHexString( boolean[] bools );
 
-    public String toHexString( boolean[] bools )
-    {
-        if ( bools == null ) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder( bools.length );
-        for ( int idx = 0; idx < bools.length; idx++ ) {
-            sb.append( bools[idx] ? "1" : "0" );
-        }
-        return Integer.toHexString( Integer.parseInt( sb.toString(), 2 ) );
-    }
+    String toString( DEREncodable obj );
 
 }

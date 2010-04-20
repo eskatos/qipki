@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.tools;
+package org.codeartisans.qipki.core.crypto.tools.x509;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
@@ -56,20 +56,23 @@ import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.commons.constants.KeyUsage;
 import org.codeartisans.qipki.commons.constants.RevocationReason;
 import org.codeartisans.qipki.commons.constants.X509GeneralName;
+import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
-import org.qi4j.api.injection.scope.Uses;
+import org.qi4j.api.injection.scope.Service;
 
-public class X509ExtensionsReader
+public class X509ExtensionsReaderImpl
+        implements X509ExtensionsReader
 {
 
     private final CryptCodex cryptCodex;
 
-    public X509ExtensionsReader( @Uses CryptCodex cryptCodex )
+    public X509ExtensionsReaderImpl( @Service CryptCodex cryptCodex )
     {
         this.cryptCodex = cryptCodex;
     }
 
+    @Override
     public AuthorityKeyIdentifier getAuthorityKeyIdentifier( X509Certificate cert )
     {
         try {
@@ -83,6 +86,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public byte[] getSubjectKeyIdentifier( X509Certificate cert )
     {
         try {
@@ -96,6 +100,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public Set<KeyUsage> getKeyUsages( X509Certificate cert )
     {
         try {
@@ -116,6 +121,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public Interval getPrivateKeyUsagePeriod( X509Certificate cert )
     {
         try {
@@ -135,6 +141,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public DistributionPoint[] getCRLDistributionPoints( X509Certificate cert )
     {
         try {
@@ -150,6 +157,7 @@ public class X509ExtensionsReader
 
     }
 
+    @Override
     public Set<PolicyInformation> getCertificatePolicies( X509Certificate cert )
     {
         try {
@@ -170,6 +178,7 @@ public class X509ExtensionsReader
     }
 
     // See swisscom_root_ca_1 in cacerts for an example
+    @Override
     public Set<PolicyMapping> getPolicyMappings( X509Certificate cert )
     {
         try {
@@ -196,34 +205,7 @@ public class X509ExtensionsReader
         }
     }
 
-    public class PolicyMapping
-    {
-
-        private String issuerDomainPolicyOID;
-        private String subjectDomainPolicyOID;
-
-        public void setIssuerDomainPolicyOID( String issuerDomainPolicyOID )
-        {
-            this.issuerDomainPolicyOID = issuerDomainPolicyOID;
-        }
-
-        public void setSubjectDomainPolicyOID( String subjectDomainPolicyOID )
-        {
-            this.subjectDomainPolicyOID = subjectDomainPolicyOID;
-        }
-
-        public String getIssuerDomainPolicyOID()
-        {
-            return issuerDomainPolicyOID;
-        }
-
-        public String getSubjectDomainPolicyOID()
-        {
-            return subjectDomainPolicyOID;
-        }
-
-    }
-
+    @Override
     public GeneralNames getSubjectAlternativeNames( X509Certificate cert )
     {
         try {
@@ -237,6 +219,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public GeneralNames getIssuerAlternativeNames( X509Certificate cert )
     {
         try {
@@ -250,6 +233,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public BasicConstraints getBasicConstraints( X509Certificate cert )
     {
         try {
@@ -263,6 +247,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public NameConstraints getNameConstraints( X509Certificate cert )
     {
         try {
@@ -276,6 +261,7 @@ public class X509ExtensionsReader
         }
     }
 
+    @Override
     public Set<PolicyConstraint> getPolicyConstraints( X509Certificate cert )
     {
         try {
@@ -304,34 +290,7 @@ public class X509ExtensionsReader
         }
     }
 
-    public class PolicyConstraint
-    {
-
-        private int requireExplicitPolicy;
-        private int inhibitPolicyMapping;
-
-        public int getInhibitPolicyMapping()
-        {
-            return inhibitPolicyMapping;
-        }
-
-        public void setInhibitPolicyMapping( int inhibitPolicyMapping )
-        {
-            this.inhibitPolicyMapping = inhibitPolicyMapping;
-        }
-
-        public int getRequireExplicitPolicy()
-        {
-            return requireExplicitPolicy;
-        }
-
-        public void setRequireExplicitPolicy( int requireExplicitPolicy )
-        {
-            this.requireExplicitPolicy = requireExplicitPolicy;
-        }
-
-    }
-
+    @Override
     public Set<RevocationReason> getRevocationReasons( ReasonFlags reasonFlags )
     {
         if ( reasonFlags == null ) {
@@ -347,6 +306,7 @@ public class X509ExtensionsReader
         return revocationReasons;
     }
 
+    @Override
     public Map<X509GeneralName, String> asMap( GeneralNames generalNames )
     {
         if ( generalNames == null ) {
@@ -360,48 +320,49 @@ public class X509ExtensionsReader
         return map;
     }
 
-    public Map.Entry<X509GeneralName, String> asImmutableMapEntry( GeneralName eachGeneralName )
+    @Override
+    public Map.Entry<X509GeneralName, String> asImmutableMapEntry( GeneralName generalName )
     {
-        int nameType = eachGeneralName.getTagNo();
+        int nameType = generalName.getTagNo();
         X509GeneralName x509GeneralName = null;
         String value = null;
         switch ( nameType ) {
             case GeneralName.otherName:
-                ASN1Sequence otherName = ( ASN1Sequence ) eachGeneralName.getName();
+                ASN1Sequence otherName = ( ASN1Sequence ) generalName.getName();
                 // String oid = ( ( DERObjectIdentifier ) otherName.getObjectAt( 0 ) ).getId();
                 x509GeneralName = X509GeneralName.otherName;
                 value = cryptCodex.toString( otherName.getObjectAt( 1 ) );
                 break;
             case GeneralName.rfc822Name:
                 x509GeneralName = X509GeneralName.rfc822Name;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.dNSName:
                 x509GeneralName = X509GeneralName.dNSName;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.registeredID:
                 x509GeneralName = X509GeneralName.registeredID;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.x400Address:
                 x509GeneralName = X509GeneralName.x400Address;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.ediPartyName:
                 x509GeneralName = X509GeneralName.ediPartyName;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.directoryName:
                 x509GeneralName = X509GeneralName.directoryName;
-                value = new X500Principal( ( ( X509Name ) eachGeneralName.getName() ).toString() ).getName( X500Principal.CANONICAL );
+                value = new X500Principal( ( ( X509Name ) generalName.getName() ).toString() ).getName( X500Principal.CANONICAL );
                 break;
             case GeneralName.uniformResourceIdentifier:
                 x509GeneralName = X509GeneralName.uniformResourceIdentifier;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
                 break;
             case GeneralName.iPAddress: // What about IPv6 addresses ?
-                ASN1OctetString iPAddress = ( ASN1OctetString ) eachGeneralName.getName();
+                ASN1OctetString iPAddress = ( ASN1OctetString ) generalName.getName();
                 byte[] iPAddressBytes = iPAddress.getOctets();
                 StringBuilder sb = new StringBuilder();
                 for ( int idx = 0; idx < iPAddressBytes.length; idx++ ) {
@@ -414,7 +375,7 @@ public class X509ExtensionsReader
                 value = sb.toString();
             default:
                 x509GeneralName = X509GeneralName.unknownGeneralName;
-                value = eachGeneralName.getName().toString();
+                value = generalName.getName().toString();
         }
         final X509GeneralName finalName = x509GeneralName;
         final String finalValue = value;

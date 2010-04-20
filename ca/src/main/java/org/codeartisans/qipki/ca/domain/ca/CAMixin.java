@@ -33,7 +33,6 @@ import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
 import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
 import org.joda.time.Duration;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
@@ -46,7 +45,9 @@ public abstract class CAMixin
 
     private static final Logger LOGGER = LoggerFactory.getLogger( RootCAMixin.class );
     @Service
-    private CryptoToolFactory cryptoToolFactory;
+    private CryptGEN cryptGEN;
+    @Service
+    private CryptIO cryptIO;
     @This
     private CAState state;
 
@@ -76,15 +77,12 @@ public abstract class CAMixin
         LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
         try {
 
-            CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
-            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
-
-            X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
+            X509Extensions requestedExtensions = cryptIO.extractRequestedExtensions( pkcs10 );
 
             // TODO add Basic Constraints
             // TODO add CRL Distribution point !
 
-            X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),
+            X509Certificate certificate = cryptGEN.generateX509Certificate( privateKey(),
                                                                             certificate().getSubjectX500Principal(),
                                                                             BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                             pkcs10.getCertificationRequestInfo().getSubject(),

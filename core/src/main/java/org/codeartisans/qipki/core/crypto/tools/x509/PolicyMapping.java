@@ -19,33 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.tools;
+package org.codeartisans.qipki.core.crypto.tools.x509;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-
-public interface CryptIO
+public class PolicyMapping
 {
 
-    CharSequence asPEM( X509Certificate certificate );
+    private String issuerDomainPolicyOID;
+    private String subjectDomainPolicyOID;
 
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
+    public void setIssuerDomainPolicyOID( String issuerDomainPolicyOID )
+    {
+        this.issuerDomainPolicyOID = issuerDomainPolicyOID;
+    }
 
-    CharSequence asPEM( X509CRL x509CRL );
+    public void setSubjectDomainPolicyOID( String subjectDomainPolicyOID )
+    {
+        this.subjectDomainPolicyOID = subjectDomainPolicyOID;
+    }
 
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
+    public String getIssuerDomainPolicyOID()
+    {
+        return issuerDomainPolicyOID;
+    }
 
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
+    public String getSubjectDomainPolicyOID()
+    {
+        return subjectDomainPolicyOID;
+    }
 
 }

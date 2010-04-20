@@ -21,13 +21,14 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
+import org.codeartisans.qipki.core.crypto.objects.KeyInformation;
+import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
-import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
-import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsBuilder;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsReader;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
+import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.core.crypto.tools.CryptCodexService;
+import org.codeartisans.qipki.core.crypto.tools.CryptGENService;
+import org.codeartisans.qipki.core.crypto.tools.CryptIOService;
+import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsReaderService;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -48,15 +49,14 @@ public class CryptoAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( CryptoToolFactory.class,
+        module.addServices( CryptObjectsFactory.class,
+                            CryptCodexService.class,
+                            CryptGENService.class,
+                            CryptIOService.class,
+                            X509ExtensionsReaderService.class,
                             X509ExtensionsValueFactory.class ).
                 visibleIn( visibility );
-        module.addObjects( CryptIO.class,
-                           CryptGEN.class,
-                           CryptCodex.class,
-                           X509ExtensionsReader.class,
-                           X509ExtensionsBuilder.class,
-                           KeyInformation.class ).
+        module.addObjects( KeyInformation.class ).
                 visibleIn( visibility );
         new QiPkiCryptoValuesAssembler( visibility ).assemble( module );
     }
