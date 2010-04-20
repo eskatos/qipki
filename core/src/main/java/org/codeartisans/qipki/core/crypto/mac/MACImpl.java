@@ -28,7 +28,7 @@ import java.security.GeneralSecurityException;
 import javax.crypto.Mac;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodex;
 import org.qi4j.api.injection.scope.Service;
 
 public class MACImpl
@@ -47,7 +47,7 @@ public class MACImpl
     public byte[] mac( InputStream data, MACParameters params )
     {
         try {
-            Mac mac = Mac.getInstance( params.algo().algoString(), BouncyCastleProvider.PROVIDER_NAME );
+            Mac mac = Mac.getInstance( params.algorithm().algoString(), BouncyCastleProvider.PROVIDER_NAME );
             mac.init( params.secretKey() );
             byte[] buffer = new byte[ BUFFER_SIZE ];
             int length = 0;
@@ -56,9 +56,9 @@ public class MACImpl
             }
             return mac.doFinal();
         } catch ( IOException ex ) {
-            throw new QiPkiFailure( "Unable to read data to MAC with " + params.algo().algoString(), ex );
+            throw new QiPkiFailure( "Unable to read data to MAC with " + params.algorithm().algoString(), ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiPkiFailure( "Unable to MAC using " + params.algo().algoString(), ex );
+            throw new QiPkiFailure( "Unable to MAC using " + params.algorithm().algoString(), ex );
         }
     }
 

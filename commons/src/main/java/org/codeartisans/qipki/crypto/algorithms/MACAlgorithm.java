@@ -19,52 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.digest;
+package org.codeartisans.qipki.crypto.algorithms;
 
-import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
-
-public class DigestParameters
+public enum MACAlgorithm
 {
 
-    private final DigestAlgorithm algo;
-    private final byte[] salt;
-    private final int iterations;
+    /**
+     * The HMAC-MD5 keyed-hashing algorithm as defined in RFC 2104: "HMAC: Keyed-Hashing for Message Authentication" (February 1997).
+     */
+    HmacMD5( "HmacMD5" ),
+    /**
+     * The HMAC-SHA1 keyed-hashing algorithm as defined in RFC 2104: "HMAC: Keyed-Hashing for Message Authentication" (February 1997).
+     */
+    HmacSHA1( "HmacSHA1" ),
+    /**
+     * The HmacSHA256 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-256 as the message digest algorithm.
+     */
+    HmacSHA256( "HmacSHA256" ),
+    /**
+     * The HmacSHA384 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-384 as the message digest algorithm.
+     */
+    HmacSHA384( "HmacSHA384" ),
+    /**
+     * The HmacSHA512 algorithm as defined in RFC 2104 "HMAC: Keyed-Hashing for Message Authentication" (February 1997) with SHA-512 as the message digest algorithm.
+     */
+    HmacSHA512( "HmacSHA512" );
+    private String algo;
 
-    public DigestParameters( DigestAlgorithm algo )
-    {
-        this( algo, null, 1 );
-    }
-
-    public DigestParameters( DigestAlgorithm algo, byte[] salt )
-    {
-        this( algo, salt, 1 );
-    }
-
-    public DigestParameters( DigestAlgorithm algo, int iterations )
-    {
-        this( algo, null, iterations );
-    }
-
-    public DigestParameters( DigestAlgorithm algo, byte[] salt, int iterations )
+    private MACAlgorithm( String algo )
     {
         this.algo = algo;
-        this.salt = salt;
-        this.iterations = iterations;
     }
 
-    public DigestAlgorithm algorithm()
+    public String algoString()
     {
         return algo;
-    }
-
-    public int iterations()
-    {
-        return iterations;
-    }
-
-    public byte[] salt()
-    {
-        return salt;
     }
 
 }

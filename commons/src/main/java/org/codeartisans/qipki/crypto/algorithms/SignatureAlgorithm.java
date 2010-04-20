@@ -19,18 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.algorithms;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum SignatureAlgorithm
 {
 
-    Property<X509GeneralName> nameType();
+    // DSA currently just supports SHA-1.
+    SHA1withDSA( "SHA1withDSA" ),
+    // ECDSA is support with both the SHA-1 and SHA-2 family of digest algorithms.
+    SHA1withECDSA( "SHA1withECDSA" ),
+    SHA224withECDSA( "SHA224withECDSA" ),
+    SHA256withECDSA( "SHA256withECDSA" ),
+    SHA384withECDSA( "SHA384withECDSA" ),
+    SHA512withECDSA( "SHA512withECDSA" ),
+    // A variety of digests can be used to sign using the RSA algorithm
+    MD2withRSA( "MD2withRSA" ),
+    MD5withRSA( "MD5withRSA" ),
+    SHA1withRSA( "SHA1withRSA" ),
+    SHA224withRSA( "SHA224withRSA" ),
+    SHA256withRSA( "SHA256withRSA" ),
+    SHA384withRSA( "SHA384withRSA" ),
+    SHA512withRSA( "SHA512withRSA" ),
+    RIPEMD160withRSA( "RIPEMD160withRSA" ),
+    RIPEMD128withRSA( "RIPEMD128withRSA" ),
+    RIPEMD256withRSA( "RIPEMD256withRSA" );
+    private String algo;
 
-    Property<String> nameValue();
+    private SignatureAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
 
 }

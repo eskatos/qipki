@@ -19,18 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.crypto.codec;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import java.math.BigInteger;
+import org.bouncycastle.asn1.DEREncodable;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+public interface CryptCodex
 {
 
-    Property<X509GeneralName> nameType();
+    String toString( DEREncodable obj );
 
-    Property<String> nameValue();
+    String toHexString( BigInteger bigInt );
+
+    String toHexString( byte[] bytes );
+
+    String toHexString( boolean[] bools );
+
+    String toBase64( byte[] bytes );
 
 }

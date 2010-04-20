@@ -19,18 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.constants;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.joda.time.Duration;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+public interface Time
 {
 
-    Property<X509GeneralName> nameType();
-
-    Property<String> nameValue();
-
+    /**
+     * Used to prevent clock synchronization issues.
+     */
+    Duration CLOCK_SKEW = Duration.standardMinutes( 10 );
 }

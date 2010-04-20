@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.commons.states;
 
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.qi4j.api.property.Property;
 

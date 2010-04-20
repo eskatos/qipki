@@ -23,8 +23,8 @@ package org.codeartisans.qipki.core.crypto.digest;
 
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.codeartisans.qipki.core.crypto.algorithms.DigestAlgorithm;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodexImpl;
+import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodexImpl;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

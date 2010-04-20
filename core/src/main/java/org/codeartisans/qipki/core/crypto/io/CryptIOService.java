@@ -19,18 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.crypto.io;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+@Mixins( CryptIOImpl.class )
+public interface CryptIOService
+        extends CryptIO, ServiceComposite
 {
-
-    Property<X509GeneralName> nameType();
-
-    Property<String> nameValue();
-
 }

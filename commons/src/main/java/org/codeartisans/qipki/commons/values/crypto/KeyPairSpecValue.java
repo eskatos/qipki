@@ -19,18 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.commons.values.crypto;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface X509GeneralNameValue
+public interface KeyPairSpecValue
         extends ValueComposite
 {
 
-    Property<X509GeneralName> nameType();
+    Property<AsymetricAlgorithm> algorithm();
 
-    Property<String> nameValue();
+    Property<Integer> length();
 
 }

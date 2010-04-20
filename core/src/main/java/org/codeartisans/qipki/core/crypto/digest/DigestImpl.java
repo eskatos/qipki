@@ -28,7 +28,7 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodex;
 import org.qi4j.api.injection.scope.Service;
 
 public class DigestImpl
@@ -47,7 +47,7 @@ public class DigestImpl
     public byte[] digest( InputStream data, DigestParameters params )
     {
         try {
-            MessageDigest digest = MessageDigest.getInstance( params.algo().algoString(), BouncyCastleProvider.PROVIDER_NAME );
+            MessageDigest digest = MessageDigest.getInstance( params.algorithm().algoString(), BouncyCastleProvider.PROVIDER_NAME );
             if ( params.salt() != null ) {
                 digest.update( params.salt() );
             }
@@ -63,9 +63,9 @@ public class DigestImpl
             }
             return hashed;
         } catch ( IOException ex ) {
-            throw new QiPkiFailure( "Unable to read data to digest with " + params.algo().algoString(), ex );
+            throw new QiPkiFailure( "Unable to read data to digest with " + params.algorithm().algoString(), ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiPkiFailure( "Unable to digest using " + params.algo().algoString(), ex );
+            throw new QiPkiFailure( "Unable to digest using " + params.algorithm().algoString(), ex );
         }
     }
 

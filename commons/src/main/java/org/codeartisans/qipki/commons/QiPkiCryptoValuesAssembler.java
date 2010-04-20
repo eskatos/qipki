@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.commons;
 
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
-import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue;
@@ -55,7 +55,7 @@ public class QiPkiCryptoValuesAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addValues( KeySpecValue.class,
+        module.addValues( KeyPairSpecValue.class,
                           ValidityIntervalValue.class,
                           X509GeneralNameValue.class,
                           X509GeneralSubtreeValue.class,

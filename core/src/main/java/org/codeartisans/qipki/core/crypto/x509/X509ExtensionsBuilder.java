@@ -19,18 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.crypto.x509;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import java.security.PublicKey;
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+public interface X509ExtensionsBuilder
 {
 
-    Property<X509GeneralName> nameType();
+    SubjectKeyIdentifier buildSubjectKeyIdentifier( PublicKey publicKey );
 
-    Property<String> nameValue();
+    AuthorityKeyIdentifier buildAuthorityKeyIdentifier( PublicKey publicKey );
 
 }
