@@ -19,18 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.algorithms;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum AsymetricAlgorithm
 {
 
-    Property<X509GeneralName> nameType();
+    RSA( "RSA" ),
+    ECDSA( "ECDSA" );
+    private String algo;
 
-    Property<String> nameValue();
+    private AsymetricAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
 
 }

@@ -19,18 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.crypto.asymetric;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 
-public interface X509GeneralNameValue
-        extends ValueComposite
+public class AsymetricGeneratorParameters
 {
 
-    Property<X509GeneralName> nameType();
+    private final AsymetricAlgorithm algo;
+    private final int keySize;
 
-    Property<String> nameValue();
+    public AsymetricGeneratorParameters( AsymetricAlgorithm algo, int keySize )
+    {
+        this.algo = algo;
+        this.keySize = keySize;
+    }
+
+    public AsymetricAlgorithm algorithm()
+    {
+        return algo;
+    }
+
+    public int keySize()
+    {
+        return keySize;
+    }
 
 }

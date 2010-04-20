@@ -26,10 +26,11 @@ import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -76,7 +77,7 @@ public interface QiPkiCaFixtures
             KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
 
             // Create some test CAs
-            KeySpecValue keySpec = paramsFactory.createKeySpec( "SHA256WITHRSA", 512 );
+            KeyPairSpecValue keySpec = paramsFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
             RootCA rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
             RootCA usersCa = caFactory.createRootCA( USERS_CA_NAME, USERS_CA_DN, keySpec, cryptoStore );
             RootCA servicesCa = caFactory.createRootCA( SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, cryptoStore );

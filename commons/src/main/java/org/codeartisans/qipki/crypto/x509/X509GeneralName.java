@@ -19,18 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.x509;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum X509GeneralName
 {
 
-    Property<X509GeneralName> nameType();
+    otherName( org.bouncycastle.asn1.x509.GeneralName.otherName ),
+    rfc822Name( org.bouncycastle.asn1.x509.GeneralName.rfc822Name ),
+    dNSName( org.bouncycastle.asn1.x509.GeneralName.dNSName ),
+    x400Address( org.bouncycastle.asn1.x509.GeneralName.x400Address ),
+    directoryName( org.bouncycastle.asn1.x509.GeneralName.directoryName ),
+    ediPartyName( org.bouncycastle.asn1.x509.GeneralName.ediPartyName ),
+    uniformResourceIdentifier( org.bouncycastle.asn1.x509.GeneralName.uniformResourceIdentifier ),
+    iPAddress( org.bouncycastle.asn1.x509.GeneralName.iPAddress ),
+    registeredID( org.bouncycastle.asn1.x509.GeneralName.registeredID ),
+    unknownGeneralName( -1 );
+    private int tag;
 
-    Property<String> nameValue();
+    private X509GeneralName( int tag )
+    {
+        this.tag = tag;
+    }
+
+    public int tag()
+    {
+        return tag;
+    }
 
 }

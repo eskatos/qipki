@@ -19,18 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.x509;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum KeyUsage
 {
 
-    Property<X509GeneralName> nameType();
+    digitalSignature( org.bouncycastle.asn1.x509.KeyUsage.digitalSignature ),
+    nonRepudiation( org.bouncycastle.asn1.x509.KeyUsage.nonRepudiation ),
+    keyEncipherment( org.bouncycastle.asn1.x509.KeyUsage.keyEncipherment ),
+    dataEncipherment( org.bouncycastle.asn1.x509.KeyUsage.dataEncipherment ),
+    keyAgreement( org.bouncycastle.asn1.x509.KeyUsage.keyAgreement ),
+    keyCertSign( org.bouncycastle.asn1.x509.KeyUsage.keyCertSign ),
+    cRLSign( org.bouncycastle.asn1.x509.KeyUsage.cRLSign ),
+    encipherOnly( org.bouncycastle.asn1.x509.KeyUsage.encipherOnly ),
+    decipherOnly( org.bouncycastle.asn1.x509.KeyUsage.decipherOnly );
+    private int usage;
 
-    Property<String> nameValue();
+    private KeyUsage( int usage )
+    {
+        this.usage = usage;
+    }
+
+    public int usage()
+    {
+        return usage;
+    }
 
 }

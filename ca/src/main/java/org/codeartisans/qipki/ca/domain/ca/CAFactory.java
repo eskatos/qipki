@@ -42,12 +42,15 @@ import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.constants.TimeRelated;
-import org.codeartisans.qipki.core.crypto.algorithms.SignatureAlgorithm;
-import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.constants.Time;
+import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGenerator;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorParameters;
+import org.codeartisans.qipki.core.crypto.x509.X509Generator;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReader;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.qi4j.api.entity.EntityBuilder;
@@ -65,9 +68,9 @@ public interface CAFactory
         extends ServiceComposite
 {
 
-    RootCA createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore );
+    RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
-    SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore );
+    SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
     abstract class Mixin
             implements CAFactory
@@ -76,27 +79,31 @@ public interface CAFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CryptGEN cryptGEN;
+        private X509Generator x509Generator;
+        @Service
+        private X509ExtensionsReader x509ExtReader;
+        @Service
+        private AsymetricGenerator asymGenerator;
         @Service
         private CryptIO cryptIO;
         @Service
         private CRLFactory crlFactory;
 
         @Override
-        public RootCA createRootCA( String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore )
+        public RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Self signed CA
-                KeyPair keyPair = cryptGEN.generateRSAKeyPair( keySpec.length().get() );
+                KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
                 X500Principal dn = new X500Principal( distinguishedName );
-                PKCS10CertificationRequest pkcs10 = cryptGEN.generatePKCS10( dn, keyPair );
-                X509Certificate cert = cryptGEN.generateX509Certificate( keyPair.getPrivate(),
-                                                                         dn,
-                                                                         BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                         pkcs10.getCertificationRequestInfo().getSubject(),
-                                                                         pkcs10.getPublicKey(),
-                                                                         Duration.standardDays( 3650 ),
-                                                                         cryptIO.extractRequestedExtensions( pkcs10 ) );
+                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                X509Certificate cert = x509Generator.generateX509Certificate( keyPair.getPrivate(),
+                                                                              dn,
+                                                                              BigInteger.probablePrime( 120, new SecureRandom() ),
+                                                                              pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                              pkcs10.getPublicKey(),
+                                                                              Duration.standardDays( 3650 ),
+                                                                              x509ExtReader.extractRequestedExtensions( pkcs10 ) );
 
                 EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
                 RootCA ca = caBuilder.instance();
@@ -131,8 +138,8 @@ public interface CAFactory
         {
             X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
             crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
-            crlGen.setThisUpdate( new DateTime().minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
-            crlGen.setNextUpdate( new DateTime().minus( TimeRelated.CLOCK_SKEW_DURATION ).plusHours( 12 ).toDate() );
+            crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
+            crlGen.setNextUpdate( new DateTime().minus( Time.CLOCK_SKEW ).plusHours( 12 ).toDate() );
             crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
             crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
             crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
@@ -141,7 +148,7 @@ public interface CAFactory
 
         // TODO
         @Override
-        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeySpecValue keySpec, CryptoStore cryptoStore )
+        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );
             SubCA ca = caBuilder.instance();

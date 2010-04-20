@@ -21,16 +21,18 @@
  */
 package org.codeartisans.qipki.core.crypto;
 
-import org.codeartisans.qipki.core.crypto.objects.KeyInformation;
-import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
-import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodexService;
-import org.codeartisans.qipki.core.crypto.tools.CryptGENService;
-import org.codeartisans.qipki.core.crypto.tools.CryptIOService;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorService;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodexService;
 import org.codeartisans.qipki.core.crypto.digest.DigestService;
+import org.codeartisans.qipki.core.crypto.io.CryptIOService;
 import org.codeartisans.qipki.core.crypto.mac.MACService;
-import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsReaderService;
+import org.codeartisans.qipki.core.crypto.objects.KeyInformation;
+import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsBuilderService;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReaderService;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.core.crypto.x509.X509GeneratorService;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -53,11 +55,13 @@ public class CryptoAssembler
     {
         module.addServices( CryptObjectsFactory.class,
                             CryptCodexService.class,
-                            CryptGENService.class,
+                            X509GeneratorService.class,
                             CryptIOService.class,
                             DigestService.class,
                             MACService.class,
+                            AsymetricGeneratorService.class,
                             X509ExtensionsReaderService.class,
+                            X509ExtensionsBuilderService.class,
                             X509ExtensionsValueFactory.class ).
                 visibleIn( visibility );
         module.addObjects( KeyInformation.class ).

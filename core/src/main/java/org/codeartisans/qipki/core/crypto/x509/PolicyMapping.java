@@ -19,18 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.core.crypto.x509;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public class PolicyMapping
 {
 
-    Property<X509GeneralName> nameType();
+    private String issuerDomainPolicyOID;
+    private String subjectDomainPolicyOID;
 
-    Property<String> nameValue();
+    public void setIssuerDomainPolicyOID( String issuerDomainPolicyOID )
+    {
+        this.issuerDomainPolicyOID = issuerDomainPolicyOID;
+    }
+
+    public void setSubjectDomainPolicyOID( String subjectDomainPolicyOID )
+    {
+        this.subjectDomainPolicyOID = subjectDomainPolicyOID;
+    }
+
+    public String getIssuerDomainPolicyOID()
+    {
+        return issuerDomainPolicyOID;
+    }
+
+    public String getSubjectDomainPolicyOID()
+    {
+        return subjectDomainPolicyOID;
+    }
 
 }

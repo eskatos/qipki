@@ -19,18 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.algorithms;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum DigestAlgorithm
 {
 
-    Property<X509GeneralName> nameType();
+    @Deprecated
+    MD2( "MD2" ),
+    MD5( "MD5" ),
+    SHA_1( "SHA-1" ),
+    SHA_256( "SHA-256" ),
+    SHA_384( "SHA-384" ),
+    SHA_512( "SHA-512" );
+    private String algo;
 
-    Property<String> nameValue();
+    private DigestAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
 
 }

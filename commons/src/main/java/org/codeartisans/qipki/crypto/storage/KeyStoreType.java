@@ -19,18 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.storage;
 
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface X509GeneralNameValue
-        extends ValueComposite
+public enum KeyStoreType
 {
 
-    Property<X509GeneralName> nameType();
+    JCEKS( StringValues.JCEKS ),
+    JKS( StringValues.JKS ),
+    PKCS12( StringValues.PKCS12 ),
+    PKCS11( StringValues.PKCS11 );
 
-    Property<String> nameValue();
+    // Needed ?
+    public interface StringValues
+    {
+
+        String JCEKS = "JCEKS";
+        String JKS = "JKS";
+        String PKCS12 = "PKCS12";
+        String PKCS11 = "PKCS11";
+    }
+
+    private String string;
+
+    private KeyStoreType( String string )
+    {
+        this.string = string;
+    }
+
+    public String typeString()
+    {
+        return string;
+    }
 
 }

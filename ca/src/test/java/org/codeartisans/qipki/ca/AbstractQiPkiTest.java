@@ -30,10 +30,12 @@ import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.core.QiPkiApplication;
-import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
-import org.codeartisans.qipki.core.crypto.tools.CryptGENService;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptIOService;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGenerator;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorService;
+import org.codeartisans.qipki.core.crypto.x509.X509Generator;
+import org.codeartisans.qipki.core.crypto.x509.X509GeneratorService;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
+import org.codeartisans.qipki.core.crypto.io.CryptIOService;
 import org.junit.After;
 import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
@@ -50,7 +52,8 @@ public abstract class AbstractQiPkiTest
     protected HttpHost httpHost;
     protected DefaultHttpClient httpClient;
     protected CryptIO cryptio;
-    protected CryptGEN cryptgen;
+    protected X509Generator x509Generator;
+    protected AsymetricGenerator asymGenerator;
     protected ParamsFactory paramsFactory;
 
     @Override
@@ -58,7 +61,7 @@ public abstract class AbstractQiPkiTest
             throws AssemblyException
     {
         new QiPkiRestValuesAssembler().assemble( module );
-        module.addServices( CryptIOService.class, CryptGENService.class );
+        module.addServices( CryptIOService.class, X509GeneratorService.class, AsymetricGeneratorService.class );
     }
 
     @Before
@@ -71,7 +74,8 @@ public abstract class AbstractQiPkiTest
         httpHost = new HttpHost( "localhost", DEFAULT_PORT );
         httpClient = new DefaultHttpClient();
         cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
-        cryptgen = serviceLocator.<CryptGEN>findService( CryptGEN.class ).get();
+        x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
+        asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
     }
 

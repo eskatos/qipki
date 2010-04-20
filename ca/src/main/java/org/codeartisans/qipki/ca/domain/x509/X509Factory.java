@@ -25,7 +25,7 @@ import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
