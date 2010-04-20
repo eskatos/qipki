@@ -27,12 +27,14 @@ import org.bouncycastle.asn1.DEREncodable;
 public interface CryptCodex
 {
 
+    String toString( DEREncodable obj );
+
     String toHexString( BigInteger bigInt );
 
     String toHexString( byte[] bytes );
 
     String toHexString( boolean[] bools );
 
-    String toString( DEREncodable obj );
+    String toBase64( byte[] bytes );
 
 }

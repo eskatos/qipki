@@ -58,7 +58,7 @@ public class CryptGENImpl
     public KeyPair generateRSAKeyPair( int size )
     {
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( AsymetricAlgorithm.RSA, BouncyCastleProvider.PROVIDER_NAME );
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( AsymetricAlgorithm.RSA.algoString(), BouncyCastleProvider.PROVIDER_NAME );
             keyGen.initialize( size );
             return keyGen.generateKeyPair();
         } catch ( GeneralSecurityException ex ) {
@@ -70,7 +70,7 @@ public class CryptGENImpl
     public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
     {
         try {
-            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
                                                    distinguishedName, keyPair.getPublic(),
                                                    null,
                                                    keyPair.getPrivate(),
@@ -84,7 +84,7 @@ public class CryptGENImpl
     public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
     {
         try {
-            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA,
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
                                                    distinguishedName, keyPair.getPublic(),
                                                    generateSANAttribute( subjectAlternativeNames ),
                                                    keyPair.getPrivate(),
@@ -114,7 +114,7 @@ public class CryptGENImpl
             x509v3Generator.setIssuerDN( issuerDN );
             x509v3Generator.setNotBefore( now.minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
             x509v3Generator.setNotAfter( now.plus( validity ).minus( TimeRelated.CLOCK_SKEW_DURATION ).toDate() );
-            x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA );
+            x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
             x509v3Generator.setPublicKey( publicKey );
 
             if ( x509Extensions != null ) {

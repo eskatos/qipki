@@ -21,11 +21,23 @@
  */
 package org.codeartisans.qipki.core.crypto.algorithms;
 
-public interface SymetricAlgorithm
+public enum SymetricAlgorithm
 {
 
-    String AES = "AES";
-    String Blowfish = "Blowfish";
-    String DES = "DES";
-    String TripleDES = "DESede";
+    AES( "AES" ),
+    Blowfish( "Blowfish" ),
+    DES( "DES" ),
+    TripleDES( "DESede" );
+    private String algo;
+
+    private SymetricAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
+
 }

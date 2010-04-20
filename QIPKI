@@ -32,7 +32,7 @@ Next steps
     Common interfaces, Rest values having HasURI
     Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
 
-  Refactor CryptoTools as services
+  DONE Refactor CryptoTools as services
 
   Use plain BouncyCastle for hash calulations (see RestletValuesFactory)
 

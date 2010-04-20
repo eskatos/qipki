@@ -28,6 +28,8 @@ import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
 import org.codeartisans.qipki.core.crypto.tools.CryptCodexService;
 import org.codeartisans.qipki.core.crypto.tools.CryptGENService;
 import org.codeartisans.qipki.core.crypto.tools.CryptIOService;
+import org.codeartisans.qipki.core.crypto.digest.DigestService;
+import org.codeartisans.qipki.core.crypto.mac.MACService;
 import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsReaderService;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
@@ -53,6 +55,8 @@ public class CryptoAssembler
                             CryptCodexService.class,
                             CryptGENService.class,
                             CryptIOService.class,
+                            DigestService.class,
+                            MACService.class,
                             X509ExtensionsReaderService.class,
                             X509ExtensionsValueFactory.class ).
                 visibleIn( visibility );

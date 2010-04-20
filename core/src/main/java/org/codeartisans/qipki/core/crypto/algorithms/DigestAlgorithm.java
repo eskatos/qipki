@@ -21,13 +21,26 @@
  */
 package org.codeartisans.qipki.core.crypto.algorithms;
 
-public interface DigestAlgorithm
+public enum DigestAlgorithm
 {
 
-    String MD2 = "MD2";
-    String MD5 = "MD5";
-    String SHA_1 = "SHA-1";
-    String SHA_256 = "SHA-256";
-    String SHA_384 = "SHA-384";
-    String SHA_512 = "SHA-512";
+    @Deprecated
+    MD2( "MD2" ),
+    MD5( "MD5" ),
+    SHA_1( "SHA-1" ),
+    SHA_256( "SHA-256" ),
+    SHA_384( "SHA-384" ),
+    SHA_512( "SHA-512" );
+    private String algo;
+
+    private DigestAlgorithm( String algo )
+    {
+        this.algo = algo;
+    }
+
+    public String algoString()
+    {
+        return algo;
+    }
+
 }

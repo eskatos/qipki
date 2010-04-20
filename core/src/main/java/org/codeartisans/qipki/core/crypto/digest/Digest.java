@@ -19,33 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.algorithms;
+package org.codeartisans.qipki.core.crypto.digest;
 
-public enum BlockCipherPadding
+import java.io.InputStream;
+
+public interface Digest
 {
 
-    // Sun JCE
-    NoPadding( "NoPadding" ),
-    PKCS5Padding( "PKCS5Padding" ),
-    SSL3Padding( "SSL3Padding" ),
-    ISO10126Padding( "ISO10126Padding" ),
-    // Bouncy Castle
-    PKCS7Padding( "PKCS7Padding" ),
-    ISO10126d2Padding( "ISO10126d2Padding" ),
-    ISO7816d4Padding( "ISO7816d4Padding" ),
-    X932Padding( "X932Padding" ),
-    ZeroBytePadding( "ZeroBytePadding" ),
-    TBCPadding( "TBCPadding" );
-    private String algo;
+    byte[] digest( InputStream data, DigestParameters params );
 
-    private BlockCipherPadding( String algo )
-    {
-        this.algo = algo;
-    }
+    String hexDigest( InputStream data, DigestParameters params );
 
-    public String algoString()
-    {
-        return algo;
-    }
+    String base64Digest( InputStream data, DigestParameters params );
+
+    byte[] digest( byte[] data, DigestParameters params );
+
+    String hexDigest( byte[] data, DigestParameters params );
+
+    String base64Digest( byte[] data, DigestParameters params );
 
 }
