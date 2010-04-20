@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto;
+package org.codeartisans.qipki.core.crypto.tools.x509;
 
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
@@ -60,8 +60,9 @@ import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralNameValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralSubtreeValue;
 import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
-import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsReader;
+import org.codeartisans.qipki.core.crypto.tools.x509.PolicyMapping;
+import org.codeartisans.qipki.core.crypto.tools.x509.PolicyConstraint;
+import org.codeartisans.qipki.core.crypto.tools.x509.X509ExtensionsReader;
 import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -90,13 +91,13 @@ public interface X509ExtensionsValueFactory
         @Structure
         private ValueBuilderFactory vbf;
         @Service
-        private CryptoToolFactory cryptoToolFactory;
+        private CryptCodex cryptCodex;
+        @Service
+        private X509ExtensionsReader x509ExtReader;
 
         @Override
         public KeysExtensionsValue buildKeysExtensionsValue( X509Certificate cert )
         {
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
-            CryptCodex cryptcodex = cryptoToolFactory.newCryptCodexInstance();
             Set<KeyUsage> keyUsages = x509ExtReader.getKeyUsages( cert );
             byte[] subKeyId = x509ExtReader.getSubjectKeyIdentifier( cert );
             AuthorityKeyIdentifier authKeyId = x509ExtReader.getAuthorityKeyIdentifier( cert );
@@ -119,7 +120,7 @@ public interface X509ExtensionsValueFactory
             if ( subKeyId != null ) {
                 SubjectKeyIdentifierValue skiv = buildSubjectKeyIdentifierValue(
                         cert.getCriticalExtensionOIDs().contains( SubjectKeyIdentifier.getId() ),
-                        cryptcodex.toHexString( subKeyId ) );
+                        cryptCodex.toHexString( subKeyId ) );
                 keyExtensions.subjectKeyIdentifier().set( skiv );
             }
 
@@ -150,9 +151,8 @@ public interface X509ExtensionsValueFactory
         @Override
         public PoliciesExtensionsValue buildPoliciesExtensionsValue( X509Certificate cert )
         {
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             Set<PolicyInformation> certPolicies = x509ExtReader.getCertificatePolicies( cert );
-            Set<X509ExtensionsReader.PolicyMapping> policyMappings = x509ExtReader.getPolicyMappings( cert );
+            Set<PolicyMapping> policyMappings = x509ExtReader.getPolicyMappings( cert );
 
             if ( certPolicies.isEmpty() && policyMappings.isEmpty() ) {
                 return null;
@@ -181,7 +181,6 @@ public interface X509ExtensionsValueFactory
         @Override
         public NamesExtensionsValue buildNamesExtensionsValue( X509Certificate cert )
         {
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             Map<X509GeneralName, String> subjectNames = x509ExtReader.asMap( x509ExtReader.getSubjectAlternativeNames( cert ) );
             Map<X509GeneralName, String> issuerNames = x509ExtReader.asMap( x509ExtReader.getIssuerAlternativeNames( cert ) );
 
@@ -212,10 +211,9 @@ public interface X509ExtensionsValueFactory
         @Override
         public ConstraintsExtensionsValue buildConstraintsExtensionsValue( X509Certificate cert )
         {
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             BasicConstraints basicConstraints = x509ExtReader.getBasicConstraints( cert );
             NameConstraints nameConstraints = x509ExtReader.getNameConstraints( cert );
-            Set<X509ExtensionsReader.PolicyConstraint> policyConstraints = x509ExtReader.getPolicyConstraints( cert );
+            Set<PolicyConstraint> policyConstraints = x509ExtReader.getPolicyConstraints( cert );
 
             if ( basicConstraints == null && nameConstraints == null && policyConstraints.isEmpty() ) {
                 return null;
@@ -268,12 +266,10 @@ public interface X509ExtensionsValueFactory
 
         private AuthorityKeyIdentifierValue buildAuthorityKeyIdentifierValue( boolean critical, AuthorityKeyIdentifier authKeyId )
         {
-            CryptCodex cryptcodex = cryptoToolFactory.newCryptCodexInstance();
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             ValueBuilder<AuthorityKeyIdentifierValue> akiBuilder = vbf.newValueBuilder( AuthorityKeyIdentifierValue.class );
             AuthorityKeyIdentifierValue akiValue = akiBuilder.prototype();
             akiValue.critical().set( critical );
-            akiValue.keyIdentifier().set( cryptcodex.toHexString( authKeyId.getKeyIdentifier() ) );
+            akiValue.keyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
             akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
             akiValue.names().set( buildSetOfNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
             return akiBuilder.newInstance();
@@ -291,8 +287,6 @@ public interface X509ExtensionsValueFactory
 
         private CRLDistributionPointsValue buildCRLDistributionPointsValue( boolean critical, DistributionPoint[] crlDistPoints )
         {
-            CryptCodex cryptcodex = cryptoToolFactory.newCryptCodexInstance();
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             ValueBuilder<KeysExtensionsValue.CRLDistributionPointsValue> cdpBuilder = vbf.newValueBuilder( KeysExtensionsValue.CRLDistributionPointsValue.class );
             KeysExtensionsValue.CRLDistributionPointsValue cdpValue = cdpBuilder.prototype();
             cdpValue.critical().set( critical );
@@ -306,7 +300,7 @@ public interface X509ExtensionsValueFactory
                         break;
                     case DistributionPointName.NAME_RELATIVE_TO_CRL_ISSUER:
                     default:
-                        endpoints.add( cryptcodex.toString( eachPoint.getDistributionPoint().getName() ) );
+                        endpoints.add( cryptCodex.toString( eachPoint.getDistributionPoint().getName() ) );
                 }
                 reasons.addAll( x509ExtReader.getRevocationReasons( eachPoint.getReasons() ) );
                 issuerNames.addAll( buildSetOfNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
@@ -341,13 +335,13 @@ public interface X509ExtensionsValueFactory
             return cpBuilder.newInstance();
         }
 
-        private PolicyMappingsValue buildPolicyMappingsValue( boolean critical, Set<X509ExtensionsReader.PolicyMapping> policyMappings )
+        private PolicyMappingsValue buildPolicyMappingsValue( boolean critical, Set<PolicyMapping> policyMappings )
         {
             ValueBuilder<PolicyMappingsValue> pmBuilder = vbf.newValueBuilder( PolicyMappingsValue.class );
             PolicyMappingsValue pmValue = pmBuilder.prototype();
             pmValue.critical().set( critical );
             Set<PolicyMappingValue> mappingValues = new LinkedHashSet<PolicyMappingValue>();
-            for ( X509ExtensionsReader.PolicyMapping eachMapping : policyMappings ) {
+            for ( PolicyMapping eachMapping : policyMappings ) {
                 ValueBuilder<PolicyMappingValue> mBuilder = vbf.newValueBuilder( PolicyMappingValue.class );
                 PolicyMappingValue mValue = mBuilder.prototype();
                 mValue.issuerDomainPolicyOID().set( eachMapping.getIssuerDomainPolicyOID() );
@@ -393,13 +387,13 @@ public interface X509ExtensionsValueFactory
             return ncBuilder.newInstance();
         }
 
-        private PolicyConstraintsValue buildPolicyConstraintsValue( boolean critical, Set<X509ExtensionsReader.PolicyConstraint> policyConstraints )
+        private PolicyConstraintsValue buildPolicyConstraintsValue( boolean critical, Set<PolicyConstraint> policyConstraints )
         {
             ValueBuilder<PolicyConstraintsValue> pcBuilder = vbf.newValueBuilder( PolicyConstraintsValue.class );
             PolicyConstraintsValue pcValue = pcBuilder.prototype();
             pcValue.critical().set( critical );
             Set<PolicyConstraintValue> constrainsSet = new LinkedHashSet<PolicyConstraintValue>();
-            for ( X509ExtensionsReader.PolicyConstraint eachConstraint : policyConstraints ) {
+            for ( PolicyConstraint eachConstraint : policyConstraints ) {
                 ValueBuilder<PolicyConstraintValue> cBuilder = vbf.newValueBuilder( PolicyConstraintValue.class );
                 PolicyConstraintValue cValue = cBuilder.prototype();
                 cValue.requireExplicitPolicy().set( eachConstraint.getRequireExplicitPolicy() );
@@ -412,7 +406,6 @@ public interface X509ExtensionsValueFactory
 
         private X509GeneralSubtreeValue buildSubtree( GeneralSubtree subtree )
         {
-            X509ExtensionsReader x509ExtReader = cryptoToolFactory.newX509ExtensionsReaderInstance();
             ValueBuilder<X509GeneralSubtreeValue> subtreeValueBuilder = vbf.newValueBuilder( X509GeneralSubtreeValue.class );
             X509GeneralSubtreeValue subtreeValue = subtreeValueBuilder.prototype();
             Map.Entry<X509GeneralName, String> baseName = x509ExtReader.asImmutableMapEntry( subtree.getBase() );

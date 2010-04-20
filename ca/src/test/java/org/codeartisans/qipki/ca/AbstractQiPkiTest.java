@@ -31,7 +31,9 @@ import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.core.QiPkiApplication;
 import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
+import org.codeartisans.qipki.core.crypto.tools.CryptGENService;
 import org.codeartisans.qipki.core.crypto.tools.CryptIO;
+import org.codeartisans.qipki.core.crypto.tools.CryptIOService;
 import org.junit.After;
 import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
@@ -56,8 +58,7 @@ public abstract class AbstractQiPkiTest
             throws AssemblyException
     {
         new QiPkiRestValuesAssembler().assemble( module );
-        module.addObjects( CryptIO.class,
-                           CryptGEN.class );
+        module.addServices( CryptIOService.class, CryptGENService.class );
     }
 
     @Before
@@ -69,8 +70,8 @@ public abstract class AbstractQiPkiTest
         strResponseHandler = new BasicResponseHandler();
         httpHost = new HttpHost( "localhost", DEFAULT_PORT );
         httpClient = new DefaultHttpClient();
-        cryptio = objectBuilderFactory.newObject( CryptIO.class );
-        cryptgen = objectBuilderFactory.newObject( CryptGEN.class );
+        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
+        cryptgen = serviceLocator.<CryptGEN>findService( CryptGEN.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
     }
 

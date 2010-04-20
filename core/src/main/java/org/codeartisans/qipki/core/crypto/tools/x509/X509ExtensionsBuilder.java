@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.tools;
+package org.codeartisans.qipki.core.crypto.tools.x509;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

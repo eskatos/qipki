@@ -44,11 +44,10 @@ import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.constants.TimeRelated;
+import org.codeartisans.qipki.core.crypto.algorithms.SignatureAlgorithm;
 import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
 import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
-import org.codeartisans.qipki.core.crypto.algorithms.SignatureAlgorithm;
-import org.codeartisans.qipki.core.constants.TimeRelated;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.qi4j.api.entity.EntityBuilder;
@@ -77,7 +76,9 @@ public interface CAFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CryptoToolFactory cryptoToolFactory;
+        private CryptGEN cryptGEN;
+        @Service
+        private CryptIO cryptIO;
         @Service
         private CRLFactory crlFactory;
 
@@ -86,18 +87,16 @@ public interface CAFactory
         {
             try {
                 // Self signed CA
-                CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
-                CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
-                KeyPair keyPair = cryptgen.generateRSAKeyPair( keySpec.length().get() );
+                KeyPair keyPair = cryptGEN.generateRSAKeyPair( keySpec.length().get() );
                 X500Principal dn = new X500Principal( distinguishedName );
-                PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10( dn, keyPair );
-                X509Certificate cert = cryptgen.generateX509Certificate( keyPair.getPrivate(),
+                PKCS10CertificationRequest pkcs10 = cryptGEN.generatePKCS10( dn, keyPair );
+                X509Certificate cert = cryptGEN.generateX509Certificate( keyPair.getPrivate(),
                                                                          dn,
                                                                          BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                          pkcs10.getCertificationRequestInfo().getSubject(),
                                                                          pkcs10.getPublicKey(),
                                                                          Duration.standardDays( 3650 ),
-                                                                         cryptio.extractRequestedExtensions( pkcs10 ) );
+                                                                         cryptIO.extractRequestedExtensions( pkcs10 ) );
 
                 EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
                 RootCA ca = caBuilder.instance();
@@ -110,13 +109,13 @@ public interface CAFactory
                     ks.setEntry( ca.identity().get(),
                                  new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
                                  new KeyStore.PasswordProtection( cryptoStore.password().get() ) );
-                    cryptoStore.payload().set( cryptio.base64Encode( ks, cryptoStore.password().get() ) );
+                    cryptoStore.payload().set( cryptIO.base64Encode( ks, cryptoStore.password().get() ) );
                 }
 
                 // Generate initial CRL
                 {
                     X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
-                    CRL crl = crlFactory.create( cryptio.asPEM( x509CRL ).toString() );
+                    CRL crl = crlFactory.create( cryptIO.asPEM( x509CRL ).toString() );
                     ca.crl().set( crl );
                 }
 

@@ -19,68 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.tools;
+package org.codeartisans.qipki.core.crypto.objects;
 
 import java.security.PublicKey;
-import org.codeartisans.qipki.core.crypto.KeyInformation;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 
-@Mixins( CryptoToolFactory.Mixin.class )
-public interface CryptoToolFactory
+@Mixins( CryptObjectsFactory.Mixin.class )
+public interface CryptObjectsFactory
         extends ServiceComposite
 {
-
-    CryptIO newCryptIOInstance();
-
-    CryptGEN newCryptGENInstance();
-
-    CryptCodex newCryptCodexInstance();
-
-    X509ExtensionsReader newX509ExtensionsReaderInstance();
-
-    X509ExtensionsBuilder newX509ExtensionsBuilderInstance();
 
     KeyInformation newKeyInformationInstance( PublicKey publicKey );
 
     abstract class Mixin
-            implements CryptoToolFactory
+            implements CryptObjectsFactory
     {
 
         @Structure
         private ObjectBuilderFactory obf;
-
-        @Override
-        public CryptIO newCryptIOInstance()
-        {
-            return obf.newObject( CryptIO.class );
-        }
-
-        @Override
-        public CryptGEN newCryptGENInstance()
-        {
-            return obf.newObject( CryptGEN.class );
-        }
-
-        @Override
-        public CryptCodex newCryptCodexInstance()
-        {
-            return obf.newObject( CryptCodex.class );
-        }
-
-        @Override
-        public X509ExtensionsReader newX509ExtensionsReaderInstance()
-        {
-            return obf.newObjectBuilder( X509ExtensionsReader.class ).use( newCryptCodexInstance() ).newInstance();
-        }
-
-        @Override
-        public X509ExtensionsBuilder newX509ExtensionsBuilderInstance()
-        {
-            return obf.newObject( X509ExtensionsBuilder.class );
-        }
 
         @Override
         public KeyInformation newKeyInformationInstance( PublicKey publicKey )
