@@ -22,8 +22,8 @@
 package org.codeartisans.qipki.commons.values.crypto.x509;
 
 import java.util.Set;
-import org.codeartisans.qipki.commons.constants.KeyUsage;
-import org.codeartisans.qipki.commons.constants.RevocationReason;
+import org.codeartisans.qipki.crypto.x509.KeyUsage;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import org.qi4j.api.common.Optional;

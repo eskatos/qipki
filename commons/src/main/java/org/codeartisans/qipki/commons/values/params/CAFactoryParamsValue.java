@@ -23,7 +23,7 @@ package org.codeartisans.qipki.commons.values.params;
 
 import org.codeartisans.qipki.commons.constraints.X500Name;
 import org.codeartisans.qipki.commons.fragments.Nameable;
-import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
@@ -37,7 +37,7 @@ public interface CAFactoryParamsValue
     @X500Name
     Property<String> distinguishedName();
 
-    Property<KeySpecValue> keySpec();
+    Property<KeyPairSpecValue> keySpec();
 
     @Optional
     Property<String> parentCaIdentity();

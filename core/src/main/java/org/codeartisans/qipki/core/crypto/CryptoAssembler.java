@@ -22,12 +22,17 @@
 package org.codeartisans.qipki.core.crypto;
 
 import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
-import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
-import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsBuilder;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.X509ExtensionsReader;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorService;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodexService;
+import org.codeartisans.qipki.core.crypto.digest.DigestService;
+import org.codeartisans.qipki.core.crypto.io.CryptIOService;
+import org.codeartisans.qipki.core.crypto.mac.MACService;
+import org.codeartisans.qipki.core.crypto.objects.KeyInformation;
+import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsBuilderService;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReaderService;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.core.crypto.x509.X509GeneratorService;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -48,15 +53,18 @@ public class CryptoAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( CryptoToolFactory.class,
+        module.addServices( CryptObjectsFactory.class,
+                            CryptCodexService.class,
+                            X509GeneratorService.class,
+                            CryptIOService.class,
+                            DigestService.class,
+                            MACService.class,
+                            AsymetricGeneratorService.class,
+                            X509ExtensionsReaderService.class,
+                            X509ExtensionsBuilderService.class,
                             X509ExtensionsValueFactory.class ).
                 visibleIn( visibility );
-        module.addObjects( CryptIO.class,
-                           CryptGEN.class,
-                           CryptCodex.class,
-                           X509ExtensionsReader.class,
-                           X509ExtensionsBuilder.class,
-                           KeyInformation.class ).
+        module.addObjects( KeyInformation.class ).
                 visibleIn( visibility );
         new QiPkiCryptoValuesAssembler( visibility ).assemble( module );
     }

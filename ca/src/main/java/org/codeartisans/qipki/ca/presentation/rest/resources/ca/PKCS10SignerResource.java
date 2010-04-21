@@ -29,8 +29,7 @@ import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -51,7 +50,7 @@ public class PKCS10SignerResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PKCS10SignerResource.class );
     @Service
-    private CryptoToolFactory cryptoToolFactory;
+    private CryptIO cryptIO;
 
     public PKCS10SignerResource( @Structure ObjectBuilderFactory obf )
     {
@@ -69,7 +68,6 @@ public class PKCS10SignerResource
 
             // Data
             String caIdentity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            CryptIO cryptIO = cryptoToolFactory.newCryptIOInstance();
             PKCS10CertificationRequest pkcs10 = cryptIO.readPKCS10PEM( entity.getReader() );
 
             // Context

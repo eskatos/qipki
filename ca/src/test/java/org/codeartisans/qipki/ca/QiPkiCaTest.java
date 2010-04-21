@@ -34,6 +34,8 @@ import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorParameters;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -70,8 +72,8 @@ public class QiPkiCaTest
         String crl = httpClient.execute( httpHost, get, strResponseHandler );
         LOGGER.debug( "First CA CRL:\n{}", crl );
 
-        KeyPair keyPair = cryptgen.generateRSAKeyPair( 512 );
-        PKCS10CertificationRequest pkcs10 = cryptgen.generatePKCS10(
+        KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
+        PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10(
                 new X500Principal( "CN=qipki" ), keyPair,
                 new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );
 
