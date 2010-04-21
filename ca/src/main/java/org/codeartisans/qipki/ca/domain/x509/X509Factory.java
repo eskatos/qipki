@@ -25,8 +25,7 @@ import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -50,16 +49,15 @@ public interface X509Factory
         @Service
         private CryptoValuesFactory commonValuesFactory;
         @Service
-        private CryptoToolFactory cryptoToolFactory;
+        private CryptIO cryptIO;
 
         @Override
         public X509 create( X509Certificate cert, CA issuer )
         {
             EntityBuilder<X509> x509Builder = uowf.currentUnitOfWork().newEntityBuilder( X509.class );
-            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
 
             X509 x509 = x509Builder.instance();
-            x509.pem().set( cryptio.asPEM( cert ).toString() );
+            x509.pem().set( cryptIO.asPEM( cert ).toString() );
             x509.canonicalSubjectDN().set( cert.getSubjectX500Principal().getName( X500Principal.CANONICAL ) );
             x509.canonicalIssuerDN().set( cert.getIssuerX500Principal().getName( X500Principal.CANONICAL ) );
             x509.hexSerialNumber().set( cert.getSerialNumber().toString( 16 ) );

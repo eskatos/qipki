@@ -1,7 +1,8 @@
 package org.codeartisans.qipki.commons.values.params;
 
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
-import org.codeartisans.qipki.commons.values.crypto.KeySpecValue;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -16,9 +17,9 @@ public interface ParamsFactory
 
     CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
 
-    KeySpecValue createKeySpec( String algorithm, Integer length );
+    KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length );
 
-    CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeySpecValue keySpec, @Optional String parentCaIdentity );
+    CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaIdentity );
 
     abstract class Mixin
             implements ParamsFactory
@@ -39,17 +40,17 @@ public interface ParamsFactory
         }
 
         @Override
-        public KeySpecValue createKeySpec( String algorithm, Integer length )
+        public KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length )
         {
-            ValueBuilder<KeySpecValue> keySpecBuilder = vbf.newValueBuilder( KeySpecValue.class );
-            KeySpecValue keySpec = keySpecBuilder.prototype();
+            ValueBuilder<KeyPairSpecValue> keySpecBuilder = vbf.newValueBuilder( KeyPairSpecValue.class );
+            KeyPairSpecValue keySpec = keySpecBuilder.prototype();
             keySpec.algorithm().set( algorithm );
             keySpec.length().set( length );
             return keySpecBuilder.newInstance();
         }
 
         @Override
-        public CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeySpecValue keySpec, String parentCaIdentity )
+        public CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
         {
             ValueBuilder<CAFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CAFactoryParamsValue.class );
             CAFactoryParamsValue params = paramsBuilder.prototype();

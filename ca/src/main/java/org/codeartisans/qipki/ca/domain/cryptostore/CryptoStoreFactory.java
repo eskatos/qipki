@@ -23,8 +23,7 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import java.security.KeyStore;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -49,12 +48,11 @@ public interface CryptoStoreFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CryptoToolFactory cryptoToolFactory;
+        private CryptIO cryptIO;
 
         @Override
         public CryptoStore create( CryptoStoreFactoryParamsValue params )
         {
-            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
             EntityBuilder<CryptoStore> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStore.class );
 
             CryptoStore ksEntity = ksBuilder.instance();
@@ -63,8 +61,8 @@ public interface CryptoStoreFactory
             ksEntity.storeType().set( params.storeType().get() );
             ksEntity.password().set( params.password().get() );
 
-            KeyStore keystore = cryptio.createEmptyKeyStore( ksEntity.storeType().get() );
-            ksEntity.payload().set( cryptio.base64Encode( keystore, ksEntity.password().get() ) );
+            KeyStore keystore = cryptIO.createEmptyKeyStore( ksEntity.storeType().get() );
+            ksEntity.payload().set( cryptIO.base64Encode( keystore, ksEntity.password().get() ) );
 
             return ksBuilder.newInstance();
         }

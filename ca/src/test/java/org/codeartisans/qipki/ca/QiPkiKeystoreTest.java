@@ -26,7 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.codeartisans.qipki.ca.utils.QiPkiCaFixtures;
-import org.codeartisans.qipki.commons.constants.KeyStoreType;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;

@@ -25,9 +25,6 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.crypto.hash.Sha1Hash;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.x509.X509;
@@ -39,10 +36,13 @@ import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.tools.CryptCodex;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
-import org.codeartisans.qipki.core.crypto.KeyInformation;
-import org.codeartisans.qipki.core.crypto.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.core.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.core.crypto.objects.KeyInformation;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.core.crypto.codec.CryptCodex;
+import org.codeartisans.qipki.core.crypto.digest.DigestParameters;
+import org.codeartisans.qipki.core.crypto.digest.DigestService;
+import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -83,7 +83,11 @@ public interface RestletValuesFactory
         @Service
         private X509ExtensionsValueFactory x509ExtensionsValueFactory;
         @Service
-        private CryptoToolFactory cryptoToolFactory;
+        private CryptCodex cryptCodex;
+        @Service
+        private DigestService digester;
+        @Service
+        private CryptObjectsFactory cryptoToolFactory;
 
         @Override
         public CAValue ca( Reference parentRef, CA ca )
@@ -135,7 +139,6 @@ public interface RestletValuesFactory
         {
             try {
                 X509Certificate cert = x509.x509Certificate();
-                CryptCodex cryptcodex = cryptoToolFactory.newCryptCodexInstance();
                 KeyInformation publicKeyInfo = cryptoToolFactory.newKeyInformationInstance( cert.getPublicKey() );
                 ValueBuilder<X509DetailValue> x509DetailValueBuilder = vbf.newValueBuilder( X509DetailValue.class );
 
@@ -152,11 +155,15 @@ public interface RestletValuesFactory
                 x509DetailValue.signatureAlgorithm().set( cert.getSigAlgName() );
                 x509DetailValue.publicKeyAlgorithm().set( publicKeyInfo.getKeyAlgorithm() );
                 x509DetailValue.publicKeySize().set( publicKeyInfo.getKeySize() );
-                x509DetailValue.hexSubjectUniqueIdentifier().set( cryptcodex.toHexString( cert.getSubjectUniqueID() ) );
-                x509DetailValue.hexIssuerUniqueIdentifier().set( cryptcodex.toHexString( cert.getIssuerUniqueID() ) );
-                x509DetailValue.md5Fingerprint().set( new Md5Hash( cert.getEncoded() ).toHex() );
-                x509DetailValue.sha1Fingerprint().set( new Sha1Hash( cert.getEncoded() ).toHex() );
-                x509DetailValue.sha256Fingerprint().set( new Sha256Hash( cert.getEncoded() ).toHex() );
+                if ( cert.getSubjectUniqueID() != null ) {
+                    x509DetailValue.hexSubjectUniqueIdentifier().set( cryptCodex.toHexString( cert.getSubjectUniqueID() ) );
+                }
+                if ( cert.getIssuerUniqueID() != null ) {
+                    x509DetailValue.hexIssuerUniqueIdentifier().set( cryptCodex.toHexString( cert.getIssuerUniqueID() ) );
+                }
+                x509DetailValue.md5Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.MD5 ) ) );
+                x509DetailValue.sha1Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_1 ) ) );
+                x509DetailValue.sha256Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_256 ) ) );
 
                 // Key informations
                 x509DetailValue.keysExtensions().set( x509ExtensionsValueFactory.buildKeysExtensionsValue( cert ) );

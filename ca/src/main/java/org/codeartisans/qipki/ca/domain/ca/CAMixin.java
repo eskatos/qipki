@@ -31,9 +31,8 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
 import org.codeartisans.qipki.core.QiPkiFailure;
-import org.codeartisans.qipki.core.crypto.tools.CryptGEN;
-import org.codeartisans.qipki.core.crypto.tools.CryptIO;
-import org.codeartisans.qipki.core.crypto.tools.CryptoToolFactory;
+import org.codeartisans.qipki.core.crypto.x509.X509Generator;
+import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReader;
 import org.joda.time.Duration;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
@@ -46,7 +45,9 @@ public abstract class CAMixin
 
     private static final Logger LOGGER = LoggerFactory.getLogger( RootCAMixin.class );
     @Service
-    private CryptoToolFactory cryptoToolFactory;
+    private X509Generator x509Generator;
+    @Service
+    private X509ExtensionsReader x509ExtReader;
     @This
     private CAState state;
 
@@ -76,21 +77,18 @@ public abstract class CAMixin
         LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
         try {
 
-            CryptGEN cryptgen = cryptoToolFactory.newCryptGENInstance();
-            CryptIO cryptio = cryptoToolFactory.newCryptIOInstance();
-
-            X509Extensions requestedExtensions = cryptio.extractRequestedExtensions( pkcs10 );
+            X509Extensions requestedExtensions = x509ExtReader.extractRequestedExtensions( pkcs10 );
 
             // TODO add Basic Constraints
             // TODO add CRL Distribution point !
 
-            X509Certificate certificate = cryptgen.generateX509Certificate( privateKey(),
-                                                                            certificate().getSubjectX500Principal(),
-                                                                            BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                            pkcs10.getCertificationRequestInfo().getSubject(),
-                                                                            pkcs10.getPublicKey(),
-                                                                            Duration.standardDays( 365 ),
-                                                                            requestedExtensions );
+            X509Certificate certificate = x509Generator.generateX509Certificate( privateKey(),
+                                                                                 certificate().getSubjectX500Principal(),
+                                                                                 BigInteger.probablePrime( 120, new SecureRandom() ),
+                                                                                 pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                                 pkcs10.getPublicKey(),
+                                                                                 Duration.standardDays( 365 ),
+                                                                                 requestedExtensions );
 
             return certificate;
 
