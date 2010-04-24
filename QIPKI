@@ -45,6 +45,8 @@ Next steps
 
   Write CryptoStoreFactoryResource and CAFactoryResource unit tests
 
+  QUID? @SideEffects: synchronous or asynchronous, currentUnitOfWork or newUnitOfWork ?
+
   Factorize Values factories ???
     Common interfaces, Rest values having HasURI
     Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
@@ -65,18 +67,21 @@ Next steps
   Release 0.1
 
   Use @Concerns to factorize Resources (error handling, logging etc..)
+    Finish WrongParamatersBuilder and integrate in resources concerns
     Remove loggings from unit tests, the server logs, the client only use http
 
   Add shiro
     Model with one root Role and Permissions, other Roles will emerge themselves later
     See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
 
+  Apply qi4j data migration system to learn it
+
+  Add a domain auditing bounded context filled by @SideEffects
+
   Simple Client/UI reflecting naive rest api list/factory/entity
     Example: request to x509 factory is presented with two fields
       ComboBox: choose Fca in list
       TextArea: paste pkcs10 pem
-
-  Apply qi4j data migration system to learn it
 
 
 

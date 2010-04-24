@@ -19,40 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca;
+package org.codeartisans.qipki.ra.domain.csr;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class QiPkiCaBundleActivator
-        implements BundleActivator
+public enum CSRStatus
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiCaBundleActivator.class );
-    private QiPkiCa qipkiServer;
-
-    public QiPkiCaBundleActivator()
-    {
-        LOGGER.info( "Assembling QiPki::CA::Server Bundle" );
-        qipkiServer = new QiPkiCa();
-    }
-
-    @Override
-    public void start( BundleContext bc )
-            throws Exception
-    {
-        LOGGER.info( "Starting   QiPki::CA::Server Bundle" );
-        qipkiServer.run();
-    }
-
-    @Override
-    public void stop( BundleContext bc )
-            throws Exception
-    {
-        LOGGER.info( "Stopping   QiPki::CA::Server Bundle" );
-        qipkiServer.stop();
-    }
-
+    NEW, READY, IN_PROGRESS, DONE
 }
