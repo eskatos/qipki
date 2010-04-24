@@ -65,6 +65,7 @@ import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import org.codeartisans.qipki.core.crypto.CryptoAssembler;
+import org.codeartisans.qipki.core.sideeffects.TracingSideEffect;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -226,7 +227,8 @@ public class QiPkiCaAssembler
                                         X509Repository.class,
                                         X509Factory.class,
                                         CryptoValuesFactory.class ).
-                            visibleIn( Visibility.application );
+                            visibleIn( Visibility.application ).
+                            withSideEffects( TracingSideEffect.class );
                 }
 
             }.assemble( domain.moduleAssembly( "domain" ) );
