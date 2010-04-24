@@ -60,9 +60,6 @@ import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralNameValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralSubtreeValue;
 import org.codeartisans.qipki.core.crypto.codec.CryptCodex;
-import org.codeartisans.qipki.core.crypto.x509.PolicyMapping;
-import org.codeartisans.qipki.core.crypto.x509.PolicyConstraint;
-import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReader;
 import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -260,7 +257,7 @@ public interface X509ExtensionsValueFactory
             ValueBuilder<SubjectKeyIdentifierValue> skiBuilder = vbf.newValueBuilder( SubjectKeyIdentifierValue.class );
             SubjectKeyIdentifierValue skiValue = skiBuilder.prototype();
             skiValue.critical().set( critical );
-            skiValue.keyIdentifier().set( hexKeyIdentifier );
+            skiValue.hexKeyIdentifier().set( hexKeyIdentifier );
             return skiBuilder.newInstance();
         }
 
@@ -269,7 +266,7 @@ public interface X509ExtensionsValueFactory
             ValueBuilder<AuthorityKeyIdentifierValue> akiBuilder = vbf.newValueBuilder( AuthorityKeyIdentifierValue.class );
             AuthorityKeyIdentifierValue akiValue = akiBuilder.prototype();
             akiValue.critical().set( critical );
-            akiValue.keyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
+            akiValue.hexKeyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
             akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
             akiValue.names().set( buildSetOfNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
             return akiBuilder.newInstance();

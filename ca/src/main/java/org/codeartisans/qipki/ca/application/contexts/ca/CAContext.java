@@ -21,15 +21,12 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntity;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
 import org.codeartisans.qipki.ca.domain.x509.X509;
-import org.codeartisans.qipki.ca.domain.x509.X509Factory;
+import org.codeartisans.qipki.ca.domain.x509.X509Repository;
+import org.codeartisans.qipki.commons.values.params.RevocationParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
+import org.qi4j.api.query.Query;
 
 public class CAContext
         extends Context
@@ -40,12 +37,20 @@ public class CAContext
         return context.role( CA.class );
     }
 
-    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
+    // TODO Implement query with hexSubjectKeyIdentifier
+    public void revoke( RevocationParamsValue revocationParams )
     {
-        X509Certificate cert = context.role( PKCS10Signer.class ).sign( pkcs10 );
-        X509 x509 = context.role( X509Factory.class ).create( cert, context.role( CA.class ) );
-        EndEntity ee = context.role( EndEntityFactory.class ).create( x509 );
-        return cert;
+        Query<X509> x509s = context.role( X509Repository.class ).findPaginated( revocationParams.hexSerialNumber().get(),
+                                                                                revocationParams.canonicalIssuerDN().get(),
+                                                                                0, 2 );
+        if ( x509s.count() <= 0 ) {
+            throw new IllegalArgumentException( "No X509Certificate found for the given revocation parameters: " + revocationParams.toJSON() );
+        }
+        if ( x509s.count() > 1 ) {
+            throw new IllegalArgumentException( "More than one X509Certificate found for the given revocation parameters: " + revocationParams.toJSON() );
+        }
+        X509 x509toRevoke = x509s.iterator().next();
+        // TODO
     }
 
 }

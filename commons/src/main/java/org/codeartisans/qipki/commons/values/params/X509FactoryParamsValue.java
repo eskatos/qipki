@@ -19,13 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.fragments;
+package org.codeartisans.qipki.commons.values.params;
 
 import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
 
-public interface ValueWithIdentity
+public interface X509FactoryParamsValue
+        extends ValueComposite
 {
 
-    Property<String> identity();
+    Property<String> caIdentity();
+
+    Property<String> pemPkcs10();
 
 }

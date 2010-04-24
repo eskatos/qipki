@@ -31,21 +31,53 @@ Next steps
 
   DONE Use plain BouncyCastle for hash calulations (see RestletValuesFactory)
 
+  DONE Refactor CAFactoryResource to use 302/GET on x509 like other creational resources
+
+  DONE Refactor PKCS10SignerResource so it becomes a X509FactoryResource and take parameters around the pkcs10 request
+    Create X509FactoryResource
+    Remove PKCS10SignerResource
+
+  BUG: generated URIs seems wrong but everything is working, see unit tests logs
+
   Add /ca/{identity}/x509revoker
+    Seems wrong according to DCI
+    Move to /x509/{identity}/revoke
+
+  Write CryptoStoreFactoryResource and CAFactoryResource unit tests
 
   Factorize Values factories ???
     Common interfaces, Rest values having HasURI
     Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
 
   State on commons/core modules and on basic crypto code/services location
+    Questions
+      Add crypto mixins to rest params ?
+        It is nice server side, try to find a way to augment params Values server side only
 
   Fix domain objects visibility
 
   Write qi4j client library for cryptostore/ca/csr/certificates/revocation
+    QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
+      Immutables QiPkiIURIBuilders sharing a StringBuilderF
 
   Package as a unix daemon
 
   Release 0.1
+
+  Use @Concerns to factorize Resources (error handling, logging etc..)
+    Remove loggings from unit tests, the server logs, the client only use http
+
+  Add shiro
+    Model with one root Role and Permissions, other Roles will emerge themselves later
+    See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
+
+  Simple Client/UI reflecting naive rest api list/factory/entity
+    Example: request to x509 factory is presented with two fields
+      ComboBox: choose Fca in list
+      TextArea: paste pkcs10 pem
+
+  Apply qi4j data migration system to learn it
+
 
 
 X.509 Extensions Documents

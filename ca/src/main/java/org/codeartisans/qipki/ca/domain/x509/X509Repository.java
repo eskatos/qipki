@@ -43,6 +43,8 @@ public interface X509Repository
 
     Query<X509> findPaginatedByCA( CA ca, int firstResult, int maxResults );
 
+    Query<X509> findPaginated( String hexSerialNumber, String canonicalIssuerDn, int firstResult, int maxResults );
+
     abstract class Mixin
             implements X509Repository
     {
@@ -76,6 +78,19 @@ public interface X509Repository
             X509 x509 = templateFor( X509.class );
             builder = builder.where( eq( x509.issuer(), ca ) );
             builder = builder.where( contains( ee.x509s(), x509 ) );
+            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() ).
+                    firstResult( firstResult ).
+                    maxResults( maxResults );
+            return query;
+        }
+
+        @Override
+        public Query<X509> findPaginated( String hexSerialNumber, String canonicalIssuerDn, int firstResult, int maxResults )
+        {
+            QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
+            X509 x509 = templateFor( X509.class );
+            builder = builder.where( and( eq( x509.canonicalIssuerDN(), canonicalIssuerDn ),
+                                          eq( x509.hexSerialNumber(), hexSerialNumber ) ) );
             Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
