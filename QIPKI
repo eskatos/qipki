@@ -40,12 +40,10 @@ Next steps
   BUG: generated URIs seems wrong but everything is working, see unit tests logs
 
   Add /ca/{identity}/x509revoker
-    Seems wrong according to DCI
+    Seems wrong according to DCI & REST
     Move to /x509/{identity}/revoke
 
   Write CryptoStoreFactoryResource and CAFactoryResource unit tests
-
-  QUID? @SideEffects: synchronous or asynchronous, currentUnitOfWork or newUnitOfWork ?
 
   Factorize Values factories ???
     Common interfaces, Rest values having HasURI
