@@ -29,7 +29,6 @@ import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.ca.domain.fragments.PKCS10Signer;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
@@ -89,15 +88,16 @@ public class RootContext
     {
         CA ca = caRepos.findByIdentity( identity );
         context.playRoles( ca, CA.class );
-        context.playRoles( ca, PKCS10Signer.class );
-        context.playRoles( endEntityFactory, EndEntityFactory.class );
-        context.playRoles( x509Factory, X509Factory.class );
+        context.playRoles( x509Repository, X509Repository.class );
         return subContext( CAContext.class );
     }
 
     public X509ListContext x509ListContext()
     {
         context.playRoles( x509Repository, X509Repository.class );
+        context.playRoles( x509Factory, X509Factory.class );
+        context.playRoles( caRepos, CARepository.class );
+        context.playRoles( endEntityFactory, EndEntityFactory.class );
         return subContext( X509ListContext.class );
     }
 

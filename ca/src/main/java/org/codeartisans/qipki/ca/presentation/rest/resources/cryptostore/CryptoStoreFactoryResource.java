@@ -33,7 +33,6 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
 import org.restlet.data.Status;
-import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
@@ -69,14 +68,13 @@ public class CryptoStoreFactoryResource
             // Interaction
             CryptoStore cs = csListCtx.createCryptoStore( data );
 
-            // Representation
+            // Redirect to created resource
             CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef().addSegment( "cryptostore" ), cs );
-            getResponse().redirectSeeOther( csValue.uri().get() );
-            return new EmptyRepresentation();
+            return redirectToCreatedResource( csValue.uri().get() );
 
         } catch ( IOException ex ) {
             LOGGER.trace( "500: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted entity", ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted Value", ex );
         }
     }
 

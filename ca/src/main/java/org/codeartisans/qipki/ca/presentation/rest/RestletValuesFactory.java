@@ -97,6 +97,7 @@ public interface RestletValuesFactory
             CAValue caValue = caValueBuilder.prototype();
             caValue.uri().set( appendIdentity( parentRef, ca ) );
 
+            caValue.identity().set( ca.identity().get() );
             caValue.name().set( ca.name().get() );
             caValue.keystoreIdentity().set( ca.cryptoStore().get().identity().get() );
 

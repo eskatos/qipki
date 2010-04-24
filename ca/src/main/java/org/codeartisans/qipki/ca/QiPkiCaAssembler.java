@@ -53,12 +53,13 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResourc
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.ca.PKCS10SignerResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.ca.X509RevokerResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
@@ -115,8 +116,9 @@ public class QiPkiCaAssembler
                                        CAFactoryResource.class,
                                        CAResource.class,
                                        CRLResource.class,
-                                       PKCS10SignerResource.class,
+                                       X509RevokerResource.class,
                                        X509ListResource.class,
+                                       X509FactoryResource.class,
                                        X509Resource.class,
                                        X509DetailResource.class ).
                             visibleIn( Visibility.module );

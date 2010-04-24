@@ -35,6 +35,7 @@ public class AbstractResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractResource.class );
+    public static final String PARAM_IDENTITY = "identity";
     protected final ObjectBuilderFactory obf;
 
     public AbstractResource( ObjectBuilderFactory obf )

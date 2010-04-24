@@ -21,38 +21,54 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
-import java.util.Collections;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.EmptyRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
+import java.util.Arrays;
+import java.util.List;
 
-public abstract class AbstractFactoryResource
-        extends AbstractResource
+/**
+ * TODO Generate automatic message using missings and illegals
+ */
+public class WrongParametersBuilder
+        extends Exception
 {
 
-    public AbstractFactoryResource( ObjectBuilderFactory obf )
+    private String title;
+    private List<String> missings;
+    private List<String> illegals;
+
+    public WrongParametersBuilder()
     {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.POST ) );
-        setNegotiated( false );
     }
 
-    @Override
-    protected abstract Representation post( Representation entity )
-            throws ResourceException;
-
-    /**
-     * Shortcut to apply POST/302/GET redirect pattern.
-     *
-     * @param getURI URI of the created resource
-     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
-     */
-    protected final Representation redirectToCreatedResource( String getURI )
+    private WrongParametersBuilder( String title, List<String> missings, List<String> illegals )
     {
-        getResponse().redirectSeeOther( getURI );
-        return new EmptyRepresentation();
+        this.title = title;
+        this.missings = missings;
+        this.illegals = illegals;
+    }
+
+    public WrongParametersBuilder title( String title )
+    {
+        return new WrongParametersBuilder( title, missings, illegals );
+    }
+
+    public WrongParametersBuilder missings( String... missings )
+    {
+        return new WrongParametersBuilder( title, Arrays.asList( missings ), illegals );
+    }
+
+    public WrongParametersBuilder illegals( String... illegals )
+    {
+        return new WrongParametersBuilder( title, missings, Arrays.asList( illegals ) );
+    }
+
+    public WrongParametersException build()
+    {
+        return new WrongParametersException( title );
+    }
+
+    public WrongParametersException build( Throwable cause )
+    {
+        return new WrongParametersException( title, cause );
     }
 
 }
