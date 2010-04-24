@@ -19,40 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca;
+package org.codeartisans.qipki.ra;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QiPkiCaBundleActivator
+public class QiPkiRaBundleActivator
         implements BundleActivator
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiCaBundleActivator.class );
-    private QiPkiCa qipkiServer;
+    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiRaBundleActivator.class );
 
-    public QiPkiCaBundleActivator()
+    public QiPkiRaBundleActivator()
     {
-        LOGGER.info( "Assembling QiPki::CA::Server Bundle" );
-        qipkiServer = new QiPkiCa();
+        LOGGER.info( "Assembling QiPki::RA::Server Bundle" );
     }
 
     @Override
     public void start( BundleContext bc )
             throws Exception
     {
-        LOGGER.info( "Starting   QiPki::CA::Server Bundle" );
-        qipkiServer.run();
+        LOGGER.info( "Starting   QiPki::RA::Server Bundle" );
     }
 
     @Override
     public void stop( BundleContext bc )
             throws Exception
     {
-        LOGGER.info( "Stopping   QiPki::CA::Server Bundle" );
-        qipkiServer.stop();
+        LOGGER.info( "Stopping   QiPki::RA::Server Bundle" );
     }
 
 }

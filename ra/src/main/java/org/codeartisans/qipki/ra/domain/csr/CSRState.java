@@ -19,40 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca;
+package org.codeartisans.qipki.ra.domain.csr;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.qi4j.api.entity.Identity;
+import org.qi4j.api.property.Property;
 
-public class QiPkiCaBundleActivator
-        implements BundleActivator
+public interface CSRState
+        extends Identity
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiCaBundleActivator.class );
-    private QiPkiCa qipkiServer;
+    Property<CSRStatus> status();
 
-    public QiPkiCaBundleActivator()
-    {
-        LOGGER.info( "Assembling QiPki::CA::Server Bundle" );
-        qipkiServer = new QiPkiCa();
-    }
-
-    @Override
-    public void start( BundleContext bc )
-            throws Exception
-    {
-        LOGGER.info( "Starting   QiPki::CA::Server Bundle" );
-        qipkiServer.run();
-    }
-
-    @Override
-    public void stop( BundleContext bc )
-            throws Exception
-    {
-        LOGGER.info( "Stopping   QiPki::CA::Server Bundle" );
-        qipkiServer.stop();
-    }
+    Property<String> pemPkcs10();
 
 }
