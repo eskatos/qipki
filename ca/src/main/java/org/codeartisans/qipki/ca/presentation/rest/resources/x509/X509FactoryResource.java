@@ -19,37 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
+package org.codeartisans.qipki.ca.presentation.rest.resources.x509;
 
 import java.io.IOException;
-import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
-import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
+import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersException;
+import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
 import org.restlet.data.Status;
-import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CAFactoryResource
+public class X509FactoryResource
         extends AbstractFactoryResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CAFactoryResource.class );
-    @Service
-    private RestletValuesFactory restValuesFactory;
+    private static final Logger LOGGER = LoggerFactory.getLogger( X509FactoryResource.class );
     @Structure
     private ValueBuilderFactory vbf;
+    @Service
+    private RestletValuesFactory restValuesFactory;
 
-    public CAFactoryResource( @Structure ObjectBuilderFactory obf )
+    public X509FactoryResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
@@ -61,21 +61,24 @@ public class CAFactoryResource
         try {
 
             // Data
-            CAFactoryParamsValue data = vbf.newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
+            X509FactoryParamsValue data = vbf.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
 
             // Context
-            CAListContext caListCtx = newRootContext().caListContext();
+            X509ListContext caListCtx = newRootContext().x509ListContext();
 
             // Interaction
-            CA ca = caListCtx.createCA( data );
+            X509 x509 = caListCtx.createX509( data );
 
             // Redirect to created resource
-            CAValue caValue = restValuesFactory.ca( getRootRef().addSegment( "ca" ), ca );
-            return redirectToCreatedResource( caValue.uri().get() );
+            X509Value csValue = restValuesFactory.x509( getRootRef().addSegment( "x509" ), x509 );
+            return redirectToCreatedResource( csValue.uri().get() );
 
+        } catch ( WrongParametersException ex ) {
+            LOGGER.warn( "400: {}", ex.getMessage(), ex );
+            throw new ResourceException( Status.CLIENT_ERROR_BAD_REQUEST, ex.getMessage(), ex );
         } catch ( IOException ex ) {
-            LOGGER.trace( "500: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted entity", ex );
+            LOGGER.warn( "500: {}", ex.getMessage(), ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted value", ex );
         }
     }
 

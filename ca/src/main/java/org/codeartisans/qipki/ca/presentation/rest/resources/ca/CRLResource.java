@@ -4,7 +4,6 @@ import java.util.Collections;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
-import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -40,7 +39,7 @@ public class CRLResource
         try {
 
             // Data
-            String caIdentity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            String caIdentity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
 
             // Context
             RootContext rootCtx = newRootContext();

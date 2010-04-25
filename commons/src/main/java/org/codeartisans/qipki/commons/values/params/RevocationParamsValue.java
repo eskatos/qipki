@@ -19,40 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.commons.values.params;
 
-import java.util.Collections;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.EmptyRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
 
-public abstract class AbstractFactoryResource
-        extends AbstractResource
+public interface RevocationParamsValue
+        extends ValueComposite
 {
 
-    public AbstractFactoryResource( ObjectBuilderFactory obf )
-    {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.POST ) );
-        setNegotiated( false );
-    }
+    Property<String> hexSerialNumber();
 
-    @Override
-    protected abstract Representation post( Representation entity )
-            throws ResourceException;
+    Property<String> canonicalIssuerDN();
 
-    /**
-     * Shortcut to apply POST/302/GET redirect pattern.
-     *
-     * @param getURI URI of the created resource
-     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
-     */
-    protected final Representation redirectToCreatedResource( String getURI )
-    {
-        getResponse().redirectSeeOther( getURI );
-        return new EmptyRepresentation();
-    }
+    @Optional
+    Property<String> hexSubjectKeyIdentifier();
+
+    Property<RevocationReason> reason();
 
 }

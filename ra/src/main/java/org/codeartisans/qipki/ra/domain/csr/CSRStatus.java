@@ -19,40 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources;
+package org.codeartisans.qipki.ra.domain.csr;
 
-import java.util.Collections;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.EmptyRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
-
-public abstract class AbstractFactoryResource
-        extends AbstractResource
+public enum CSRStatus
 {
 
-    public AbstractFactoryResource( ObjectBuilderFactory obf )
-    {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.POST ) );
-        setNegotiated( false );
-    }
-
-    @Override
-    protected abstract Representation post( Representation entity )
-            throws ResourceException;
-
-    /**
-     * Shortcut to apply POST/302/GET redirect pattern.
-     *
-     * @param getURI URI of the created resource
-     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
-     */
-    protected final Representation redirectToCreatedResource( String getURI )
-    {
-        getResponse().redirectSeeOther( getURI );
-        return new EmptyRepresentation();
-    }
-
+    NEW, READY, IN_PROGRESS, DONE
 }

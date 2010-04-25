@@ -35,7 +35,7 @@ public class QiPkiCaBundleActivator
 
     public QiPkiCaBundleActivator()
     {
-        LOGGER.info( "Assembling QiPKI::Server Bundle" );
+        LOGGER.info( "Assembling QiPki::CA::Server Bundle" );
         qipkiServer = new QiPkiCa();
     }
 
@@ -43,7 +43,7 @@ public class QiPkiCaBundleActivator
     public void start( BundleContext bc )
             throws Exception
     {
-        LOGGER.info( "Starting   QiPKI::Server Bundle" );
+        LOGGER.info( "Starting   QiPki::CA::Server Bundle" );
         qipkiServer.run();
     }
 
@@ -51,7 +51,7 @@ public class QiPkiCaBundleActivator
     public void stop( BundleContext bc )
             throws Exception
     {
-        LOGGER.info( "Stopping   QiPKI::Server Bundle" );
+        LOGGER.info( "Stopping   QiPki::CA::Server Bundle" );
         qipkiServer.stop();
     }
 

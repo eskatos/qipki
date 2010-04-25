@@ -33,6 +33,8 @@ public interface CAValue
         extends RestValue, Nameable, Listable, ValueComposite
 {
 
+    Property<String> identity();
+
     Property<String> keystoreIdentity();
 
     abstract class Mixin

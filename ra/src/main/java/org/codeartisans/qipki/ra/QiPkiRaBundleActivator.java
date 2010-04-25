@@ -19,13 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.fragments;
+package org.codeartisans.qipki.ra;
 
-import org.qi4j.api.property.Property;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface ValueWithIdentity
+public class QiPkiRaBundleActivator
+        implements BundleActivator
 {
 
-    Property<String> identity();
+    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiRaBundleActivator.class );
+
+    public QiPkiRaBundleActivator()
+    {
+        LOGGER.info( "Assembling QiPki::RA::Server Bundle" );
+    }
+
+    @Override
+    public void start( BundleContext bc )
+            throws Exception
+    {
+        LOGGER.info( "Starting   QiPki::RA::Server Bundle" );
+    }
+
+    @Override
+    public void stop( BundleContext bc )
+            throws Exception
+    {
+        LOGGER.info( "Stopping   QiPki::RA::Server Bundle" );
+    }
 
 }

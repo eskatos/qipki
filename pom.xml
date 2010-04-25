@@ -39,6 +39,7 @@
         <module>commons</module>
         <module>client</module>
         <module>ca</module>
+        <module>ra</module>
         <module>swing</module>
         <module>main</module>
         <module>dist</module>
