@@ -21,38 +21,18 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
-import java.util.Collections;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.Method;
-import org.restlet.representation.EmptyRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
-
-public abstract class AbstractFactoryResource
-        extends AbstractResource
+public class WrongParametersException
+        extends RuntimeException
 {
 
-    public AbstractFactoryResource( ObjectBuilderFactory obf )
+    /* package */ WrongParametersException( String message )
     {
-        super( obf );
-        setAllowedMethods( Collections.singleton( Method.POST ) );
-        setNegotiated( false );
+        super( message );
     }
 
-    @Override
-    protected abstract Representation post( Representation entity )
-            throws ResourceException;
-
-    /**
-     * Shortcut to apply POST/302/GET redirect pattern.
-     *
-     * @param getURI URI of the created resource
-     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
-     */
-    protected final Representation redirectToCreatedResource( String getURI )
+    /* package */ WrongParametersException( String message, Throwable cause )
     {
-        getResponse().redirectSeeOther( getURI );
-        return new EmptyRepresentation();
+        super( message, cause );
     }
 
 }

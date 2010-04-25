@@ -19,14 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.fragments;
+package org.codeartisans.qipki.core.sideeffects;
 
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import org.qi4j.api.sideeffect.GenericSideEffect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface PKCS10Signer
+public class TracingSideEffect
+        extends GenericSideEffect
 {
 
-    X509Certificate sign( PKCS10CertificationRequest pkcs10 );
+    private static final Logger LOGGER = LoggerFactory.getLogger( TracingSideEffect.class );
+
+    @Override
+    protected void invoke( Method method, Object[] args )
+            throws Throwable
+    {
+        LOGGER.trace( "{}.{}( {} );", new Object[]{ method.getDeclaringClass().getSimpleName(), method.getName(), Arrays.toString( args ) } );
+    }
 
 }

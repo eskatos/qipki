@@ -22,42 +22,37 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
 import java.io.IOException;
-import java.security.cert.X509Certificate;
 import java.util.Collections;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
+import org.codeartisans.java.toolbox.io.ReaderUtil;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResource;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
-import org.codeartisans.qipki.core.crypto.io.CryptIO;
-import org.qi4j.api.injection.scope.Service;
+import org.codeartisans.qipki.commons.values.params.RevocationParamsValue;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
-import org.restlet.data.MediaType;
+import org.qi4j.api.value.ValueBuilderFactory;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PKCS10SignerResource
+public class X509RevokerResource
         extends AbstractResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( PKCS10SignerResource.class );
-    @Service
-    private CryptIO cryptIO;
+    private static final Logger LOGGER = LoggerFactory.getLogger( X509RevokerResource.class );
+    @Structure
+    private ValueBuilderFactory vbf;
 
-    public PKCS10SignerResource( @Structure ObjectBuilderFactory obf )
+    public X509RevokerResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
         setAllowedMethods( Collections.singleton( Method.POST ) );
         setNegotiated( false );
-        getVariants().add( new Variant( MediaType.TEXT_PLAIN ) );
     }
 
     @Override
@@ -67,18 +62,19 @@ public class PKCS10SignerResource
         try {
 
             // Data
-            String caIdentity = ensureRequestAttribute( AbstractEntityResource.PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            PKCS10CertificationRequest pkcs10 = cryptIO.readPKCS10PEM( entity.getReader() );
+            String caIdentity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            RevocationParamsValue revocationParams = vbf.newValueFromJSON( RevocationParamsValue.class,
+                                                                           ReaderUtil.readStringFully( entity.getReader() ) );
 
             // Context
             RootContext rootCtx = newRootContext();
             CAContext caCtx = rootCtx.caContext( caIdentity );
 
             // Interaction
-            X509Certificate cert = caCtx.sign( pkcs10 );
+            caCtx.revoke( revocationParams );
 
             // Representation
-            return new StringRepresentation( cryptIO.asPEM( cert ), MediaType.TEXT_PLAIN );
+            return new EmptyRepresentation(); // QUID ???
 
         } catch ( NoSuchEntityException ex ) {
             LOGGER.trace( "404: {}", ex.getMessage(), ex );

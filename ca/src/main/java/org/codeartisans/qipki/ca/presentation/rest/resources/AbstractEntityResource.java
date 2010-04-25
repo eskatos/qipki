@@ -40,7 +40,6 @@ public abstract class AbstractEntityResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractEntityResource.class );
-    public static final String PARAM_IDENTITY = "identity";
 
     protected AbstractEntityResource( ObjectBuilderFactory obf )
     {

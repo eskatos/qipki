@@ -2,6 +2,7 @@ core/target
 dist/target
 main/target
 ca/target
+ra/target
 swing/target
 client/target
 commons/target

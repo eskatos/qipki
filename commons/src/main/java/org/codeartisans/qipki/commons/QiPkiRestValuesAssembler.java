@@ -27,6 +27,7 @@ import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
+import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
@@ -57,7 +58,8 @@ public class QiPkiRestValuesAssembler
     {
         // Params
         module.addValues( CryptoStoreFactoryParamsValue.class,
-                          CAFactoryParamsValue.class ).
+                          CAFactoryParamsValue.class,
+                          X509FactoryParamsValue.class ).
                 visibleIn( visibility );
         module.addServices( ParamsFactory.class ).
                 visibleIn( visibility );

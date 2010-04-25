@@ -58,12 +58,14 @@ import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.sideeffect.SideEffects;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 /**
  * TODO Handle CRL nextUpdate
  */
 @Mixins( CAFactory.Mixin.class )
+@SideEffects( CAFactorySideEffect.class )
 public interface CAFactory
         extends ServiceComposite
 {

@@ -21,6 +21,8 @@ public interface ParamsFactory
 
     CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaIdentity );
 
+    X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 );
+
     abstract class Mixin
             implements ParamsFactory
     {
@@ -59,6 +61,16 @@ public interface ParamsFactory
             params.distinguishedName().set( distinguishedName );
             params.keySpec().set( keySpec );
             params.parentCaIdentity().set( parentCaIdentity );
+            return paramsBuilder.newInstance();
+        }
+
+        @Override
+        public X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 )
+        {
+            ValueBuilder<X509FactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509FactoryParamsValue.class );
+            X509FactoryParamsValue params = paramsBuilder.prototype();
+            params.caIdentity().set( caIdentity );
+            params.pemPkcs10().set( pemPkcs10 );
             return paramsBuilder.newInstance();
         }
 

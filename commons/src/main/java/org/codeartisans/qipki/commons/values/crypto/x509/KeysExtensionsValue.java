@@ -63,7 +63,7 @@ public interface KeysExtensionsValue
             extends HasCriticality, ValueComposite
     {
 
-        Property<String> keyIdentifier();
+        Property<String> hexKeyIdentifier();
 
     }
 
@@ -71,7 +71,7 @@ public interface KeysExtensionsValue
             extends HasCriticality, ValueComposite
     {
 
-        Property<String> keyIdentifier();
+        Property<String> hexKeyIdentifier();
 
         Property<Long> serialNumber();
 
