@@ -46,13 +46,9 @@ Next steps
 
   DONE Augment ApiRootResource so that it returns all base URIs in json and refactor unit test so that there's no hardcoded path anymore
 
-  Write CryptoStoreFactoryResource and CAFactoryResource unit tests
+  DONE Use CryptoStoreFactoryResource and CAFactoryResource in unit tests
 
   BUG: generated URIs seems wrong but everything is working, see unit tests logs
-
-  Factorize Values factories ???
-    Common interfaces, Rest values having HasURI
-    Maybe have sort of reusable ValuePrototypeFeeders with module Visibility
 
   State on commons/core modules and on basic crypto code/services location
     Questions
@@ -65,7 +61,6 @@ Next steps
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
     QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
-
 
   Package as a unix daemon
 

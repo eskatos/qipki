@@ -135,6 +135,7 @@ public interface RestletValuesFactory
             CryptoStoreValue ksValue = ksValueBuilder.prototype();
             ksValue.uri().set( appendIdentity( parentRef, ks ).toString() );
 
+            ksValue.identity().set( ks.identity().get() );
             ksValue.name().set( ks.name().get() );
             ksValue.storeType().set( ks.storeType().get() );
             ksValue.password().set( ks.password().get() );

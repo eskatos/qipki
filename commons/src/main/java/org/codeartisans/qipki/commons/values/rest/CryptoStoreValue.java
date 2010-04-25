@@ -22,9 +22,13 @@
 package org.codeartisans.qipki.commons.values.rest;
 
 import org.codeartisans.qipki.commons.states.CryptoStoreState;
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface CryptoStoreValue
         extends RestValue, CryptoStoreState, ValueComposite
 {
+
+    Property<String> identity();
+
 }

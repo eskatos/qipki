@@ -77,40 +77,25 @@ public class RestletApplication
     {
         Router router = new Router( getContext() );
 
-        { // API
-            Finder apiFinder = createFinder( ApiRootResource.class );
-            router.attach( "", apiFinder );
-            router.attach( "/", apiFinder );
-        }
-        { // CryptoStore
-            Finder cryptoStoreListFinder = createFinder( CryptoStoreListResource.class );
-            router.attach( "/cryptostore", cryptoStoreListFinder );
-            router.attach( "/cryptostore/", cryptoStoreListFinder );
+        Finder apiFinder = createFinder( ApiRootResource.class );
+        router.attach( "", apiFinder );
+        router.attach( "/", apiFinder );
 
-            Finder cryptoStoreFactoryFinder = createFinder( CryptoStoreFactoryResource.class );
-            router.attach( "/cryptostore/factory", cryptoStoreFactoryFinder );
-            router.attach( "/cryptostore/factory/", cryptoStoreFactoryFinder );
+        router.attach( "/cryptostore", createFinder( CryptoStoreListResource.class ) );
+        router.attach( "/cryptostore/factory", createFinder( CryptoStoreFactoryResource.class ) );
+        router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
 
-            Finder cryptoStoreFinder = createFinder( CryptoStoreResource.class );
-            router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}", cryptoStoreFinder );
-            router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}/", cryptoStoreFinder );
-        }
-        { // CA
-            router.attach( "/ca", createFinder( CAListResource.class ) );
-            router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
-            router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
-            router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
-        }
-        { // X509
-            Finder x509ListFinder = createFinder( X509ListResource.class );
-            router.attach( "/x509", x509ListFinder );
-            router.attach( "/x509/", x509ListFinder );
+        router.attach( "/ca", createFinder( CAListResource.class ) );
+        router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
+        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
+        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
 
-            router.attach( "/x509/factory", createFinder( X509FactoryResource.class ) );
-            router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
-            router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
-            router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
-        }
+        router.attach( "/x509", createFinder( X509ListResource.class ) );
+        router.attach( "/x509/factory", createFinder( X509FactoryResource.class ) );
+        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
+        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
+        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
+
         return new ExtensionMediaTypeFilter( getContext(), router );
     }
 
