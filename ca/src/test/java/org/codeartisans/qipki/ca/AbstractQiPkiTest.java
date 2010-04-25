@@ -23,12 +23,15 @@ package org.codeartisans.qipki.ca;
 
 import java.io.IOException;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpMessage;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
+import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.core.QiPkiApplication;
 import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGenerator;
 import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorService;
@@ -41,6 +44,7 @@ import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
+import org.restlet.data.MediaType;
 
 public abstract class AbstractQiPkiTest
         extends AbstractQi4jTest
@@ -49,14 +53,15 @@ public abstract class AbstractQiPkiTest
     private static final int DEFAULT_PORT = 8443;
     protected QiPkiApplication qipkiServer;
     protected ResponseHandler<String> strResponseHandler;
-    protected HttpHost httpHost;
     protected DefaultHttpClient httpClient;
     protected CryptIO cryptio;
     protected X509Generator x509Generator;
     protected AsymetricGenerator asymGenerator;
     protected ParamsFactory paramsFactory;
+    protected ApiURIsValue qiPkiApi;
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
@@ -71,18 +76,26 @@ public abstract class AbstractQiPkiTest
         qipkiServer = new QiPkiTestApplicationCa();
         qipkiServer.run();
         strResponseHandler = new BasicResponseHandler();
-        httpHost = new HttpHost( "localhost", DEFAULT_PORT );
         httpClient = new DefaultHttpClient();
         cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
         x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
         asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
+        HttpGet get = new HttpGet( "/api" );
+        addAcceptJsonHeader( get );
+        String jsonApi = httpClient.execute( new HttpHost( "localhost", DEFAULT_PORT ), get, strResponseHandler );
+        qiPkiApi = valueBuilderFactory.newValueFromJSON( ApiURIsValue.class, jsonApi );
     }
 
     @After
     public void after()
     {
         qipkiServer.stop();
+    }
+
+    protected final void addAcceptJsonHeader( HttpMessage httpMessage )
+    {
+        httpMessage.addHeader( "Accept", MediaType.APPLICATION_JSON.toString() );
     }
 
 }

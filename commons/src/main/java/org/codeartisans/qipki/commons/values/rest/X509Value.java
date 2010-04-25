@@ -30,11 +30,11 @@ public interface X509Value
         extends RestValue, X509State, ValueComposite
 {
 
+    @Optional // TODO REMOVE
+    Property<String> issuerIdentity();
+
     Property<String> revocationUri();
 
     Property<String> detailUri();
-
-    @Optional // TODO REMOVE
-    Property<String> issuerIdentity();
 
 }
