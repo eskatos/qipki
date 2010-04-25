@@ -39,6 +39,8 @@ import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.domain.endentity.EndEntityEntity;
 import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
+import org.codeartisans.qipki.ca.domain.revocation.RevocationEntity;
+import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509Entity;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
@@ -53,7 +55,6 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResourc
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.ca.X509RevokerResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
@@ -61,6 +62,7 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoS
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
 import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
@@ -80,6 +82,7 @@ import org.qi4j.library.http.JettyConfiguration;
 import static org.qi4j.library.http.Servlets.*;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
+@SuppressWarnings( "unchecked" )
 public class QiPkiCaAssembler
         implements ApplicationAssembler
 {
@@ -117,11 +120,11 @@ public class QiPkiCaAssembler
                                        CAFactoryResource.class,
                                        CAResource.class,
                                        CRLResource.class,
-                                       X509RevokerResource.class,
                                        X509ListResource.class,
                                        X509FactoryResource.class,
                                        X509Resource.class,
-                                       X509DetailResource.class ).
+                                       X509DetailResource.class,
+                                       X509RevocationResource.class ).
                             visibleIn( Visibility.module );
 
                     new QiPkiRestValuesAssembler( Visibility.layer ).assemble( module );
@@ -214,7 +217,8 @@ public class QiPkiCaAssembler
                                         SubCAEntity.class,
                                         CRLEntity.class,
                                         EndEntityEntity.class,
-                                        X509Entity.class ).
+                                        X509Entity.class,
+                                        RevocationEntity.class ).
                             visibleIn( Visibility.application );
 
                     // Services
@@ -226,6 +230,7 @@ public class QiPkiCaAssembler
                                         EndEntityFactory.class,
                                         X509Repository.class,
                                         X509Factory.class,
+                                        RevocationFactory.class,
                                         CryptoValuesFactory.class ).
                             visibleIn( Visibility.application ).
                             withSideEffects( TracingSideEffect.class );

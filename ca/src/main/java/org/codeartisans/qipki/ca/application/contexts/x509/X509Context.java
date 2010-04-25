@@ -21,7 +21,9 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.x509;
 
+import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
 
 public class X509Context
@@ -31,6 +33,12 @@ public class X509Context
     public X509 x509()
     {
         return context.role( X509.class );
+    }
+
+    public Revocation revoke( X509RevocationParamsValue params )
+    {
+        X509 x509 = context.role( X509.class );
+        return x509.issuer().get().revoke( x509, params.reason().get() );
     }
 
 }

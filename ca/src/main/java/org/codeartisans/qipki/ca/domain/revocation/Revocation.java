@@ -19,24 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.params;
+package org.codeartisans.qipki.ca.domain.revocation;
 
-import org.codeartisans.qipki.crypto.x509.RevocationReason;
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface RevocationParamsValue
-        extends ValueComposite
+public interface Revocation
+        extends RevocationState
 {
-
-    Property<String> hexSerialNumber();
-
-    Property<String> canonicalIssuerDN();
-
-    @Optional
-    Property<String> hexSubjectKeyIdentifier();
-
-    Property<RevocationReason> reason();
-
 }

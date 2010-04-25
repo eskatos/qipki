@@ -19,32 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.io;
+package org.codeartisans.qipki.commons.values.rest;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.qi4j.api.property.Property;
 
-public interface CryptIO
+public interface ApiURIsValue
+        extends RestValue
 {
 
-    CharSequence asPEM( X509Certificate certificate );
+    Property<String> cryptoStoreListUri();
 
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
+    Property<String> cryptoStoreFactoryUri();
 
-    CharSequence asPEM( X509CRL x509CRL );
+    Property<String> caListUri();
 
-    X509CRL readCRLPEM( Reader reader );
+    Property<String> caFactoryUri();
 
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
+    Property<String> x509ListUri();
 
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
+    Property<String> x509FactoryUri();
 
 }

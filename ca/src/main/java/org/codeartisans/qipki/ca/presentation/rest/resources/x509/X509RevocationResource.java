@@ -19,39 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
+package org.codeartisans.qipki.ca.presentation.rest.resources.x509;
 
 import java.io.IOException;
-import java.util.Collections;
-import org.codeartisans.java.toolbox.io.ReaderUtil;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
+import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
+import org.codeartisans.qipki.ca.domain.revocation.Revocation;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
-import org.codeartisans.qipki.commons.values.params.RevocationParamsValue;
+import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.qi4j.api.value.ValueBuilderFactory;
-import org.restlet.data.Method;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class X509RevokerResource
+public class X509RevocationResource
         extends AbstractResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( X509RevokerResource.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( X509RevocationResource.class );
     @Structure
     private ValueBuilderFactory vbf;
+    @Service
+    private RestletValuesFactory valuesFactory;
 
-    public X509RevokerResource( @Structure ObjectBuilderFactory obf )
+    public X509RevocationResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
-        setAllowedMethods( Collections.singleton( Method.POST ) );
         setNegotiated( false );
     }
 
@@ -62,26 +63,23 @@ public class X509RevokerResource
         try {
 
             // Data
-            String caIdentity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            RevocationParamsValue revocationParams = vbf.newValueFromJSON( RevocationParamsValue.class,
-                                                                           ReaderUtil.readStringFully( entity.getReader() ) );
+            String x509Identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+            X509RevocationParamsValue params = vbf.newValueFromJSON( X509RevocationParamsValue.class, entity.getText() );
 
             // Context
             RootContext rootCtx = newRootContext();
-            CAContext caCtx = rootCtx.caContext( caIdentity );
+            X509Context x509Ctx = rootCtx.x509Context( x509Identity );
 
             // Interaction
-            caCtx.revoke( revocationParams );
+            Revocation revocation = x509Ctx.revoke( params );
 
             // Representation
-            return new EmptyRepresentation(); // QUID ???
+            return new StringRepresentation( valuesFactory.revocation( getRootRef().addSegment( "x509" ), revocation ).toJSON(),
+                                             MediaType.APPLICATION_JSON );
 
-        } catch ( NoSuchEntityException ex ) {
-            LOGGER.trace( "404: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND );
         } catch ( IOException ex ) {
             LOGGER.warn( "500: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted entity", ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted value", ex );
         }
     }
 

@@ -37,13 +37,18 @@ Next steps
     Create X509FactoryResource
     Remove PKCS10SignerResource
 
-  BUG: generated URIs seems wrong but everything is working, see unit tests logs
+  DONE Add 404 (NoSuchEntityException) and 400 (WrongParametersExtension) handling in RestletApplication
 
-  Add /ca/{identity}/x509revoker
+  DONE Add /ca/{identity}/x509revoker
     Seems wrong according to DCI & REST
-    Move to /x509/{identity}/revoke
+    Move to /x509/{identity}/revocation
+    Add the revocation URI in X509Value
+
+  DONE Augment ApiRootResource so that it returns all base URIs in json and refactor unit test so that there's no hardcoded path anymore
 
   Write CryptoStoreFactoryResource and CAFactoryResource unit tests
+
+  BUG: generated URIs seems wrong but everything is working, see unit tests logs
 
   Factorize Values factories ???
     Common interfaces, Rest values having HasURI
@@ -58,7 +63,9 @@ Next steps
 
   Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
-      Immutables QiPkiIURIBuilders sharing a StringBuilderF
+      Immutables QiPkiIURIBuilders sharing a StringBuilder
+    QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
+
 
   Package as a unix daemon
 
@@ -75,6 +82,8 @@ Next steps
   Apply qi4j data migration system to learn it
 
   Add a domain auditing bounded context filled by @SideEffects
+
+  Wrap client api as a small qi4j application usable without qi4j imports
 
   Simple Client/UI reflecting naive rest api list/factory/entity
     Example: request to x509 factory is presented with two fields

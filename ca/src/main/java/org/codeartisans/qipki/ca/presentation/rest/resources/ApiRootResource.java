@@ -21,8 +21,9 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.structure.Module;
+import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
+import org.qi4j.api.injection.scope.Service;
+import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
@@ -32,14 +33,14 @@ public class ApiRootResource
         extends ServerResource
 {
 
-    @Structure
-    private Module module;
+    @Service
+    private RestletValuesFactory restValuesFactory;
 
     @Override
     protected Representation get()
             throws ResourceException
     {
-        return new StringRepresentation( "api root resource, instanciated in qi4j module named: " + module.name() );
+        return new StringRepresentation( restValuesFactory.apiURIs( getRootRef() ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

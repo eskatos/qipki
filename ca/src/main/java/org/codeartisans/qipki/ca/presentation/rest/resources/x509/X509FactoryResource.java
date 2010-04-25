@@ -73,9 +73,6 @@ public class X509FactoryResource
             X509Value csValue = restValuesFactory.x509( getRootRef().addSegment( "x509" ), x509 );
             return redirectToCreatedResource( csValue.uri().get() );
 
-        } catch ( WrongParametersException ex ) {
-            LOGGER.warn( "400: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.CLIENT_ERROR_BAD_REQUEST, ex.getMessage(), ex );
         } catch ( IOException ex ) {
             LOGGER.warn( "500: {}", ex.getMessage(), ex );
             throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted value", ex );
