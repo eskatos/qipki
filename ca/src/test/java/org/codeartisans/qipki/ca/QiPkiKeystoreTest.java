@@ -46,10 +46,10 @@ public class QiPkiKeystoreTest
     public void testListKeystores()
             throws IOException
     {
-        HttpGet get = new HttpGet( "/api/cryptostore" );
-        get.addHeader( "Accept", "application/json" );
+        HttpGet get = new HttpGet( qiPkiApi.cryptoStoreListUri().get() );
+        addAcceptJsonHeader( get );
 
-        String jsonKsList = httpClient.execute( httpHost, get, strResponseHandler );
+        String jsonKsList = httpClient.execute( get, strResponseHandler );
 
         LOGGER.debug( "KEYSTORES: {}", jsonKsList );
 
@@ -69,19 +69,19 @@ public class QiPkiKeystoreTest
     public void testCreateKeystore()
             throws IOException
     {
-        HttpPost post = new HttpPost( "/api/cryptostore/factory" );
-        post.addHeader( "Accept", "application/json" );
+        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreFactoryUri().get() );
+        addAcceptJsonHeader( post );
 
         String ksName = "Another KeyStore";
 
         CryptoStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
-                                                                                       KeyStoreType.JKS,
-                                                                                       "changeit".toCharArray() );
+                                                                                          KeyStoreType.JKS,
+                                                                                          "changeit".toCharArray() );
 
         post.setEntity( new StringEntity( params.toJSON() ) );
 
         // POST / Redirect 303 / GET Pattern
-        String ksJson = httpClient.execute( httpHost, post, strResponseHandler );
+        String ksJson = httpClient.execute( post, strResponseHandler );
 
         CryptoStoreValue ks = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, ksJson );
 
