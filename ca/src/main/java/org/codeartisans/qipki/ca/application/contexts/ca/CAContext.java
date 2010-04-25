@@ -22,11 +22,7 @@
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.ca.domain.x509.X509;
-import org.codeartisans.qipki.ca.domain.x509.X509Repository;
-import org.codeartisans.qipki.commons.values.params.RevocationParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
-import org.qi4j.api.query.Query;
 
 public class CAContext
         extends Context
@@ -35,22 +31,6 @@ public class CAContext
     public CA ca()
     {
         return context.role( CA.class );
-    }
-
-    // TODO Implement query with hexSubjectKeyIdentifier
-    public void revoke( RevocationParamsValue revocationParams )
-    {
-        Query<X509> x509s = context.role( X509Repository.class ).findPaginated( revocationParams.hexSerialNumber().get(),
-                                                                                revocationParams.canonicalIssuerDN().get(),
-                                                                                0, 2 );
-        if ( x509s.count() <= 0 ) {
-            throw new IllegalArgumentException( "No X509Certificate found for the given revocation parameters: " + revocationParams.toJSON() );
-        }
-        if ( x509s.count() > 1 ) {
-            throw new IllegalArgumentException( "More than one X509Certificate found for the given revocation parameters: " + revocationParams.toJSON() );
-        }
-        X509 x509toRevoke = x509s.iterator().next();
-        // TODO
     }
 
 }

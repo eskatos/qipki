@@ -19,32 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.io;
+package org.codeartisans.qipki.ca.domain.revocation;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
+import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-public interface CryptIO
+@Mixins( RevocationFactory.Mixin.class )
+public interface RevocationFactory
+        extends ServiceComposite
 {
 
-    CharSequence asPEM( X509Certificate certificate );
+    Revocation create( X509 x509, RevocationReason reason );
 
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
+    abstract class Mixin
+            implements RevocationFactory
+    {
 
-    CharSequence asPEM( X509CRL x509CRL );
+        @Structure
+        private UnitOfWorkFactory uowf;
 
-    X509CRL readCRLPEM( Reader reader );
+        @Override
+        public Revocation create( X509 x509, RevocationReason reason )
+        {
+            EntityBuilder<Revocation> builder = uowf.currentUnitOfWork().newEntityBuilder( Revocation.class );
+            Revocation revocation = builder.instance();
+            revocation.x509().set( x509 );
+            revocation.reason().set( reason );
+            return builder.newInstance();
+        }
 
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
-
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
+    }
 
 }

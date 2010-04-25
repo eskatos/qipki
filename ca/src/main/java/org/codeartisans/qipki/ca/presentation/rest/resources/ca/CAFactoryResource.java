@@ -33,7 +33,6 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
 import org.restlet.data.Status;
-import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;

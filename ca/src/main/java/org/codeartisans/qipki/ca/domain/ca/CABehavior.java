@@ -24,6 +24,9 @@ package org.codeartisans.qipki.ca.domain.ca;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.qipki.ca.domain.revocation.Revocation;
+import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
 
 public interface CABehavior
 {
@@ -33,5 +36,7 @@ public interface CABehavior
     PrivateKey privateKey();
 
     X509Certificate sign( PKCS10CertificationRequest pkcs10 );
+
+    Revocation revoke( X509 x509, RevocationReason reason );
 
 }

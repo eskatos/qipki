@@ -37,6 +37,8 @@ public interface CAValue
 
     Property<String> keystoreIdentity();
 
+    Property<String> crlUri();
+
     abstract class Mixin
             implements CAValue
     {

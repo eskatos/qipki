@@ -28,20 +28,15 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractEntityResou
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ResourceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class X509Resource
         extends AbstractEntityResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( X509Resource.class );
     @Service
     private RestletValuesFactory valuesFactory;
 
@@ -53,26 +48,18 @@ public class X509Resource
     @Override
     protected Representation representJson()
     {
-        String identity = null;
-        try {
+        // Data
+        String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
 
-            // Data
-            identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+        // Context
+        X509Context x509Ctx = newRootContext().x509Context( identity );
 
-            // Context
-            X509Context x509Ctx = newRootContext().x509Context( identity );
+        // Interaction
+        X509 x509 = x509Ctx.x509();
 
-            // Interaction
-            X509 x509 = x509Ctx.x509();
-
-            // Representation
-            return new StringRepresentation( valuesFactory.x509( getReference().getParentRef(), x509 ).toJSON(),
-                                             MediaType.APPLICATION_JSON );
-
-        } catch ( NoSuchEntityException ex ) {
-            LOGGER.debug( "{}: No X509 found for the requested identity ('{}')", new Object[]{ Status.CLIENT_ERROR_NOT_FOUND, identity }, ex );
-            throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND, ex );
-        }
+        // Representation
+        return new StringRepresentation( valuesFactory.x509( getReference().getParentRef(), x509 ).toJSON(),
+                                         MediaType.APPLICATION_JSON );
     }
 
 }

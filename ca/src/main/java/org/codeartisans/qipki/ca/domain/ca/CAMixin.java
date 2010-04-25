@@ -21,18 +21,32 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import java.io.StringReader;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.x509.X509V2CRLGenerator;
+import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
+import org.codeartisans.qipki.ca.domain.revocation.Revocation;
+import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
+import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.core.QiPkiFailure;
+import org.codeartisans.qipki.core.constants.Time;
+import org.codeartisans.qipki.core.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.crypto.x509.X509Generator;
 import org.codeartisans.qipki.core.crypto.x509.X509ExtensionsReader;
+import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
@@ -48,6 +62,10 @@ public abstract class CAMixin
     private X509Generator x509Generator;
     @Service
     private X509ExtensionsReader x509ExtReader;
+    @Service
+    private CryptIO cryptIO;
+    @Service
+    private RevocationFactory revocationFactory;
     @This
     private CAState state;
 
@@ -99,6 +117,39 @@ public abstract class CAMixin
             LOGGER.error( ex.getMessage(), ex );
             throw new QiPkiFailure( "Unable to enroll PKCS#10", ex );
         }
+    }
+
+    @Override
+    public Revocation revoke( X509 x509, RevocationReason reason )
+    {
+        try {
+            Revocation revocation = revocationFactory.create( x509, reason );
+            X509CRL x509CRL = cryptIO.readCRLPEM( new StringReader( state.crl().get().pem().get() ) );
+            x509CRL = updateCRL( x509CRL, x509.x509Certificate(), reason );
+            state.crl().get().pem().set( cryptIO.asPEM( x509CRL ).toString() );
+            return revocation;
+        } catch ( GeneralSecurityException ex ) {
+            throw new QiPkiFailure( "Unable to update CRL", ex );
+        }
+    }
+
+    // TODO move CRL updating crypto code into a crypto service
+    private X509CRL updateCRL( X509CRL previousCRL, X509Certificate cert, RevocationReason reason )
+            throws GeneralSecurityException
+    {
+        X509Certificate caCert = certificate();
+        X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+        crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
+        DateTime skewedNow = new DateTime().minus( Time.CLOCK_SKEW );
+        crlGen.setThisUpdate( skewedNow.toDate() );
+        crlGen.setNextUpdate( skewedNow.plusHours( 12 ).toDate() );
+        crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
+        crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
+        state.crl().get().lastCRLNumber().set( state.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
+        crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( state.crl().get().lastCRLNumber().get() ) );
+        crlGen.addCRL( previousCRL );
+        crlGen.addCRLEntry( cert.getSerialNumber(), skewedNow.toDate(), reason.reason() );
+        return crlGen.generate( privateKey(), BouncyCastleProvider.PROVIDER_NAME );
     }
 
 }

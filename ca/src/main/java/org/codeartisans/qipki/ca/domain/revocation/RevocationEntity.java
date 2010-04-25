@@ -19,32 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.io;
+package org.codeartisans.qipki.ca.domain.revocation;
 
-import java.io.Reader;
-import java.security.KeyStore;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.qi4j.api.entity.EntityComposite;
 
-public interface CryptIO
+public interface RevocationEntity
+        extends Revocation, EntityComposite
 {
-
-    CharSequence asPEM( X509Certificate certificate );
-
-    CharSequence asPEM( PKCS10CertificationRequest pkcs10 );
-
-    CharSequence asPEM( X509CRL x509CRL );
-
-    X509CRL readCRLPEM( Reader reader );
-
-    KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
-
-    String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
-
 }

@@ -21,14 +21,16 @@
  */
 package org.codeartisans.qipki.commons;
 
-import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
+import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
+import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
+import org.codeartisans.qipki.commons.values.rest.RevocationValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.qi4j.api.common.Visibility;
@@ -36,6 +38,7 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
+@SuppressWarnings( "unchecked" )
 public class QiPkiRestValuesAssembler
         implements Assembler
 {
@@ -59,7 +62,8 @@ public class QiPkiRestValuesAssembler
         // Params
         module.addValues( CryptoStoreFactoryParamsValue.class,
                           CAFactoryParamsValue.class,
-                          X509FactoryParamsValue.class ).
+                          X509FactoryParamsValue.class,
+                          X509RevocationParamsValue.class ).
                 visibleIn( visibility );
         module.addServices( ParamsFactory.class ).
                 visibleIn( visibility );
@@ -69,10 +73,12 @@ public class QiPkiRestValuesAssembler
 
         // Rest values
         module.addValues( RestListValue.class,
+                          ApiURIsValue.class,
                           CryptoStoreValue.class,
                           CAValue.class,
                           X509Value.class,
-                          X509DetailValue.class ).
+                          X509DetailValue.class,
+                          RevocationValue.class ).
                 visibleIn( visibility );
 
     }

@@ -32,24 +32,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchProviderException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
-import java.util.Enumeration;
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.DEREncodable;
-import org.bouncycastle.asn1.DERObjectIdentifier;
-import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.bouncycastle.asn1.x509.Attribute;
-import org.bouncycastle.asn1.x509.X509Extension;
-import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.codeartisans.qipki.core.constants.IOConstants;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.core.QiPkiFailure;
@@ -108,6 +95,16 @@ public class CryptIOImpl
             return ( PKCS10CertificationRequest ) new PEMReader( reader ).readObject();
         } catch ( IOException ex ) {
             throw new IllegalArgumentException( "Unable to read PKCS#10 from PEM", ex );
+        }
+    }
+
+    @Override
+    public X509CRL readCRLPEM( Reader reader )
+    {
+        try {
+            return ( X509CRL ) new PEMReader( reader ).readObject();
+        } catch ( IOException ex ) {
+            throw new IllegalArgumentException( "Unable to read CRL from PEM", ex );
         }
     }
 

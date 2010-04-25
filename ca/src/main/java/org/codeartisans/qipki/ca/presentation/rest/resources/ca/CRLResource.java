@@ -7,7 +7,6 @@ import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
@@ -36,25 +35,19 @@ public class CRLResource
     protected Representation get()
             throws ResourceException
     {
-        try {
+        // Data
+        String caIdentity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
 
-            // Data
-            String caIdentity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
+        // Context
+        RootContext rootCtx = newRootContext();
+        CAContext caCtx = rootCtx.caContext( caIdentity );
 
-            // Context
-            RootContext rootCtx = newRootContext();
-            CAContext caCtx = rootCtx.caContext( caIdentity );
+        // Interaction
+        CRL crl = caCtx.ca().crl().get();
 
-            // Interaction
-            CRL crl = caCtx.ca().crl().get();
+        // Representation
+        return new StringRepresentation( crl.pem().get(), MediaType.TEXT_PLAIN );
 
-            // Representation
-            return new StringRepresentation( crl.pem().get(), MediaType.TEXT_PLAIN );
-
-        } catch ( NoSuchEntityException ex ) {
-            LOGGER.trace( "404: {}", ex.getMessage(), ex );
-            throw new ResourceException( Status.CLIENT_ERROR_NOT_FOUND );
-        }
     }
 
 }

@@ -135,6 +135,7 @@ public interface CAFactory
             }
         }
 
+        // TODO move CRL creation crypto code into a crypto service
         private X509CRL createInitialCRL( X509Certificate caCert, PrivateKey caPrivKey )
                 throws GeneralSecurityException
         {
@@ -148,7 +149,7 @@ public interface CAFactory
             return crlGen.generate( caPrivKey, BouncyCastleProvider.PROVIDER_NAME );
         }
 
-        // TODO
+        // TODO implement createSubCA
         @Override
         public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {

@@ -21,20 +21,21 @@
  */
 package org.codeartisans.qipki.crypto.x509;
 
-import org.bouncycastle.asn1.x509.ReasonFlags;
+import org.bouncycastle.asn1.x509.CRLReason;
 
 public enum RevocationReason
 {
 
-    unused( ReasonFlags.unused ),
-    keyCompromise( ReasonFlags.keyCompromise ),
-    cACompromise( ReasonFlags.cACompromise ),
-    affiliationChanged( ReasonFlags.affiliationChanged ),
-    superseded( ReasonFlags.superseded ),
-    cessationOfOperation( ReasonFlags.cessationOfOperation ),
-    certificateHold( ReasonFlags.certificateHold ),
-    privilegeWithdrawn( ReasonFlags.privilegeWithdrawn ),
-    aACompromise( ReasonFlags.aACompromise );
+    unspecified( CRLReason.unspecified ),
+    keyCompromise( CRLReason.keyCompromise ),
+    cACompromise( CRLReason.cACompromise ),
+    affiliationChanged( CRLReason.affiliationChanged ),
+    superseded( CRLReason.superseded ),
+    cessationOfOperation( CRLReason.cessationOfOperation ),
+    certificateHold( CRLReason.certificateHold ),
+    removeFromCRL( CRLReason.removeFromCRL ),
+    privilegeWithdrawn( CRLReason.privilegeWithdrawn ),
+    aACompromise( CRLReason.aACompromise );
     private int reason;
 
     private RevocationReason( int reason )

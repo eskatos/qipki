@@ -3,6 +3,7 @@ package org.codeartisans.qipki.commons.values.params;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -22,6 +23,8 @@ public interface ParamsFactory
     CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaIdentity );
 
     X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 );
+
+    X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
 
     abstract class Mixin
             implements ParamsFactory
@@ -71,6 +74,15 @@ public interface ParamsFactory
             X509FactoryParamsValue params = paramsBuilder.prototype();
             params.caIdentity().set( caIdentity );
             params.pemPkcs10().set( pemPkcs10 );
+            return paramsBuilder.newInstance();
+        }
+
+        @Override
+        public X509RevocationParamsValue createX509RevocationParams( RevocationReason reason )
+        {
+            ValueBuilder<X509RevocationParamsValue> paramsBuilder = vbf.newValueBuilder( X509RevocationParamsValue.class );
+            X509RevocationParamsValue params = paramsBuilder.prototype();
+            params.reason().set( reason );
             return paramsBuilder.newInstance();
         }
 

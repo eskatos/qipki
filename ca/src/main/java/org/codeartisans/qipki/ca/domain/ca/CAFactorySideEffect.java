@@ -40,9 +40,7 @@ public abstract class CAFactorySideEffect
     public RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
         RootCA ca = result.createRootCA( name, distinguishedName, keySpec, cryptoStore );
-        LOGGER.debug( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
-        LOGGER.debug( "+ New RootCA created: " + ca.name() );
-        LOGGER.debug( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        LOGGER.debug( "New RootCA created: " + ca.name() );
         return null;
     }
 
@@ -50,9 +48,7 @@ public abstract class CAFactorySideEffect
     public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
         SubCA ca = result.createSubCA( parentCA, name, distinguishedName, keySpec, cryptoStore );
-        LOGGER.debug( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
-        LOGGER.debug( "+ New SubCA created: " + ca.name() );
-        LOGGER.debug( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        LOGGER.debug( "New SubCA created: " + ca.name() );
         return null;
     }
 
