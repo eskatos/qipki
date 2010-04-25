@@ -36,11 +36,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QiPkiKeystoreTest
+public class QiPkiCryptoStoreTest
         extends AbstractQiPkiTest
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiKeystoreTest.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiCryptoStoreTest.class );
 
     @Test
     public void testListKeystores()
@@ -71,18 +71,12 @@ public class QiPkiKeystoreTest
     {
         HttpPost post = new HttpPost( qiPkiApi.cryptoStoreFactoryUri().get() );
         addAcceptJsonHeader( post );
-
         String ksName = "Another KeyStore";
-
         CryptoStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
                                                                                           KeyStoreType.JKS,
                                                                                           "changeit".toCharArray() );
-
         post.setEntity( new StringEntity( params.toJSON() ) );
-
-        // POST / Redirect 303 / GET Pattern
         String ksJson = httpClient.execute( post, strResponseHandler );
-
         CryptoStoreValue ks = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, ksJson );
 
         assertEquals( ksName, ks.name().get() );

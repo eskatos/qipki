@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
+import org.codeartisans.java.toolbox.StringUtils;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
@@ -52,6 +53,9 @@ public class CAListContext
 
     private CA fetchParentCA( String identity )
     {
+        if ( StringUtils.isEmpty( identity ) ) {
+            return null;
+        }
         try {
             return context.role( CARepository.class ).findByIdentity( identity );
         } catch ( NoSuchEntityException ex ) {

@@ -30,14 +30,19 @@ import org.apache.http.entity.StringEntity;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
 import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorParameters;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,14 +73,33 @@ public class QiPkiCaTest
         get = new HttpGet( firstCa.uri().get() );
         addAcceptJsonHeader( get );
         String caJson = httpClient.execute( get, strResponseHandler );
-        CAValue caValue = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
-        LOGGER.debug( "First CA JSON:\n{}", caValue.toJSON() );
+        CAValue ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
+        LOGGER.debug( "First CA JSON:\n{}", ca.toJSON() );
 
 
         // Get first CA CRL
-        get = new HttpGet( caValue.crlUri().get() );
+        get = new HttpGet( ca.crlUri().get() );
         String crl = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "First CA CRL:\n{}", crl );
+
+
+        // Create a new CryptoStore
+        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreFactoryUri().get() );
+        addAcceptJsonHeader( post );
+        CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( "MyTestCryptoStore", KeyStoreType.JKS, "changeit".toCharArray() );
+        post.setEntity( new StringEntity( csParams.toJSON() ) );
+        String csJson = httpClient.execute( post, strResponseHandler );
+        CryptoStoreValue cryptoStore = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, csJson );
+
+
+        // Create a new CA
+        post = new HttpPost( qiPkiApi.caFactoryUri().get() );
+        addAcceptJsonHeader( post );
+        KeyPairSpecValue keyPairSpec = paramsFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
+        CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), "MyTestCA", "CN=MyTestCA", keyPairSpec, null );
+        post.setEntity( new StringEntity( caParams.toJSON() ) );
+        caJson = httpClient.execute( post, strResponseHandler );
+        ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
 
 
         // Request certificate on X509Factory with a PKCS#10 request using the first CA
@@ -84,8 +108,8 @@ public class QiPkiCaTest
                 new X500Principal( "CN=qipki" ), keyPair,
                 new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );
         String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
-        X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( caValue.identity().get(), pkcs10PEM );
-        HttpPost post = new HttpPost( qiPkiApi.x509FactoryUri().get() );
+        X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.identity().get(), pkcs10PEM );
+        post = new HttpPost( qiPkiApi.x509FactoryUri().get() );
         addAcceptJsonHeader( post );
         post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );
         String jsonX509 = httpClient.execute( post, strResponseHandler );
@@ -117,6 +141,7 @@ public class QiPkiCaTest
         LOGGER.debug( "First X509: {}", new JSONObject( jsonX509 ).toString( 2 ) );
         firstX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
 
+        
         // Revoke first X509
         X509RevocationParamsValue x509RevocationParams = paramsFactory.createX509RevocationParams( RevocationReason.cessationOfOperation );
         post = new HttpPost( firstX509.revocationUri().get() );
