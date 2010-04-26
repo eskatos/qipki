@@ -22,7 +22,6 @@
 package org.codeartisans.qipki.commons.values.rest;
 
 import org.codeartisans.qipki.commons.states.X509State;
-import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
@@ -30,8 +29,7 @@ public interface X509Value
         extends RestValue, X509State, ValueComposite
 {
 
-    @Optional // TODO REMOVE
-    Property<String> issuerIdentity();
+    Property<String> issuerUri();
 
     Property<String> revocationUri();
 

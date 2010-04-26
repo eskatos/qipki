@@ -58,7 +58,7 @@ public class X509Resource
         X509 x509 = x509Ctx.x509();
 
         // Representation
-        return new StringRepresentation( valuesFactory.x509( getReference().getParentRef(), x509 ).toJSON(),
+        return new StringRepresentation( valuesFactory.x509( getRootRef(), x509 ).toJSON(),
                                          MediaType.APPLICATION_JSON );
     }
 

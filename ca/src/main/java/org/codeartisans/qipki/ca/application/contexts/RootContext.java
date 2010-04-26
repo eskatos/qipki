@@ -40,7 +40,7 @@ import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.qi4j.api.injection.scope.Service;
 
 /**
- * TODO Use ServiceReference for lazy service instanciation ?
+ * QUID Use ServiceReference for lazy service instanciation ?
  */
 public class RootContext
         extends Context

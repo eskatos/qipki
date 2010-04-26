@@ -32,14 +32,11 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CAResource
         extends AbstractEntityResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CAResource.class );
     @Service
     private RestletValuesFactory valuesFactory;
 
@@ -61,9 +58,7 @@ public class CAResource
         CA ca = caCtx.ca();
 
         // Representation
-        return new StringRepresentation( valuesFactory.ca( getReference().getParentRef(), ca ).toJSON(),
-                                         MediaType.APPLICATION_JSON );
-
+        return new StringRepresentation( valuesFactory.ca( getRootRef(), ca ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

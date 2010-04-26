@@ -69,7 +69,7 @@ public class CryptoStoreFactoryResource
             CryptoStore cs = csListCtx.createCryptoStore( data );
 
             // Redirect to created resource
-            CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef().addSegment( "cryptostore" ), cs );
+            CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef(), cs );
             return redirectToCreatedResource( csValue.uri().get() );
 
         } catch ( IOException ex ) {

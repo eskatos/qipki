@@ -64,19 +64,19 @@ public interface RestletValuesFactory
 
     ApiURIsValue apiURIs( Reference rootRef );
 
-    CAValue ca( Reference parentRef, CA ca );
+    CAValue ca( Reference rootRef, CA ca );
 
-    CryptoStoreValue cryptoStore( Reference parentRef, CryptoStore ks );
+    CryptoStoreValue cryptoStore( Reference rootRef, CryptoStore ks );
 
-    X509Value x509( Reference parentRef, X509 x509 );
+    X509Value x509( Reference rootRef, X509 x509 );
 
-    X509DetailValue x509Detail( Reference parentRef, X509 x509 );
+    X509DetailValue x509Detail( Reference rootRef, X509 x509 );
 
-    RevocationValue revocation( Reference parentRef, Revocation revocation );
+    RevocationValue revocation( Reference rootRef, Revocation revocation );
 
-    Iterable<RestValue> asValues( Reference parentRef, Iterable objects );
+    Iterable<RestValue> asValues( Reference rootRef, Iterable objects );
 
-    RestListValue newListRepresentationValue( Reference parentRef, int start, Iterable<RestValue> list );
+    RestListValue newListRepresentationValue( Reference listRef, int start, Iterable<RestValue> list );
 
     abstract class Mixin
             implements RestletValuesFactory
@@ -112,59 +112,60 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public CAValue ca( Reference parentRef, CA ca )
+        public CAValue ca( Reference rootRef, CA ca )
         {
 
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
             CAValue caValue = caValueBuilder.prototype();
-            Reference uri = appendIdentity( parentRef, ca );
+            Reference uri = appendIdentity( rootRef.clone().addSegment( "ca" ), ca );
             caValue.uri().set( uri.toString() );
-            caValue.crlUri().set( uri.addSegment( "crl" ).toString() );
+            caValue.crlUri().set( uri.clone().addSegment( "crl" ).toString() );
+            caValue.cryptoStoreUri().set( appendIdentity( rootRef.clone().addSegment( "cryptostore" ), ca.cryptoStore().get() ).toString() );
 
             caValue.identity().set( ca.identity().get() );
             caValue.name().set( ca.name().get() );
-            caValue.keystoreIdentity().set( ca.cryptoStore().get().identity().get() );
 
             return caValueBuilder.newInstance();
         }
 
         @Override
-        public CryptoStoreValue cryptoStore( Reference parentRef, CryptoStore ks )
+        public CryptoStoreValue cryptoStore( Reference rootRef, CryptoStore cs )
         {
             ValueBuilder<CryptoStoreValue> ksValueBuilder = vbf.newValueBuilder( CryptoStoreValue.class );
             CryptoStoreValue ksValue = ksValueBuilder.prototype();
-            ksValue.uri().set( appendIdentity( parentRef, ks ).toString() );
+            ksValue.uri().set( appendIdentity( rootRef.addSegment( "cryptostore" ), cs ).toString() );
 
-            ksValue.identity().set( ks.identity().get() );
-            ksValue.name().set( ks.name().get() );
-            ksValue.storeType().set( ks.storeType().get() );
-            ksValue.password().set( ks.password().get() );
+            ksValue.identity().set( cs.identity().get() );
+            ksValue.name().set( cs.name().get() );
+            ksValue.storeType().set( cs.storeType().get() );
+            ksValue.password().set( cs.password().get() );
 
             return ksValueBuilder.newInstance();
         }
 
         @Override
-        public X509Value x509( Reference parentRef, X509 x509 )
+        public X509Value x509( Reference rootRef, X509 x509 )
         {
             ValueBuilder<X509Value> x509ValueBuilder = vbf.newValueBuilder( X509Value.class );
             X509Value x509Value = x509ValueBuilder.prototype();
-            Reference uri = appendIdentity( parentRef, x509 );
+            ApiURIsValue api = apiURIs( rootRef );
+
+            Reference uri = appendIdentity( new Reference( api.x509ListUri().get() ), x509 );
             x509Value.uri().set( uri.toString() );
             x509Value.detailUri().set( uri.clone().addSegment( "detail" ).toString() );
             x509Value.revocationUri().set( uri.clone().addSegment( "revocation" ).toString() );
+            x509Value.issuerUri().set( appendIdentity( new Reference( api.caListUri().get() ), x509.issuer().get() ).toString() );
 
             x509Value.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
             x509Value.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
             x509Value.hexSerialNumber().set( x509.hexSerialNumber().get() );
             x509Value.validityInterval().set( commonValuesFactory.buildValidityInterval( x509.validityInterval().get().notBefore().get(),
                                                                                          x509.validityInterval().get().notAfter().get() ) );
-            // TODO Add relations identities
-
             return x509ValueBuilder.newInstance();
         }
 
         @Override
-        public X509DetailValue x509Detail( Reference parentRef, X509 x509 )
+        public X509DetailValue x509Detail( Reference rootRef, X509 x509 )
         {
             try {
                 X509Certificate cert = x509.x509Certificate();
@@ -172,17 +173,19 @@ public interface RestletValuesFactory
                 ValueBuilder<X509DetailValue> x509DetailValueBuilder = vbf.newValueBuilder( X509DetailValue.class );
 
                 X509DetailValue x509DetailValue = x509DetailValueBuilder.prototype();
-                Reference x509Uri = appendIdentity( parentRef, x509 );
-                x509DetailValue.uri().set( x509Uri.toString() );
-                x509DetailValue.detailUri().set( x509Uri.clone().addSegment( "detail" ).toString() );
-                x509DetailValue.revocationUri().set( x509Uri.clone().addSegment( "revocation" ).toString() );
+                ApiURIsValue api = apiURIs( rootRef );
+
+                Reference uri = appendIdentity( new Reference( api.x509ListUri().get() ), x509 );
+                x509DetailValue.uri().set( uri.toString() );
+                x509DetailValue.detailUri().set( uri.clone().addSegment( "detail" ).toString() );
+                x509DetailValue.revocationUri().set( uri.clone().addSegment( "revocation" ).toString() );
+                x509DetailValue.issuerUri().set( appendIdentity( new Reference( api.caListUri().get() ), x509.issuer().get() ).toString() );
+
                 x509DetailValue.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
                 x509DetailValue.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
                 x509DetailValue.hexSerialNumber().set( x509.hexSerialNumber().get() );
                 x509DetailValue.validityInterval().set( commonValuesFactory.buildValidityInterval( x509.validityInterval().get().notBefore().get(),
                                                                                                    x509.validityInterval().get().notAfter().get() ) );
-                // TODO Add relations identities
-
                 x509DetailValue.certificateVersion().set( cert.getVersion() );
                 x509DetailValue.signatureAlgorithm().set( cert.getSigAlgName() );
                 x509DetailValue.publicKeyAlgorithm().set( publicKeyInfo.getKeyAlgorithm() );
@@ -216,11 +219,11 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public RevocationValue revocation( Reference parentRef, Revocation revocation )
+        public RevocationValue revocation( Reference rootRef, Revocation revocation )
         {
             ValueBuilder<RevocationValue> revocationValueBuilder = vbf.newValueBuilder( RevocationValue.class );
             RevocationValue revocationValue = revocationValueBuilder.prototype();
-            Reference x509Uri = appendIdentity( parentRef, revocation.x509().get() );
+            Reference x509Uri = appendIdentity( rootRef.addSegment( "x590" ), revocation.x509().get() );
             revocationValue.x509Uri().set( x509Uri.toString() );
             revocationValue.uri().set( x509Uri.addSegment( "revocation" ).toString() );
             revocationValue.reason().set( revocation.reason().get() );
@@ -228,24 +231,24 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public Iterable<RestValue> asValues( Reference parentRef, Iterable objects )
+        public Iterable<RestValue> asValues( Reference rootRef, Iterable objects )
         {
             Set<RestValue> set = new LinkedHashSet<RestValue>();
             for ( Object eachObj : objects ) {
                 try {
-                    set.add( ca( parentRef, ( CA ) eachObj ) );
+                    set.add( ca( rootRef, ( CA ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
                     LOGGER.trace( "Object is not a CA: {}", ex.getMessage() );
                 }
                 try {
-                    set.add( cryptoStore( parentRef, ( CryptoStore ) eachObj ) );
+                    set.add( cryptoStore( rootRef, ( CryptoStore ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
                     LOGGER.trace( "Object is not a CryptoStore: {}", ex.getMessage() );
                 }
                 try {
-                    set.add( x509( parentRef, ( X509 ) eachObj ) );
+                    set.add( x509( rootRef, ( X509 ) eachObj ) );
                     continue;
                 } catch ( ClassCastException ex ) {
                     LOGGER.trace( "Object is not a X509: {}", ex.getMessage() );

@@ -54,7 +54,7 @@ public class CAListResource
         Query<CA> caList = caListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = valuesFactory.asValues( getReference(), caList );
+        Iterable<RestValue> values = valuesFactory.asValues( getRootRef(), caList );
         return valuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 

@@ -32,14 +32,11 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CryptoStoreResource
         extends AbstractEntityResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreResource.class );
     @Service
     private RestletValuesFactory restValuesFactory;
 
@@ -61,7 +58,7 @@ public class CryptoStoreResource
         CryptoStore cs = csCtx.cryptoStore();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.cryptoStore( getReference().getParentRef(), cs ).toJSON(),
+        return new StringRepresentation( restValuesFactory.cryptoStore( getRootRef(), cs ).toJSON(),
                                          MediaType.APPLICATION_JSON );
 
     }
