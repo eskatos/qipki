@@ -63,10 +63,10 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailReso
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
-import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
-import org.codeartisans.qipki.core.crypto.CryptoAssembler;
+import org.codeartisans.qipki.crypto.QiCryptoAssembler;
 import org.codeartisans.qipki.core.sideeffects.TracingSideEffect;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembler;
@@ -127,7 +127,7 @@ public class QiPkiCaAssembler
                                        X509RevocationResource.class ).
                             visibleIn( Visibility.module );
 
-                    new QiPkiRestValuesAssembler( Visibility.layer ).assemble( module );
+                    new QiPkiCommonsValuesAssembler( Visibility.layer ).assemble( module );
 
                     module.addServices( RestletValuesFactory.class ).
                             visibleIn( Visibility.module );
@@ -242,7 +242,7 @@ public class QiPkiCaAssembler
 
         LayerAssembly crypto = app.layerAssembly( "crypto" );
         {
-            new CryptoAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
+            new QiCryptoAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
         }
 
         LayerAssembly infrastructure = app.layerAssembly( "infrastructure" );

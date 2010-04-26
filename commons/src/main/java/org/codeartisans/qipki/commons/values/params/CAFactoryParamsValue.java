@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.commons.values.params;
 
-import org.codeartisans.qipki.commons.constraints.X500Name;
+import org.codeartisans.qipki.crypto.constraints.X500Name;
 import org.codeartisans.qipki.commons.fragments.Nameable;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.qi4j.api.common.Optional;

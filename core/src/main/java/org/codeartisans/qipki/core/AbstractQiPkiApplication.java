@@ -21,8 +21,6 @@
  */
 package org.codeartisans.qipki.core;
 
-import java.security.Security;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
@@ -47,14 +45,6 @@ public abstract class AbstractQiPkiApplication
     protected AbstractQiPkiApplication( ApplicationAssembler appAssembler )
     {
         this.appAssembler = appAssembler;
-        ensureBouncyCastle();
-    }
-
-    private void ensureBouncyCastle()
-    {
-        if ( Security.getProvider( BouncyCastleProvider.PROVIDER_NAME ) == null ) {
-            Security.addProvider( new BouncyCastleProvider() );
-        }
     }
 
     @Override

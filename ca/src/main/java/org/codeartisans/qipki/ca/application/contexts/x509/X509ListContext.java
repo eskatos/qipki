@@ -32,7 +32,7 @@ import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
-import org.codeartisans.qipki.core.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.query.Query;

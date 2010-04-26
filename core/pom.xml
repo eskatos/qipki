@@ -17,12 +17,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- Libraries -->
         <dependency>
             <groupId>org.codeartisans.java</groupId>

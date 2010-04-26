@@ -30,18 +30,6 @@
             <version>${version.httpclient}</version>
         </dependency>
 
-        <!-- Libraries -->
-        <dependency>
-            <groupId>org.codeartisans.java</groupId>
-            <artifactId>java-toolbox</artifactId>
-            <version>${version.java-toolbox}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>${version.bouncy}</version>
-        </dependency>
-
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
