@@ -37,8 +37,6 @@ import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntityEntity;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationEntity;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509Entity;
@@ -216,7 +214,6 @@ public class QiPkiCaAssembler
                                         RootCAEntity.class,
                                         SubCAEntity.class,
                                         CRLEntity.class,
-                                        EndEntityEntity.class,
                                         X509Entity.class,
                                         RevocationEntity.class ).
                             visibleIn( Visibility.application );
@@ -227,7 +224,6 @@ public class QiPkiCaAssembler
                                         CARepository.class,
                                         CAFactory.class,
                                         CRLFactory.class,
-                                        EndEntityFactory.class,
                                         X509Repository.class,
                                         X509Factory.class,
                                         RevocationFactory.class,
