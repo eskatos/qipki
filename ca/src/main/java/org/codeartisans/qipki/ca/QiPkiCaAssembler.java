@@ -263,8 +263,6 @@ public class QiPkiCaAssembler
         application.uses( domain, crypto );
         domain.uses( crypto, infrastructure );
 
-        presentation.uses( domain ); // TODO remove .. needed by fixtures .. need to rewrite fixtures to use DCI application code directly
-
         return app;
     }
 

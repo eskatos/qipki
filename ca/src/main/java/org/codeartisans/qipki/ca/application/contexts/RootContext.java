@@ -59,14 +59,14 @@ public class RootContext
     @Service
     private X509Repository x509Repository;
 
-    public CryptoStoreListContext ksListContext()
+    public CryptoStoreListContext cryptoStoreListContext()
     {
         context.playRoles( ksRepos, CryptoStoreRepository.class );
         context.playRoles( ksFactory, CryptoStoreFactory.class );
         return subContext( CryptoStoreListContext.class );
     }
 
-    public CryptoStoreContext ksContext( String identity )
+    public CryptoStoreContext cryptoStoreContext( String identity )
     {
         CryptoStore ks = ksRepos.findByIdentity( identity );
         context.playRoles( ks, CryptoStore.class );

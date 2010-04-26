@@ -48,7 +48,7 @@ public class CryptoStoreListResource
     protected RestListValue list( int start )
     {
         // Context
-        CryptoStoreListContext csListCtx = newRootContext().ksListContext();
+        CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();
 
         // Interaction
         Query<CryptoStore> csList = csListCtx.list( start );

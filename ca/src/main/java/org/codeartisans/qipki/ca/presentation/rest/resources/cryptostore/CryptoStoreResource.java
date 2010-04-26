@@ -55,7 +55,7 @@ public class CryptoStoreResource
         String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
 
         // Context
-        CryptoStoreContext csCtx = newRootContext().ksContext( identity );
+        CryptoStoreContext csCtx = newRootContext().cryptoStoreContext( identity );
 
         // Interaction
         CryptoStore cs = csCtx.cryptoStore();
