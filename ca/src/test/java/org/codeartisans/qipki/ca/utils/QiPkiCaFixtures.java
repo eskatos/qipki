@@ -22,18 +22,20 @@
 package org.codeartisans.qipki.ca.utils;
 
 import java.security.KeyStore;
-import org.codeartisans.qipki.ca.domain.ca.CAFactory;
-import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
+import org.codeartisans.qipki.ca.application.contexts.RootContext;
+import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
+import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
+import org.codeartisans.qipki.core.dci.InteractionContext;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
@@ -58,40 +60,41 @@ public interface QiPkiCaFixtures
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Structure
+        private ObjectBuilderFactory obf;
         @Service
         private ParamsFactory paramsFactory;
-        @Service
-        private CAFactory caFactory;
-        @Service
-        private CryptoStoreFactory csFactory;
 
         @Override
         public void activate()
                 throws Exception
         {
             UnitOfWork uow = uowf.newUnitOfWork();
+            RootContext rootCtx = newRootContext();
 
             // Create a test keystore
             CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
-            CryptoStore cryptoStore = csFactory.create( csParams );
-            KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CrytpoStoreBehavior
+            CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( csParams );
+            KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CryptoStoreBehavior
 
             // Create some test CAs
+            CAListContext caListCtx = rootCtx.caListContext();
             KeyPairSpecValue keySpec = paramsFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-            RootCA rootCa = caFactory.createRootCA( ROOT_CA_NAME, ROOT_CA_DN, keySpec, cryptoStore );
-            RootCA usersCa = caFactory.createRootCA( USERS_CA_NAME, USERS_CA_DN, keySpec, cryptoStore );
-            RootCA servicesCa = caFactory.createRootCA( SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, cryptoStore );
+            CA rootCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), ROOT_CA_NAME, ROOT_CA_DN, keySpec, null ) );
+            CA usersCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), USERS_CA_NAME, USERS_CA_DN, keySpec, null ) );
+            CA servicesCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, null ) );
 
+            String cryptoStoreId = cryptoStore.identity().get();
             String rootId = rootCa.identity().get();
 
             uow.complete();
 
 
-
             uow = uowf.newUnitOfWork();
+            rootCtx = newRootContext();
 
-            cryptoStore = uow.get( cryptoStore );
-            rootCa = uow.get( RootCA.class, rootId );
+            cryptoStore = rootCtx.cryptoStoreContext( cryptoStoreId ).cryptoStore();
+            rootCa = rootCtx.caContext( rootId ).ca();
 
             uow.complete();
 
@@ -101,6 +104,11 @@ public interface QiPkiCaFixtures
         public void passivate()
                 throws Exception
         {
+        }
+
+        protected final RootContext newRootContext()
+        {
+            return obf.newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
         }
 
     }

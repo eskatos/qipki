@@ -63,7 +63,7 @@ public class CryptoStoreFactoryResource
             CryptoStoreFactoryParamsValue data = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
 
             // Context
-            CryptoStoreListContext csListCtx = newRootContext().ksListContext();
+            CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();
 
             // Interaction
             CryptoStore cs = csListCtx.createCryptoStore( data );
