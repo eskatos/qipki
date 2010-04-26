@@ -54,7 +54,7 @@ public class X509ListResource
         Query<X509> x509List = x509ListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = valuesFactory.asValues( getReference(), x509List );
+        Iterable<RestValue> values = valuesFactory.asValues( getRootRef(), x509List );
         return valuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 

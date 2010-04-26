@@ -54,7 +54,7 @@ public class CryptoStoreListResource
         Query<CryptoStore> csList = csListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getReference(), csList );
+        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), csList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 

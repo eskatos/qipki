@@ -35,7 +35,7 @@ public interface CAValue
 
     Property<String> identity();
 
-    Property<String> keystoreIdentity();
+    Property<String> cryptoStoreUri();
 
     Property<String> crlUri();
 

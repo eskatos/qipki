@@ -48,14 +48,11 @@ Next steps
 
   DONE Use CryptoStoreFactoryResource and CAFactoryResource in unit tests
 
-  BUG: generated URIs seems wrong but everything is working, see unit tests logs
+  DONE State on commons/core modules and on basic crypto code/services location
 
-  State on commons/core modules and on basic crypto code/services location
-    Questions
-      Add crypto mixins to rest params ?
-        It is nice server side, try to find a way to augment params Values server side only
+  DONE Fix domain objects visibility
 
-  Fix domain objects visibility
+  DONE BUG: generated URIs seems wrong but everything is working, see unit tests logs
 
   Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs

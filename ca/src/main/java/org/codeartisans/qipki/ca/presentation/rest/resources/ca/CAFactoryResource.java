@@ -69,7 +69,7 @@ public class CAFactoryResource
             CA ca = caListCtx.createCA( data );
 
             // Redirect to created resource
-            CAValue caValue = restValuesFactory.ca( getRootRef().addSegment( "ca" ), ca );
+            CAValue caValue = restValuesFactory.ca( getRootRef(), ca );
             return redirectToCreatedResource( caValue.uri().get() );
 
         } catch ( IOException ex ) {

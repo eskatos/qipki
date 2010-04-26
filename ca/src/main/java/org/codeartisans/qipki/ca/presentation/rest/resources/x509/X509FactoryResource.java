@@ -26,7 +26,6 @@ import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersException;
 import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.qi4j.api.injection.scope.Service;
@@ -70,7 +69,7 @@ public class X509FactoryResource
             X509 x509 = caListCtx.createX509( data );
 
             // Redirect to created resource
-            X509Value csValue = restValuesFactory.x509( getRootRef().addSegment( "x509" ), x509 );
+            X509Value csValue = restValuesFactory.x509( getRootRef(), x509 );
             return redirectToCreatedResource( csValue.uri().get() );
 
         } catch ( IOException ex ) {

@@ -32,14 +32,11 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class X509DetailResource
         extends AbstractEntityResource
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( X509DetailResource.class );
     @Service
     private RestletValuesFactory valuesFactory;
 
@@ -61,7 +58,7 @@ public class X509DetailResource
         X509 x509 = x509Ctx.x509();
 
         // Representation
-        return new StringRepresentation( valuesFactory.x509Detail( getReference().getParentRef().getParentRef(), x509 ).toJSON(),
+        return new StringRepresentation( valuesFactory.x509Detail( getRootRef(), x509 ).toJSON(),
                                          MediaType.APPLICATION_JSON );
 
     }

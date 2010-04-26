@@ -74,7 +74,7 @@ public class X509RevocationResource
             Revocation revocation = x509Ctx.revoke( params );
 
             // Representation
-            return new StringRepresentation( valuesFactory.revocation( getRootRef().addSegment( "x509" ), revocation ).toJSON(),
+            return new StringRepresentation( valuesFactory.revocation( getRootRef(), revocation ).toJSON(),
                                              MediaType.APPLICATION_JSON );
 
         } catch ( IOException ex ) {
