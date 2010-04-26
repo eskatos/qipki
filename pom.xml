@@ -35,6 +35,7 @@
     </properties>
 
     <modules>
+        <module>crypto</module>
         <module>core</module>
         <module>commons</module>
         <module>client</module>

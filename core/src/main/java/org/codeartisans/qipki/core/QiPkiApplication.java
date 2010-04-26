@@ -21,9 +21,6 @@
  */
 package org.codeartisans.qipki.core;
 
-/**
- * @author Paul Merlin <p.merlin@nosphere.org>
- */
 public interface QiPkiApplication
         extends Runnable
 {

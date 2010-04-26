@@ -21,7 +21,6 @@
  */
 package org.codeartisans.qipki.commons.values.crypto;
 
-import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import java.util.Date;
 import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Structure;

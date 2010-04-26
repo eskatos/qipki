@@ -41,7 +41,7 @@ import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
-import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorParameters;
+import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.json.JSONException;

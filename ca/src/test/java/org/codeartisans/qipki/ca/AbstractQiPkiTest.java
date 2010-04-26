@@ -29,16 +29,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
-import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.core.QiPkiApplication;
-import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGenerator;
-import org.codeartisans.qipki.core.crypto.asymetric.AsymetricGeneratorService;
-import org.codeartisans.qipki.core.crypto.x509.X509Generator;
-import org.codeartisans.qipki.core.crypto.x509.X509GeneratorService;
-import org.codeartisans.qipki.core.crypto.io.CryptIO;
-import org.codeartisans.qipki.core.crypto.io.CryptIOService;
+import org.codeartisans.qipki.crypto.QiCryptoAssembler;
+import org.codeartisans.qipki.crypto.asymetric.AsymetricGenerator;
+import org.codeartisans.qipki.crypto.x509.X509Generator;
+import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.junit.After;
 import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
@@ -65,8 +63,8 @@ public abstract class AbstractQiPkiTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new QiPkiRestValuesAssembler().assemble( module );
-        module.addServices( CryptIOService.class, X509GeneratorService.class, AsymetricGeneratorService.class );
+        new QiCryptoAssembler().assemble( module );
+        new QiPkiCommonsValuesAssembler().assemble( module );
     }
 
     @Before

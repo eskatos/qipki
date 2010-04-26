@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import java.security.KeyStore;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.core.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
