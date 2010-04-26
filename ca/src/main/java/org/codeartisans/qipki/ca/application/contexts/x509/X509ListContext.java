@@ -25,8 +25,6 @@ import java.io.StringReader;
 import java.security.cert.X509Certificate;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntity;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
@@ -56,7 +54,6 @@ public class X509ListContext
             CA ca = context.role( CARepository.class ).findByIdentity( params.caIdentity().get() );
             X509Certificate cert = ca.sign( cryptIO.readPKCS10PEM( new StringReader( params.pemPkcs10().get() ) ) );
             X509 x509 = context.role( X509Factory.class ).create( cert, ca );
-            EndEntity ee = context.role( EndEntityFactory.class ).create( x509 );
             return x509;
 
         } catch ( NoSuchEntityException ex ) {

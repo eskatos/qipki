@@ -34,7 +34,6 @@ import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.ca.domain.endentity.EndEntityFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
@@ -55,8 +54,6 @@ public class RootContext
     private CARepository caRepos;
     @Service
     private CAFactory caFactory;
-    @Service
-    private EndEntityFactory endEntityFactory;
     @Service
     private X509Factory x509Factory;
     @Service
@@ -97,7 +94,6 @@ public class RootContext
         context.playRoles( x509Repository, X509Repository.class );
         context.playRoles( x509Factory, X509Factory.class );
         context.playRoles( caRepos, CARepository.class );
-        context.playRoles( endEntityFactory, EndEntityFactory.class );
         return subContext( X509ListContext.class );
     }
 
