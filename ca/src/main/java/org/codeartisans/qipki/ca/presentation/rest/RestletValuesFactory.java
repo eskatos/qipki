@@ -74,7 +74,7 @@ public interface RestletValuesFactory
 
     RevocationValue revocation( Reference rootRef, Revocation revocation );
 
-    Iterable<RestValue> asValues( Reference rootRef, Iterable objects );
+    Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects );
 
     RestListValue newListRepresentationValue( Reference listRef, int start, Iterable<RestValue> list );
 
@@ -247,29 +247,19 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public Iterable<RestValue> asValues( Reference rootRef, Iterable objects )
+        public Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects )
         {
             Set<RestValue> set = new LinkedHashSet<RestValue>();
             for ( Object eachObj : objects ) {
-                try {
+                if ( CA.class.isAssignableFrom( eachObj.getClass() ) ) {
                     set.add( ca( rootRef, ( CA ) eachObj ) );
-                    continue;
-                } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a CA: {}", ex.getMessage() );
-                }
-                try {
+                } else if ( CryptoStore.class.isAssignableFrom( eachObj.getClass() ) ) {
                     set.add( cryptoStore( rootRef, ( CryptoStore ) eachObj ) );
-                    continue;
-                } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a CryptoStore: {}", ex.getMessage() );
-                }
-                try {
+                } else if ( X509.class.isAssignableFrom( eachObj.getClass() ) ) {
                     set.add( x509( rootRef, ( X509 ) eachObj ) );
-                    continue;
-                } catch ( ClassCastException ex ) {
-                    LOGGER.trace( "Object is not a X509: {}", ex.getMessage() );
+                } else {
+                    throw new IllegalArgumentException( "Object is of unsupported Type: " + eachObj );
                 }
-                throw new IllegalArgumentException( "Entity is of unsupported Type: " + eachObj );
             }
             return set;
         }

@@ -38,7 +38,7 @@
         <module>crypto</module>
         <module>core</module>
         <module>commons</module>
-        <module>client</module>
+        <module>client-ca</module>
         <module>ca</module>
         <module>ra</module>
         <module>swing</module>

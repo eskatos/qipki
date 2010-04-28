@@ -19,22 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.client.ca.services;
 
-import java.util.List;
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.commons.values.rest.RestValue;
 
-// TODO make it generic and implementing Iterable
-public interface RestListValue
-        extends RestValue, ValueComposite
+interface GenericClientService<T extends RestValue>
 {
 
-    @UseDefaults
-    Property<Integer> start();
+    Iterable<T> list( int start );
 
-    @UseDefaults
-    Property<List<RestValue>> items();
+    T get( String uri );
 
 }

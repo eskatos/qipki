@@ -19,22 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.client.ca;
 
-import java.util.List;
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-// TODO make it generic and implementing Iterable
-public interface RestListValue
-        extends RestValue, ValueComposite
+public class QiPkiClientFailure
+        extends RuntimeException
 {
 
-    @UseDefaults
-    Property<Integer> start();
+    private static final long serialVersionUID = 1L;
 
-    @UseDefaults
-    Property<List<RestValue>> items();
+    public QiPkiClientFailure( String message )
+    {
+        super( message );
+    }
+
+    public QiPkiClientFailure( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
 
 }

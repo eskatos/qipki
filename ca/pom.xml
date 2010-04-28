@@ -44,7 +44,7 @@
             <artifactId>qipki-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
 
         <!-- OSGI -->
         <dependency>
@@ -141,7 +141,11 @@
         </dependency>
 
         <!-- test -->
-
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-client-ca</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
