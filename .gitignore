@@ -5,6 +5,6 @@ main/target
 ca/target
 ra/target
 swing/target
-client/target
+client-ca/target
 commons/target
 QIPKI~

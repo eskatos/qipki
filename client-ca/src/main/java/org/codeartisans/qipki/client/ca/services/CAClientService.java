@@ -19,22 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.rest;
+package org.codeartisans.qipki.client.ca.services;
 
-import java.util.List;
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
 
-// TODO make it generic and implementing Iterable
-public interface RestListValue
-        extends RestValue, ValueComposite
+@Mixins( CAClientService.Mixin.class )
+public interface CAClientService
+        extends GenericClientService<CAValue>, ServiceComposite
 {
 
-    @UseDefaults
-    Property<Integer> start();
+    CAValue create( CAFactoryParamsValue params );
 
-    @UseDefaults
-    Property<List<RestValue>> items();
+    abstract class Mixin
+            implements CAClientService
+    {
+
+        @Override
+        public Iterable<CAValue> list( int start )
+        {
+            throw new UnsupportedOperationException( "Not supported yet." );
+        }
+
+        @Override
+        public CAValue get( String uri )
+        {
+            throw new UnsupportedOperationException( "Not supported yet." );
+        }
+
+        @Override
+        public CAValue create( CAFactoryParamsValue params )
+        {
+            throw new UnsupportedOperationException( "Not supported yet." );
+        }
+
+    }
 
 }

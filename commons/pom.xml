@@ -22,6 +22,12 @@
             <artifactId>qipki-crypto</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${version.logback}</version>
+            <optional>true</optional>
+        </dependency>
 
     </dependencies>
 

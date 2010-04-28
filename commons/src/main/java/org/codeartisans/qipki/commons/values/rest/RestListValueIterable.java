@@ -21,20 +21,55 @@
  */
 package org.codeartisans.qipki.commons.values.rest;
 
+import java.util.Iterator;
 import java.util.List;
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
 
-// TODO make it generic and implementing Iterable
-public interface RestListValue
-        extends RestValue, ValueComposite
+public class RestListValueIterable<T extends RestValue>
+        implements Iterable<T>
 {
 
-    @UseDefaults
-    Property<Integer> start();
+    private final List<RestValue> items;
 
-    @UseDefaults
-    Property<List<RestValue>> items();
+    public RestListValueIterable( RestListValue restList )
+    {
+        this.items = restList.items().get();
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return new RestListValueIterator();
+    }
+
+    public class RestListValueIterator
+            implements Iterator<T>
+    {
+
+        private final Iterator<RestValue> delegate;
+
+        public RestListValueIterator()
+        {
+            delegate = items.iterator();
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return delegate.hasNext();
+        }
+
+        @Override
+        public T next()
+        {
+            return ( T ) delegate.next();
+        }
+
+        @Override
+        public void remove()
+        {
+            delegate.remove();
+        }
+
+    }
 
 }
