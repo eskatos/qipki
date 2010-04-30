@@ -35,6 +35,10 @@ public interface ApiURIsValue
 
     Property<String> caFactoryUri();
 
+    Property<String> x509ProfileListUri();
+
+    Property<String> x509ProfileFactoryUri();
+
     Property<String> x509ListUri();
 
     Property<String> x509FactoryUri();

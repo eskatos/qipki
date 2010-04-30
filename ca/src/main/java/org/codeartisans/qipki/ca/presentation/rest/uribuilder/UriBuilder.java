@@ -43,6 +43,11 @@ public final class UriBuilder
         return new CaUriBuilder( root.clone().addSegment( "ca" ), null, null );
     }
 
+    public X509ProfileUriBuilder x509Profile()
+    {
+        return new X509ProfileUriBuilder( root.clone().addSegment( "x509Profile" ), null, null );
+    }
+
     public X509UriBuilder x509()
     {
         return new X509UriBuilder( root.clone().addSegment( "x509" ), null, null );

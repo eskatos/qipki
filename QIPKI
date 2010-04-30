@@ -54,14 +54,19 @@ Next steps
 
   DONE BUG: generated URIs seems wrong but everything is working, see unit tests logs
 
-  Write qi4j client library for cryptostore/ca/csr/certificates/revocation
+  IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
     QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
 
+  IN_PROGESS  Add support for certificate profiles
+
   Package as a unix daemon
 
+
   Release 0.1
+
+  Add support for key escrow
 
   Use @Concerns to factorize Resources (error handling, logging etc..)
     Finish WrongParamatersBuilder and integrate in resources concerns

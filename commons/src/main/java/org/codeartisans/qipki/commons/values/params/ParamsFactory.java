@@ -22,6 +22,8 @@ public interface ParamsFactory
 
     CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaIdentity );
 
+    X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name );
+
     X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 );
 
     X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
@@ -64,6 +66,15 @@ public interface ParamsFactory
             params.distinguishedName().set( distinguishedName );
             params.keySpec().set( keySpec );
             params.parentCaIdentity().set( parentCaIdentity );
+            return paramsBuilder.newInstance();
+        }
+
+        @Override
+        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name )
+        {
+            ValueBuilder<X509ProfileFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509ProfileFactoryParamsValue.class );
+            X509ProfileFactoryParamsValue params = paramsBuilder.prototype();
+            params.name().set( name );
             return paramsBuilder.newInstance();
         }
 

@@ -19,31 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.core.domain.services;
 
-import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
-import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.QueryBuilderFactory;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.api.query.Query;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
-        extends BoxedDomainRepository<CA>, ServiceComposite
+public interface BoxedDomainRepository<T>
 {
 
-    abstract class Mixin
-            extends AbstractBoxedDomainRepository<CA>
-            implements CARepository
-    {
+    T findByIdentity( String identity );
 
-        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
-        {
-            super( uowf, qbf );
-        }
-
-    }
+    Query<T> findAllPaginated( int firstResult, int maxResults );
 
 }
