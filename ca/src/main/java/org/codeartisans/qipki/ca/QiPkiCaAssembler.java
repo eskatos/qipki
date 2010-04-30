@@ -28,6 +28,8 @@ import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreLis
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
+import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileContext;
+import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAEntity;
@@ -42,6 +44,9 @@ import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509Entity;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileEntity;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
@@ -61,6 +66,9 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailReso
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
@@ -118,6 +126,9 @@ public class QiPkiCaAssembler
                                        CAFactoryResource.class,
                                        CAResource.class,
                                        CRLResource.class,
+                                       X509ProfileListResource.class,
+                                       X509ProfileFactoryResource.class,
+                                       X509ProfileResource.class,
                                        X509ListResource.class,
                                        X509FactoryResource.class,
                                        X509Resource.class,
@@ -189,6 +200,8 @@ public class QiPkiCaAssembler
                                        CryptoStoreContext.class,
                                        CAListContext.class,
                                        CAContext.class,
+                                       X509ProfileListContext.class,
+                                       X509ProfileContext.class,
                                        X509ListContext.class,
                                        X509Context.class ).
                             visibleIn( Visibility.application );
@@ -214,6 +227,7 @@ public class QiPkiCaAssembler
                                         RootCAEntity.class,
                                         SubCAEntity.class,
                                         CRLEntity.class,
+                                        X509ProfileEntity.class,
                                         X509Entity.class,
                                         RevocationEntity.class ).
                             visibleIn( Visibility.application );
@@ -224,6 +238,8 @@ public class QiPkiCaAssembler
                                         CARepository.class,
                                         CAFactory.class,
                                         CRLFactory.class,
+                                        X509ProfileRepository.class,
+                                        X509ProfileFactory.class,
                                         X509Repository.class,
                                         X509Factory.class,
                                         RevocationFactory.class,

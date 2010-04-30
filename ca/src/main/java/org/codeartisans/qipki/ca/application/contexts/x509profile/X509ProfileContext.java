@@ -19,31 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.application.contexts.x509profile;
 
-import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
-import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.QueryBuilderFactory;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+import org.codeartisans.qipki.core.dci.Context;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
-        extends BoxedDomainRepository<CA>, ServiceComposite
+public class X509ProfileContext
+        extends Context
 {
 
-    abstract class Mixin
-            extends AbstractBoxedDomainRepository<CA>
-            implements CARepository
+    public X509Profile x509Profile()
     {
-
-        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
-        {
-            super( uowf, qbf );
-        }
-
+        return context.role( X509Profile.class );
     }
 
 }

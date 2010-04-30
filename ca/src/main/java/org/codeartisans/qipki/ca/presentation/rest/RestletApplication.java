@@ -36,6 +36,9 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailReso
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileListResource;
+import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.Uses;
 import org.qi4j.api.object.ObjectBuilderFactory;
@@ -89,6 +92,10 @@ public class RestletApplication
         router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
+
+        router.attach( "/x509Profile", createFinder( X509ProfileListResource.class ) );
+        router.attach( "/x509Profile/factory", createFinder( X509ProfileFactoryResource.class ) );
+        router.attach( "/x509Profile/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509ProfileResource.class ) );
 
         router.attach( "/x509", createFinder( X509ListResource.class ) );
         router.attach( "/x509/factory", createFinder( X509FactoryResource.class ) );

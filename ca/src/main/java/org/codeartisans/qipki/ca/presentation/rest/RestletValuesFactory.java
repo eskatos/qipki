@@ -29,6 +29,7 @@ import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.presentation.rest.uribuilder.UriBuilder;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.X509ExtensionsValueFactory;
@@ -39,6 +40,7 @@ import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RevocationValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
+import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
@@ -54,8 +56,6 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
 import org.restlet.data.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Mixins( RestletValuesFactory.Mixin.class )
 public interface RestletValuesFactory
@@ -67,6 +67,8 @@ public interface RestletValuesFactory
     CryptoStoreValue cryptoStore( Reference rootRef, CryptoStore ks );
 
     CAValue ca( Reference rootRef, CA ca );
+
+    X509ProfileValue x509Profile( Reference rootRef, X509Profile x509Profile );
 
     X509Value x509( Reference rootRef, X509 x509 );
 
@@ -82,7 +84,6 @@ public interface RestletValuesFactory
             implements RestletValuesFactory
     {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger( RestletValuesFactory.class );
         @Structure
         private ValueBuilderFactory vbf;
         @Service
@@ -112,6 +113,9 @@ public interface RestletValuesFactory
             api.caListUri().set( uriBuilder.ca().build() );
             api.caFactoryUri().set( uriBuilder.ca().factory().build() );
 
+            api.x509ProfileListUri().set( uriBuilder.x509Profile().build() );
+            api.x509ProfileFactoryUri().set( uriBuilder.x509Profile().factory().build() );
+
             api.x509ListUri().set( uriBuilder.x509().build() );
             api.x509FactoryUri().set( uriBuilder.x509().factory().build() );
 
@@ -139,7 +143,6 @@ public interface RestletValuesFactory
         @Override
         public CAValue ca( Reference rootRef, CA ca )
         {
-
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
             UriBuilder uriBuilder = new UriBuilder( rootRef );
 
@@ -153,6 +156,19 @@ public interface RestletValuesFactory
             caValue.name().set( ca.name().get() );
 
             return caValueBuilder.newInstance();
+        }
+
+        @Override
+        public X509ProfileValue x509Profile( Reference rootRef, X509Profile x509Profile )
+        {
+            ValueBuilder<X509ProfileValue> x509ProfileValueBuilder = vbf.newValueBuilder( X509ProfileValue.class );
+            UriBuilder uriBuilder = new UriBuilder( rootRef );
+
+            X509ProfileValue x509ProfileValue = x509ProfileValueBuilder.prototype();
+            x509ProfileValue.uri().set( uriBuilder.x509Profile().withIdentity( x509Profile.identity().get() ).build() );
+            x509ProfileValue.name().set( x509Profile.name().get() );
+
+            return x509ProfileValueBuilder.newInstance();
         }
 
         @Override

@@ -19,31 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.presentation.rest.uribuilder;
 
-import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
-import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.QueryBuilderFactory;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.restlet.data.Reference;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
-        extends BoxedDomainRepository<CA>, ServiceComposite
+public final class X509ProfileUriBuilder
+        extends AbstractUriBuilder
 {
 
-    abstract class Mixin
-            extends AbstractBoxedDomainRepository<CA>
-            implements CARepository
+
+    /* package */ X509ProfileUriBuilder( Reference baseRef, String identity, String special )
     {
+        super( baseRef, identity, special );
+    }
 
-        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
-        {
-            super( uowf, qbf );
-        }
+    public X509ProfileUriBuilder factory()
+    {
+        return new X509ProfileUriBuilder( baseRef, identity, "factory" );
+    }
 
+    public X509ProfileUriBuilder withIdentity( String identity )
+    {
+        return new X509ProfileUriBuilder( baseRef, identity, special );
+    }
+
+    public X509ProfileUriBuilder detail()
+    {
+        return new X509ProfileUriBuilder( baseRef, identity, "detail" );
+    }
+
+    public X509ProfileUriBuilder revocation()
+    {
+        return new X509ProfileUriBuilder( baseRef, identity, "revocation" );
     }
 
 }

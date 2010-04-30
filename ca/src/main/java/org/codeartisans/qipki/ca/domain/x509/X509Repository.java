@@ -21,46 +21,27 @@
  */
 package org.codeartisans.qipki.ca.domain.x509;
 
+import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
+import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( X509Repository.Mixin.class )
 public interface X509Repository
-        extends ServiceComposite
+        extends BoxedDomainRepository<X509>, ServiceComposite
 {
 
-    X509 findByIdentity( String identity );
-
-    Query<X509> findAllPaginated( int firstResult, int maxResults );
-
     abstract class Mixin
+            extends AbstractBoxedDomainRepository<X509>
             implements X509Repository
     {
 
-        @Structure
-        private UnitOfWorkFactory uowf;
-        @Structure
-        private QueryBuilderFactory qbf;
-
-        @Override
-        public X509 findByIdentity( String identity )
+        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
-            return uowf.currentUnitOfWork().get( X509.class, identity );
-        }
-
-        @Override
-        public Query<X509> findAllPaginated( int firstResult, int maxResults )
-        {
-            QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
-            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() ).
-                    firstResult( firstResult ).
-                    maxResults( maxResults );
-            return query;
+            super( uowf, qbf );
         }
 
     }

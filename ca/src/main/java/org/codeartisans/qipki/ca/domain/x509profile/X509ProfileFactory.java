@@ -19,29 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.ca.domain.x509profile;
 
-import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
-import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
+import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-@Mixins( CARepository.Mixin.class )
-public interface CARepository
-        extends BoxedDomainRepository<CA>, ServiceComposite
+@Mixins( X509ProfileFactory.Mixin.class )
+public interface X509ProfileFactory
+        extends ServiceComposite
 {
 
+    X509Profile create( String name );
+
     abstract class Mixin
-            extends AbstractBoxedDomainRepository<CA>
-            implements CARepository
+            implements X509ProfileFactory
     {
 
-        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
+        @Structure
+        private UnitOfWorkFactory uowf;
+
+        @Override
+        public X509Profile create( String name )
         {
-            super( uowf, qbf );
+            EntityBuilder<X509Profile> builder = uowf.currentUnitOfWork().newEntityBuilder( X509Profile.class );
+            X509Profile profile = builder.instance();
+            profile.name().set( name );
+            return builder.newInstance();
         }
 
     }

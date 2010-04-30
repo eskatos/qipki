@@ -27,6 +27,8 @@ import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreLis
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
+import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileContext;
+import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.core.dci.Context;
@@ -37,6 +39,9 @@ import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.qi4j.api.injection.scope.Service;
 
 /**
@@ -54,6 +59,10 @@ public class RootContext
     private CARepository caRepos;
     @Service
     private CAFactory caFactory;
+    @Service
+    private X509ProfileFactory x509ProfileFactory;
+    @Service
+    private X509ProfileRepository x509ProfileRepository;
     @Service
     private X509Factory x509Factory;
     @Service
@@ -87,6 +96,20 @@ public class RootContext
         context.playRoles( ca, CA.class );
         context.playRoles( x509Repository, X509Repository.class );
         return subContext( CAContext.class );
+    }
+
+    public X509ProfileListContext x509ProfileListContext()
+    {
+        context.playRoles( x509ProfileRepository, X509ProfileRepository.class );
+        context.playRoles( x509ProfileFactory, X509ProfileFactory.class );
+        return subContext( X509ProfileListContext.class );
+    }
+
+    public X509ProfileContext x509ProfileContext( String identity )
+    {
+        X509Profile x509Profile = x509ProfileRepository.findByIdentity( identity );
+        context.playRoles( x509Profile, X509Profile.class );
+        return subContext( X509ProfileContext.class );
     }
 
     public X509ListContext x509ListContext()

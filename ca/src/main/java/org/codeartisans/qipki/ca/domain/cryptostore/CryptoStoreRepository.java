@@ -21,46 +21,27 @@
  */
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
+import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
+import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( CryptoStoreRepository.Mixin.class )
 public interface CryptoStoreRepository
-        extends ServiceComposite
+        extends BoxedDomainRepository<CryptoStore>, ServiceComposite
 {
 
-    CryptoStore findByIdentity( String identity );
-
-    Query<CryptoStore> findAllPaginated( int firstResult, int maxResults );
-
     abstract class Mixin
+            extends AbstractBoxedDomainRepository<CryptoStore>
             implements CryptoStoreRepository
     {
 
-        @Structure
-        private UnitOfWorkFactory uowf;
-        @Structure
-        private QueryBuilderFactory qbf;
-
-        @Override
-        public CryptoStore findByIdentity( String identity )
+        public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
-            return uowf.currentUnitOfWork().get( CryptoStore.class, identity );
-        }
-
-        @Override
-        public Query<CryptoStore> findAllPaginated( int firstResult, int maxResults )
-        {
-            QueryBuilder<CryptoStore> builder = qbf.newQueryBuilder( CryptoStore.class );
-            Query<CryptoStore> query = builder.newQuery( uowf.currentUnitOfWork() ).
-                    firstResult( firstResult ).
-                    maxResults( maxResults );
-            return query;
+            super( uowf, qbf );
         }
 
     }
