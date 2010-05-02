@@ -22,8 +22,34 @@
 package org.codeartisans.qipki.commons.states;
 
 import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.property.Property;
 
 public interface X509ProfileState
         extends Nameable
 {
+
+    @Optional
+    Property<String> netscapeCertComment();
+
+    @Optional
+    Property<KeyUsagesValue> keyUsages();
+
+    @Optional
+    Property<ExtendedKeyUsagesValue> extendedKeyUsages();
+
+    @Optional
+    Property<NetscapeCertTypesValue> netscapeCertTypes();
+
+    @Optional
+    Property<BasicConstraintsValue> basicConstraints();
+
+    @Optional
+    Property<NameConstraintsValue> nameConstraints();
+
 }

@@ -21,10 +21,7 @@
  */
 package org.codeartisans.qipki.commons.values.crypto.x509;
 
-import java.util.Set;
-import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.qi4j.api.common.Optional;
-import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
@@ -37,14 +34,5 @@ public interface NamesExtensionsValue
 
     @Optional
     Property<AlternativeNamesValue> issuerAlternativeNames();
-
-    public interface AlternativeNamesValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<X509GeneralNameValue>> alternativeNames();
-
-    }
 
 }

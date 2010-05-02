@@ -54,12 +54,37 @@ Next steps
 
   DONE BUG: generated URIs seems wrong but everything is working, see unit tests logs
 
+  DONE Add ExtendedKeyUsage and NetscapeCertType in X509DetailValue
+
+  DONE Refactor X509ExtensionsValueFactory so that we expose internal code needed to build X509Profile
+
   IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
     QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
 
   IN_PROGESS  Add support for certificate profiles
+    QUID X509ProfileAssignment aggregated in CA ?
+        yes, so that when removing a ca, it removes its assignments
+        still needs to handle X509Profile deletion manually
+    QUID model as resource ? seems to be a good choice
+    Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
+
+
+
+
+  Add tools resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
+    With this we can write unit tests for certificate parsing using a bunch of external certificates
+
+  Add Netscape extensions handling
+    In X509DetailValue : all of them
+    In X509Profile
+        Netscape Certificate Comment
+    Automatically filled by CAs
+        Netscape CA Revocation URL
+            Only on CA certificates
+            With only the CRL endpoint of the issuing CA
+            It feels weird .... is this really necessary ?
 
   Package as a unix daemon
 
@@ -99,6 +124,31 @@ X.509 Extensions Documents
 
 	NETSCAPE
 	http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn3.html
+
+
+    extendedKeyUsage : FUCK, need to find reliable info about this
+        Two interpretations as to what extended key usage values mean when set in a CA certificate
+            • Certificate can be used for the indicated usage
+                – Interpretation used by PKIX, some vendors
+            • Certificate can issue certificates with the given usage
+                – Interpretation used by Netscape, Microsoft, other vendors
+        As usual, PKI people are split 50:50 on this
+
+    netscapeCertType
+        Discontinued since 10 years ... is it needed ?
+
+    privateKeyUsagePeriod
+        Disallowed by the PKIX profile, although no-one can provide a reason for this
+
+    nameConstraints
+        On CA only
+        Constrain the DN subtree under which a CA can issue certificates
+
+        Name constraints can be avoided through creative name encoding (Problem in standards)
+            • Multiple encodings for the same character, zero-width spaces, floating diacritics, etc
+            • Can make identical-appearing strings compare as different strings
+            • Can also evade name constraints by using altNames
+
 
 
 

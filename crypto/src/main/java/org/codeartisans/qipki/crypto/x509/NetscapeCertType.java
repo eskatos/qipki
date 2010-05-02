@@ -19,35 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.crypto.x509;
 
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface KeysExtensionsValue
-        extends ValueComposite
+public enum NetscapeCertType
 {
 
-    @Optional
-    Property<KeyUsagesValue> keyUsages();
+    sslClient( org.bouncycastle.asn1.misc.NetscapeCertType.sslClient ),
+    sslServer( org.bouncycastle.asn1.misc.NetscapeCertType.sslServer ),
+    smime( org.bouncycastle.asn1.misc.NetscapeCertType.smime ),
+    objectSigning( org.bouncycastle.asn1.misc.NetscapeCertType.objectSigning ),
+    reserved( org.bouncycastle.asn1.misc.NetscapeCertType.reserved ),
+    sslCA( org.bouncycastle.asn1.misc.NetscapeCertType.sslCA ),
+    smimeCA( org.bouncycastle.asn1.misc.NetscapeCertType.smimeCA ),
+    objectSigningCA( org.bouncycastle.asn1.misc.NetscapeCertType.objectSigningCA );
+    private int intValue;
 
-    @Optional
-    Property<ExtendedKeyUsagesValue> extendedKeyUsages();
+    private NetscapeCertType( int intValue )
+    {
+        this.intValue = intValue;
+    }
 
-    @Optional
-    Property<NetscapeCertTypesValue> netscapeCertTypes();
-
-    @Optional
-    Property<SubjectKeyIdentifierValue> subjectKeyIdentifier();
-
-    @Optional
-    Property<AuthorityKeyIdentifierValue> authorityKeyIdentifier();
-
-    @Optional
-    Property<PrivateKeyUsageIntervalValue> privateKeyUsageInterval();
-
-    @Optional
-    Property<CRLDistributionPointsValue> crlDistributionPoints();
+    public int getIntValue()
+    {
+        return intValue;
+    }
 
 }

@@ -19,35 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.crypto.x509;
+package org.codeartisans.qipki.ca.domain.ca.profileassignment;
 
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
-
-public interface KeysExtensionsValue
-        extends ValueComposite
+public interface X509ProfileAssignment
+        extends X509ProfileAssignmentState
 {
-
-    @Optional
-    Property<KeyUsagesValue> keyUsages();
-
-    @Optional
-    Property<ExtendedKeyUsagesValue> extendedKeyUsages();
-
-    @Optional
-    Property<NetscapeCertTypesValue> netscapeCertTypes();
-
-    @Optional
-    Property<SubjectKeyIdentifierValue> subjectKeyIdentifier();
-
-    @Optional
-    Property<AuthorityKeyIdentifierValue> authorityKeyIdentifier();
-
-    @Optional
-    Property<PrivateKeyUsageIntervalValue> privateKeyUsageInterval();
-
-    @Optional
-    Property<CRLDistributionPointsValue> crlDistributionPoints();
-
 }

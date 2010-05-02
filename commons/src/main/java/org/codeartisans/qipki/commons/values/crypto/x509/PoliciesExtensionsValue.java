@@ -21,11 +21,7 @@
  */
 package org.codeartisans.qipki.commons.values.crypto.x509;
 
-import java.util.Set;
-import org.codeartisans.qipki.commons.fragments.HasCriticality;
-import org.codeartisans.qipki.commons.fragments.HasOID;
 import org.qi4j.api.common.Optional;
-import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
@@ -38,50 +34,5 @@ public interface PoliciesExtensionsValue
 
     @Optional
     Property<PolicyMappingsValue> policyMappings();
-
-    public interface CertificatePoliciesValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<PolicyInformationValue>> policies();
-
-    }
-
-    public interface PolicyInformationValue
-            extends HasOID, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<PolicyQualifierInfoValue>> policyQualifiers();
-
-    }
-
-    public interface PolicyQualifierInfoValue
-            extends HasOID, ValueComposite
-    {
-
-        Property<String> qualifier();
-
-    }
-
-    public interface PolicyMappingsValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<PolicyMappingValue>> mappings();
-
-    }
-
-    public interface PolicyMappingValue
-            extends ValueComposite
-    {
-
-        Property<String> issuerDomainPolicyOID();
-
-        Property<String> subjectDomainPolicyOID();
-
-    }
 
 }
