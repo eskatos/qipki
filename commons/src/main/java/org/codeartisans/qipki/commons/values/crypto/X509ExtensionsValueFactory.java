@@ -25,6 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.DistributionPoint;
@@ -36,28 +37,32 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
 import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue;
 import static org.bouncycastle.asn1.x509.X509Extensions.*;
-import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue.BasicConstraintsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue.NameConstraintsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue.PolicyConstraintValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue.PolicyConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue.AuthorityKeyIdentifierValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue.CRLDistributionPointsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue.KeyUsagesValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue.PrivateKeyUsageIntervalValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue.SubjectKeyIdentifierValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.AuthorityKeyIdentifierValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CRLDistributionPointsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PrivateKeyUsageIntervalValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.SubjectKeyIdentifierValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.NamesExtensionsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.NamesExtensionsValue.AlternativeNamesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.AlternativeNamesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CertificatePoliciesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CertificatePoliciesValue.PolicyInformationValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CertificatePoliciesValue.PolicyQualifierInfoValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue.CertificatePoliciesValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue.PolicyInformationValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue.PolicyMappingValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue.PolicyMappingsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue.PolicyQualifierInfoValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyConstraintsValue.PolicyConstraintValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyMappingsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyMappingsValue.PolicyMappingValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralNameValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralSubtreeValue;
 import org.codeartisans.qipki.crypto.codec.CryptCodex;
+import org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage;
 import org.codeartisans.qipki.crypto.x509.KeyUsage;
+import org.codeartisans.qipki.crypto.x509.NetscapeCertType;
 import org.codeartisans.qipki.crypto.x509.PolicyConstraint;
 import org.codeartisans.qipki.crypto.x509.PolicyMapping;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
@@ -79,11 +84,25 @@ public interface X509ExtensionsValueFactory
 
     KeysExtensionsValue buildKeysExtensionsValue( X509Certificate cert );
 
+    KeyUsagesValue buildKeyUsagesValue( boolean critical, Set<KeyUsage> keyUsages );
+
+    ExtendedKeyUsagesValue buildExtendedKeyUsagesValue( boolean critical, Set<ExtendedKeyUsage> extendedKeyUsages );
+
+    NetscapeCertTypesValue buildNetscapeCertTypesValue( boolean critical, Set<NetscapeCertType> netscapeCertTypes );
+
+    BasicConstraintsValue buildBasicConstraintsValue( boolean critical, boolean subjectIsCA, long pathLenConstraint );
+
     PoliciesExtensionsValue buildPoliciesExtensionsValue( X509Certificate cert );
 
     NamesExtensionsValue buildNamesExtensionsValue( X509Certificate cert );
 
     ConstraintsExtensionsValue buildConstraintsExtensionsValue( X509Certificate cert );
+
+    NameConstraintsValue buildNameConstraintsValue( boolean critical, Set<X509GeneralSubtreeValue> permittedSubtrees, Set<X509GeneralSubtreeValue> excludedSubtrees );
+
+    X509GeneralNameValue buildGeneralName( X509GeneralName nameType, String value );
+
+    X509GeneralSubtreeValue buildGeneralSubtree( X509GeneralName nameType, String nameValue, Long subtreeMinimum, Long subtreeMaximum );
 
     abstract class Mixin
             implements X509ExtensionsValueFactory
@@ -100,14 +119,17 @@ public interface X509ExtensionsValueFactory
         public KeysExtensionsValue buildKeysExtensionsValue( X509Certificate cert )
         {
             Set<KeyUsage> keyUsages = x509ExtReader.getKeyUsages( cert );
+            Set<ExtendedKeyUsage> extendedKeyUsages = x509ExtReader.getExtendedKeyUsages( cert );
+            Set<NetscapeCertType> netscapeCertTypes = x509ExtReader.getNetscapeCertTypes( cert );
             byte[] subKeyId = x509ExtReader.getSubjectKeyIdentifier( cert );
             AuthorityKeyIdentifier authKeyId = x509ExtReader.getAuthorityKeyIdentifier( cert );
             Interval privKeyUsageInterval = x509ExtReader.getPrivateKeyUsagePeriod( cert );
             DistributionPoint[] crlDistPoints = x509ExtReader.getCRLDistributionPoints( cert );
-
-            if ( keyUsages.isEmpty() && subKeyId == null && authKeyId == null && privKeyUsageInterval == null && crlDistPoints == null ) {
+            if ( keyUsages.isEmpty() && extendedKeyUsages.isEmpty() && netscapeCertTypes.isEmpty()
+                    && subKeyId == null && authKeyId == null && privKeyUsageInterval == null && crlDistPoints == null ) {
                 return null;
             }
+
             ValueBuilder<KeysExtensionsValue> keyExtensionsBuilder = vbf.newValueBuilder( KeysExtensionsValue.class );
             KeysExtensionsValue keyExtensions = keyExtensionsBuilder.prototype();
 
@@ -116,6 +138,20 @@ public interface X509ExtensionsValueFactory
                         cert.getCriticalExtensionOIDs().contains( KeyUsage.getId() ),
                         keyUsages );
                 keyExtensions.keyUsages().set( kuv );
+            }
+
+            if ( !extendedKeyUsages.isEmpty() ) {
+                ExtendedKeyUsagesValue ekuv = buildExtendedKeyUsagesValue(
+                        cert.getCriticalExtensionOIDs().contains( ExtendedKeyUsage.getId() ),
+                        extendedKeyUsages );
+                keyExtensions.extendedKeyUsages().set( ekuv );
+            }
+
+            if ( !netscapeCertTypes.isEmpty() ) {
+                NetscapeCertTypesValue nctv = buildNetscapeCertTypesValue(
+                        cert.getCriticalExtensionOIDs().contains( MiscObjectIdentifiers.netscapeCertType.getId() ),
+                        netscapeCertTypes );
+                keyExtensions.netscapeCertTypes().set( nctv );
             }
 
             if ( subKeyId != null ) {
@@ -226,7 +262,8 @@ public interface X509ExtensionsValueFactory
             if ( basicConstraints != null ) {
                 BasicConstraintsValue bcv = buildBasicConstraintsValue(
                         cert.getCriticalExtensionOIDs().contains( BasicConstraints.getId() ),
-                        basicConstraints );
+                        basicConstraints.isCA(),
+                        basicConstraints.getPathLenConstraint().longValue() );
                 constraintsExtensions.basicConstraints().set( bcv );
             }
 
@@ -247,13 +284,34 @@ public interface X509ExtensionsValueFactory
             return constraintsExtensionsBuilder.newInstance();
         }
 
-        private KeyUsagesValue buildKeyUsagesValue( boolean critical, Set<KeyUsage> keyUsages )
+        @Override
+        public KeyUsagesValue buildKeyUsagesValue( boolean critical, Set<KeyUsage> keyUsages )
         {
             ValueBuilder<KeyUsagesValue> kuBuilder = vbf.newValueBuilder( KeyUsagesValue.class );
             KeyUsagesValue kuValue = kuBuilder.prototype();
             kuValue.critical().set( critical );
             kuValue.keyUsages().set( keyUsages );
             return kuBuilder.newInstance();
+        }
+
+        @Override
+        public ExtendedKeyUsagesValue buildExtendedKeyUsagesValue( boolean critical, Set<ExtendedKeyUsage> extendedKeyUsages )
+        {
+            ValueBuilder<ExtendedKeyUsagesValue> ekuBuilder = vbf.newValueBuilder( ExtendedKeyUsagesValue.class );
+            ExtendedKeyUsagesValue ekuValue = ekuBuilder.prototype();
+            ekuValue.critical().set( critical );
+            ekuValue.extendedKeyUsages().set( extendedKeyUsages );
+            return ekuBuilder.newInstance();
+        }
+
+        @Override
+        public NetscapeCertTypesValue buildNetscapeCertTypesValue( boolean critical, Set<NetscapeCertType> netscapeCertTypes )
+        {
+            ValueBuilder<NetscapeCertTypesValue> nctBuilder = vbf.newValueBuilder( NetscapeCertTypesValue.class );
+            NetscapeCertTypesValue nctValue = nctBuilder.prototype();
+            nctValue.critical().set( critical );
+            nctValue.netscapeCertTypes().set( netscapeCertTypes );
+            return nctBuilder.newInstance();
         }
 
         private SubjectKeyIdentifierValue buildSubjectKeyIdentifierValue( boolean critical, String hexKeyIdentifier )
@@ -272,7 +330,7 @@ public interface X509ExtensionsValueFactory
             akiValue.critical().set( critical );
             akiValue.hexKeyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
             akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
-            akiValue.names().set( buildSetOfNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
+            akiValue.names().set( buildSetOfGeneralNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
             return akiBuilder.newInstance();
         }
 
@@ -286,10 +344,11 @@ public interface X509ExtensionsValueFactory
             return pkuBuilder.newInstance();
         }
 
+        @SuppressWarnings( "SetReplaceableByEnumSet" )
         private CRLDistributionPointsValue buildCRLDistributionPointsValue( boolean critical, DistributionPoint[] crlDistPoints )
         {
-            ValueBuilder<KeysExtensionsValue.CRLDistributionPointsValue> cdpBuilder = vbf.newValueBuilder( KeysExtensionsValue.CRLDistributionPointsValue.class );
-            KeysExtensionsValue.CRLDistributionPointsValue cdpValue = cdpBuilder.prototype();
+            ValueBuilder<CRLDistributionPointsValue> cdpBuilder = vbf.newValueBuilder( CRLDistributionPointsValue.class );
+            CRLDistributionPointsValue cdpValue = cdpBuilder.prototype();
             cdpValue.critical().set( critical );
             Set<String> endpoints = new LinkedHashSet<String>();
             Set<RevocationReason> reasons = new LinkedHashSet<RevocationReason>();
@@ -304,7 +363,7 @@ public interface X509ExtensionsValueFactory
                         endpoints.add( cryptCodex.toString( eachPoint.getDistributionPoint().getName() ) );
                 }
                 reasons.addAll( x509ExtReader.getRevocationReasons( eachPoint.getReasons() ) );
-                issuerNames.addAll( buildSetOfNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
+                issuerNames.addAll( buildSetOfGeneralNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
             }
             cdpValue.endpoints().set( endpoints );
             cdpValue.reasons().set( reasons );
@@ -358,33 +417,44 @@ public interface X509ExtensionsValueFactory
             ValueBuilder<AlternativeNamesValue> anBuilder = vbf.newValueBuilder( AlternativeNamesValue.class );
             AlternativeNamesValue an = anBuilder.prototype();
             an.critical().set( critical );
-            an.alternativeNames().set( buildSetOfNames( altNames ) );
+            an.alternativeNames().set( buildSetOfGeneralNames( altNames ) );
             return anBuilder.newInstance();
         }
 
-        private BasicConstraintsValue buildBasicConstraintsValue( boolean critical, BasicConstraints basicConstraints )
+        @Override
+        public BasicConstraintsValue buildBasicConstraintsValue( boolean critical, boolean subjectIsCA, long pathLenConstraint )
         {
             ValueBuilder<BasicConstraintsValue> bcBuilder = vbf.newValueBuilder( BasicConstraintsValue.class );
             BasicConstraintsValue bcValue = bcBuilder.prototype();
             bcValue.critical().set( critical );
-            bcValue.subjectIsCA().set( basicConstraints.isCA() );
-            bcValue.pathLenConstraint().set( basicConstraints.getPathLenConstraint().longValue() );
+            bcValue.subjectIsCA().set( subjectIsCA );
+            bcValue.pathLengthConstraint().set( pathLenConstraint );
             return bcBuilder.newInstance();
         }
 
         private NameConstraintsValue buildNameConstraintsValue( boolean critical, NameConstraints nameConstraints )
         {
-            ValueBuilder<NameConstraintsValue> ncBuilder = vbf.newValueBuilder( NameConstraintsValue.class );
-            NameConstraintsValue ncValue = ncBuilder.prototype();
-            ncValue.critical().set( critical );
+            LinkedHashSet<X509GeneralSubtreeValue> permittedSubtrees = new LinkedHashSet<X509GeneralSubtreeValue>();
+            LinkedHashSet<X509GeneralSubtreeValue> excludedSubtrees = new LinkedHashSet<X509GeneralSubtreeValue>();
             for ( int idx = 0; idx < nameConstraints.getPermittedSubtrees().size(); idx++ ) {
                 GeneralSubtree eachSubtree = ( GeneralSubtree ) nameConstraints.getPermittedSubtrees().getObjectAt( idx );
-                ncValue.permittedSubtrees().get().add( buildSubtree( eachSubtree ) );
+                permittedSubtrees.add( buildGeneralSubtree( eachSubtree ) );
             }
             for ( int idx = 0; idx < nameConstraints.getExcludedSubtrees().size(); idx++ ) {
                 GeneralSubtree eachSubtree = ( GeneralSubtree ) nameConstraints.getExcludedSubtrees().getObjectAt( idx );
-                ncValue.excludedSubtrees().get().add( buildSubtree( eachSubtree ) );
+                excludedSubtrees.add( buildGeneralSubtree( eachSubtree ) );
             }
+            return buildNameConstraintsValue( critical, permittedSubtrees, excludedSubtrees );
+        }
+
+        @Override
+        public NameConstraintsValue buildNameConstraintsValue( boolean critical, Set<X509GeneralSubtreeValue> permittedSubtrees, Set<X509GeneralSubtreeValue> excludedSubtrees )
+        {
+            ValueBuilder<NameConstraintsValue> ncBuilder = vbf.newValueBuilder( NameConstraintsValue.class );
+            NameConstraintsValue ncValue = ncBuilder.prototype();
+            ncValue.critical().set( critical );
+            ncValue.permittedSubtrees().set( permittedSubtrees );
+            ncValue.excludedSubtrees().set( excludedSubtrees );
             return ncBuilder.newInstance();
         }
 
@@ -405,36 +475,44 @@ public interface X509ExtensionsValueFactory
             return pcBuilder.newInstance();
         }
 
-        private X509GeneralSubtreeValue buildSubtree( GeneralSubtree subtree )
+        private X509GeneralSubtreeValue buildGeneralSubtree( GeneralSubtree subtree )
+        {
+            Map.Entry<X509GeneralName, String> baseName = x509ExtReader.asImmutableMapEntry( subtree.getBase() );
+            return buildGeneralSubtree( baseName.getKey(), baseName.getValue(), subtree.getMinimum().longValue(), subtree.getMaximum().longValue() );
+        }
+
+        @Override
+        public X509GeneralSubtreeValue buildGeneralSubtree( X509GeneralName nameType, String nameValue, Long subtreeMinimum, Long subtreeMaximum )
         {
             ValueBuilder<X509GeneralSubtreeValue> subtreeValueBuilder = vbf.newValueBuilder( X509GeneralSubtreeValue.class );
             X509GeneralSubtreeValue subtreeValue = subtreeValueBuilder.prototype();
-            Map.Entry<X509GeneralName, String> baseName = x509ExtReader.asImmutableMapEntry( subtree.getBase() );
-            subtreeValue.base().set( buildName( baseName ) );
-            subtreeValue.minimum().set( subtree.getMinimum().longValue() );
-            subtreeValue.maximum().set( subtree.getMaximum().longValue() );
+            subtreeValue.base().set( buildGeneralName( nameType, nameValue ) );
+            subtreeValue.minimum().set( subtreeMinimum );
+            subtreeValue.maximum().set( subtreeMaximum );
             return subtreeValueBuilder.newInstance();
         }
 
-        private Set<X509GeneralNameValue> buildSetOfNames( Map<X509GeneralName, String> names )
+        private Set<X509GeneralNameValue> buildSetOfGeneralNames( Map<X509GeneralName, String> names )
         {
             Set<X509GeneralNameValue> setOfNames = new LinkedHashSet<X509GeneralNameValue>();
             for ( Map.Entry<X509GeneralName, String> eachName : names.entrySet() ) {
-                ValueBuilder<X509GeneralNameValue> nameBuilder = vbf.newValueBuilder( X509GeneralNameValue.class );
-                X509GeneralNameValue name = nameBuilder.prototype();
-                name.nameType().set( eachName.getKey() );
-                name.nameValue().set( eachName.getValue() );
-                setOfNames.add( nameBuilder.newInstance() );
+                setOfNames.add( buildGeneralName( eachName ) );
             }
             return setOfNames;
         }
 
-        private X509GeneralNameValue buildName( Map.Entry<X509GeneralName, String> entry )
+        private X509GeneralNameValue buildGeneralName( Map.Entry<X509GeneralName, String> entry )
+        {
+            return buildGeneralName( entry.getKey(), entry.getValue() );
+        }
+
+        @Override
+        public X509GeneralNameValue buildGeneralName( X509GeneralName nameType, String nameValue )
         {
             ValueBuilder<X509GeneralNameValue> nameBuilder = vbf.newValueBuilder( X509GeneralNameValue.class );
             X509GeneralNameValue name = nameBuilder.prototype();
-            name.nameType().set( entry.getKey() );
-            name.nameValue().set( entry.getValue() );
+            name.nameType().set( nameType );
+            name.nameValue().set( nameValue );
             return nameBuilder.newInstance();
         }
 

@@ -21,13 +21,9 @@
  */
 package org.codeartisans.qipki.commons.values.crypto.x509;
 
-import java.util.Set;
-import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.qi4j.api.common.Optional;
-import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
-import org.qi4j.library.constraints.annotation.GreaterThan;
 
 public interface ConstraintsExtensionsValue
         extends ValueComposite
@@ -41,51 +37,5 @@ public interface ConstraintsExtensionsValue
 
     @Optional
     Property<PolicyConstraintsValue> policyConstraints();
-
-    public interface BasicConstraintsValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Boolean> subjectIsCA();
-
-        @Optional
-        @GreaterThan( 0L )
-        Property<Long> pathLenConstraint();
-
-    }
-
-    public interface NameConstraintsValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<X509GeneralSubtreeValue>> permittedSubtrees();
-
-        @UseDefaults
-        Property<Set<X509GeneralSubtreeValue>> excludedSubtrees();
-
-    }
-
-    public interface PolicyConstraintsValue
-            extends HasCriticality, ValueComposite
-    {
-
-        @UseDefaults
-        Property<Set<PolicyConstraintValue>> constraints();
-
-    }
-
-    public interface PolicyConstraintValue
-            extends ValueComposite
-    {
-
-        @Optional
-        Property<Integer> requireExplicitPolicy();
-
-        @Optional
-        Property<Integer> inhibitPolicyMapping();
-
-    }
 
 }

@@ -34,9 +34,6 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.ReasonFlags;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.crypto.x509.KeyUsage;
-import org.codeartisans.qipki.crypto.x509.RevocationReason;
-import org.codeartisans.qipki.crypto.x509.X509GeneralName;
 import org.joda.time.Interval;
 import org.qi4j.api.common.Optional;
 
@@ -60,6 +57,12 @@ public interface X509ExtensionsReader
     GeneralNames getIssuerAlternativeNames( X509Certificate cert );
 
     Set<KeyUsage> getKeyUsages( X509Certificate cert );
+
+    Set<ExtendedKeyUsage> getExtendedKeyUsages( X509Certificate cert );
+
+    Set<NetscapeCertType> getNetscapeCertTypes( X509Certificate cert );
+
+    String getNetscapeCertComment( X509Certificate cert );
 
     NameConstraints getNameConstraints( X509Certificate cert );
 

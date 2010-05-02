@@ -47,10 +47,7 @@ public interface X509DetailValue
     Property<String> sha256Fingerprint();
 
     @Optional
-    Property<String> hexSubjectUniqueIdentifier();
-
-    @Optional
-    Property<String> hexIssuerUniqueIdentifier();
+    Property<String> netscapeCertComment();
 
     @Optional
     Property<KeysExtensionsValue> keysExtensions();

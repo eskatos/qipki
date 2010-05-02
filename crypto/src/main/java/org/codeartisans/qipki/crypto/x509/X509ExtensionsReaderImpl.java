@@ -37,12 +37,14 @@ import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
+import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DEREncodable;
 import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERTaggedObject;
+import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Attribute;
@@ -108,7 +110,7 @@ public class X509ExtensionsReaderImpl
 
                         certificateRequestExtensions = new X509Extensions( extensionsASN1Sequence );
 
-                        Enumeration e = certificateRequestExtensions.oids();
+                        Enumeration<?> e = certificateRequestExtensions.oids();
                         while ( e.hasMoreElements() ) {
                             DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
                             X509Extension ext = certificateRequestExtensions.getExtension( oid );
@@ -154,12 +156,13 @@ public class X509ExtensionsReaderImpl
     }
 
     @Override
+    @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<KeyUsage> getKeyUsages( X509Certificate cert )
     {
         try {
             byte[] value = cert.getExtensionValue( X509Extensions.KeyUsage.getId() );
             if ( value == null ) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
             int usages = org.bouncycastle.asn1.x509.KeyUsage.getInstance( ASN1Object.fromByteArray( value ) ).intValue();
             Set<KeyUsage> keyUsages = new LinkedHashSet<KeyUsage>();
@@ -171,6 +174,64 @@ public class X509ExtensionsReaderImpl
             return keyUsages;
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract KeyUsages from X509Certificate extensions", ex );
+        }
+    }
+
+    @Override
+    @SuppressWarnings( "SetReplaceableByEnumSet" )
+    public Set<ExtendedKeyUsage> getExtendedKeyUsages( X509Certificate cert )
+    {
+        try {
+            byte[] value = cert.getExtensionValue( X509Extensions.ExtendedKeyUsage.getId() );
+            if ( value == null ) {
+                return Collections.emptySet();
+            }
+            org.bouncycastle.asn1.x509.ExtendedKeyUsage usages = org.bouncycastle.asn1.x509.ExtendedKeyUsage.getInstance( ASN1Object.fromByteArray( value ) );
+            Set<ExtendedKeyUsage> keyUsages = new LinkedHashSet<ExtendedKeyUsage>();
+            for ( ExtendedKeyUsage eachPossible : ExtendedKeyUsage.values() ) {
+                if ( usages.hasKeyPurposeId( eachPossible.getKeyPurposeId() ) ) {
+                    keyUsages.add( eachPossible );
+                }
+            }
+            return keyUsages;
+        } catch ( IOException ex ) {
+            throw new QiCryptoFailure( "Unable to extract ExtendedKeyUsages from X509Certificate extensions", ex );
+        }
+    }
+
+    @Override
+    @SuppressWarnings( "SetReplaceableByEnumSet" )
+    public Set<NetscapeCertType> getNetscapeCertTypes( X509Certificate cert )
+    {
+        try {
+            byte[] value = cert.getExtensionValue( MiscObjectIdentifiers.netscapeCertType.getId() );
+            if ( value == null ) {
+                return Collections.emptySet();
+            }
+            int nctIntValue = new org.bouncycastle.asn1.misc.NetscapeCertType( ( DERBitString ) ASN1Object.fromByteArray( value ) ).intValue();
+            Set<NetscapeCertType> netscapeCertTypes = new LinkedHashSet<NetscapeCertType>();
+            for ( NetscapeCertType eachCertType : NetscapeCertType.values() ) {
+                if ( ( nctIntValue & eachCertType.getIntValue() ) == eachCertType.getIntValue() ) {
+                    netscapeCertTypes.add( eachCertType );
+                }
+            }
+            return netscapeCertTypes;
+        } catch ( IOException ex ) {
+            throw new QiCryptoFailure( "Unable to extract NetscapeCertType from X509Certificate extensions", ex );
+        }
+    }
+
+    @Override
+    public String getNetscapeCertComment( X509Certificate cert )
+    {
+        try {
+            byte[] value = cert.getExtensionValue( MiscObjectIdentifiers.netscapeCertComment.getId() );
+            if ( value == null ) {
+                return null;
+            }
+            return ASN1Object.fromByteArray( value ).toString();
+        } catch ( IOException ex ) {
+            throw new QiCryptoFailure( "Unable to extract NetscapeCertComment from X509Certificate extensions", ex );
         }
     }
 
@@ -216,7 +277,7 @@ public class X509ExtensionsReaderImpl
         try {
             byte[] value = cert.getExtensionValue( X509Extensions.CertificatePolicies.getId() );
             if ( value == null ) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
             ASN1Sequence policiesSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
             Set<PolicyInformation> certPolicies = new LinkedHashSet<PolicyInformation>();
@@ -237,7 +298,7 @@ public class X509ExtensionsReaderImpl
         try {
             byte[] value = cert.getExtensionValue( X509Extensions.PolicyMappings.getId() );
             if ( value == null ) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
             ASN1Sequence mappingsSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
             Set<PolicyMapping> mappings = new LinkedHashSet<PolicyMapping>();
@@ -320,7 +381,7 @@ public class X509ExtensionsReaderImpl
         try {
             byte[] value = cert.getExtensionValue( X509Extensions.PolicyConstraints.getId() );
             if ( value == null ) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
             ASN1Sequence constraintsSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
             Set<PolicyConstraint> constraints = new LinkedHashSet<PolicyConstraint>();
@@ -344,10 +405,11 @@ public class X509ExtensionsReaderImpl
     }
 
     @Override
+    @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<RevocationReason> getRevocationReasons( ReasonFlags reasonFlags )
     {
         if ( reasonFlags == null ) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
         int reasons = reasonFlags.intValue();
         Set<RevocationReason> revocationReasons = new LinkedHashSet<RevocationReason>();
@@ -360,10 +422,11 @@ public class X509ExtensionsReaderImpl
     }
 
     @Override
+    @SuppressWarnings( "MapReplaceableByEnumMap" )
     public Map<X509GeneralName, String> asMap( GeneralNames generalNames )
     {
         if ( generalNames == null ) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         Map<X509GeneralName, String> map = new LinkedHashMap<X509GeneralName, String>();
         for ( GeneralName eachGeneralName : generalNames.getNames() ) {
@@ -426,6 +489,7 @@ public class X509ExtensionsReaderImpl
                 }
                 x509GeneralName = X509GeneralName.iPAddress;
                 value = sb.toString();
+                break;
             default:
                 x509GeneralName = X509GeneralName.unknownGeneralName;
                 value = generalName.getName().toString();

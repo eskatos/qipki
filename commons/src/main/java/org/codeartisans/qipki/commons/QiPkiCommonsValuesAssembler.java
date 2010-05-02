@@ -25,10 +25,23 @@ import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import org.codeartisans.qipki.commons.values.crypto.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.commons.values.crypto.x509.AlternativeNamesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.AuthorityKeyIdentifierValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CRLDistributionPointsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.CertificatePoliciesValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.ConstraintsExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.KeysExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.NamesExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.PoliciesExtensionsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PolicyMappingsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.PrivateKeyUsageIntervalValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.SubjectKeyIdentifierValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralNameValue;
 import org.codeartisans.qipki.commons.values.crypto.x509.X509GeneralSubtreeValue;
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
@@ -87,24 +100,26 @@ public class QiPkiCommonsValuesAssembler
                           X509GeneralNameValue.class,
                           X509GeneralSubtreeValue.class,
                           KeysExtensionsValue.class,
-                          KeysExtensionsValue.KeyUsagesValue.class,
-                          KeysExtensionsValue.SubjectKeyIdentifierValue.class,
-                          KeysExtensionsValue.AuthorityKeyIdentifierValue.class,
-                          KeysExtensionsValue.PrivateKeyUsageIntervalValue.class,
-                          KeysExtensionsValue.CRLDistributionPointsValue.class,
+                          KeyUsagesValue.class,
+                          ExtendedKeyUsagesValue.class,
+                          NetscapeCertTypesValue.class,
+                          SubjectKeyIdentifierValue.class,
+                          AuthorityKeyIdentifierValue.class,
+                          PrivateKeyUsageIntervalValue.class,
+                          CRLDistributionPointsValue.class,
                           PoliciesExtensionsValue.class,
-                          PoliciesExtensionsValue.CertificatePoliciesValue.class,
-                          PoliciesExtensionsValue.PolicyInformationValue.class,
-                          PoliciesExtensionsValue.PolicyQualifierInfoValue.class,
-                          PoliciesExtensionsValue.PolicyMappingsValue.class,
-                          PoliciesExtensionsValue.PolicyMappingValue.class,
+                          CertificatePoliciesValue.class,
+                          CertificatePoliciesValue.PolicyInformationValue.class,
+                          CertificatePoliciesValue.PolicyQualifierInfoValue.class,
+                          PolicyMappingsValue.class,
+                          PolicyMappingsValue.PolicyMappingValue.class,
                           NamesExtensionsValue.class,
-                          NamesExtensionsValue.AlternativeNamesValue.class,
+                          AlternativeNamesValue.class,
                           ConstraintsExtensionsValue.class,
-                          ConstraintsExtensionsValue.BasicConstraintsValue.class,
-                          ConstraintsExtensionsValue.PolicyConstraintsValue.class,
-                          ConstraintsExtensionsValue.PolicyConstraintValue.class,
-                          ConstraintsExtensionsValue.NameConstraintsValue.class ).
+                          BasicConstraintsValue.class,
+                          PolicyConstraintsValue.class,
+                          PolicyConstraintsValue.PolicyConstraintValue.class,
+                          NameConstraintsValue.class ).
                 visibleIn( visibility );
         module.addServices( CryptoValuesFactory.class,
                             X509ExtensionsValueFactory.class ).

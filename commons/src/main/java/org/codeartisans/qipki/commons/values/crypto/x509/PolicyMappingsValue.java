@@ -21,33 +21,27 @@
  */
 package org.codeartisans.qipki.commons.values.crypto.x509;
 
-import org.qi4j.api.common.Optional;
+import java.util.Set;
+import org.codeartisans.qipki.commons.fragments.HasCriticality;
+import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-public interface KeysExtensionsValue
-        extends ValueComposite
+public interface PolicyMappingsValue
+        extends HasCriticality, ValueComposite
 {
 
-    @Optional
-    Property<KeyUsagesValue> keyUsages();
+    @UseDefaults
+    Property<Set<PolicyMappingValue>> mappings();
 
-    @Optional
-    Property<ExtendedKeyUsagesValue> extendedKeyUsages();
+    public interface PolicyMappingValue
+            extends ValueComposite
+    {
 
-    @Optional
-    Property<NetscapeCertTypesValue> netscapeCertTypes();
+        Property<String> issuerDomainPolicyOID();
 
-    @Optional
-    Property<SubjectKeyIdentifierValue> subjectKeyIdentifier();
+        Property<String> subjectDomainPolicyOID();
 
-    @Optional
-    Property<AuthorityKeyIdentifierValue> authorityKeyIdentifier();
-
-    @Optional
-    Property<PrivateKeyUsageIntervalValue> privateKeyUsageInterval();
-
-    @Optional
-    Property<CRLDistributionPointsValue> crlDistributionPoints();
+    }
 
 }
