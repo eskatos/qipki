@@ -32,7 +32,7 @@ public interface CAFactoryParamsValue
         extends Nameable, ValueComposite
 {
 
-    Property<String> keyStoreIdentity();
+    Property<String> cryptoStoreUri();
 
     @X500Name
     Property<String> distinguishedName();
@@ -40,6 +40,6 @@ public interface CAFactoryParamsValue
     Property<KeyPairSpecValue> keySpec();
 
     @Optional
-    Property<String> parentCaIdentity();
+    Property<String> parentCaUri();
 
 }

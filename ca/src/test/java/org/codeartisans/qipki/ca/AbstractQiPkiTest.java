@@ -30,6 +30,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
 import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
+import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.core.QiPkiApplication;
@@ -55,6 +56,7 @@ public abstract class AbstractQiPkiTest
     protected CryptIO cryptio;
     protected X509Generator x509Generator;
     protected AsymetricGenerator asymGenerator;
+    protected CryptoValuesFactory cryptoValuesFactory;
     protected ParamsFactory paramsFactory;
     protected ApiURIsValue qiPkiApi;
 
@@ -79,6 +81,7 @@ public abstract class AbstractQiPkiTest
         x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
         asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
+        cryptoValuesFactory = serviceLocator.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
         HttpGet get = new HttpGet( "/api" );
         addAcceptJsonHeader( get );
         String jsonApi = httpClient.execute( new HttpHost( "localhost", DEFAULT_PORT ), get, strResponseHandler );

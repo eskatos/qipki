@@ -1,8 +1,9 @@
 package org.codeartisans.qipki.commons.values.params;
 
+import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
-import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
@@ -18,13 +19,13 @@ public interface ParamsFactory
 
     CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
 
-    KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length );
-
-    CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaIdentity );
+    CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaUri );
 
     X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name );
 
-    X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 );
+    X509ProfileAssignmentValue createX509ProfileAssignment( String x509ProfileUri, KeyEscrowPolicy keyEscrowPolicy );
+
+    X509FactoryParamsValue createX509FactoryParams( String caUri, String pemPkcs10 );
 
     X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
 
@@ -47,25 +48,15 @@ public interface ParamsFactory
         }
 
         @Override
-        public KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length )
-        {
-            ValueBuilder<KeyPairSpecValue> keySpecBuilder = vbf.newValueBuilder( KeyPairSpecValue.class );
-            KeyPairSpecValue keySpec = keySpecBuilder.prototype();
-            keySpec.algorithm().set( algorithm );
-            keySpec.length().set( length );
-            return keySpecBuilder.newInstance();
-        }
-
-        @Override
-        public CAFactoryParamsValue createCAFactoryParams( String keyStoreIdentity, String name, String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
+        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, String parentCaUri )
         {
             ValueBuilder<CAFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CAFactoryParamsValue.class );
             CAFactoryParamsValue params = paramsBuilder.prototype();
-            params.keyStoreIdentity().set( keyStoreIdentity );
+            params.cryptoStoreUri().set( keyStoreUri );
             params.name().set( name );
             params.distinguishedName().set( distinguishedName );
             params.keySpec().set( keySpec );
-            params.parentCaIdentity().set( parentCaIdentity );
+            params.parentCaUri().set( parentCaUri );
             return paramsBuilder.newInstance();
         }
 
@@ -79,11 +70,21 @@ public interface ParamsFactory
         }
 
         @Override
-        public X509FactoryParamsValue createX509FactoryParams( String caIdentity, String pemPkcs10 )
+        public X509ProfileAssignmentValue createX509ProfileAssignment( String x509ProfileUri, KeyEscrowPolicy keyEscrowPolicy )
+        {
+            ValueBuilder<X509ProfileAssignmentValue> profileBuilder = vbf.newValueBuilder( X509ProfileAssignmentValue.class );
+            X509ProfileAssignmentValue profile = profileBuilder.prototype();
+            profile.keyEscrowPolicy().set( keyEscrowPolicy );
+            profile.x509ProfileUri().set( x509ProfileUri );
+            return profileBuilder.newInstance();
+        }
+
+        @Override
+        public X509FactoryParamsValue createX509FactoryParams( String caUri, String pemPkcs10 )
         {
             ValueBuilder<X509FactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509FactoryParamsValue.class );
             X509FactoryParamsValue params = paramsBuilder.prototype();
-            params.caIdentity().set( caIdentity );
+            params.caUri().set( caUri );
             params.pemPkcs10().set( pemPkcs10 );
             return paramsBuilder.newInstance();
         }

@@ -26,6 +26,7 @@ import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
@@ -40,6 +41,7 @@ import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RevocationValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
+import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.core.QiPkiFailure;
@@ -132,7 +134,6 @@ public interface RestletValuesFactory
 
             ksValue.uri().set( uriBuilder.cryptoStore().withIdentity( cs.identity().get() ).build() );
 
-            ksValue.identity().set( cs.identity().get() );
             ksValue.name().set( cs.name().get() );
             ksValue.storeType().set( cs.storeType().get() );
             ksValue.password().set( cs.password().get() );
@@ -152,7 +153,17 @@ public interface RestletValuesFactory
             caValue.crlUri().set( uriBuilder.ca().withIdentity( ca.identity().get() ).crl().build() );
             caValue.cryptoStoreUri().set( uriBuilder.cryptoStore().withIdentity( ca.cryptoStore().get().identity().get() ).build() );
 
-            caValue.identity().set( ca.identity().get() );
+            for ( X509ProfileAssignment eachAllowedProfile : ca.allowedX509Profiles().toSet() ) {
+                ValueBuilder<X509ProfileAssignmentValue> profileBuilder = vbf.newValueBuilder( X509ProfileAssignmentValue.class );
+
+                X509ProfileAssignmentValue profile = profileBuilder.prototype();
+
+                profile.keyEscrowPolicy().set( eachAllowedProfile.keyEscrowPolicy().get() );
+                profile.x509ProfileUri().set( uriBuilder.x509Profile().withIdentity( eachAllowedProfile.x509Profile().get().identity().get() ).build() );
+
+                caValue.allowedX509Profiles().get().add( profileBuilder.newInstance() );
+            }
+
             caValue.name().set( ca.name().get() );
 
             return caValueBuilder.newInstance();

@@ -66,7 +66,7 @@ public class X509ProfileFactoryResource
             X509ProfileListContext x509ProfileListCtx = newRootContext().x509ProfileListContext();
 
             // Interaction
-            X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params );
+            X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params.name().get() );
 
             // Redirect to created resource
             X509ProfileValue x509ProfileValue = restValuesFactory.x509Profile( getRootRef(), x509Profile );

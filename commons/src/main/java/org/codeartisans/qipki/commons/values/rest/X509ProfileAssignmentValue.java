@@ -19,18 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca.profileassignment;
+package org.codeartisans.qipki.commons.values.rest;
 
-import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
-import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
 
-public interface X509ProfileAssignmentState
+public interface X509ProfileAssignmentValue
+        extends ValueComposite
 {
 
     Property<KeyEscrowPolicy> keyEscrowPolicy();
 
-    Association<X509Profile> x509Profile();
+    Property<String> x509ProfileUri();
 
 }

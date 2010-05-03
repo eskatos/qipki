@@ -26,6 +26,7 @@ import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractFactoryResource;
+import org.codeartisans.qipki.ca.presentation.rest.uribuilder.UriResolver;
 import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.qi4j.api.injection.scope.Service;
@@ -60,13 +61,13 @@ public class X509FactoryResource
         try {
 
             // Data
-            X509FactoryParamsValue data = vbf.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
+            X509FactoryParamsValue params = vbf.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
 
             // Context
             X509ListContext caListCtx = newRootContext().x509ListContext();
 
             // Interaction
-            X509 x509 = caListCtx.createX509( data );
+            X509 x509 = caListCtx.createX509( new UriResolver( getRootRef(), params.caUri().get() ).identity(), params.pemPkcs10().get() );
 
             // Redirect to created resource
             X509Value x509Value = restValuesFactory.x509( getRootRef(), x509 );

@@ -71,7 +71,7 @@ public class X509RevocationResource
             X509Context x509Ctx = rootCtx.x509Context( x509Identity );
 
             // Interaction
-            Revocation revocation = x509Ctx.revoke( params );
+            Revocation revocation = x509Ctx.revoke( params.reason().get() );
 
             // Representation
             return new StringRepresentation( valuesFactory.revocation( getRootRef(), revocation ).toJSON(),

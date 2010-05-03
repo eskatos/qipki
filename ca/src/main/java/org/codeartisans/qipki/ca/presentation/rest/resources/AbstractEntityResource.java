@@ -27,6 +27,7 @@ import org.qi4j.api.object.ObjectBuilderFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -95,6 +96,18 @@ public abstract class AbstractEntityResource
         } catch ( IOException ex ) {
             throw new ResourceException( ex );
         }
+    }
+
+    /**
+     * Shortcut to apply POST/302/GET redirect pattern.
+     *
+     * @param getURI URI of the updated resource
+     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
+     */
+    protected final Representation redirectToUpdatedResource( String getURI )
+    {
+        getResponse().redirectSeeOther( getURI );
+        return new EmptyRepresentation();
     }
 
 }

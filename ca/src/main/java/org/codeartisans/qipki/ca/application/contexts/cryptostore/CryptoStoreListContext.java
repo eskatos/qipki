@@ -24,8 +24,8 @@ package org.codeartisans.qipki.ca.application.contexts.cryptostore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.qi4j.api.query.Query;
 
 public class CryptoStoreListContext
@@ -37,9 +37,9 @@ public class CryptoStoreListContext
         return context.role( CryptoStoreRepository.class ).findAllPaginated( start, 25 );
     }
 
-    public CryptoStore createCryptoStore( CryptoStoreFactoryParamsValue params )
+    public CryptoStore createCryptoStore( String name, KeyStoreType storeType, char[] password )
     {
-        return context.role( CryptoStoreFactory.class ).create( params );
+        return context.role( CryptoStoreFactory.class ).create( name, storeType, password );
     }
 
 }

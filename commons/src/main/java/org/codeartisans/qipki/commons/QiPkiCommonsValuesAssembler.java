@@ -56,6 +56,7 @@ import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RevocationValue;
 import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
+import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.qi4j.api.common.Visibility;
@@ -130,6 +131,7 @@ public class QiPkiCommonsValuesAssembler
                           ApiURIsValue.class,
                           CryptoStoreValue.class,
                           CAValue.class,
+                          X509ProfileAssignmentValue.class,
                           X509ProfileValue.class,
                           X509Value.class,
                           X509DetailValue.class,

@@ -28,7 +28,7 @@ public interface X509FactoryParamsValue
         extends ValueComposite
 {
 
-    Property<String> caIdentity();
+    Property<String> caUri();
 
     Property<String> pemPkcs10();
 

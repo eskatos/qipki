@@ -23,14 +23,36 @@ package org.codeartisans.qipki.ca.domain.ca.profileassignment;
 
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
-import org.qi4j.api.entity.association.Association;
-import org.qi4j.api.property.Property;
+import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-public interface X509ProfileAssignmentState
+@Mixins( X509ProfileAssignmentFactory.Mixin.class )
+public interface X509ProfileAssignmentFactory
+        extends ServiceComposite
 {
 
-    Property<KeyEscrowPolicy> keyEscrowPolicy();
+    X509ProfileAssignment create( KeyEscrowPolicy keyEscrowPolicy, X509Profile profile );
 
-    Association<X509Profile> x509Profile();
+    abstract class Mixin
+            implements X509ProfileAssignmentFactory
+    {
+
+        @Structure
+        private UnitOfWorkFactory uowf;
+
+        @Override
+        public X509ProfileAssignment create( KeyEscrowPolicy keyEscrowPolicy, X509Profile profile )
+        {
+            EntityBuilder<X509ProfileAssignment> profileAssignmentBuilder = uowf.currentUnitOfWork().newEntityBuilder( X509ProfileAssignment.class );
+            X509ProfileAssignment profileAssignment = profileAssignmentBuilder.instance();
+            profileAssignment.keyEscrowPolicy().set( keyEscrowPolicy );
+            profileAssignment.x509Profile().set( profile );
+            return profileAssignmentBuilder.newInstance();
+        }
+
+    }
 
 }

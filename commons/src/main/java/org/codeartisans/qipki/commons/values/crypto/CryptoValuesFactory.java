@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.values.crypto;
 
 import java.util.Date;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.joda.time.Interval;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -37,6 +38,8 @@ public interface CryptoValuesFactory
     ValidityIntervalValue buildValidityInterval( Interval interval );
 
     ValidityIntervalValue buildValidityInterval( Date notBefore, Date notAfter );
+
+    KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length );
 
     abstract class Mixin
             implements CryptoValuesFactory
@@ -59,6 +62,16 @@ public interface CryptoValuesFactory
             interval.notBefore().set( notBefore );
             interval.notAfter().set( notAfter );
             return builder.newInstance();
+        }
+
+        @Override
+        public KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length )
+        {
+            ValueBuilder<KeyPairSpecValue> keySpecBuilder = vbf.newValueBuilder( KeyPairSpecValue.class );
+            KeyPairSpecValue keySpec = keySpecBuilder.prototype();
+            keySpec.algorithm().set( algorithm );
+            keySpec.length().set( length );
+            return keySpecBuilder.newInstance();
         }
 
     }
