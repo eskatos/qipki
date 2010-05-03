@@ -58,20 +58,25 @@ Next steps
 
   DONE Refactor X509ExtensionsValueFactory so that we expose internal code needed to build X509Profile
 
+  DONE Write a UriEntityResolver that does the exact oposite of UriBuilder so that client manipulate only URIs and no Identity strings
+
+  DONE Refactor resources, client code and unit tests so that they use only URIs and no Identity
+
+  DONE Think about ParamsValues that will now contains URIs only and no Identity
+    --> Contexts don't consume ParamsValues but real parameters
+
   IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
     QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
 
   IN_PROGESS  Add support for certificate profiles
-    QUID X509ProfileAssignment aggregated in CA ?
-        yes, so that when removing a ca, it removes its assignments
-        still needs to handle X509Profile deletion manually
-    QUID model as resource ? seems to be a good choice
+    X509ProfileAssignment aggregated in CA so that when removing a ca, it removes its assignments but still needs to handle X509Profile deletion manually
+    TODO Model as a CA subresource so client can POST on it to update CA assignments
+        /ca/{identity}/profiles return a list of profiles, POST update this list
     Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
 
-
-
+  
 
   Add tools resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
     With this we can write unit tests for certificate parsing using a bunch of external certificates

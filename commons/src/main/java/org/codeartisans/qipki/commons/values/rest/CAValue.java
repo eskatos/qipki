@@ -21,8 +21,10 @@
  */
 package org.codeartisans.qipki.commons.values.rest;
 
+import java.util.Set;
 import org.codeartisans.qipki.commons.fragments.Listable;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
@@ -33,11 +35,12 @@ public interface CAValue
         extends RestValue, Nameable, Listable, ValueComposite
 {
 
-    Property<String> identity();
-
     Property<String> cryptoStoreUri();
 
     Property<String> crlUri();
+
+    @UseDefaults
+    Property<Set<X509ProfileAssignmentValue>> allowedX509Profiles();
 
     abstract class Mixin
             implements CAValue

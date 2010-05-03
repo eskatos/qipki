@@ -34,6 +34,7 @@ import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
@@ -63,6 +64,8 @@ public class RootContext
     private X509ProfileFactory x509ProfileFactory;
     @Service
     private X509ProfileRepository x509ProfileRepository;
+    @Service
+    private X509ProfileAssignmentFactory x509ProfileAssignmentFactory;
     @Service
     private X509Factory x509Factory;
     @Service
@@ -95,6 +98,8 @@ public class RootContext
         CA ca = caRepos.findByIdentity( identity );
         context.playRoles( ca, CA.class );
         context.playRoles( x509Repository, X509Repository.class );
+        context.playRoles( x509ProfileAssignmentFactory, X509ProfileAssignmentFactory.class );
+        context.playRoles( x509ProfileRepository, X509ProfileRepository.class );
         return subContext( CAContext.class );
     }
 

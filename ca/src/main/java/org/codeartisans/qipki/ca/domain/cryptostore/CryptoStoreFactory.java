@@ -22,8 +22,8 @@
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import java.security.KeyStore;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -39,7 +39,7 @@ public interface CryptoStoreFactory
         extends ServiceComposite
 {
 
-    CryptoStore create( CryptoStoreFactoryParamsValue params );
+    CryptoStore create( String name, KeyStoreType storeType, char[] password );
 
     abstract class Mixin
             implements CryptoStoreFactory
@@ -51,15 +51,15 @@ public interface CryptoStoreFactory
         private CryptIO cryptIO;
 
         @Override
-        public CryptoStore create( CryptoStoreFactoryParamsValue params )
+        public CryptoStore create( String name, KeyStoreType storeType, char[] password )
         {
             EntityBuilder<CryptoStore> ksBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStore.class );
 
             CryptoStore ksEntity = ksBuilder.instance();
 
-            ksEntity.name().set( params.name().get() );
-            ksEntity.storeType().set( params.storeType().get() );
-            ksEntity.password().set( params.password().get() );
+            ksEntity.name().set( name );
+            ksEntity.storeType().set( storeType );
+            ksEntity.password().set( password );
 
             KeyStore keystore = cryptIO.createEmptyKeyStore( ksEntity.storeType().get() );
             ksEntity.payload().set( cryptIO.base64Encode( keystore, ksEntity.password().get() ) );

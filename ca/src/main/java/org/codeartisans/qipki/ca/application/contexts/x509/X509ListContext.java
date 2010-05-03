@@ -29,7 +29,6 @@ import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
-import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.injection.scope.Service;
@@ -48,16 +47,16 @@ public class X509ListContext
         return context.role( X509Repository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509 createX509( X509FactoryParamsValue params )
+    public X509 createX509( String caIdentity, String pkcs10PEM )
     {
         try {
-            CA ca = context.role( CARepository.class ).findByIdentity( params.caIdentity().get() );
-            X509Certificate cert = ca.sign( cryptIO.readPKCS10PEM( new StringReader( params.pemPkcs10().get() ) ) );
+            CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
+            X509Certificate cert = ca.sign( cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
             X509 x509 = context.role( X509Factory.class ).create( cert, ca );
             return x509;
 
         } catch ( NoSuchEntityException ex ) {
-            throw new WrongParametersBuilder().title( "Invalid CA identity: " + params.caIdentity().get() ).build( ex );
+            throw new WrongParametersBuilder().title( "Invalid CA identity: " + pkcs10PEM ).build( ex );
         }
     }
 

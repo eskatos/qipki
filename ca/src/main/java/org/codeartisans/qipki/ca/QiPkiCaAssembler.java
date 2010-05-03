@@ -48,6 +48,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileEntity;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentEntity;
+import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.codeartisans.qipki.ca.presentation.http.HttpService;
 import org.codeartisans.qipki.ca.presentation.http.RootServletService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletApplication;
@@ -240,6 +241,7 @@ public class QiPkiCaAssembler
                                         CARepository.class,
                                         CAFactory.class,
                                         CRLFactory.class,
+                                        X509ProfileAssignmentFactory.class,
                                         X509ProfileRepository.class,
                                         X509ProfileFactory.class,
                                         X509Repository.class,

@@ -26,10 +26,9 @@ import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
+import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.core.dci.InteractionContext;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qi4j.api.injection.scope.Service;
@@ -63,7 +62,7 @@ public interface QiPkiCaFixtures
         @Structure
         private ObjectBuilderFactory obf;
         @Service
-        private ParamsFactory paramsFactory;
+        private CryptoValuesFactory cryptoValuesFactory;
 
         @Override
         public void activate()
@@ -73,16 +72,15 @@ public interface QiPkiCaFixtures
             RootContext rootCtx = newRootContext();
 
             // Create a test keystore
-            CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
-            CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( csParams );
+            CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
             KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CryptoStoreBehavior
 
             // Create some test CAs
             CAListContext caListCtx = rootCtx.caListContext();
-            KeyPairSpecValue keySpec = paramsFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-            CA rootCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), ROOT_CA_NAME, ROOT_CA_DN, keySpec, null ) );
-            CA usersCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), USERS_CA_NAME, USERS_CA_DN, keySpec, null ) );
-            CA servicesCa = caListCtx.createCA( paramsFactory.createCAFactoryParams( cryptoStore.identity().get(), SERVICES_CA_NAME, SERVICES_CA_DN, keySpec, null ) );
+            KeyPairSpecValue keySpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
+            CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, ROOT_CA_DN, keySpec );
+            CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, USERS_CA_DN, keySpec );
+            CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, SERVICES_CA_DN, keySpec );
 
             String cryptoStoreId = cryptoStore.identity().get();
             String rootId = rootCa.identity().get();

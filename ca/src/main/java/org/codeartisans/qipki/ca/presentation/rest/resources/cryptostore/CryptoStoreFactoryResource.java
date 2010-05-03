@@ -60,13 +60,13 @@ public class CryptoStoreFactoryResource
         try {
 
             // Data
-            CryptoStoreFactoryParamsValue data = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
+            CryptoStoreFactoryParamsValue params = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
 
             // Context
             CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();
 
             // Interaction
-            CryptoStore cs = csListCtx.createCryptoStore( data );
+            CryptoStore cs = csListCtx.createCryptoStore( params.name().get(), params.storeType().get(), params.password().get() );
 
             // Redirect to created resource
             CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef(), cs );

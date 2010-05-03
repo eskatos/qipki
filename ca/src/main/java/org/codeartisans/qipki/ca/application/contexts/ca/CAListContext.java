@@ -21,14 +21,17 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
-import org.codeartisans.java.toolbox.StringUtils;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
+import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
+import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.constraints.X500Name;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 
@@ -41,25 +44,25 @@ public class CAListContext
         return context.role( CARepository.class ).findAllPaginated( start, 25 );
     }
 
-    public CA createCA( CAFactoryParamsValue params )
+    public RootCA createRootCA( String cryptoStoreIdentity, String name, @X500Name String distinguishedName, KeyPairSpecValue keySpec )
     {
-        CryptoStore keyStore = context.role( CryptoStoreRepository.class ).findByIdentity( params.keyStoreIdentity().get() );
-        CA parentCA = fetchParentCA( params.parentCaIdentity().get() );
-        if ( parentCA == null ) {
-            return context.role( CAFactory.class ).createRootCA( params.name().get(), params.distinguishedName().get(), params.keySpec().get(), keyStore );
-        }
-        return context.role( CAFactory.class ).createSubCA( parentCA, params.name().get(), params.distinguishedName().get(), params.keySpec().get(), keyStore );
+        CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
+        return context.role( CAFactory.class ).createRootCA( name, distinguishedName, keySpec, cryptoStore );
+    }
+
+    public SubCA createSubCA( String cryptoStoreIdentity, String name, @X500Name String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
+    {
+        CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
+        CA parentCA = fetchParentCA( parentCaIdentity );
+        return context.role( CAFactory.class ).createSubCA( parentCA, name, distinguishedName, keySpec, cryptoStore );
     }
 
     private CA fetchParentCA( String identity )
     {
-        if ( StringUtils.isEmpty( identity ) ) {
-            return null;
-        }
         try {
             return context.role( CARepository.class ).findByIdentity( identity );
         } catch ( NoSuchEntityException ex ) {
-            return null;
+            throw new WrongParametersBuilder().missings( "Parent CA Identity" ).build( ex );
         }
     }
 

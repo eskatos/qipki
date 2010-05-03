@@ -31,6 +31,7 @@ public class WrongParametersBuilder
         extends Exception
 {
 
+    private static final long serialVersionUID = 1L;
     private String title;
     private List<String> missings;
     private List<String> illegals;
@@ -51,11 +52,13 @@ public class WrongParametersBuilder
         return new WrongParametersBuilder( title, missings, illegals );
     }
 
+    // TODO Make WrongParametersBuilder.missings() method additive
     public WrongParametersBuilder missings( String... missings )
     {
         return new WrongParametersBuilder( title, Arrays.asList( missings ), illegals );
     }
 
+    // TODO Make WrongParametersBuilder.illegals() method additive
     public WrongParametersBuilder illegals( String... illegals )
     {
         return new WrongParametersBuilder( title, missings, Arrays.asList( illegals ) );

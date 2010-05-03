@@ -21,18 +21,25 @@
  */
 package org.codeartisans.qipki.ca.domain.ca;
 
+import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.association.Association;
+import org.qi4j.api.entity.association.ManyAssociation;
 
 public interface CAState
         extends Nameable, Identity
 {
 
     Association<CryptoStore> cryptoStore();
+
+    @Aggregated
+    @UseDefaults
+    ManyAssociation<X509ProfileAssignment> allowedX509Profiles();
 
     @Aggregated
     Association<CRL> crl();
