@@ -29,16 +29,23 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.constants.Time;
 import org.codeartisans.qipki.crypto.io.CryptIO;
@@ -46,6 +53,8 @@ import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
 import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
+import org.codeartisans.qipki.crypto.x509.X509ExtensionHolder;
+import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.qi4j.api.injection.scope.Service;
@@ -58,10 +67,18 @@ public abstract class CAMixin
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( RootCAMixin.class );
+    private static final Set<String> ALLOWED_REQUESTED_EXTENSIONS = new HashSet<String>();
+
+    static {
+        ALLOWED_REQUESTED_EXTENSIONS.add( X509Extensions.SubjectAlternativeName.getId() );
+    }
+
     @Service
     private X509Generator x509Generator;
     @Service
     private X509ExtensionsReader x509ExtReader;
+    @Service
+    private X509ExtensionsBuilder x509ExtBuilder;
     @Service
     private CryptIO cryptIO;
     @Service
@@ -90,15 +107,21 @@ public abstract class CAMixin
     }
 
     @Override
-    public X509Certificate sign( PKCS10CertificationRequest pkcs10 )
+    public X509Certificate sign( X509Profile x509profile, PKCS10CertificationRequest pkcs10 )
     {
-        LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request" );
+        LOGGER.debug( "Handling a PKCS#10 Certificate Signing Request using X509Profile " + x509profile.name().get() );
         try {
 
-            X509Extensions requestedExtensions = x509ExtReader.extractRequestedExtensions( pkcs10 );
+            ensureX509ProfileIsAllowed( x509profile );
 
-            // TODO add Basic Constraints
-            // TODO add CRL Distribution point !
+            List<X509ExtensionHolder> requestedExtensions = x509ExtReader.extractRequestedExtensions( pkcs10 );
+            ensureNoIllegalRequestedExtensions( requestedExtensions );
+
+            // TODO apply X509Profile on issued X509Certificate
+
+            // TODO Climb up the CA hierarchy to add inherited CRL distpoints
+            CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
+            requestedExtensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
 
             X509Certificate certificate = x509Generator.generateX509Certificate( privateKey(),
                                                                                  certificate().getSubjectX500Principal(),
@@ -113,9 +136,25 @@ public abstract class CAMixin
         } catch ( GeneralSecurityException ex ) {
             LOGGER.error( ex.getMessage(), ex );
             throw new QiPkiFailure( "Unable to enroll PKCS#10", ex );
-        } catch ( IllegalStateException ex ) {
-            LOGGER.error( ex.getMessage(), ex );
-            throw new QiPkiFailure( "Unable to enroll PKCS#10", ex );
+        }
+    }
+
+    private void ensureX509ProfileIsAllowed( X509Profile x509profile )
+    {
+        for ( X509ProfileAssignment eachAssignment : state.allowedX509Profiles() ) {
+            if ( eachAssignment.x509Profile().get().equals( x509profile ) ) {
+                return;
+            }
+        }
+        throw new WrongParametersBuilder().illegals( "X509Profile " + x509profile.name().get() + " is not allowed on CA " + state.name().get() ).build();
+    }
+
+    private void ensureNoIllegalRequestedExtensions( List<X509ExtensionHolder> requestedExtensions )
+    {
+        for ( X509ExtensionHolder eachDerOid : requestedExtensions ) {
+            if ( !ALLOWED_REQUESTED_EXTENSIONS.contains( eachDerOid.getDerOID().getId() ) ) {
+                throw new WrongParametersBuilder().illegals( "Illegal requested extension in PKCS#10 request: " + eachDerOid.getDerOID().getId() ).build();
+            }
         }
     }
 

@@ -67,7 +67,9 @@ public class X509FactoryResource
             X509ListContext caListCtx = newRootContext().x509ListContext();
 
             // Interaction
-            X509 x509 = caListCtx.createX509( new UriResolver( getRootRef(), params.caUri().get() ).identity(), params.pemPkcs10().get() );
+            X509 x509 = caListCtx.createX509( new UriResolver( getRootRef(), params.caUri().get() ).identity(),
+                                              new UriResolver( getRootRef(), params.x509ProfileUri().get() ).identity(),
+                                              params.pemPkcs10().get() );
 
             // Redirect to created resource
             X509Value x509Value = restValuesFactory.x509( getRootRef(), x509 );
