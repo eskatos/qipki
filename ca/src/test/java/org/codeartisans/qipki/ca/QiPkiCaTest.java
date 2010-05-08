@@ -50,6 +50,7 @@ import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.qi4j.api.value.ValueBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,15 +116,17 @@ public class QiPkiCaTest
 
 
         // Add profile to CA
-        // TODO Do not work because of Values immutability, need to think differently about it
-//        post = new HttpPost( ca.uri().get() );
-//        addAcceptJsonHeader( post );
-//        ca.allowedX509Profiles().get().add( paramsFactory.createX509ProfileAssignment( sslClientProfile.uri().get(), KeyEscrowPolicy.allowed ) );
-//        post.setEntity( new StringEntity( ca.toJSON() ) );
-//        caJson = httpClient.execute( post, strResponseHandler );
-//        ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
+        post = new HttpPost( ca.uri().get() );
+        addAcceptJsonHeader( post );
+        ValueBuilder<CAValue> caValueBuilder = valueBuilderFactory.newValueBuilder( CAValue.class ).withPrototype( ca ); // Needed as Values are immutables
+        ca = caValueBuilder.prototype();
+        ca.allowedX509Profiles().get().add( paramsFactory.createX509ProfileAssignment( sslClientProfile.uri().get(), KeyEscrowPolicy.allowed ) );
+        ca = caValueBuilder.newInstance();
+        post.setEntity( new StringEntity( ca.toJSON() ) );
+        caJson = httpClient.execute( post, strResponseHandler );
+        ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
 
-        
+
         // Request certificate on X509Factory with a PKCS#10 request using the first CA
         KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
         PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10(
