@@ -76,7 +76,7 @@ Next steps
         /ca/{identity}/profiles return a list of profiles, POST update this list
     Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
 
-  
+  Move FactoryResources as post in ListResources
 
   Add tools resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
     With this we can write unit tests for certificate parsing using a bunch of external certificates
