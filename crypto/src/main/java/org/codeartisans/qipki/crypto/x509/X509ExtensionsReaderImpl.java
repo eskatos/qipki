@@ -25,11 +25,13 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
@@ -63,6 +65,7 @@ import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 import org.codeartisans.qipki.crypto.codec.CryptCodex;
 import org.joda.time.DateTime;
@@ -81,12 +84,13 @@ public class X509ExtensionsReaderImpl
     }
 
     @Override
-    public X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 )
+    public List<X509ExtensionHolder> extractRequestedExtensions( PKCS10CertificationRequest pkcs10 )
     {
+        final List<X509ExtensionHolder> extractedExtensions = new ArrayList<X509ExtensionHolder>();
         final CertificationRequestInfo certificationRequestInfo = pkcs10.getCertificationRequestInfo();
         final ASN1Set attributesAsn1Set = certificationRequestInfo.getAttributes();
         if ( attributesAsn1Set == null ) {
-            return null;
+            return extractedExtensions;
         }
         // The `Extension Request` attribute is contained within an ASN.1 Set,
         // usually as the first element.
@@ -103,28 +107,26 @@ public class X509ExtensionsReaderImpl
                     final ASN1Set attributeValues = attribute.getAttrValues();
 
                     // The X509Extensions are contained as a value of the ASN.1 Set.
-                    // Assume that it is the first value of the set.
+                    // WARN Assuming that it is the first value of the set.
                     if ( attributeValues.size() >= 1 ) {
                         DEREncodable extensionsDEREncodable = attributeValues.getObjectAt( 0 );
                         ASN1Sequence extensionsASN1Sequence = ( ASN1Sequence ) extensionsDEREncodable;
-
                         certificateRequestExtensions = new X509Extensions( extensionsASN1Sequence );
-
-                        Enumeration<?> e = certificateRequestExtensions.oids();
-                        while ( e.hasMoreElements() ) {
-                            DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
-                            X509Extension ext = certificateRequestExtensions.getExtension( oid );
-                            boolean critical = ext.isCritical();
-                            ASN1OctetString value = ext.getValue();
-                        }
-
                         // No need to search any more.
                         break;
                     }
                 }
             }
         }
-        return certificateRequestExtensions;
+        if ( certificateRequestExtensions != null ) {
+            Enumeration<?> e = certificateRequestExtensions.oids();
+            while ( e.hasMoreElements() ) {
+                DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
+                X509Extension extension = certificateRequestExtensions.getExtension( oid );
+                extractedExtensions.add( new X509ExtensionHolder( oid, extension.isCritical(), extension.getValue() ) );
+            }
+        }
+        return extractedExtensions;
     }
 
     @Override
@@ -263,7 +265,7 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            CRLDistPoint crlDistPoints = CRLDistPoint.getInstance( ASN1Object.fromByteArray( value ) );
+            CRLDistPoint crlDistPoints = CRLDistPoint.getInstance( X509ExtensionUtil.fromExtensionValue( value ) );
             return crlDistPoints.getDistributionPoints();
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract CRLDistributionPoints from X509Certificate extensions", ex );
@@ -327,7 +329,7 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) X509ExtensionUtil.fromExtensionValue( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract SubjectAlternativeName from X509Certificate extensions", ex );
         }
@@ -341,7 +343,7 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) X509ExtensionUtil.fromExtensionValue( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract IssuerAlternativeName from X509Certificate extensions", ex );
         }

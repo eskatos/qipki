@@ -362,8 +362,12 @@ public interface X509ExtensionsValueFactory
                     default:
                         endpoints.add( cryptCodex.toString( eachPoint.getDistributionPoint().getName() ) );
                 }
-                reasons.addAll( x509ExtReader.getRevocationReasons( eachPoint.getReasons() ) );
-                issuerNames.addAll( buildSetOfGeneralNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
+                if ( eachPoint.getReasons() != null ) {
+                    reasons.addAll( x509ExtReader.getRevocationReasons( eachPoint.getReasons() ) );
+                }
+                if ( eachPoint.getCRLIssuer() != null ) {
+                    issuerNames.addAll( buildSetOfGeneralNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
+                }
             }
             cdpValue.endpoints().set( endpoints );
             cdpValue.reasons().set( reasons );

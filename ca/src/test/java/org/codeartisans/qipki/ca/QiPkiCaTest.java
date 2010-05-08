@@ -133,7 +133,8 @@ public class QiPkiCaTest
                 new X500Principal( "CN=qipki" ), keyPair,
                 new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );
         String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
-        X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), pkcs10PEM );
+        LOGGER.debug( "Will request a new X509 with the following PKCS#10: " + pkcs10PEM );
+        X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), pkcs10PEM );
         post = new HttpPost( qiPkiApi.x509FactoryUri().get() );
         addAcceptJsonHeader( post );
         post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );

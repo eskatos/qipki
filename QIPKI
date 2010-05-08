@@ -65,6 +65,9 @@ Next steps
   DONE Think about ParamsValues that will now contains URIs only and no Identity
     --> Contexts don't consume ParamsValues but real parameters
 
+  Added CRL Endpoint in issued X509Certificates
+    Need to find a way to get the RootReference data in CAMixin in order to build the URL ... something is weird here
+
   IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
@@ -72,6 +75,7 @@ Next steps
 
   IN_PROGESS  Add support for certificate profiles
     X509ProfileAssignment aggregated in CA so that when removing a ca, it removes its assignments but still needs to handle X509Profile deletion manually
+    Handle requested extensions in PKCS#10, only SubjectAlternativeNames is allowed for now but the mechanism is in place.
     TODO Model as a CA subresource so client can POST on it to update CA assignments
         /ca/{identity}/profiles return a list of profiles, POST update this list
     Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.

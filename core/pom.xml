@@ -23,7 +23,12 @@
             <artifactId>java-toolbox</artifactId>
             <version>${version.java-toolbox}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${version.bouncy}</version>
+        </dependency>
+        
         <!-- Qi4j runtime -->
         <dependency>
             <groupId>org.qi4j.core</groupId>

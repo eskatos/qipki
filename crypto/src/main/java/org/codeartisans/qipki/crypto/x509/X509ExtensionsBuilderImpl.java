@@ -24,11 +24,26 @@ package org.codeartisans.qipki.crypto.x509;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERIA5String;
+import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.CRLDistPoint;
+import org.bouncycastle.asn1.x509.DistributionPoint;
+import org.bouncycastle.asn1.x509.DistributionPointName;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.asn1.x509.X509Name;
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 
 public class X509ExtensionsBuilderImpl
@@ -57,6 +72,39 @@ public class X509ExtensionsBuilderImpl
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
         }
+    }
+
+    @Override
+    public CRLDistPoint buildCRLDistributionPoints( X500Principal issuer, String... crlUris )
+    {
+        Map<X500Principal, Iterable<String>> crlDistPointsData = new HashMap<X500Principal, Iterable<String>>();
+        crlDistPointsData.put( issuer, Arrays.asList( crlUris ) );
+        return buildCRLDistributionPoints( crlDistPointsData );
+    }
+
+    @Override
+    public CRLDistPoint buildCRLDistributionPoints( Map<X500Principal, Iterable<String>> crlDistPointsData )
+    {
+        List<DistributionPoint> distributionPoints = new ArrayList<DistributionPoint>();
+        for ( Map.Entry<X500Principal, Iterable<String>> eachIssuerEntry : crlDistPointsData.entrySet() ) {
+
+            GeneralName issuerName = new GeneralName( new X509Name( eachIssuerEntry.getKey().getName() ) );
+            ASN1EncodableVector issuerVector = new ASN1EncodableVector();
+            issuerVector.add( issuerName );
+            GeneralNames issuerNames = new GeneralNames( new DERSequence( issuerVector ) );
+
+            for ( String eachEndpoint : eachIssuerEntry.getValue() ) {
+
+                GeneralName endpointName = new GeneralName( GeneralName.uniformResourceIdentifier, new DERIA5String( eachEndpoint ) );
+                ASN1EncodableVector epVector = new ASN1EncodableVector();
+                epVector.add( endpointName );
+                GeneralNames endpointNames = new GeneralNames( new DERSequence( epVector ) );
+                DistributionPointName dpn = new DistributionPointName( DistributionPointName.FULL_NAME, endpointNames );
+
+                distributionPoints.add( new DistributionPoint( dpn, null, issuerNames ) );
+            }
+        }
+        return new CRLDistPoint( distributionPoints.toArray( new DistributionPoint[ distributionPoints.size() ] ) );
     }
 
 }

@@ -19,19 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons.values.params;
+package org.codeartisans.qipki.crypto.x509;
 
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
+import org.bouncycastle.asn1.DEREncodable;
+import org.bouncycastle.asn1.DERObjectIdentifier;
 
-public interface X509FactoryParamsValue
-        extends ValueComposite
+public final class X509ExtensionHolder
 {
 
-    Property<String> caUri();
+    private final DERObjectIdentifier derOID;
+    private final boolean critical;
+    private final DEREncodable value;
 
-    Property<String> x509ProfileUri();
+    public X509ExtensionHolder( DERObjectIdentifier derOID, boolean critical, DEREncodable value )
+    {
+        this.derOID = derOID;
+        this.critical = critical;
+        this.value = value;
+    }
 
-    Property<String> pemPkcs10();
+    public DERObjectIdentifier getDerOID()
+    {
+        return derOID;
+    }
+
+    public boolean isCritical()
+    {
+        return critical;
+    }
+
+    public DEREncodable getValue()
+    {
+        return value;
+    }
 
 }

@@ -28,6 +28,8 @@ import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
@@ -47,11 +49,12 @@ public class X509ListContext
         return context.role( X509Repository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509 createX509( String caIdentity, String pkcs10PEM )
+    public X509 createX509( String caIdentity, String x509ProfileIdentity, String pkcs10PEM )
     {
         try {
             CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
-            X509Certificate cert = ca.sign( cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
+            X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
+            X509Certificate cert = ca.sign( x509Profile, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
             X509 x509 = context.role( X509Factory.class ).create( cert, ca );
             return x509;
 

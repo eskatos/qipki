@@ -22,7 +22,10 @@
 package org.codeartisans.qipki.crypto.x509;
 
 import java.security.PublicKey;
+import java.util.Map;
+import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 
 public interface X509ExtensionsBuilder
@@ -31,5 +34,9 @@ public interface X509ExtensionsBuilder
     SubjectKeyIdentifier buildSubjectKeyIdentifier( PublicKey publicKey );
 
     AuthorityKeyIdentifier buildAuthorityKeyIdentifier( PublicKey publicKey );
+
+    CRLDistPoint buildCRLDistributionPoints( Map<X500Principal, Iterable<String>> crlDistPointsData );
+
+    CRLDistPoint buildCRLDistributionPoints( X500Principal issuer, String... crlUris );
 
 }

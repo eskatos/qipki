@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.crypto.x509;
 
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
@@ -32,7 +33,6 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.NameConstraints;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.ReasonFlags;
-import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.joda.time.Interval;
 import org.qi4j.api.common.Optional;
@@ -40,7 +40,7 @@ import org.qi4j.api.common.Optional;
 public interface X509ExtensionsReader
 {
 
-    X509Extensions extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
+    List<X509ExtensionHolder> extractRequestedExtensions( PKCS10CertificationRequest pkcs10 );
 
     Map.Entry<X509GeneralName, String> asImmutableMapEntry( GeneralName generalName );
 

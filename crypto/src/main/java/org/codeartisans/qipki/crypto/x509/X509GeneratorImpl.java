@@ -27,10 +27,9 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import javax.security.auth.x500.X500Principal;
-import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
@@ -87,7 +86,7 @@ public class X509GeneratorImpl
                                                     X509Name subjectDN,
                                                     PublicKey publicKey,
                                                     Duration validity,
-                                                    X509Extensions x509Extensions )
+                                                    List<X509ExtensionHolder> x509Extensions )
     {
         try {
 
@@ -103,16 +102,8 @@ public class X509GeneratorImpl
             x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
             x509v3Generator.setPublicKey( publicKey );
 
-            if ( x509Extensions != null ) {
-                // Adding requested X509Extensions
-                Enumeration oids = x509Extensions.oids();
-                while ( oids.hasMoreElements() ) {
-                    DERObjectIdentifier eachOid = ( DERObjectIdentifier ) oids.nextElement();
-                    X509Extension eachExtension = x509Extensions.getExtension( eachOid );
-                    x509v3Generator.addExtension( eachOid,
-                                                  eachExtension.isCritical(),
-                                                  X509Extension.convertValueToObject( eachExtension ) );
-                }
+            for ( X509ExtensionHolder eachExtensionHolder : x509Extensions ) {
+                x509v3Generator.addExtension( eachExtensionHolder.getDerOID(), eachExtensionHolder.isCritical(), eachExtensionHolder.getValue() );
             }
 
             return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );
@@ -124,6 +115,7 @@ public class X509GeneratorImpl
         }
     }
 
+    @SuppressWarnings( { "UseOfObsoleteCollectionType", "unchecked" } )
     private DERSet generateSANAttribute( GeneralNames subGeneralNames )
     {
         if ( subGeneralNames == null ) {
@@ -139,4 +131,3 @@ public class X509GeneratorImpl
     }
 
 }
-

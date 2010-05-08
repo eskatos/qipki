@@ -121,6 +121,7 @@ public class RootContext
     {
         context.playRoles( x509Repository, X509Repository.class );
         context.playRoles( x509Factory, X509Factory.class );
+        context.playRoles( x509ProfileRepository, X509ProfileRepository.class );
         context.playRoles( caRepos, CARepository.class );
         return subContext( X509ListContext.class );
     }

@@ -25,7 +25,7 @@ public interface ParamsFactory
 
     X509ProfileAssignmentValue createX509ProfileAssignment( String x509ProfileUri, KeyEscrowPolicy keyEscrowPolicy );
 
-    X509FactoryParamsValue createX509FactoryParams( String caUri, String pemPkcs10 );
+    X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String pemPkcs10 );
 
     X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
 
@@ -80,11 +80,12 @@ public interface ParamsFactory
         }
 
         @Override
-        public X509FactoryParamsValue createX509FactoryParams( String caUri, String pemPkcs10 )
+        public X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String pemPkcs10 )
         {
             ValueBuilder<X509FactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509FactoryParamsValue.class );
             X509FactoryParamsValue params = paramsBuilder.prototype();
             params.caUri().set( caUri );
+            params.x509ProfileUri().set( x509ProfileUri );
             params.pemPkcs10().set( pemPkcs10 );
             return paramsBuilder.newInstance();
         }
