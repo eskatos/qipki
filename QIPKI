@@ -71,6 +71,8 @@ Next steps
   QUID Add a parameter to CA to say if they allow child CAs to issue CRLs
        Add a parameter to CA to say if they delegate CRLs issueing to parent CA
        Which one ?
+       By default, only RootCAs issue CRLs, SubCA can have a parameter "Issue own CRLs"
+       Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
 
   IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
