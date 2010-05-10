@@ -68,6 +68,10 @@ Next steps
   Added CRL Endpoint in issued X509Certificates
     Need to find a way to get the RootReference data in CAMixin in order to build the URL ... something is weird here
 
+  QUID Add a parameter to CA to say if they allow child CAs to issue CRLs
+       Add a parameter to CA to say if they delegate CRLs issueing to parent CA
+       Which one ?
+
   IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
     QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
       Immutables QiPkiIURIBuilders sharing a StringBuilder
@@ -79,6 +83,8 @@ Next steps
     TODO Model as a CA subresource so client can POST on it to update CA assignments
         /ca/{identity}/profiles return a list of profiles, POST update this list
     Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
+    Add basic profiles created at first deployment
+    Discriminate CA and EndEntity profiles ? ... seems overkill
 
   Move FactoryResources as post in ListResources
 
@@ -89,6 +95,7 @@ Next steps
     In X509DetailValue : all of them
     In X509Profile
         Netscape Certificate Comment
+        Netscape Certificate Type
     Automatically filled by CAs
         Netscape CA Revocation URL
             Only on CA certificates
@@ -188,6 +195,22 @@ RootCAThatDoesEverything ...  :|
     KU  cRLSign | keyCertSign
     NCT sslCA | objectSigningCA | smimeCA
 
+AuthenticationCA
+
+    BC  CA, pathLen=0
+    KU  cRLSign | keyCertSign
+    NCT sslCA
+
+CipheringCA
+
+    BC  CA, pathLen=0
+    KU  cRLSign | keyCertSign
+
+NonRepudiationCA
+
+    BC  CA, pathLen=0
+    KU  cRLSign | keyCertSign
+    NCT objectSigningCA | smimeCA
 
 SSL Server Certificates
 
