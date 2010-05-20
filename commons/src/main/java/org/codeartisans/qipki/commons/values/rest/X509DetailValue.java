@@ -40,12 +40,6 @@ public interface X509DetailValue
 
     Property<Integer> publicKeySize();
 
-    Property<String> md5Fingerprint();
-
-    Property<String> sha1Fingerprint();
-
-    Property<String> sha256Fingerprint();
-
     @Optional
     Property<String> netscapeCertComment();
 

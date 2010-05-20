@@ -33,11 +33,6 @@ public final class CryptoStoreUriBuilder
         super( cryptoStoreRef, identity, special );
     }
 
-    public CryptoStoreUriBuilder factory()
-    {
-        return new CryptoStoreUriBuilder( baseRef, identity, "factory" );
-    }
-
     public CryptoStoreUriBuilder withIdentity( String identity )
     {
         return new CryptoStoreUriBuilder( baseRef, identity, special );

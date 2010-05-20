@@ -21,7 +21,6 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest;
 
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -44,12 +43,8 @@ import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
 import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
 import org.codeartisans.qipki.commons.values.rest.X509Value;
-import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
 import org.codeartisans.qipki.crypto.objects.KeyInformation;
-import org.codeartisans.qipki.crypto.digest.DigestParameters;
-import org.codeartisans.qipki.crypto.digest.DigestService;
-import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -95,8 +90,6 @@ public interface RestletValuesFactory
         @Service
         private X509ExtensionsReader x509ExtReader;
         @Service
-        private DigestService digester;
-        @Service
         private CryptObjectsFactory cryptoToolFactory;
 
         @Override
@@ -108,18 +101,10 @@ public interface RestletValuesFactory
             ApiURIsValue api = apiBuilder.prototype();
 
             api.uri().set( rootRef.toString() );
-
             api.cryptoStoreListUri().set( uriBuilder.cryptoStore().build() );
-            api.cryptoStoreFactoryUri().set( uriBuilder.cryptoStore().factory().build() );
-
             api.caListUri().set( uriBuilder.ca().build() );
-            api.caFactoryUri().set( uriBuilder.ca().factory().build() );
-
             api.x509ProfileListUri().set( uriBuilder.x509Profile().build() );
-            api.x509ProfileFactoryUri().set( uriBuilder.x509Profile().factory().build() );
-
             api.x509ListUri().set( uriBuilder.x509().build() );
-            api.x509FactoryUri().set( uriBuilder.x509().factory().build() );
 
             return apiBuilder.newInstance();
         }
@@ -200,57 +185,54 @@ public interface RestletValuesFactory
             x509Value.hexSerialNumber().set( x509.hexSerialNumber().get() );
             x509Value.validityInterval().set( commonValuesFactory.buildValidityInterval( x509.validityInterval().get().notBefore().get(),
                                                                                          x509.validityInterval().get().notAfter().get() ) );
+            x509Value.md5Fingerprint().set( x509.md5Fingerprint().get() );
+            x509Value.sha1Fingerprint().set( x509.sha1Fingerprint().get() );
             return x509ValueBuilder.newInstance();
         }
 
         @Override
         public X509DetailValue x509Detail( Reference rootRef, X509 x509 )
         {
-            try {
-                X509Certificate cert = x509.x509Certificate();
-                KeyInformation publicKeyInfo = cryptoToolFactory.newKeyInformationInstance( cert.getPublicKey() );
+            X509Certificate cert = x509.x509Certificate();
+            KeyInformation publicKeyInfo = cryptoToolFactory.newKeyInformationInstance( cert.getPublicKey() );
 
-                ValueBuilder<X509DetailValue> x509DetailValueBuilder = vbf.newValueBuilder( X509DetailValue.class );
-                UriBuilder uriBuilder = new UriBuilder( rootRef );
+            ValueBuilder<X509DetailValue> x509DetailValueBuilder = vbf.newValueBuilder( X509DetailValue.class );
+            UriBuilder uriBuilder = new UriBuilder( rootRef );
 
-                X509DetailValue x509DetailValue = x509DetailValueBuilder.prototype();
+            X509DetailValue x509DetailValue = x509DetailValueBuilder.prototype();
 
-                x509DetailValue.uri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).build() );
-                x509DetailValue.detailUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
-                x509DetailValue.revocationUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
-                x509DetailValue.issuerUri().set( uriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
+            x509DetailValue.uri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).build() );
+            x509DetailValue.detailUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
+            x509DetailValue.revocationUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
+            x509DetailValue.issuerUri().set( uriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
 
-                x509DetailValue.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
-                x509DetailValue.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
-                x509DetailValue.hexSerialNumber().set( x509.hexSerialNumber().get() );
-                x509DetailValue.validityInterval().set( commonValuesFactory.buildValidityInterval( x509.validityInterval().get().notBefore().get(),
-                                                                                                   x509.validityInterval().get().notAfter().get() ) );
-                x509DetailValue.certificateVersion().set( cert.getVersion() );
-                x509DetailValue.signatureAlgorithm().set( cert.getSigAlgName() );
-                x509DetailValue.publicKeyAlgorithm().set( publicKeyInfo.getKeyAlgorithm() );
-                x509DetailValue.publicKeySize().set( publicKeyInfo.getKeySize() );
-                x509DetailValue.md5Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.MD5 ) ) );
-                x509DetailValue.sha1Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_1 ) ) );
-                x509DetailValue.sha256Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_256 ) ) );
+            x509DetailValue.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
+            x509DetailValue.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
+            x509DetailValue.hexSerialNumber().set( x509.hexSerialNumber().get() );
+            x509DetailValue.validityInterval().set( commonValuesFactory.buildValidityInterval( x509.validityInterval().get().notBefore().get(),
+                                                                                               x509.validityInterval().get().notAfter().get() ) );
+            x509DetailValue.md5Fingerprint().set( x509.md5Fingerprint().get() );
+            x509DetailValue.sha1Fingerprint().set( x509.sha1Fingerprint().get() );
+            x509DetailValue.certificateVersion().set( cert.getVersion() );
+            x509DetailValue.signatureAlgorithm().set( cert.getSigAlgName() );
+            x509DetailValue.publicKeyAlgorithm().set( publicKeyInfo.getKeyAlgorithm() );
+            x509DetailValue.publicKeySize().set( publicKeyInfo.getKeySize() );
 
-                x509DetailValue.netscapeCertComment().set( x509ExtReader.getNetscapeCertComment( cert ) );
+            x509DetailValue.netscapeCertComment().set( x509ExtReader.getNetscapeCertComment( cert ) );
 
-                // Key informations
-                x509DetailValue.keysExtensions().set( x509ExtensionsValueFactory.buildKeysExtensionsValue( cert ) );
+            // Key informations
+            x509DetailValue.keysExtensions().set( x509ExtensionsValueFactory.buildKeysExtensionsValue( cert ) );
 
-                // Policies
-                x509DetailValue.policiesExtensions().set( x509ExtensionsValueFactory.buildPoliciesExtensionsValue( cert ) );
+            // Policies
+            x509DetailValue.policiesExtensions().set( x509ExtensionsValueFactory.buildPoliciesExtensionsValue( cert ) );
 
-                // Alternative Names
-                x509DetailValue.namesExtensions().set( x509ExtensionsValueFactory.buildNamesExtensionsValue( cert ) );
+            // Alternative Names
+            x509DetailValue.namesExtensions().set( x509ExtensionsValueFactory.buildNamesExtensionsValue( cert ) );
 
-                // Constraints
-                x509DetailValue.constraintsExtensions().set( x509ExtensionsValueFactory.buildConstraintsExtensionsValue( cert ) );
+            // Constraints
+            x509DetailValue.constraintsExtensions().set( x509ExtensionsValueFactory.buildConstraintsExtensionsValue( cert ) );
 
-                return x509DetailValueBuilder.newInstance();
-            } catch ( CertificateEncodingException ex ) {
-                throw new QiPkiFailure( "Unable to calculate X509Certificate fingerprints", ex );
-            }
+            return x509DetailValueBuilder.newInstance();
         }
 
         @Override

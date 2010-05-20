@@ -21,13 +21,17 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.restlet.data.Method;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
 
 public abstract class AbstractListResource
         extends AbstractEntityResource
@@ -36,7 +40,7 @@ public abstract class AbstractListResource
     protected AbstractListResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
-        setAllowedMethods( Collections.singleton( Method.GET ) );
+        setAllowedMethods( new HashSet<Method>( Arrays.asList( new Method[]{ Method.GET, Method.POST } ) ) );
     }
 
     @Override
@@ -47,5 +51,29 @@ public abstract class AbstractListResource
     }
 
     protected abstract RestListValue list( int start );
+
+    @Override
+    protected Representation post( Representation entity, Variant variant )
+            throws ResourceException
+    {
+        // Ignoring Variant on post
+        return post( entity );
+    }
+
+    @Override
+    protected abstract Representation post( Representation entity )
+            throws ResourceException;
+
+    /**
+     * Shortcut to apply POST/302/GET redirect pattern.
+     *
+     * @param getURI URI of the created resource
+     * @return An EmptyRepresentation with proper HTTP headers to apply the redirection
+     */
+    protected final Representation redirectToCreatedResource( String getURI )
+    {
+        getResponse().redirectSeeOther( getURI );
+        return new EmptyRepresentation();
+    }
 
 }

@@ -65,6 +65,10 @@ Next steps
   DONE Think about ParamsValues that will now contains URIs only and no Identity
     --> Contexts don't consume ParamsValues but real parameters
 
+  DONE Move X509Certificate fingerprints from X509DetailValue to X509State in order to be able to query our database with them.
+
+  DONE Move FactoryResources as post in ListResources
+
   Added CRL Endpoint in issued X509Certificates
     Need to find a way to get the RootReference data in CAMixin in order to build the URL ... something is weird here
 
@@ -87,8 +91,6 @@ Next steps
     Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
     Add basic profiles created at first deployment
     Discriminate CA and EndEntity profiles ? ... seems overkill
-
-  Move FactoryResources as post in ListResources
 
   Add tools resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
     With this we can write unit tests for certificate parsing using a bunch of external certificates

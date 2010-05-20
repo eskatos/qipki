@@ -21,25 +21,35 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources.x509profile;
 
-import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
+import java.io.IOException;
 import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
-import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
+import org.codeartisans.qipki.commons.values.params.X509ProfileFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
+import org.qi4j.api.value.ValueBuilderFactory;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class X509ProfileListResource
         extends AbstractListResource
 {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger( X509ProfileListResource.class );
+    @Structure
+    private ValueBuilderFactory vbf;
     @Service
-    private RestletValuesFactory valuesFactory;
+    private RestletValuesFactory restValuesFactory;
 
     public X509ProfileListResource( @Structure ObjectBuilderFactory obf )
     {
@@ -56,8 +66,33 @@ public class X509ProfileListResource
         Query<X509Profile> x509ProfileList = x509ProfileListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = valuesFactory.asValues( getRootRef(), x509ProfileList );
-        return valuesFactory.newListRepresentationValue( getReference(), start, values );
+        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), x509ProfileList );
+        return restValuesFactory.newListRepresentationValue( getReference(), start, values );
+    }
+
+    @Override
+    protected Representation post( Representation entity )
+            throws ResourceException
+    {
+        try {
+
+            // Data
+            X509ProfileFactoryParamsValue params = vbf.newValueFromJSON( X509ProfileFactoryParamsValue.class, entity.getText() );
+
+            // Context
+            X509ProfileListContext x509ProfileListCtx = newRootContext().x509ProfileListContext();
+
+            // Interaction
+            X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params.name().get() );
+
+            // Redirect to created resource
+            X509ProfileValue x509ProfileValue = restValuesFactory.x509Profile( getRootRef(), x509Profile );
+            return redirectToCreatedResource( x509ProfileValue.uri().get() );
+
+        } catch ( IOException ex ) {
+            LOGGER.warn( "500: {}", ex.getMessage(), ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted value", ex );
+        }
     }
 
 }

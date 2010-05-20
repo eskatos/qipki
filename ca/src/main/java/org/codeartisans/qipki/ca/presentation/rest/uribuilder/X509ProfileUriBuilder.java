@@ -33,24 +33,9 @@ public final class X509ProfileUriBuilder
         super( baseRef, identity, special );
     }
 
-    public X509ProfileUriBuilder factory()
-    {
-        return new X509ProfileUriBuilder( baseRef, identity, "factory" );
-    }
-
     public X509ProfileUriBuilder withIdentity( String identity )
     {
         return new X509ProfileUriBuilder( baseRef, identity, special );
-    }
-
-    public X509ProfileUriBuilder detail()
-    {
-        return new X509ProfileUriBuilder( baseRef, identity, "detail" );
-    }
-
-    public X509ProfileUriBuilder revocation()
-    {
-        return new X509ProfileUriBuilder( baseRef, identity, "revocation" );
     }
 
 }

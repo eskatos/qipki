@@ -69,7 +69,7 @@ public class QiPkiCryptoStoreTest
     public void testCreateKeystore()
             throws IOException
     {
-        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreFactoryUri().get() );
+        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
         String ksName = "Another KeyStore";
         CryptoStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
