@@ -21,18 +21,25 @@
  */
 package org.codeartisans.qipki.ca.domain.x509profile;
 
+import org.codeartisans.qipki.commons.states.X509ProfileState;
+import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.api.value.ValueBuilderFactory;
 
 @Mixins( X509ProfileFactory.Mixin.class )
 public interface X509ProfileFactory
         extends ServiceComposite
 {
 
-    X509Profile create( String name );
+    X509Profile create( X509ProfileState params );
 
     abstract class Mixin
             implements X509ProfileFactory
@@ -40,13 +47,36 @@ public interface X509ProfileFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Structure
+        private ValueBuilderFactory vbf;
 
         @Override
-        public X509Profile create( String name )
+        public X509Profile create( X509ProfileState params )
         {
             EntityBuilder<X509Profile> builder = uowf.currentUnitOfWork().newEntityBuilder( X509Profile.class );
             X509Profile profile = builder.instance();
-            profile.name().set( name );
+            profile.name().set( params.name().get() );
+            profile.netscapeCertComment().set( params.netscapeCertComment().get() );
+            if ( params.keyUsages().get() != null ) {
+                profile.keyUsages().set( vbf.newValueBuilder( KeyUsagesValue.class ).
+                        withPrototype( params.keyUsages().get() ).newInstance() );
+            }
+            if ( params.extendedKeyUsages().get() != null ) {
+                profile.extendedKeyUsages().set( vbf.newValueBuilder( ExtendedKeyUsagesValue.class ).
+                        withPrototype( params.extendedKeyUsages().get() ).newInstance() );
+            }
+            if ( params.netscapeCertTypes().get() != null ) {
+                profile.netscapeCertTypes().set( vbf.newValueBuilder( NetscapeCertTypesValue.class ).
+                        withPrototype( params.netscapeCertTypes().get() ).newInstance() );
+            }
+            if ( params.basicConstraints().get() != null ) {
+                profile.basicConstraints().set( vbf.newValueBuilder( BasicConstraintsValue.class ).
+                        withPrototype( params.basicConstraints().get() ).newInstance() );
+            }
+            if ( params.nameConstraints().get() != null ) {
+                profile.nameConstraints().set( vbf.newValueBuilder( NameConstraintsValue.class ).
+                        withPrototype( params.nameConstraints().get() ).newInstance() );
+            }
             return builder.newInstance();
         }
 

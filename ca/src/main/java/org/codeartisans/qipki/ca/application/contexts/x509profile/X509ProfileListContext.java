@@ -24,6 +24,7 @@ package org.codeartisans.qipki.ca.application.contexts.x509profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
+import org.codeartisans.qipki.commons.states.X509ProfileState;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.query.Query;
 
@@ -36,9 +37,9 @@ public class X509ProfileListContext
         return context.role( X509ProfileRepository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509Profile createX509Profile( String name )
+    public X509Profile createX509Profile( X509ProfileState params )
     {
-        return context.role( X509ProfileFactory.class ).create( name );
+        return context.role( X509ProfileFactory.class ).create( params );
     }
 
 }

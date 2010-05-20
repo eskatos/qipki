@@ -109,7 +109,7 @@ public class QiPkiCaTest
         // Create a new X509Profile
         post = new HttpPost( qiPkiApi.x509ProfileListUri().get() );
         addAcceptJsonHeader( post );
-        X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams( "SSLClient" );
+        X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams( "SSLClient", "A simple SSLClient x509 profile for unit tests" );
         post.setEntity( new StringEntity( profileParams.toJSON() ) );
         String sslClientProfileJson = httpClient.execute( post, strResponseHandler );
         X509ProfileValue sslClientProfile = valueBuilderFactory.newValueFromJSON( X509ProfileValue.class, sslClientProfileJson );

@@ -21,7 +21,7 @@ public interface ParamsFactory
 
     CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaUri );
 
-    X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name );
+    X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, @Optional String comment );
 
     X509ProfileAssignmentValue createX509ProfileAssignment( String x509ProfileUri, KeyEscrowPolicy keyEscrowPolicy );
 
@@ -61,11 +61,12 @@ public interface ParamsFactory
         }
 
         @Override
-        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name )
+        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, String comment )
         {
             ValueBuilder<X509ProfileFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509ProfileFactoryParamsValue.class );
             X509ProfileFactoryParamsValue params = paramsBuilder.prototype();
             params.name().set( name );
+            params.netscapeCertComment().set( comment );
             return paramsBuilder.newInstance();
         }
 
