@@ -21,23 +21,37 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources.ca;
 
+import java.io.IOException;
+import org.codeartisans.java.toolbox.StringUtils;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
+import org.codeartisans.qipki.ca.presentation.rest.uribuilder.UriResolver;
+import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.CAValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
+import org.qi4j.api.value.ValueBuilderFactory;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CAListResource
         extends AbstractListResource
 {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger( CAListResource.class );
+    @Structure
+    private ValueBuilderFactory vbf;
     @Service
-    private RestletValuesFactory valuesFactory;
+    private RestletValuesFactory restValuesFactory;
 
     public CAListResource( @Structure ObjectBuilderFactory obf )
     {
@@ -54,8 +68,40 @@ public class CAListResource
         Query<CA> caList = caListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = valuesFactory.asValues( getRootRef(), caList );
-        return valuesFactory.newListRepresentationValue( getReference(), start, values );
+        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), caList );
+        return restValuesFactory.newListRepresentationValue( getReference(), start, values );
+    }
+
+    @Override
+    protected Representation post( Representation entity )
+            throws ResourceException
+    {
+        try {
+
+            // Data
+            CAFactoryParamsValue params = vbf.newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
+
+            // Context
+            CAListContext caListCtx = newRootContext().caListContext();
+
+            // Interaction
+            CA ca;
+            UriResolver cryptoStoreResolver = new UriResolver( getRootRef(), params.cryptoStoreUri().get() );
+            if ( StringUtils.isEmpty( params.parentCaUri().get() ) ) {
+                ca = caListCtx.createRootCA( cryptoStoreResolver.identity(), params.name().get(), params.distinguishedName().get(), params.keySpec().get() );
+            } else {
+                UriResolver parentCaResolver = new UriResolver( getRootRef(), params.parentCaUri().get() );
+                ca = caListCtx.createSubCA( cryptoStoreResolver.identity(), params.name().get(), params.distinguishedName().get(), params.keySpec().get(), parentCaResolver.identity() );
+            }
+
+            // Redirect to created resource
+            CAValue caValue = restValuesFactory.ca( getRootRef(), ca );
+            return redirectToCreatedResource( caValue.uri().get() );
+
+        } catch ( IOException ex ) {
+            LOGGER.trace( "500: {}", ex.getMessage(), ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted entity", ex );
+        }
     }
 
 }

@@ -21,21 +21,33 @@
  */
 package org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore;
 
+import java.io.IOException;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
+import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
 import org.codeartisans.qipki.commons.values.rest.RestListValue;
 import org.codeartisans.qipki.commons.values.rest.RestValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
+import org.qi4j.api.value.ValueBuilderFactory;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CryptoStoreListResource
         extends AbstractListResource
 {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreListResource.class );
+    @Structure
+    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
@@ -56,6 +68,31 @@ public class CryptoStoreListResource
         // Representation
         Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), csList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
+    }
+
+    @Override
+    protected Representation post( Representation entity )
+            throws ResourceException
+    {
+        try {
+
+            // Data
+            CryptoStoreFactoryParamsValue params = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
+
+            // Context
+            CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();
+
+            // Interaction
+            CryptoStore cs = csListCtx.createCryptoStore( params.name().get(), params.storeType().get(), params.password().get() );
+
+            // Redirect to created resource
+            CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef(), cs );
+            return redirectToCreatedResource( csValue.uri().get() );
+
+        } catch ( IOException ex ) {
+            LOGGER.trace( "500: {}", ex.getMessage(), ex );
+            throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted Value", ex );
+        }
     }
 
 }

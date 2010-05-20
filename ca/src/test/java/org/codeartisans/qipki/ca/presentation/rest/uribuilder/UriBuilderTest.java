@@ -41,9 +41,6 @@ public class UriBuilderTest
 
         String entityUri = new UriBuilder( new Reference( ROOT_REF ) ).cryptoStore().withIdentity( id ).build();
         Assert.assertEquals( ROOT_REF + "/cryptostore/" + id, entityUri );
-
-        String factoryUri = new UriBuilder( new Reference( ROOT_REF ) ).cryptoStore().factory().build();
-        Assert.assertEquals( ROOT_REF + "/cryptostore/factory", factoryUri );
     }
 
     @Test
@@ -57,11 +54,20 @@ public class UriBuilderTest
         String entityUri = new UriBuilder( new Reference( ROOT_REF ) ).ca().withIdentity( id ).build();
         Assert.assertEquals( ROOT_REF + "/ca/" + id, entityUri );
 
-        String factoryUri = new UriBuilder( new Reference( ROOT_REF ) ).ca().factory().build();
-        Assert.assertEquals( ROOT_REF + "/ca/factory", factoryUri );
-
         String crlUri = new UriBuilder( new Reference( ROOT_REF ) ).ca().withIdentity( id ).crl().build();
         Assert.assertEquals( ROOT_REF + "/ca/" + id + "/crl", crlUri );
+    }
+
+    @Test
+    public void testX509Profile()
+    {
+        String listUri = new UriBuilder( new Reference( ROOT_REF ) ).x509Profile().build();
+        Assert.assertEquals( ROOT_REF + "/x509Profile", listUri );
+
+        String id = UUID.randomUUID().toString();
+
+        String entityUri = new UriBuilder( new Reference( ROOT_REF ) ).x509Profile().withIdentity( id ).build();
+        Assert.assertEquals( ROOT_REF + "/x509Profile/" + id, entityUri );
     }
 
     @Test
@@ -74,9 +80,6 @@ public class UriBuilderTest
 
         String entityUri = new UriBuilder( new Reference( ROOT_REF ) ).x509().withIdentity( id ).build();
         Assert.assertEquals( ROOT_REF + "/x509/" + id, entityUri );
-
-        String factoryUri = new UriBuilder( new Reference( ROOT_REF ) ).x509().factory().build();
-        Assert.assertEquals( ROOT_REF + "/x509/factory", factoryUri );
 
         String detailUri = new UriBuilder( new Reference( ROOT_REF ) ).x509().withIdentity( id ).detail().build();
         Assert.assertEquals( ROOT_REF + "/x509/" + id + "/detail", detailUri );

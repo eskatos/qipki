@@ -29,18 +29,10 @@ public interface ApiURIsValue
 
     Property<String> cryptoStoreListUri();
 
-    Property<String> cryptoStoreFactoryUri();
-
     Property<String> caListUri();
-
-    Property<String> caFactoryUri();
 
     Property<String> x509ProfileListUri();
 
-    Property<String> x509ProfileFactoryUri();
-
     Property<String> x509ListUri();
-
-    Property<String> x509FactoryUri();
 
 }

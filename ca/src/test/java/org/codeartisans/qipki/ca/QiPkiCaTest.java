@@ -88,7 +88,7 @@ public class QiPkiCaTest
 
 
         // Create a new CryptoStore
-        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreFactoryUri().get() );
+        HttpPost post = new HttpPost( qiPkiApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
         CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( "MyTestCryptoStore", KeyStoreType.JKS, "changeit".toCharArray() );
         post.setEntity( new StringEntity( csParams.toJSON() ) );
@@ -97,7 +97,7 @@ public class QiPkiCaTest
 
 
         // Create a new CA
-        post = new HttpPost( qiPkiApi.caFactoryUri().get() );
+        post = new HttpPost( qiPkiApi.caListUri().get() );
         addAcceptJsonHeader( post );
         KeyPairSpecValue keyPairSpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
         CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), "MyTestCA", "CN=MyTestCA", keyPairSpec, null );
@@ -107,7 +107,7 @@ public class QiPkiCaTest
 
 
         // Create a new X509Profile
-        post = new HttpPost( qiPkiApi.x509ProfileFactoryUri().get() );
+        post = new HttpPost( qiPkiApi.x509ProfileListUri().get() );
         addAcceptJsonHeader( post );
         X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams( "SSLClient" );
         post.setEntity( new StringEntity( profileParams.toJSON() ) );
@@ -135,7 +135,7 @@ public class QiPkiCaTest
         String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
         LOGGER.debug( "Will request a new X509 with the following PKCS#10: " + pkcs10PEM );
         X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), pkcs10PEM );
-        post = new HttpPost( qiPkiApi.x509FactoryUri().get() );
+        post = new HttpPost( qiPkiApi.x509ListUri().get() );
         addAcceptJsonHeader( post );
         post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );
         String jsonX509 = httpClient.execute( post, strResponseHandler );

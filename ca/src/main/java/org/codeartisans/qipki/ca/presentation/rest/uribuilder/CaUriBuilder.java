@@ -33,11 +33,6 @@ public final class CaUriBuilder
         super( baseRef, identity, special );
     }
 
-    public CaUriBuilder factory()
-    {
-        return new CaUriBuilder( baseRef, identity, "factory" );
-    }
-
     public CaUriBuilder withIdentity( String identity )
     {
         return new CaUriBuilder( baseRef, identity, special );

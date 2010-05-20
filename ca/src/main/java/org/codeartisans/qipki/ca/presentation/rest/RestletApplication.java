@@ -24,19 +24,15 @@ package org.codeartisans.qipki.ca.presentation.rest;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersException;
-import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.qi4j.api.injection.scope.Structure;
@@ -85,20 +81,16 @@ public class RestletApplication
         router.attach( "/", apiFinder );
 
         router.attach( "/cryptostore", createFinder( CryptoStoreListResource.class ) );
-        router.attach( "/cryptostore/factory", createFinder( CryptoStoreFactoryResource.class ) );
         router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
 
         router.attach( "/ca", createFinder( CAListResource.class ) );
-        router.attach( "/ca/factory", createFinder( CAFactoryResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
 
         router.attach( "/x509Profile", createFinder( X509ProfileListResource.class ) );
-        router.attach( "/x509Profile/factory", createFinder( X509ProfileFactoryResource.class ) );
         router.attach( "/x509Profile/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509ProfileResource.class ) );
 
         router.attach( "/x509", createFinder( X509ListResource.class ) );
-        router.attach( "/x509/factory", createFinder( X509FactoryResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );

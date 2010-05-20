@@ -33,11 +33,6 @@ public final class X509UriBuilder
         super( baseRef, identity, special );
     }
 
-    public X509UriBuilder factory()
-    {
-        return new X509UriBuilder( baseRef, identity, "factory" );
-    }
-
     public X509UriBuilder withIdentity( String identity )
     {
         return new X509UriBuilder( baseRef, identity, special );

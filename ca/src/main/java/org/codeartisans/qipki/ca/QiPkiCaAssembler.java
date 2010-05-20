@@ -56,19 +56,15 @@ import org.codeartisans.qipki.ca.presentation.rest.RestletFinder;
 import org.codeartisans.qipki.ca.presentation.rest.RestletServletServerService;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ApiRootResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509ListResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509DetailResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509FactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
-import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileFactoryResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
@@ -122,17 +118,13 @@ public class QiPkiCaAssembler
                     module.addObjects( RestletFinder.class,
                                        ApiRootResource.class,
                                        CryptoStoreListResource.class,
-                                       CryptoStoreFactoryResource.class,
                                        CryptoStoreResource.class,
                                        CAListResource.class,
-                                       CAFactoryResource.class,
                                        CAResource.class,
                                        CRLResource.class,
                                        X509ProfileListResource.class,
-                                       X509ProfileFactoryResource.class,
                                        X509ProfileResource.class,
                                        X509ListResource.class,
-                                       X509FactoryResource.class,
                                        X509Resource.class,
                                        X509DetailResource.class,
                                        X509RevocationResource.class ).

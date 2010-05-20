@@ -35,4 +35,8 @@ public interface X509State
 
     Property<ValidityIntervalValue> validityInterval();
 
+    Property<String> md5Fingerprint();
+
+    Property<String> sha1Fingerprint();
+
 }
