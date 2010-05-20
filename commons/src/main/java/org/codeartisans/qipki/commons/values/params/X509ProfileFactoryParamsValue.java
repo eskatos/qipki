@@ -21,10 +21,10 @@
  */
 package org.codeartisans.qipki.commons.values.params;
 
-import org.codeartisans.qipki.commons.fragments.Nameable;
+import org.codeartisans.qipki.commons.states.X509ProfileState;
 import org.qi4j.api.value.ValueComposite;
 
 public interface X509ProfileFactoryParamsValue
-        extends Nameable, ValueComposite
+        extends X509ProfileState, ValueComposite
 {
 }
