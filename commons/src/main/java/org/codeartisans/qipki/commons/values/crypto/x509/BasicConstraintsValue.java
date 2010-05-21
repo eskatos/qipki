@@ -36,7 +36,7 @@ public interface BasicConstraintsValue
     Property<Boolean> subjectIsCA();
 
     @Optional
-    @GreaterThan( value = 0L )
+    @GreaterThan( value = -1L )
     Property<Long> pathLengthConstraint();
 
 }

@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca;
 
 import java.io.IOException;
 import java.security.KeyPair;
+import java.util.EnumSet;
 import javax.security.auth.x500.X500Principal;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -46,6 +47,9 @@ import org.codeartisans.qipki.commons.values.rest.X509Value;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage;
+import org.codeartisans.qipki.crypto.x509.KeyUsage;
+import org.codeartisans.qipki.crypto.x509.NetscapeCertType;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,7 +113,13 @@ public class QiPkiCaTest
         // Create a new X509Profile
         post = new HttpPost( qiPkiApi.x509ProfileListUri().get() );
         addAcceptJsonHeader( post );
-        X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams( "SSLClient", "A simple SSLClient x509 profile for unit tests" );
+        X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams(
+                "SSLClient", "A simple SSLClient x509 profile for unit tests",
+                x509ExtValuesFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.dataEncipherment, KeyUsage.digitalSignature ) ),
+                x509ExtValuesFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.clientAuth ) ),
+                x509ExtValuesFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslClient ) ),
+                x509ExtValuesFactory.buildBasicConstraintsValue( true, false, 0 ),
+                null );
         post.setEntity( new StringEntity( profileParams.toJSON() ) );
         String sslClientProfileJson = httpClient.execute( post, strResponseHandler );
         X509ProfileValue sslClientProfile = valueBuilderFactory.newValueFromJSON( X509ProfileValue.class, sslClientProfileJson );

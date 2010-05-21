@@ -29,8 +29,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
-import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
+import org.codeartisans.qipki.commons.values.crypto.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.core.QiPkiApplication;
@@ -59,6 +61,7 @@ public abstract class AbstractQiPkiTest
     protected CryptoValuesFactory cryptoValuesFactory;
     protected ParamsFactory paramsFactory;
     protected ApiURIsValue qiPkiApi;
+    protected X509ExtensionsValueFactory x509ExtValuesFactory;
 
     @Override
     @SuppressWarnings( "unchecked" )
@@ -66,7 +69,8 @@ public abstract class AbstractQiPkiTest
             throws AssemblyException
     {
         new QiCryptoAssembler().assemble( module );
-        new QiPkiCommonsValuesAssembler().assemble( module );
+        new QiPkiRestValuesAssembler().assemble( module );
+        new QiPkiCryptoValuesAssembler().assemble( module );
     }
 
     @Before
@@ -82,6 +86,7 @@ public abstract class AbstractQiPkiTest
         asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
         cryptoValuesFactory = serviceLocator.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
+        x509ExtValuesFactory = serviceLocator.<X509ExtensionsValueFactory>findService( X509ExtensionsValueFactory.class ).get();
         HttpGet get = new HttpGet( "/api" );
         addAcceptJsonHeader( get );
         String jsonApi = httpClient.execute( new HttpHost( "localhost", DEFAULT_PORT ), get, strResponseHandler );

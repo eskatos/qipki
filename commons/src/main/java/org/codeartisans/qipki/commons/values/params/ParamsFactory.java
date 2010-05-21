@@ -3,6 +3,11 @@ package org.codeartisans.qipki.commons.values.params;
 import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
+import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
 import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.qi4j.api.common.Optional;
@@ -21,7 +26,13 @@ public interface ParamsFactory
 
     CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaUri );
 
-    X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, @Optional String comment );
+    X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name,
+                                                                  @Optional String comment,
+                                                                  @Optional KeyUsagesValue keyUsages,
+                                                                  @Optional ExtendedKeyUsagesValue extendedKeyUsages,
+                                                                  @Optional NetscapeCertTypesValue netscapeCertTypes,
+                                                                  @Optional BasicConstraintsValue basicConstraints,
+                                                                  @Optional NameConstraintsValue nameConstraints );
 
     X509ProfileAssignmentValue createX509ProfileAssignment( String x509ProfileUri, KeyEscrowPolicy keyEscrowPolicy );
 
@@ -61,12 +72,19 @@ public interface ParamsFactory
         }
 
         @Override
-        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, String comment )
+        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, String comment,
+                                                                             KeyUsagesValue keyUsages, ExtendedKeyUsagesValue extendedKeyUsages, NetscapeCertTypesValue netscapeCertTypes,
+                                                                             BasicConstraintsValue basicConstraints, NameConstraintsValue nameConstraints )
         {
             ValueBuilder<X509ProfileFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509ProfileFactoryParamsValue.class );
             X509ProfileFactoryParamsValue params = paramsBuilder.prototype();
             params.name().set( name );
             params.netscapeCertComment().set( comment );
+            params.keyUsages().set( keyUsages );
+            params.extendedKeyUsages().set( extendedKeyUsages );
+            params.netscapeCertTypes().set( netscapeCertTypes );
+            params.basicConstraints().set( basicConstraints );
+            params.nameConstraints().set( nameConstraints );
             return paramsBuilder.newInstance();
         }
 
