@@ -40,6 +40,7 @@ public abstract class AbstractListResource
     protected AbstractListResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
+
         setAllowedMethods( new HashSet<Method>( Arrays.asList( new Method[]{ Method.GET, Method.POST } ) ) );
     }
 

@@ -67,7 +67,8 @@ import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509.X509RevocationResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileListResource;
 import org.codeartisans.qipki.ca.presentation.rest.resources.x509profile.X509ProfileResource;
-import org.codeartisans.qipki.commons.QiPkiCommonsValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
+import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.ValidityIntervalValue;
 import org.codeartisans.qipki.crypto.QiCryptoAssembler;
@@ -130,7 +131,7 @@ public class QiPkiCaAssembler
                                        X509RevocationResource.class ).
                             visibleIn( Visibility.module );
 
-                    new QiPkiCommonsValuesAssembler( Visibility.layer ).assemble( module );
+                    new QiPkiRestValuesAssembler( Visibility.layer ).assemble( module );
 
                     module.addServices( RestletValuesFactory.class ).
                             visibleIn( Visibility.module );
@@ -250,7 +251,18 @@ public class QiPkiCaAssembler
 
         LayerAssembly crypto = app.layerAssembly( "crypto" );
         {
-            new QiCryptoAssembler( Visibility.application ).assemble( crypto.moduleAssembly( "crypto-tools" ) );
+            new Assembler() // Crypto
+            {
+
+                @Override
+                public void assemble( ModuleAssembly module )
+                        throws AssemblyException
+                {
+                    new QiCryptoAssembler( Visibility.application ).assemble( module );
+                    new QiPkiCryptoValuesAssembler( Visibility.application ).assemble( module );
+                }
+
+            }.assemble( crypto.moduleAssembly( "crypto-tools" ) );
         }
 
         LayerAssembly infrastructure = app.layerAssembly( "infrastructure" );

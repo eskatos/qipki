@@ -53,6 +53,7 @@ public class QiCryptoAssembler
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
