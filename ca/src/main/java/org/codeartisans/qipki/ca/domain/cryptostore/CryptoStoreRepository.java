@@ -21,8 +21,8 @@
  */
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
-import org.codeartisans.qipki.core.domain.services.AbstractBoxedDomainRepository;
-import org.codeartisans.qipki.core.domain.services.BoxedDomainRepository;
+import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
+import org.codeartisans.qipki.core.services.BoxedDomainRepository;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.QueryBuilderFactory;

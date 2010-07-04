@@ -26,10 +26,10 @@ import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileLis
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
-import org.codeartisans.qipki.commons.values.params.X509ProfileFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.codeartisans.qipki.commons.values.rest.RestValue;
-import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
+import org.codeartisans.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestValue;
+import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;

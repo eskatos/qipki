@@ -21,8 +21,8 @@
  */
 package org.codeartisans.qipki.client.ca.services;
 
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.CAValue;
+import org.codeartisans.qipki.commons.rest.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CAValue;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 

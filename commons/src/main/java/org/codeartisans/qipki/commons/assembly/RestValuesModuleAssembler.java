@@ -21,21 +21,21 @@
  */
 package org.codeartisans.qipki.commons.assembly;
 
-import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.params.ParamsFactory;
-import org.codeartisans.qipki.commons.values.params.X509FactoryParamsValue;
-import org.codeartisans.qipki.commons.values.params.X509ProfileFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
-import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
-import org.codeartisans.qipki.commons.values.rest.CAValue;
-import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.codeartisans.qipki.commons.values.rest.RevocationValue;
-import org.codeartisans.qipki.commons.values.rest.X509DetailValue;
-import org.codeartisans.qipki.commons.values.rest.X509ProfileAssignmentValue;
-import org.codeartisans.qipki.commons.values.rest.X509ProfileValue;
-import org.codeartisans.qipki.commons.values.rest.X509Value;
+import org.codeartisans.qipki.commons.rest.values.ApiURIsValue;
+import org.codeartisans.qipki.commons.rest.values.params.CAFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.ParamsFactory;
+import org.codeartisans.qipki.commons.rest.values.params.X509FactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.X509RevocationParamsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CAValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RevocationValue;
+import org.codeartisans.qipki.commons.rest.values.representations.X509DetailValue;
+import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
+import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileValue;
+import org.codeartisans.qipki.commons.rest.values.representations.X509Value;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;

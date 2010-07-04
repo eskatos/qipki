@@ -21,10 +21,10 @@
  */
 package org.codeartisans.qipki.ca;
 
-import org.codeartisans.qipki.client.ca.QiPkiCaClientAssembler;
+import org.codeartisans.qipki.client.ca.assembly.QiPkiCaClientAssembler;
 import org.codeartisans.qipki.client.ca.services.CAClientService;
 import org.codeartisans.qipki.client.ca.services.CryptoStoreClientService;
-import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
 import org.junit.Before;
 import org.junit.Test;
 import org.qi4j.bootstrap.AssemblyException;

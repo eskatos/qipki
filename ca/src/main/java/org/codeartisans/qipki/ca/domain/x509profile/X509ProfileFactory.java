@@ -21,12 +21,12 @@
  */
 package org.codeartisans.qipki.ca.domain.x509profile;
 
-import org.codeartisans.qipki.commons.states.X509ProfileState;
-import org.codeartisans.qipki.commons.values.crypto.x509.BasicConstraintsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.ExtendedKeyUsagesValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.KeyUsagesValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.NameConstraintsValue;
-import org.codeartisans.qipki.commons.values.crypto.x509.NetscapeCertTypesValue;
+import org.codeartisans.qipki.commons.crypto.states.X509ProfileState;
+import org.codeartisans.qipki.commons.crypto.values.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
