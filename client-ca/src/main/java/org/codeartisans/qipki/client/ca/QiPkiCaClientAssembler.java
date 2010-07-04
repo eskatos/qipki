@@ -24,9 +24,9 @@ package org.codeartisans.qipki.client.ca;
 import org.codeartisans.qipki.client.ca.services.RestClientService;
 import org.codeartisans.qipki.client.ca.services.CAClientService;
 import org.codeartisans.qipki.client.ca.services.CryptoStoreClientService;
-import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
-import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
-import org.codeartisans.qipki.crypto.QiCryptoAssembler;
+import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
+import org.codeartisans.qipki.commons.assembly.RestValuesModuleAssembler;
+import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -53,9 +53,9 @@ public class QiPkiCaClientAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new QiCryptoAssembler( visibility ).assemble( module );
-        new QiPkiCryptoValuesAssembler( visibility ).assemble( module );
-        new QiPkiRestValuesAssembler( visibility ).assemble( module );
+        new CryptoEngineModuleAssembler( visibility ).assemble( module );
+        new CryptoValuesModuleAssembler( visibility ).assemble( module );
+        new RestValuesModuleAssembler( visibility ).assemble( module );
 
         module.addServices( RestClientService.class ).
                 visibleIn( Visibility.module );

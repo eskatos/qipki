@@ -110,18 +110,6 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- Qi4j storage -->
-        <dependency>
-            <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-rdf</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.extension</groupId>
-            <artifactId>qi4j-indexing-rdf</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
-
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>

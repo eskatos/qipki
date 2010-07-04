@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons;
+package org.codeartisans.qipki.commons.assembly;
 
 import org.codeartisans.qipki.commons.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
@@ -42,18 +42,18 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 @SuppressWarnings( "unchecked" )
-public class QiPkiRestValuesAssembler
+public class RestValuesModuleAssembler
         implements Assembler
 {
 
     private final Visibility visibility;
 
-    public QiPkiRestValuesAssembler()
+    public RestValuesModuleAssembler()
     {
         this( Visibility.module );
     }
 
-    public QiPkiRestValuesAssembler( Visibility visibility )
+    public RestValuesModuleAssembler( Visibility visibility )
     {
         this.visibility = visibility;
     }
