@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.ca.domain.x509;
 
-import org.codeartisans.qipki.commons.states.X509State;
+import org.codeartisans.qipki.commons.crypto.states.X509State;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.fragments.HasPEM;
 import org.qi4j.api.entity.Identity;

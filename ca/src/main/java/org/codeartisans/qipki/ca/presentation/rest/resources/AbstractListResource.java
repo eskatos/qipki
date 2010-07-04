@@ -23,7 +23,7 @@ package org.codeartisans.qipki.ca.presentation.rest.resources;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.restlet.data.Method;

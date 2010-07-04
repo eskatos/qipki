@@ -22,7 +22,7 @@
 package org.codeartisans.qipki.ca.domain.ca.profileassignment;
 
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
-import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
+import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.property.Property;
 

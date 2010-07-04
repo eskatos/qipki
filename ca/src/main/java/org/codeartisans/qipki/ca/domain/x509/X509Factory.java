@@ -25,7 +25,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 import org.codeartisans.qipki.ca.domain.ca.CA;
-import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
+import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
 import org.codeartisans.qipki.crypto.digest.DigestParameters;

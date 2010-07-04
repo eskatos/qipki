@@ -42,7 +42,7 @@ import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.constants.Time;
 import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;

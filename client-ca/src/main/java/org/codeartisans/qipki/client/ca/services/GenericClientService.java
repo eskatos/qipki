@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.client.ca.services;
 
-import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestValue;
 
 interface GenericClientService<T extends RestValue>
 {
