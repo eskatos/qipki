@@ -1,6 +1,6 @@
 package org.codeartisans.qipki.ca.utils;
 
-import org.codeartisans.qipki.ca.QiPkiCaAssembler;
+import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
 import org.codeartisans.qipki.core.AbstractQiPkiApplication;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;

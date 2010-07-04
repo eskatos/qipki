@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.crypto;
+package org.codeartisans.qipki.crypto.assembly;
 
+import org.codeartisans.qipki.crypto.QiCryptoActivator;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorService;
 import org.codeartisans.qipki.crypto.codec.CryptCodexService;
 import org.codeartisans.qipki.crypto.digest.DigestService;
@@ -36,18 +37,18 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-public class QiCryptoAssembler
+public class CryptoEngineModuleAssembler
         implements Assembler
 {
 
     private final Visibility visibility;
 
-    public QiCryptoAssembler()
+    public CryptoEngineModuleAssembler()
     {
         this( Visibility.module );
     }
 
-    public QiCryptoAssembler( Visibility visibility )
+    public CryptoEngineModuleAssembler( Visibility visibility )
     {
         this.visibility = visibility;
     }

@@ -29,14 +29,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
-import org.codeartisans.qipki.commons.QiPkiRestValuesAssembler;
-import org.codeartisans.qipki.commons.QiPkiCryptoValuesAssembler;
+import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
+import org.codeartisans.qipki.commons.assembly.RestValuesModuleAssembler;
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.commons.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
 import org.codeartisans.qipki.core.QiPkiApplication;
-import org.codeartisans.qipki.crypto.QiCryptoAssembler;
+import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGenerator;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.io.CryptIO;
@@ -68,9 +68,9 @@ public abstract class AbstractQiPkiTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new QiCryptoAssembler().assemble( module );
-        new QiPkiRestValuesAssembler().assemble( module );
-        new QiPkiCryptoValuesAssembler().assemble( module );
+        new CryptoEngineModuleAssembler().assemble( module );
+        new RestValuesModuleAssembler().assemble( module );
+        new CryptoValuesModuleAssembler().assemble( module );
     }
 
     @Before

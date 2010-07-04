@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.commons;
+package org.codeartisans.qipki.commons.assembly;
 
 import org.codeartisans.qipki.commons.values.crypto.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
@@ -50,18 +50,18 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 @SuppressWarnings( "unchecked" )
-public class QiPkiCryptoValuesAssembler
+public class CryptoValuesModuleAssembler
         implements Assembler
 {
 
     private final Visibility visibility;
 
-    public QiPkiCryptoValuesAssembler()
+    public CryptoValuesModuleAssembler()
     {
         this( Visibility.module );
     }
 
-    public QiPkiCryptoValuesAssembler( Visibility visibility )
+    public CryptoValuesModuleAssembler( Visibility visibility )
     {
         this.visibility = visibility;
     }
