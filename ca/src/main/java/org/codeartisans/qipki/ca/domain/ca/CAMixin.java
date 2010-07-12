@@ -123,9 +123,9 @@ public abstract class CAMixin
 
             // Adding extensions commons to all profiles
             SubjectKeyIdentifier subjectKeyID = x509ExtBuilder.buildSubjectKeyIdentifier( pkcs10.getPublicKey() );
-            extensions.add( new X509ExtensionHolder( X509Extensions.SubjectKeyIdentifier, true, subjectKeyID ) );
+            extensions.add( new X509ExtensionHolder( X509Extensions.SubjectKeyIdentifier, false, subjectKeyID ) );
             AuthorityKeyIdentifier authKeyID = x509ExtBuilder.buildAuthorityKeyIdentifier( certificate().getPublicKey() );
-            extensions.add( new X509ExtensionHolder( X509Extensions.AuthorityKeyIdentifier, true, authKeyID ) );
+            extensions.add( new X509ExtensionHolder( X509Extensions.AuthorityKeyIdentifier, false, authKeyID ) );
 
             // Applying X509Profile on issued X509Certificate
             if ( x509profile.basicConstraints().get().subjectIsCA().get() ) {

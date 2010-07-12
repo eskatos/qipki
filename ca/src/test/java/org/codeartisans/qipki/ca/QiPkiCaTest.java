@@ -115,7 +115,7 @@ public class QiPkiCaTest
         addAcceptJsonHeader( post );
         X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams(
                 "SSLClient", "A simple SSLClient x509 profile for unit tests",
-                x509ExtValuesFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.dataEncipherment, KeyUsage.digitalSignature ) ),
+                x509ExtValuesFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.keyEncipherment, KeyUsage.digitalSignature ) ),
                 x509ExtValuesFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.clientAuth ) ),
                 x509ExtValuesFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslClient ) ),
                 x509ExtValuesFactory.buildBasicConstraintsValue( true, false, 0 ),

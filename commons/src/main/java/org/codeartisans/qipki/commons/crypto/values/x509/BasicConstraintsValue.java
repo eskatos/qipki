@@ -22,7 +22,6 @@
 package org.codeartisans.qipki.commons.crypto.values.x509;
 
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
-import org.qi4j.api.common.Optional;
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
@@ -35,7 +34,7 @@ public interface BasicConstraintsValue
     @UseDefaults
     Property<Boolean> subjectIsCA();
 
-    @Optional
+    @UseDefaults
     @GreaterThan( value = -1L )
     Property<Long> pathLengthConstraint();
 

@@ -263,7 +263,7 @@ public interface X509ExtensionsValueFactory
                 BasicConstraintsValue bcv = buildBasicConstraintsValue(
                         cert.getCriticalExtensionOIDs().contains( BasicConstraints.getId() ),
                         basicConstraints.isCA(),
-                        basicConstraints.getPathLenConstraint().longValue() );
+                        basicConstraints.getPathLenConstraint() == null ? 0 : basicConstraints.getPathLenConstraint().longValue() );
                 constraintsExtensions.basicConstraints().set( bcv );
             }
 
@@ -329,7 +329,9 @@ public interface X509ExtensionsValueFactory
             AuthorityKeyIdentifierValue akiValue = akiBuilder.prototype();
             akiValue.critical().set( critical );
             akiValue.hexKeyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
-            akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
+            if ( authKeyId.getAuthorityCertSerialNumber() != null ) {
+                akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
+            }
             akiValue.names().set( buildSetOfGeneralNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
             return akiBuilder.newInstance();
         }

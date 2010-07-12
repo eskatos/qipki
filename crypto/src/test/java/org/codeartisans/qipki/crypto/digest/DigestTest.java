@@ -19,11 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.core.crypto.digest;
+package org.codeartisans.qipki.crypto.digest;
 
-import org.codeartisans.qipki.crypto.digest.DigestImpl;
-import org.codeartisans.qipki.crypto.digest.DigestParameters;
-import org.codeartisans.qipki.crypto.digest.Digest;
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
