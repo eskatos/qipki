@@ -50,11 +50,10 @@ public enum KeyUsage
 
     public static int usage( Set<KeyUsage> keyUsages )
     {
-        // TODO Quid if keyUsages is empty ?
         Iterator<KeyUsage> it = keyUsages.iterator();
-        int usage = it.next().usage();
+        int usage = 0;
         while ( it.hasNext() ) {
-            usage &= it.next().usage();
+            usage |= it.next().usage();
         }
         return usage;
     }

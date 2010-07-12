@@ -57,9 +57,9 @@ public class X509ExtensionsBuilderImpl
     public SubjectKeyIdentifier buildSubjectKeyIdentifier( PublicKey publicKey )
     {
         try {
-            ByteArrayInputStream pubKeyInputStream = new ByteArrayInputStream( publicKey.getEncoded() );
-            SubjectPublicKeyInfo pubKeyInfo = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( pubKeyInputStream ).readObject() );
-            return new SubjectKeyIdentifier( pubKeyInfo );
+            ByteArrayInputStream octets = new ByteArrayInputStream( publicKey.getEncoded() );
+            SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
+            return new SubjectKeyIdentifier( spki );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
         }
@@ -69,11 +69,11 @@ public class X509ExtensionsBuilderImpl
     public AuthorityKeyIdentifier buildAuthorityKeyIdentifier( PublicKey publicKey )
     {
         try {
-            ByteArrayInputStream pubKeyInputStream = new ByteArrayInputStream( publicKey.getEncoded() );
-            SubjectPublicKeyInfo pubKeyInfo = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( pubKeyInputStream ).readObject() );
-            return new AuthorityKeyIdentifier( pubKeyInfo );
+            ByteArrayInputStream octets = new ByteArrayInputStream( publicKey.getEncoded() );
+            SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
+            return new AuthorityKeyIdentifier( apki );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
+            throw new QiCryptoFailure( "Unable to build AuthorityKeyIdentifier", ex );
         }
     }
 

@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.crypto.x509;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -94,7 +96,7 @@ public class X509ExtensionsReaderImpl
         }
         // The `Extension Request` attribute is contained within an ASN.1 Set,
         // usually as the first element.
-        X509Extensions certificateRequestExtensions = null;
+        X509Extensions requestedExtensions = null;
         for ( int i = 0; i < attributesAsn1Set.size(); ++i ) {
             // There should be only only one attribute in the set. (that is, only
             // the `Extension Request`, but loop through to find it properly)
@@ -111,19 +113,19 @@ public class X509ExtensionsReaderImpl
                     if ( attributeValues.size() >= 1 ) {
                         DEREncodable extensionsDEREncodable = attributeValues.getObjectAt( 0 );
                         ASN1Sequence extensionsASN1Sequence = ( ASN1Sequence ) extensionsDEREncodable;
-                        certificateRequestExtensions = new X509Extensions( extensionsASN1Sequence );
+                        requestedExtensions = new X509Extensions( extensionsASN1Sequence );
                         // No need to search any more.
                         break;
                     }
                 }
             }
         }
-        if ( certificateRequestExtensions != null ) {
-            Enumeration<?> e = certificateRequestExtensions.oids();
+        if ( requestedExtensions != null ) {
+            Enumeration<?> e = requestedExtensions.oids();
             while ( e.hasMoreElements() ) {
                 DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
-                X509Extension extension = certificateRequestExtensions.getExtension( oid );
-                extractedExtensions.add( new X509ExtensionHolder( oid, extension.isCritical(), extension.getValue() ) );
+                X509Extension extension = requestedExtensions.getExtension( oid );
+                extractedExtensions.add( new X509ExtensionHolder( oid, extension.isCritical(), X509Extension.convertValueToObject( extension ) ) );
             }
         }
         return extractedExtensions;
@@ -137,7 +139,9 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return AuthorityKeyIdentifier.getInstance( ASN1Object.fromByteArray( value ) );
+            DEROctetString oct = ( DEROctetString ) ( new ASN1InputStream( new ByteArrayInputStream( value ) ).readObject() );
+            return new AuthorityKeyIdentifier( ( ASN1Sequence ) new ASN1InputStream( new ByteArrayInputStream( oct.getOctets() ) ).readObject() );
+            //return AuthorityKeyIdentifier.getInstance( ASN1Object.fromByteArray( value ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract AuthorityKeyIdentifier from X509Certificate extensions", ex );
         }
@@ -329,7 +333,7 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) X509ExtensionUtil.fromExtensionValue( value ) ).getOctets() ) );
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract SubjectAlternativeName from X509Certificate extensions", ex );
         }
@@ -343,7 +347,7 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) X509ExtensionUtil.fromExtensionValue( value ) ).getOctets() ) );
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract IssuerAlternativeName from X509Certificate extensions", ex );
         }
@@ -357,7 +361,8 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return BasicConstraints.getInstance( ASN1Object.fromByteArray( value ) );
+            return BasicConstraints.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+            // return BasicConstraints.getInstance( ASN1Object.fromByteArray( value ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract BasicConstraints from X509Certificate extensions", ex );
         }
