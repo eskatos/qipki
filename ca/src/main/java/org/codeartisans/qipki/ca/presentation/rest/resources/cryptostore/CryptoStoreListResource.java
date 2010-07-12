@@ -26,10 +26,10 @@ import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreLis
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractListResource;
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.codeartisans.qipki.commons.values.rest.RestValue;
+import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;

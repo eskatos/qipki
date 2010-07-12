@@ -29,7 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codeartisans.qipki.client.ca.QiPkiClientFailure;
-import org.codeartisans.qipki.commons.values.rest.ApiURIsValue;
+import org.codeartisans.qipki.commons.rest.values.ApiURIsValue;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;

@@ -27,7 +27,7 @@ import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
-import org.codeartisans.qipki.commons.states.KeyEscrowPolicy;
+import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.unitofwork.UnitOfWork;

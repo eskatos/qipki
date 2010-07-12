@@ -29,7 +29,7 @@ import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
-import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.crypto.constraints.X500Name;
 import org.qi4j.api.query.Query;
