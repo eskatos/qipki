@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca;
 
+import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;

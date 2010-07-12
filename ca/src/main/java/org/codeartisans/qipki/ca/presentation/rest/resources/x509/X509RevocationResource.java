@@ -27,7 +27,7 @@ import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.presentation.rest.resources.AbstractResource;
-import org.codeartisans.qipki.commons.values.params.X509RevocationParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.X509RevocationParamsValue;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;

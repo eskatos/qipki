@@ -24,7 +24,7 @@ package org.codeartisans.qipki.ca.application.contexts.x509profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
-import org.codeartisans.qipki.commons.states.X509ProfileState;
+import org.codeartisans.qipki.commons.crypto.states.X509ProfileState;
 import org.codeartisans.qipki.core.dci.Context;
 import org.qi4j.api.query.Query;
 

@@ -24,7 +24,7 @@ package org.codeartisans.qipki.ca.domain.ca;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
-import org.codeartisans.qipki.commons.values.crypto.KeyPairSpecValue;
+import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qi4j.api.sideeffect.SideEffectOf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

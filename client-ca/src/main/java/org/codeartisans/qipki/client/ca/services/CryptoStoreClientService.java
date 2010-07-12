@@ -21,10 +21,10 @@
  */
 package org.codeartisans.qipki.client.ca.services;
 
-import org.codeartisans.qipki.commons.values.params.CryptoStoreFactoryParamsValue;
-import org.codeartisans.qipki.commons.values.rest.CryptoStoreValue;
-import org.codeartisans.qipki.commons.values.rest.RestListValue;
-import org.codeartisans.qipki.commons.values.rest.RestListValueIterable;
+import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
+import org.codeartisans.qipki.commons.rest.values.representations.RestListValueIterable;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
