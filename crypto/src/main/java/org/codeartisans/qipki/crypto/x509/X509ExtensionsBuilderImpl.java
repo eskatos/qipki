@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -36,11 +37,13 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.asn1.x509.X509Name;
@@ -72,6 +75,24 @@ public class X509ExtensionsBuilderImpl
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
         }
+    }
+
+    @Override
+    public BasicConstraints buildNonCABasicConstraints()
+    {
+        return new BasicConstraints( false );
+    }
+
+    @Override
+    public BasicConstraints buildCABasicConstraints( Long pathLen )
+    {
+        return new BasicConstraints( pathLen.intValue() );
+    }
+
+    @Override
+    public KeyUsage buildKeyUsages( Set<org.codeartisans.qipki.crypto.x509.KeyUsage> keyUsages )
+    {
+        return new KeyUsage( org.codeartisans.qipki.crypto.x509.KeyUsage.usage( keyUsages ) );
     }
 
     @Override
