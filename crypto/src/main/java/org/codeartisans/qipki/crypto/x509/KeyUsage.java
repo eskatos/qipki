@@ -21,6 +21,9 @@
  */
 package org.codeartisans.qipki.crypto.x509;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public enum KeyUsage
 {
 
@@ -42,6 +45,17 @@ public enum KeyUsage
 
     public int usage()
     {
+        return usage;
+    }
+
+    public static int usage( Set<KeyUsage> keyUsages )
+    {
+        // TODO Quid if keyUsages is empty ?
+        Iterator<KeyUsage> it = keyUsages.iterator();
+        int usage = it.next().usage();
+        while ( it.hasNext() ) {
+            usage &= it.next().usage();
+        }
         return usage;
     }
 

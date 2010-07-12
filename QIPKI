@@ -195,57 +195,57 @@ Basic Certificates Profiles
 
 RootCAThatDoesEverything ...  :|
 
-    BC  CA, pathLen=0
-    KU  cRLSign | keyCertSign
-    NCT sslCA | objectSigningCA | smimeCA
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, sslCA | objectSigningCA | smimeCA
 
 AuthenticationCA
 
-    BC  CA, pathLen=0
-    KU  cRLSign | keyCertSign
-    NCT sslCA
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, sslCA
 
 CipheringCA
 
-    BC  CA, pathLen=0
-    KU  cRLSign | keyCertSign
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
 
 NonRepudiationCA
 
-    BC  CA, pathLen=0
-    KU  cRLSign | keyCertSign
-    NCT objectSigningCA | smimeCA
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, objectSigningCA | smimeCA
 
 SSL Server Certificates
 
-    BC  NonCA, pathLen=0
-    KU  digitalSignature | keyEncipherment
-    EKU serverAuth, clientAuth
-    NCT sslServer
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | keyEncipherment
+    EKU nonCritical, serverAuth, clientAuth
+    NCT nonCritical, sslServer
 
 
 SSL Client Certificates
 
-    BC  NonCA, pathLen=0
-    KU  digitalSignature | keyEncipherment
-    EKU clientAuth
-    NCT sslClient
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | keyEncipherment
+    EKU nonCritical, clientAuth
+    NCT nonCritical, sslClient
 
 
 Object & S/MIME Signing Certificates
 
-    BC  NonCA, pathLen=0
-    KU  digitalSignature | nonRepudiation
-    EKU emailProtection
-    NCT objectSigning | smime
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | nonRepudiation
+    EKU nonCritical, emailProtection
+    NCT nonCritical, objectSigning | smime
 
 
 Key Encipherment & S/MIME Encipherment Certificates
 
-    BC  NonCA, pathLen=0
-    KU  keyEncipherment
-    EKU emailProtection
-    NCT smime
+    BC  NonCA,critical,  pathLen=0
+    KU  critical, keyEncipherment
+    EKU nonCritical, emailProtection
+    NCT nonCritical, smime
 
 
 

@@ -32,8 +32,12 @@ import java.security.cert.X509Certificate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -114,14 +118,29 @@ public abstract class CAMixin
 
             ensureX509ProfileIsAllowed( x509profile );
 
-            List<X509ExtensionHolder> requestedExtensions = x509ExtReader.extractRequestedExtensions( pkcs10 );
-            ensureNoIllegalRequestedExtensions( requestedExtensions );
+            List<X509ExtensionHolder> extensions = x509ExtReader.extractRequestedExtensions( pkcs10 );
+            ensureNoIllegalRequestedExtensions( extensions );
 
-            // TODO apply X509Profile on issued X509Certificate
+            // Adding extensions commons to all profiles
+            SubjectKeyIdentifier subjectKeyID = x509ExtBuilder.buildSubjectKeyIdentifier( pkcs10.getPublicKey() );
+            extensions.add( new X509ExtensionHolder( X509Extensions.SubjectKeyIdentifier, true, subjectKeyID ) );
+            AuthorityKeyIdentifier authKeyID = x509ExtBuilder.buildAuthorityKeyIdentifier( certificate().getPublicKey() );
+            extensions.add( new X509ExtensionHolder( X509Extensions.AuthorityKeyIdentifier, true, authKeyID ) );
+
+            // Applying X509Profile on issued X509Certificate
+            if ( x509profile.basicConstraints().get().subjectIsCA().get() ) {
+                BasicConstraints bc = x509ExtBuilder.buildCABasicConstraints( x509profile.basicConstraints().get().pathLengthConstraint().get() );
+                extensions.add( new X509ExtensionHolder( X509Extensions.BasicConstraints, x509profile.basicConstraints().get().critical().get(), bc ) );
+            } else {
+                BasicConstraints bc = x509ExtBuilder.buildNonCABasicConstraints();
+                extensions.add( new X509ExtensionHolder( X509Extensions.BasicConstraints, x509profile.basicConstraints().get().critical().get(), bc ) );
+            }
+            KeyUsage keyUsages = x509ExtBuilder.buildKeyUsages( x509profile.keyUsages().get().keyUsages().get() );
+            extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, x509profile.keyUsages().get().critical().get(), keyUsages ) );
 
             // TODO Climb up the CA hierarchy to add inherited CRL distpoints
             CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
-            requestedExtensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
+            extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
 
             X509Certificate certificate = x509Generator.generateX509Certificate( privateKey(),
                                                                                  certificate().getSubjectX500Principal(),
@@ -129,7 +148,7 @@ public abstract class CAMixin
                                                                                  pkcs10.getCertificationRequestInfo().getSubject(),
                                                                                  pkcs10.getPublicKey(),
                                                                                  Duration.standardDays( 365 ),
-                                                                                 requestedExtensions );
+                                                                                 extensions );
 
             return certificate;
 
