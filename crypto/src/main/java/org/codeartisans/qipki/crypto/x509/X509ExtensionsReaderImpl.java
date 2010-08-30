@@ -141,7 +141,6 @@ public class X509ExtensionsReaderImpl
             }
             DEROctetString oct = ( DEROctetString ) ( new ASN1InputStream( new ByteArrayInputStream( value ) ).readObject() );
             return new AuthorityKeyIdentifier( ( ASN1Sequence ) new ASN1InputStream( new ByteArrayInputStream( oct.getOctets() ) ).readObject() );
-            //return AuthorityKeyIdentifier.getInstance( ASN1Object.fromByteArray( value ) );
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract AuthorityKeyIdentifier from X509Certificate extensions", ex );
         }
