@@ -31,12 +31,14 @@ import java.security.cert.Certificate;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+
 import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.crl.CRL;
@@ -51,8 +53,10 @@ import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -74,6 +78,7 @@ public interface CAFactory
 
     SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements CAFactory
     {
@@ -109,29 +114,65 @@ public interface CAFactory
 
                 EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
                 RootCA ca = caBuilder.instance();
-                ca.name().set( name );
-                ca.cryptoStore().set( cryptoStore );
 
-                // Store in associated CryptoStore
-                {
-                    KeyStore ks = cryptoStore.loadKeyStore();
-                    ks.setEntry( ca.identity().get(),
-                                 new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
-                                 new KeyStore.PasswordProtection( cryptoStore.password().get() ) );
-                    cryptoStore.payload().set( cryptIO.base64Encode( ks, cryptoStore.password().get() ) );
-                }
-
-                // Generate initial CRL
-                {
-                    X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
-                    CRL crl = crlFactory.create( cryptIO.asPEM( x509CRL ).toString() );
-                    ca.crl().set( crl );
-                }
+                createCa( ca, name, cryptoStore, keyPair, cert );
 
                 return caBuilder.newInstance();
 
             } catch ( GeneralSecurityException ex ) {
                 throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
+            }
+        }
+
+        // TODO implement createSubCA
+        @Override
+        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        {
+            try {
+                // Sub CA
+                KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
+                X500Principal dn = new X500Principal( distinguishedName );
+                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                X509Certificate cert = x509Generator.generateX509Certificate( parentCA.privateKey(),
+                                                                              dn,
+                                                                              BigInteger.probablePrime( 120, new SecureRandom() ),
+                                                                              pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                              pkcs10.getPublicKey(),
+                                                                              Duration.standardDays( 3650 ),
+                                                                              x509ExtReader.extractRequestedExtensions( pkcs10 ) );
+
+                EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );
+                SubCA ca = caBuilder.instance();
+
+                createCa( ca, name, cryptoStore, keyPair, cert );
+                ca.issuer().set( parentCA );
+
+                return caBuilder.newInstance();
+            } catch ( GeneralSecurityException ex ) {
+                throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
+            }
+        }
+
+        private void createCa( CA ca, String name, CryptoStore cryptoStore, KeyPair keyPair, X509Certificate cert )
+                throws GeneralSecurityException
+        {
+            ca.name().set( name );
+            ca.cryptoStore().set( cryptoStore );
+
+            // Store in associated CryptoStore
+            {
+                KeyStore ks = cryptoStore.loadKeyStore();
+                ks.setEntry( ca.identity().get(),
+                             new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
+                             new KeyStore.PasswordProtection( cryptoStore.password().get() ) );
+                cryptoStore.payload().set( cryptIO.base64Encode( ks, cryptoStore.password().get() ) );
+            }
+
+            // Generate initial CRL
+            {
+                X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
+                CRL crl = crlFactory.create( cryptIO.asPEM( x509CRL ).toString() );
+                ca.crl().set( crl );
             }
         }
 
@@ -147,16 +188,6 @@ public interface CAFactory
             crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
             crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
             return crlGen.generate( caPrivKey, BouncyCastleProvider.PROVIDER_NAME );
-        }
-
-        // TODO implement createSubCA
-        @Override
-        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
-        {
-            EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );
-            SubCA ca = caBuilder.instance();
-            ca.name().set( name );
-            return caBuilder.newInstance();
         }
 
     }
