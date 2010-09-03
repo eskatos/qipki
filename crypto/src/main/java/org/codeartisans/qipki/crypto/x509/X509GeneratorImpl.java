@@ -30,6 +30,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Vector;
 import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
@@ -41,9 +42,11 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.codeartisans.qipki.crypto.constants.Time;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
