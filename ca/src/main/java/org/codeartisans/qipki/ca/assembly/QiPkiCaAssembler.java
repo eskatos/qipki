@@ -21,20 +21,17 @@
  */
 package org.codeartisans.qipki.ca.assembly;
 
-import org.codeartisans.qipki.core.assembly.InMemoryStoreAndFinderModuleAssembler;
-import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
-import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
+import org.codeartisans.qipki.core.assembly.AssemblyUtil;
+
 import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
-import org.qi4j.bootstrap.ModuleAssembly;
 
 @SuppressWarnings( "unchecked" )
 public class QiPkiCaAssembler
-        implements ApplicationAssembler
+        extends QiPkiEmbeddedCaAssembler
 {
 
     @Override
@@ -42,10 +39,7 @@ public class QiPkiCaAssembler
             throws AssemblyException
     {
 
-        ApplicationAssembly app = applicationFactory.newApplicationAssembly();
-
-        app.setName( AssemblyNames.APPLICATION_NAME );
-        app.setVersion( AssemblyNames.APPLICATION_VERSION );
+        ApplicationAssembly app = super.assemble( applicationFactory );
 
         LayerAssembly presentation = app.layerAssembly( AssemblyNames.LAYER_PRESENTATION );
         {
@@ -59,46 +53,12 @@ public class QiPkiCaAssembler
 
             new TransientConfigurationModuleAssembler( Visibility.layer ).assemble(
                     presentation.moduleAssembly( AssemblyNames.MODULE_CONFIGURATION ) );
-
         }
 
-        LayerAssembly application = app.layerAssembly( AssemblyNames.LAYER_APPLICATION );
-        {
-            new CaDCIModuleAssembler().assemble(
-                    application.moduleAssembly( AssemblyNames.MODULE_CA_DCI ) );
-        }
-
-        LayerAssembly domain = app.layerAssembly( AssemblyNames.LAYER_DOMAIN );
-        {
-            new CaDomainModuleAssembler().assemble(
-                    domain.moduleAssembly( AssemblyNames.MODULE_CA_DOMAIN ) );
-        }
-
-        LayerAssembly crypto = app.layerAssembly( AssemblyNames.LAYER_CRYPTO );
-        {
-            new CryptoEngineModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( AssemblyNames.MODULE_CRYPTO_ENGINE ) );
-            new CryptoValuesModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( AssemblyNames.MODULE_CRYPTO_VALUES ) );
-        }
-
-        LayerAssembly infrastructure = app.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
-        {
-            // TODO Add MessagingModule and make it short as qi4j will implement Message type anytime not so soon :)
-            new InMemoryStoreAndFinderModuleAssembler( Visibility.application ).assemble(
-                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
-        }
-
-        presentation.uses( application, crypto );
-        application.uses( domain, crypto );
-        domain.uses( crypto, infrastructure );
+        presentation.uses( AssemblyUtil.getLayerAssembly( app, AssemblyNames.LAYER_APPLICATION ),
+                           AssemblyUtil.getLayerAssembly( app, AssemblyNames.LAYER_CRYPTO ) );
 
         return app;
-    }
-
-    protected void assembleDevTestModule( ModuleAssembly devTestModule )
-            throws AssemblyException
-    {
     }
 
 }

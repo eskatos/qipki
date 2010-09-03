@@ -27,9 +27,11 @@ import org.qi4j.bootstrap.Energy4Java;
 import org.qi4j.spi.Qi4jSPI;
 import org.qi4j.spi.structure.ApplicationModelSPI;
 import org.qi4j.spi.structure.ApplicationSPI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiApplication
         implements QiPkiApplication
 {

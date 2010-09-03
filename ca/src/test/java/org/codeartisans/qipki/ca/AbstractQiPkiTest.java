@@ -22,12 +22,14 @@
 package org.codeartisans.qipki.ca;
 
 import java.io.IOException;
+
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.codeartisans.qipki.ca.utils.QiPkiTestApplicationCa;
 import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
 import org.codeartisans.qipki.commons.assembly.RestValuesModuleAssembler;
@@ -40,13 +42,17 @@ import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGenerator;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.io.CryptIO;
+
 import org.junit.After;
 import org.junit.Before;
+
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
+
 import org.restlet.data.MediaType;
 
+@SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiTest
         extends AbstractQi4jTest
 {

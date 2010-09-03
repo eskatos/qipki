@@ -19,32 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.utils;
+package org.codeartisans.qipki.ca;
 
-import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
+import org.codeartisans.qipki.ca.application.contexts.RootContext;
+import org.codeartisans.qipki.ca.assembly.AssemblyNames;
+import org.codeartisans.qipki.ca.assembly.QiPkiEmbeddedCaAssembler;
 import org.codeartisans.qipki.core.AbstractQiPkiApplication;
+import org.codeartisans.qipki.core.dci.InteractionContext;
 
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.api.structure.Module;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-public class QiPkiTestApplicationCa
+public final class QiPkiEmbeddedCa
         extends AbstractQiPkiApplication
 {
 
-    public QiPkiTestApplicationCa()
+    private Module dciModule;
+
+    public QiPkiEmbeddedCa()
     {
-        super( new QiPkiCaAssembler()
-        {
+        super( new QiPkiEmbeddedCaAssembler() );
+    }
 
-            @Override
-            @SuppressWarnings( "unchecked" )
-            protected void assembleDevTestModule( ModuleAssembly devTestModule )
-                    throws AssemblyException
-            {
-                devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
-            }
+    public UnitOfWorkFactory unitOfWorkFactory()
+    {
+        return ensureDCIModule().unitOfWorkFactory();
+    }
 
-        } );
+    public RootContext newRootContext()
+    {
+        return ensureDCIModule().objectBuilderFactory().newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
+    }
+
+    private Module ensureDCIModule()
+    {
+        if ( dciModule == null ) {
+            dciModule = application.findModule( AssemblyNames.LAYER_APPLICATION, AssemblyNames.MODULE_CA_DCI );
+        }
+        return dciModule;
+    }
+
+    @Override
+    protected void afterPassivate()
+    {
+        dciModule = null;
     }
 
 }

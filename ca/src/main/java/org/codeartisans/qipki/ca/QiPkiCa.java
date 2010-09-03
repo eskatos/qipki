@@ -21,11 +21,13 @@
  */
 package org.codeartisans.qipki.ca;
 
-import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
 import org.codeartisans.qipki.core.AbstractQiPkiApplication;
+
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
