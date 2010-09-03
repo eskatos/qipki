@@ -31,7 +31,6 @@ import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileCon
 import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
-import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
@@ -43,6 +42,9 @@ import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
+import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
+import org.codeartisans.qipki.core.dci.Context;
+
 import org.qi4j.api.injection.scope.Service;
 
 /**
@@ -70,6 +72,8 @@ public class RootContext
     private X509Factory x509Factory;
     @Service
     private X509Repository x509Repository;
+    @Service
+    private CryptoValuesFactory cryptoValuesFactory;
 
     public CryptoStoreListContext cryptoStoreListContext()
     {
@@ -90,6 +94,7 @@ public class RootContext
         context.playRoles( caRepos, CARepository.class );
         context.playRoles( caFactory, CAFactory.class );
         context.playRoles( ksRepos, CryptoStoreRepository.class );
+        context.playRoles( cryptoValuesFactory, CryptoValuesFactory.class );
         return subContext( CAListContext.class );
     }
 

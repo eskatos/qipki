@@ -19,32 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.utils;
+package org.codeartisans.qipki.core.assembly;
 
-import org.codeartisans.qipki.ca.assembly.QiPkiCaAssembler;
-import org.codeartisans.qipki.core.AbstractQiPkiApplication;
+import org.codeartisans.java.toolbox.ObjectHolder;
 
+import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.bootstrap.AssemblyVisitorAdapter;
+import org.qi4j.bootstrap.LayerAssembly;
 
-public class QiPkiTestApplicationCa
-        extends AbstractQiPkiApplication
+public final class AssemblyUtil
 {
 
-    public QiPkiTestApplicationCa()
+    public static LayerAssembly getLayerAssembly( ApplicationAssembly app, final String layerName )
+            throws AssemblyException
     {
-        super( new QiPkiCaAssembler()
+        final ObjectHolder<LayerAssembly> holder = new ObjectHolder<LayerAssembly>();
+        app.visit( new AssemblyVisitorAdapter()
         {
 
             @Override
-            @SuppressWarnings( "unchecked" )
-            protected void assembleDevTestModule( ModuleAssembly devTestModule )
+            public void visitLayer( LayerAssembly assembly )
                     throws AssemblyException
             {
-                devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
+                if ( layerName.equals( assembly.name() ) ) {
+                    holder.setHolded( assembly );
+                }
             }
 
         } );
+        return holder.getHolded();
     }
 
 }

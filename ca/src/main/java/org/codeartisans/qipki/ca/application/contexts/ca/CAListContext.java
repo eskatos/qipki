@@ -29,9 +29,12 @@ import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
+import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.crypto.constraints.X500Name;
+
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 
@@ -42,6 +45,11 @@ public class CAListContext
     public Query<CA> list( int start )
     {
         return context.role( CARepository.class ).findAllPaginated( start, 25 );
+    }
+
+    public KeyPairSpecValue createKeyPairSpecValue( AsymetricAlgorithm algorithm, Integer length )
+    {
+        return context.role( CryptoValuesFactory.class ).createKeySpec( algorithm, length );
     }
 
     public RootCA createRootCA( String cryptoStoreIdentity, String name, @X500Name String distinguishedName, KeyPairSpecValue keySpec )

@@ -22,10 +22,13 @@
 package org.codeartisans.qipki.commons.crypto.services;
 
 import java.util.Date;
+
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.crypto.values.ValidityIntervalValue;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
+
 import org.joda.time.Interval;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -43,6 +46,7 @@ public interface CryptoValuesFactory
 
     KeyPairSpecValue createKeySpec( AsymetricAlgorithm algorithm, Integer length );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements CryptoValuesFactory
     {
