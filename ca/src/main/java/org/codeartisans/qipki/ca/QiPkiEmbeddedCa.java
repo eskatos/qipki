@@ -21,9 +21,12 @@
  */
 package org.codeartisans.qipki.ca;
 
+import java.io.File;
+
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.assembly.AssemblyNames;
-import org.codeartisans.qipki.ca.assembly.QiPkiEmbeddedCaAssembler;
+import org.codeartisans.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
+import org.codeartisans.qipki.ca.assembly.QiPkiVolatileEmbeddedCaAssembler;
 import org.codeartisans.qipki.core.AbstractQiPkiApplication;
 import org.codeartisans.qipki.core.dci.InteractionContext;
 
@@ -36,9 +39,22 @@ public final class QiPkiEmbeddedCa
 
     private Module dciModule;
 
+    /**
+     * Instanciate an embedded QiPki CA application using in-memory storage.
+     */
     public QiPkiEmbeddedCa()
     {
-        super( new QiPkiEmbeddedCaAssembler() );
+        super( new QiPkiVolatileEmbeddedCaAssembler() );
+    }
+
+    /**
+     * Instanciate an embedded QiPki CA application using Apache Derby storage and Sesame RDF index.
+     *
+     * @param storePath Path of the Apache Derby database
+     */
+    public QiPkiEmbeddedCa( File storePath, File indexPath )
+    {
+        super( new QiPkiPersistentEmbeddedCaAssembler( "jdbc:derby:" + storePath.getAbsolutePath() + ";create=true", indexPath.getAbsolutePath() ) );
     }
 
     public UnitOfWorkFactory unitOfWorkFactory()

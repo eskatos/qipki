@@ -43,6 +43,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
+import org.codeartisans.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.core.dci.Context;
 
 import org.qi4j.api.injection.scope.Service;
@@ -62,6 +63,8 @@ public class RootContext
     private CARepository caRepos;
     @Service
     private CAFactory caFactory;
+    @Service
+    private X509ExtensionsValueFactory x509ExtensionsValueFactory;
     @Service
     private X509ProfileFactory x509ProfileFactory;
     @Service
@@ -110,6 +113,7 @@ public class RootContext
 
     public X509ProfileListContext x509ProfileListContext()
     {
+        context.playRoles( x509ExtensionsValueFactory, X509ExtensionsValueFactory.class );
         context.playRoles( x509ProfileRepository, X509ProfileRepository.class );
         context.playRoles( x509ProfileFactory, X509ProfileFactory.class );
         return subContext( X509ProfileListContext.class );

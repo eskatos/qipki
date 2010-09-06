@@ -23,9 +23,13 @@ package org.codeartisans.qipki.ca.domain.ca;
 
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
+import static org.qi4j.api.query.QueryExpressions.*;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
@@ -34,6 +38,9 @@ public interface CARepository
         extends BoxedDomainRepository<CA>, ServiceComposite
 {
 
+    Query<CA> findByNamePaginated( String name, int firstResult, int maxResults );
+
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             extends AbstractBoxedDomainRepository<CA>
             implements CARepository
@@ -42,6 +49,17 @@ public interface CARepository
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
             super( uowf, qbf );
+        }
+
+        @Override
+        public Query<CA> findByNamePaginated( String name, int firstResult, int maxResults )
+        {
+            QueryBuilder<CA> builder = qbf.newQueryBuilder( getBoxedClass() );
+            builder = builder.where( eq( templateFor( CA.class ).name(), name ) );
+            Query<CA> query = builder.newQuery( uowf.currentUnitOfWork() ).
+                    firstResult( firstResult ).
+                    maxResults( maxResults );
+            return query;
         }
 
     }

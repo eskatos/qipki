@@ -22,7 +22,6 @@
 package org.codeartisans.qipki.ca.assembly;
 
 import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
-import org.codeartisans.qipki.core.assembly.InMemoryStoreAndFinderModuleAssembler;
 import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
@@ -34,11 +33,12 @@ import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 @SuppressWarnings( "unchecked" )
-public class QiPkiEmbeddedCaAssembler
+public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
             throws AssemblyException
     {
@@ -67,15 +67,16 @@ public class QiPkiEmbeddedCaAssembler
                     crypto.moduleAssembly( AssemblyNames.MODULE_CRYPTO_VALUES ) );
         }
 
-        LayerAssembly infrastructure = app.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
-        {
-            // TODO Add MessagingModule and make it short as qi4j will implement Message type anytime not so soon :)
-            new InMemoryStoreAndFinderModuleAssembler( Visibility.application ).assemble(
-                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
-        }
+//        LayerAssembly infrastructure = app.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
+//        {
+//            // TODO Add MessagingModule and make it short as qi4j will implement Message type anytime not so soon :)
+//            new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
+//                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+//        }
 
         application.uses( domain, crypto );
-        domain.uses( crypto, infrastructure );
+        domain.uses( crypto );
+        // domain.uses( crypto, infrastructure );
 
         return app;
     }

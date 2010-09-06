@@ -47,6 +47,11 @@ public class CAListContext
         return context.role( CARepository.class ).findAllPaginated( start, 25 );
     }
 
+    public Query<CA> findByName( String name, int start )
+    {
+        return context.role( CARepository.class ).findByNamePaginated( name, start, 25 );
+    }
+
     public KeyPairSpecValue createKeyPairSpecValue( AsymetricAlgorithm algorithm, Integer length )
     {
         return context.role( CryptoValuesFactory.class ).createKeySpec( algorithm, length );

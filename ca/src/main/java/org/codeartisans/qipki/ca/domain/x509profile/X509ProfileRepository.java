@@ -23,9 +23,13 @@ package org.codeartisans.qipki.ca.domain.x509profile;
 
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
+import static org.qi4j.api.query.QueryExpressions.*;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
@@ -34,6 +38,9 @@ public interface X509ProfileRepository
         extends BoxedDomainRepository<X509Profile>, ServiceComposite
 {
 
+    Query<X509Profile> findByNamePaginated( String name, int start, int i );
+
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             extends AbstractBoxedDomainRepository<X509Profile>
             implements X509ProfileRepository
@@ -42,6 +49,17 @@ public interface X509ProfileRepository
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
             super( uowf, qbf );
+        }
+
+        @Override
+        public Query<X509Profile> findByNamePaginated( String name, int firstResult, int maxResults )
+        {
+            QueryBuilder<X509Profile> builder = qbf.newQueryBuilder( getBoxedClass() );
+            builder = builder.where( eq( templateFor( X509Profile.class ).name(), name ) );
+            Query<X509Profile> query = builder.newQuery( uowf.currentUnitOfWork() ).
+                    firstResult( firstResult ).
+                    maxResults( maxResults );
+            return query;
         }
 
     }

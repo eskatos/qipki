@@ -21,12 +21,13 @@
  */
 package org.codeartisans.qipki.ca.domain.x509profile;
 
-import org.codeartisans.qipki.commons.crypto.states.X509ProfileState;
 import org.codeartisans.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.KeyUsagesValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
+
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -39,8 +40,15 @@ public interface X509ProfileFactory
         extends ServiceComposite
 {
 
-    X509Profile create( X509ProfileState params );
+    X509Profile create( String name,
+                        @Optional String comment,
+                        @Optional KeyUsagesValue keyUsages,
+                        @Optional ExtendedKeyUsagesValue extendedKeyUsages,
+                        @Optional NetscapeCertTypesValue netscapeCertTypes,
+                        @Optional BasicConstraintsValue basicConstraints,
+                        @Optional NameConstraintsValue nameConstraints );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements X509ProfileFactory
     {
@@ -51,31 +59,37 @@ public interface X509ProfileFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public X509Profile create( X509ProfileState params )
+        public X509Profile create( String name,
+                                   String comment,
+                                   KeyUsagesValue keyUsages,
+                                   ExtendedKeyUsagesValue extendedKeyUsages,
+                                   NetscapeCertTypesValue netscapeCertTypes,
+                                   BasicConstraintsValue basicConstraints,
+                                   NameConstraintsValue nameConstraints )
         {
             EntityBuilder<X509Profile> builder = uowf.currentUnitOfWork().newEntityBuilder( X509Profile.class );
             X509Profile profile = builder.instance();
-            profile.name().set( params.name().get() );
-            profile.netscapeCertComment().set( params.netscapeCertComment().get() );
-            if ( params.keyUsages().get() != null ) {
+            profile.name().set( name );
+            profile.netscapeCertComment().set( comment );
+            if ( keyUsages != null ) {
                 profile.keyUsages().set( vbf.newValueBuilder( KeyUsagesValue.class ).
-                        withPrototype( params.keyUsages().get() ).newInstance() );
+                        withPrototype( keyUsages ).newInstance() );
             }
-            if ( params.extendedKeyUsages().get() != null ) {
+            if ( extendedKeyUsages != null ) {
                 profile.extendedKeyUsages().set( vbf.newValueBuilder( ExtendedKeyUsagesValue.class ).
-                        withPrototype( params.extendedKeyUsages().get() ).newInstance() );
+                        withPrototype( extendedKeyUsages ).newInstance() );
             }
-            if ( params.netscapeCertTypes().get() != null ) {
+            if ( netscapeCertTypes != null ) {
                 profile.netscapeCertTypes().set( vbf.newValueBuilder( NetscapeCertTypesValue.class ).
-                        withPrototype( params.netscapeCertTypes().get() ).newInstance() );
+                        withPrototype( netscapeCertTypes ).newInstance() );
             }
-            if ( params.basicConstraints().get() != null ) {
+            if ( basicConstraints != null ) {
                 profile.basicConstraints().set( vbf.newValueBuilder( BasicConstraintsValue.class ).
-                        withPrototype( params.basicConstraints().get() ).newInstance() );
+                        withPrototype( basicConstraints ).newInstance() );
             }
-            if ( params.nameConstraints().get() != null ) {
+            if ( nameConstraints != null ) {
                 profile.nameConstraints().set( vbf.newValueBuilder( NameConstraintsValue.class ).
-                        withPrototype( params.nameConstraints().get() ).newInstance() );
+                        withPrototype( nameConstraints ).newInstance() );
             }
             return builder.newInstance();
         }
