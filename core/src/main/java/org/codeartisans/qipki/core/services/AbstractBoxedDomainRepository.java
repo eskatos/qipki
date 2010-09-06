@@ -23,7 +23,7 @@ package org.codeartisans.qipki.core.services;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
+
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
@@ -33,8 +33,8 @@ public abstract class AbstractBoxedDomainRepository<T>
         implements BoxedDomainRepository<T>
 {
 
-    private UnitOfWorkFactory uowf;
-    private QueryBuilderFactory qbf;
+    protected final UnitOfWorkFactory uowf;
+    protected final QueryBuilderFactory qbf;
 
     public AbstractBoxedDomainRepository( UnitOfWorkFactory uowf, QueryBuilderFactory qbf )
     {
@@ -59,30 +59,22 @@ public abstract class AbstractBoxedDomainRepository<T>
     }
 
     // TODO make getBoxedClass more robust and cleanup the code
-    private Class<T> getBoxedClass()
+    protected final Class<T> getBoxedClass()
     {
         Class<T> rv = null;
         Type genericSuperClass = this.getClass().getGenericSuperclass();
         Type genericSuperSuperClass = ( ( Class ) genericSuperClass ).getGenericSuperclass();
-        System.out.println( "genericSuperClass.toString(): " + genericSuperClass.toString() );
-        System.out.println( "genericSuperClass.getClass().getName(): " + genericSuperClass.getClass().getName() );
-        System.out.println( "genericSuperSuperClass.toString(): " + genericSuperSuperClass.toString() );
         if ( genericSuperSuperClass instanceof ParameterizedType ) {
             ParameterizedType parameterizedType = ( ParameterizedType ) genericSuperSuperClass;
             for ( Type actual : parameterizedType.getActualTypeArguments() ) {
-                System.out.println( "actual.toString(): " + actual.toString() );
                 if ( actual instanceof Class ) {
-                    System.out.println( "((Class<?>) actual).getName(): " + ( ( Class<?> ) actual ).getName() );
                     if ( rv == null ) {
                         rv = ( Class<T> ) actual;
                     }
-                } else {
-                    System.out.println( "actual.getClass().getName(): " + actual.getClass().getName() );
                 }
             }
         }
         Type[] genericInterfaces = this.getClass().getGenericInterfaces();
-        System.out.println( "genericInterfaces.toString(): " + Arrays.toString( genericInterfaces ) );
         return rv;
     }
 

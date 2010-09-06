@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca.assembly;
 
 import org.codeartisans.qipki.core.assembly.AssemblyUtil;
+import org.codeartisans.qipki.core.assembly.InMemoryStoreAndIndexModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -29,36 +30,27 @@ import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 
-@SuppressWarnings( "unchecked" )
-public class QiPkiCaAssembler
-        extends QiPkiVolatileEmbeddedCaAssembler
+public class QiPkiVolatileEmbeddedCaAssembler
+        extends QiPkiEmbeddedCaAssembler
 {
 
     @Override
-    public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
+    public ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
             throws AssemblyException
     {
+        ApplicationAssembly appAssembly = super.assemble( applicationFactory );
 
-        ApplicationAssembly app = super.assemble( applicationFactory );
-
-        LayerAssembly presentation = app.layerAssembly( AssemblyNames.LAYER_PRESENTATION );
+        LayerAssembly infrastructure = appAssembly.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
         {
-            assembleDevTestModule( presentation.moduleAssembly( AssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
-
-            new RestApiModuleAssembler().assemble(
-                    presentation.moduleAssembly( AssemblyNames.MODULE_REST_API ) );
-
-            new HttpModuleAssembler().assemble(
-                    presentation.moduleAssembly( AssemblyNames.MODULE_HTTP ) );
-
-            new TransientConfigurationModuleAssembler( Visibility.layer ).assemble(
-                    presentation.moduleAssembly( AssemblyNames.MODULE_CONFIGURATION ) );
+            new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
+                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
         }
 
-        presentation.uses( AssemblyUtil.getLayerAssembly( app, AssemblyNames.LAYER_APPLICATION ),
-                           AssemblyUtil.getLayerAssembly( app, AssemblyNames.LAYER_CRYPTO ) );
+        LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, AssemblyNames.LAYER_DOMAIN );
 
-        return app;
+        domain.uses( infrastructure );
+
+        return appAssembly;
     }
 
 }

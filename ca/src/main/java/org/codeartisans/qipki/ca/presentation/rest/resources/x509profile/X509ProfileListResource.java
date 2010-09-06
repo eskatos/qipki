@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca.presentation.rest.resources.x509profile;
 
 import java.io.IOException;
+
 import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.presentation.rest.RestletValuesFactory;
@@ -30,14 +31,17 @@ import org.codeartisans.qipki.commons.rest.values.params.X509ProfileFactoryParam
 import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RestValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileValue;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.value.ValueBuilderFactory;
+
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +87,13 @@ public class X509ProfileListResource
             X509ProfileListContext x509ProfileListCtx = newRootContext().x509ProfileListContext();
 
             // Interaction
-            X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params );
+            X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params.name().get(),
+                                                                            params.netscapeCertComment().get(),
+                                                                            params.keyUsages().get(),
+                                                                            params.extendedKeyUsages().get(),
+                                                                            params.netscapeCertTypes().get(),
+                                                                            params.basicConstraints().get(),
+                                                                            params.nameConstraints().get() );
 
             // Redirect to created resource
             X509ProfileValue x509ProfileValue = restValuesFactory.x509Profile( getRootRef(), x509Profile );

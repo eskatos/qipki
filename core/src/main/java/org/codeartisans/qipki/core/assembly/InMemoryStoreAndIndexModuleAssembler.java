@@ -19,27 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.codeartisans.qipki.ca.domain.ca;
+package org.codeartisans.qipki.core.assembly;
 
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.index.rdf.assembly.RdfMemoryStoreAssembler;
+import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-
-import org.codeartisans.qipki.ca.domain.revocation.Revocation;
-import org.codeartisans.qipki.ca.domain.x509.X509;
-import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
-import org.codeartisans.qipki.crypto.x509.RevocationReason;
-
-public interface CABehavior
+public class InMemoryStoreAndIndexModuleAssembler
+        implements Assembler
 {
 
-    X509Certificate certificate();
+    private final Visibility visibility;
 
-    PrivateKey privateKey();
+    public InMemoryStoreAndIndexModuleAssembler()
+    {
+        this( Visibility.application );
+    }
 
-    X509Certificate sign( X509Profile x509profile, PKCS10CertificationRequest pkcs10 );
+    public InMemoryStoreAndIndexModuleAssembler( Visibility visibility )
+    {
+        this.visibility = visibility;
+    }
 
-    Revocation revoke( X509 x509, RevocationReason reason );
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        module.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( visibility );
+        new RdfMemoryStoreAssembler( null, visibility, visibility ).assemble( module );
+    }
 
 }

@@ -24,8 +24,15 @@ package org.codeartisans.qipki.ca.application.contexts.x509profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
-import org.codeartisans.qipki.commons.crypto.states.X509ProfileState;
+import org.codeartisans.qipki.commons.crypto.services.X509ExtensionsValueFactory;
+import org.codeartisans.qipki.commons.crypto.values.x509.BasicConstraintsValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.KeyUsagesValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
+import org.codeartisans.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.codeartisans.qipki.core.dci.Context;
+
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.query.Query;
 
 public class X509ProfileListContext
@@ -37,9 +44,27 @@ public class X509ProfileListContext
         return context.role( X509ProfileRepository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509Profile createX509Profile( X509ProfileState params )
+    public Query<X509Profile> findByName( String name, int start )
     {
-        return context.role( X509ProfileFactory.class ).create( params );
+        return context.role( X509ProfileRepository.class ).findByNamePaginated( name, start, 25 );
+    }
+
+    public X509ExtensionsValueFactory x509ExtensionsValueFactory()
+    {
+        return context.role( X509ExtensionsValueFactory.class );
+    }
+
+    public X509Profile createX509Profile( String name,
+                                          @Optional String comment,
+                                          @Optional KeyUsagesValue keyUsages,
+                                          @Optional ExtendedKeyUsagesValue extendedKeyUsages,
+                                          @Optional NetscapeCertTypesValue netscapeCertTypes,
+                                          @Optional BasicConstraintsValue basicConstraints,
+                                          @Optional NameConstraintsValue nameConstraints )
+    {
+        return context.role( X509ProfileFactory.class ).create( name, comment,
+                                                                keyUsages, extendedKeyUsages, netscapeCertTypes,
+                                                                basicConstraints, nameConstraints );
     }
 
 }
