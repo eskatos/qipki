@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
+
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
@@ -33,6 +34,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
@@ -55,12 +57,17 @@ public class X509ListContext
             CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
             X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
             X509Certificate cert = ca.sign( x509Profile, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
-            X509 x509 = context.role( X509Factory.class ).create( cert, ca );
+            X509 x509 = context.role( X509Factory.class ).create( cert, ca, x509Profile );
             return x509;
 
         } catch ( NoSuchEntityException ex ) {
             throw new WrongParametersBuilder().title( "Invalid CA identity: " + pkcs10PEM ).build( ex );
         }
+    }
+
+    public X509 findByHexSha256( String hexSha256 )
+    {
+        return context.role( X509Repository.class ).findByHexSha256( hexSha256 );
     }
 
 }

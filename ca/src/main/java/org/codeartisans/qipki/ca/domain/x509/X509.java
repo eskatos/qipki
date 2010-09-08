@@ -24,6 +24,8 @@ package org.codeartisans.qipki.ca.domain.x509;
 import org.codeartisans.qipki.commons.crypto.states.X509State;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.fragments.HasPEM;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.association.Association;
 
@@ -32,5 +34,7 @@ public interface X509
 {
 
     Association<CA> issuer();
+
+    Association<X509Profile> profile();
 
 }

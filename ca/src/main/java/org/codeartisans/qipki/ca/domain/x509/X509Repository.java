@@ -21,11 +21,16 @@
  */
 package org.codeartisans.qipki.ca.domain.x509;
 
+import org.codeartisans.java.toolbox.CollectionUtils;
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
+import static org.qi4j.api.query.QueryExpressions.*;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
@@ -34,6 +39,9 @@ public interface X509Repository
         extends BoxedDomainRepository<X509>, ServiceComposite
 {
 
+    X509 findByHexSha256( String hexSha256 );
+
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             extends AbstractBoxedDomainRepository<X509>
             implements X509Repository
@@ -42,6 +50,16 @@ public interface X509Repository
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
             super( uowf, qbf );
+        }
+
+        @Override
+        public X509 findByHexSha256( String hexSha256 )
+        {
+            QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
+            builder = builder.where( eq( templateFor( X509.class ).sha256Fingerprint(), hexSha256 ) );
+            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() );
+            assert query.count() <= 1;
+            return CollectionUtils.firstElementOrNull( query );
         }
 
     }

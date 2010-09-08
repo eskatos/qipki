@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca;
 
 import java.io.File;
+import javax.sql.DataSource;
 
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.ca.assembly.AssemblyNames;
@@ -50,11 +51,23 @@ public final class QiPkiEmbeddedCa
     /**
      * Instanciate an embedded QiPki CA application using Apache Derby storage and Sesame RDF index.
      *
-     * @param storePath Path of the Apache Derby database
+     * @param storePath     Path of the Apache Derby database
+     * @param indexPath     Path of the Sesame native RDF index
      */
     public QiPkiEmbeddedCa( File storePath, File indexPath )
     {
         super( new QiPkiPersistentEmbeddedCaAssembler( "jdbc:derby:" + storePath.getAbsolutePath() + ";create=true", indexPath.getAbsolutePath() ) );
+    }
+
+    /**
+     * Instanciate an embedded QiPki CA application using Apache Derby from a DataSource and Sesame RDF index.
+     * 
+     * @param dataSource    DataSource to use
+     * @param indexPath     Path of the Sesame native RDF index
+     */
+    public QiPkiEmbeddedCa( DataSource dataSource, File indexPath )
+    {
+        super( new QiPkiPersistentEmbeddedCaAssembler( dataSource, indexPath.getAbsolutePath() ) );
     }
 
     public UnitOfWorkFactory unitOfWorkFactory()
