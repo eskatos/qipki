@@ -21,6 +21,8 @@
  */
 package org.codeartisans.qipki.ca.assembly;
 
+import javax.sql.DataSource;
+
 import org.codeartisans.qipki.core.assembly.AssemblyUtil;
 import org.codeartisans.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
 
@@ -31,6 +33,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.entitystore.sql.bootstrap.ImportableDataSourceService;
 import org.qi4j.library.rdf.repository.NativeConfiguration;
 import org.qi4j.library.sql.common.SQLConfiguration;
 
@@ -39,15 +42,25 @@ public class QiPkiPersistentEmbeddedCaAssembler
 {
 
     private final String connectionString;
+    private final DataSource dataSource;
     private final String finderDataDirectory;
 
     public QiPkiPersistentEmbeddedCaAssembler( String connectionString, String finderDataDirectory )
     {
         this.connectionString = connectionString;
+        this.dataSource = null;
         this.finderDataDirectory = finderDataDirectory;
     }
 
+    public QiPkiPersistentEmbeddedCaAssembler( DataSource dataSource, String finderDataDirectory )
+    {
+        this.connectionString = null;
+        this.finderDataDirectory = finderDataDirectory;
+        this.dataSource = dataSource;
+    }
+
     @Override
+    @SuppressWarnings( "unchecked" )
     public ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
             throws AssemblyException
     {
@@ -55,17 +68,27 @@ public class QiPkiPersistentEmbeddedCaAssembler
 
         LayerAssembly infrastructure = appAssembly.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
         {
-            new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble(
-                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
             ModuleAssembly config = infrastructure.moduleAssembly( AssemblyNames.MODULE_CONFIGURATION );
             config.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
-            config.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
-            config.forMixin( SQLConfiguration.class ).declareDefaults().connectionString().set( connectionString );
             config.forMixin( NativeConfiguration.class ).declareDefaults().dataDirectory().set( finderDataDirectory );
+
+            if ( dataSource != null ) {
+
+                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble(
+                        infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+
+            } else {
+
+                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble(
+                        infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+
+                config.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
+                config.forMixin( SQLConfiguration.class ).declareDefaults().connectionString().set( connectionString );
+
+            }
         }
 
         LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, AssemblyNames.LAYER_DOMAIN );
-
         domain.uses( infrastructure );
 
         return appAssembly;

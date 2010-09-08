@@ -24,13 +24,16 @@ package org.codeartisans.qipki.ca.domain.x509;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
+
 import org.codeartisans.qipki.ca.domain.ca.CA;
+import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
 import org.codeartisans.qipki.crypto.digest.DigestParameters;
 import org.codeartisans.qipki.crypto.digest.DigestService;
 import org.codeartisans.qipki.crypto.io.CryptIO;
+
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -43,8 +46,9 @@ public interface X509Factory
         extends ServiceComposite
 {
 
-    X509 create( X509Certificate cert, CA issuer );
+    X509 create( X509Certificate cert, CA issuer, X509Profile profile );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements X509Factory
     {
@@ -59,7 +63,7 @@ public interface X509Factory
         private DigestService digester;
 
         @Override
-        public X509 create( X509Certificate cert, CA issuer )
+        public X509 create( X509Certificate cert, CA issuer, X509Profile profile )
         {
             try {
 
@@ -73,8 +77,10 @@ public interface X509Factory
                 x509.validityInterval().set( commonValuesFactory.buildValidityInterval( cert.getNotBefore(), cert.getNotAfter() ) );
                 x509.md5Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.MD5 ) ) );
                 x509.sha1Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_1 ) ) );
+                x509.sha256Fingerprint().set( digester.hexDigest( cert.getEncoded(), new DigestParameters( DigestAlgorithm.SHA_256 ) ) );
 
                 x509.issuer().set( issuer );
+                x509.profile().set( profile );
 
                 return x509Builder.newInstance();
 

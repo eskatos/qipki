@@ -24,6 +24,7 @@ package org.codeartisans.qipki.ca.presentation.rest;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
@@ -46,12 +47,14 @@ import org.codeartisans.qipki.commons.rest.values.representations.X509Value;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
 import org.codeartisans.qipki.crypto.objects.KeyInformation;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
+
 import org.restlet.data.Reference;
 
 @Mixins( RestletValuesFactory.Mixin.class )
@@ -77,6 +80,7 @@ public interface RestletValuesFactory
 
     RestListValue newListRepresentationValue( Reference listRef, int start, Iterable<RestValue> list );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements RestletValuesFactory
     {
@@ -179,6 +183,7 @@ public interface RestletValuesFactory
             x509Value.detailUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
             x509Value.revocationUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509Value.issuerUri().set( uriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
+            x509Value.profileUri().set( uriBuilder.x509Profile().withIdentity( x509.profile().get().identity().get() ).build() );
 
             x509Value.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
             x509Value.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
@@ -187,6 +192,8 @@ public interface RestletValuesFactory
                                                                                          x509.validityInterval().get().notAfter().get() ) );
             x509Value.md5Fingerprint().set( x509.md5Fingerprint().get() );
             x509Value.sha1Fingerprint().set( x509.sha1Fingerprint().get() );
+            x509Value.sha256Fingerprint().set( x509.sha256Fingerprint().get() );
+
             return x509ValueBuilder.newInstance();
         }
 
@@ -205,6 +212,7 @@ public interface RestletValuesFactory
             x509DetailValue.detailUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
             x509DetailValue.revocationUri().set( uriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509DetailValue.issuerUri().set( uriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
+            x509DetailValue.profileUri().set( uriBuilder.x509Profile().withIdentity( x509.profile().get().identity().get() ).build() );
 
             x509DetailValue.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
             x509DetailValue.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
@@ -213,6 +221,7 @@ public interface RestletValuesFactory
                                                                                                x509.validityInterval().get().notAfter().get() ) );
             x509DetailValue.md5Fingerprint().set( x509.md5Fingerprint().get() );
             x509DetailValue.sha1Fingerprint().set( x509.sha1Fingerprint().get() );
+            x509DetailValue.sha256Fingerprint().set( x509.sha256Fingerprint().get() );
             x509DetailValue.certificateVersion().set( cert.getVersion() );
             x509DetailValue.signatureAlgorithm().set( cert.getSigAlgName() );
             x509DetailValue.publicKeyAlgorithm().set( publicKeyInfo.getKeyAlgorithm() );

@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.rest.values.representations;
 
 import org.codeartisans.qipki.commons.crypto.states.X509State;
+
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
@@ -30,6 +31,8 @@ public interface X509Value
 {
 
     Property<String> issuerUri();
+
+    Property<String> profileUri();
 
     Property<String> revocationUri();
 

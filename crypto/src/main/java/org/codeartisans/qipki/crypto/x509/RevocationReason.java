@@ -48,4 +48,32 @@ public enum RevocationReason
         return reason;
     }
 
+    public static RevocationReason valueOf( int reason )
+    {
+        switch ( reason ) {
+            case CRLReason.unspecified:
+                return unspecified;
+            case CRLReason.keyCompromise:
+                return keyCompromise;
+            case CRLReason.cACompromise:
+                return cACompromise;
+            case CRLReason.affiliationChanged:
+                return affiliationChanged;
+            case CRLReason.superseded:
+                return superseded;
+            case CRLReason.cessationOfOperation:
+                return cessationOfOperation;
+            case CRLReason.certificateHold:
+                return certificateHold;
+            case CRLReason.removeFromCRL:
+                return removeFromCRL;
+            case CRLReason.privilegeWithdrawn:
+                return privilegeWithdrawn;
+            case CRLReason.aACompromise:
+                return aACompromise;
+            default:
+                throw new IllegalArgumentException( "Unknown revocation reason: " + reason );
+        }
+    }
+
 }

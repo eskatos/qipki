@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.crypto.states;
 
 import org.codeartisans.qipki.commons.crypto.values.ValidityIntervalValue;
+
 import org.qi4j.api.property.Property;
 
 public interface X509State
@@ -38,5 +39,7 @@ public interface X509State
     Property<String> md5Fingerprint();
 
     Property<String> sha1Fingerprint();
+
+    Property<String> sha256Fingerprint();
 
 }
