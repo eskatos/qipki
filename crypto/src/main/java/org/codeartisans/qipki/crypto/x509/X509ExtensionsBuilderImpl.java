@@ -41,6 +41,7 @@ import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyUsage;
@@ -93,6 +94,12 @@ public class X509ExtensionsBuilderImpl
     public KeyUsage buildKeyUsages( Set<org.codeartisans.qipki.crypto.x509.KeyUsage> keyUsages )
     {
         return new KeyUsage( org.codeartisans.qipki.crypto.x509.KeyUsage.usage( keyUsages ) );
+    }
+
+    @Override
+    public ExtendedKeyUsage buildExtendedKeyUsage( Set<org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage> extendedKeyUsages )
+    {
+        return new ExtendedKeyUsage( org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage.usage( extendedKeyUsages ) );
     }
 
     @Override

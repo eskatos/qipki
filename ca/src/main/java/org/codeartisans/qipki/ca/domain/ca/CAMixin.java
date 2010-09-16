@@ -32,9 +32,9 @@ import java.security.cert.X509Certificate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
-import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
@@ -43,6 +43,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
@@ -59,10 +60,13 @@ import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionHolder;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilder;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,8 +145,8 @@ public abstract class CAMixin
             // TODO add ExtendedKeyUsages and NetscapeCertTypes
 
             // TODO Climb up the CA hierarchy to add inherited CRL distpoints
-            CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
-            extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
+            // CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
+            // extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
 
             X509Certificate certificate = x509Generator.generateX509Certificate( privateKey(),
                                                                                  certificate().getSubjectX500Principal(),
