@@ -26,13 +26,20 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import javax.security.auth.x500.X500Principal;
 
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -52,7 +59,9 @@ import org.codeartisans.qipki.crypto.asymetric.AsymetricGenerator;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.io.CryptIO;
-import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
+import org.codeartisans.qipki.crypto.x509.KeyUsage;
+import org.codeartisans.qipki.crypto.x509.X509ExtensionHolder;
+import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilder;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -88,7 +97,7 @@ public interface CAFactory
         @Service
         private X509Generator x509Generator;
         @Service
-        private X509ExtensionsReader x509ExtReader;
+        private X509ExtensionsBuilder x509ExtBuilder;
         @Service
         private AsymetricGenerator asymGenerator;
         @Service
@@ -104,13 +113,14 @@ public interface CAFactory
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
                 X500Principal dn = new X500Principal( distinguishedName );
                 PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                List<X509ExtensionHolder> extensions = generateCAExtensions( pkcs10.getPublicKey(), pkcs10.getPublicKey() );
                 X509Certificate cert = x509Generator.generateX509Certificate( keyPair.getPrivate(),
                                                                               dn,
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                               pkcs10.getCertificationRequestInfo().getSubject(),
                                                                               pkcs10.getPublicKey(),
                                                                               Duration.standardDays( 3650 ),
-                                                                              x509ExtReader.extractRequestedExtensions( pkcs10 ) );
+                                                                              extensions );
 
                 EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
                 RootCA ca = caBuilder.instance();
@@ -124,7 +134,6 @@ public interface CAFactory
             }
         }
 
-        // TODO implement createSubCA
         @Override
         public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
@@ -133,13 +142,14 @@ public interface CAFactory
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
                 X500Principal dn = new X500Principal( distinguishedName );
                 PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                List<X509ExtensionHolder> extensions = generateCAExtensions( pkcs10.getPublicKey(), parentCA.certificate().getPublicKey() );
                 X509Certificate cert = x509Generator.generateX509Certificate( parentCA.privateKey(),
-                                                                              dn,
+                                                                              parentCA.certificate().getSubjectX500Principal(),
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                               pkcs10.getCertificationRequestInfo().getSubject(),
                                                                               pkcs10.getPublicKey(),
                                                                               Duration.standardDays( 3650 ),
-                                                                              x509ExtReader.extractRequestedExtensions( pkcs10 ) );
+                                                                              extensions );
 
                 EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );
                 SubCA ca = caBuilder.instance();
@@ -174,6 +184,21 @@ public interface CAFactory
                 CRL crl = crlFactory.create( cryptIO.asPEM( x509CRL ).toString() );
                 ca.crl().set( crl );
             }
+        }
+
+        private List<X509ExtensionHolder> generateCAExtensions( PublicKey subjectPubKey, PublicKey issuerPubKey )
+        {
+            List<X509ExtensionHolder> extensions = new ArrayList<X509ExtensionHolder>();
+            SubjectKeyIdentifier subjectKeyID = x509ExtBuilder.buildSubjectKeyIdentifier( subjectPubKey );
+            extensions.add( new X509ExtensionHolder( X509Extensions.SubjectKeyIdentifier, false, subjectKeyID ) );
+            AuthorityKeyIdentifier authKeyID = x509ExtBuilder.buildAuthorityKeyIdentifier( issuerPubKey );
+            extensions.add( new X509ExtensionHolder( X509Extensions.AuthorityKeyIdentifier, false, authKeyID ) );
+            BasicConstraints bc = x509ExtBuilder.buildCABasicConstraints( 0L );
+            extensions.add( new X509ExtensionHolder( X509Extensions.BasicConstraints, true, bc ) );
+            org.bouncycastle.asn1.x509.KeyUsage keyUsages = x509ExtBuilder.buildKeyUsages( EnumSet.of( KeyUsage.cRLSign, KeyUsage.keyCertSign ) );
+            extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, true, keyUsages ) );
+
+            return extensions;
         }
 
         // TODO move CRL creation crypto code into a crypto service
