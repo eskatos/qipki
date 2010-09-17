@@ -98,6 +98,7 @@ public abstract class AbstractQiPkiApplication
                 beforePassivate();
                 application.passivate();
                 afterPassivate();
+                application = null;
             }
         } catch ( Exception ex ) {
             LOGGER.warn( "Unable to passivate QiPKI Application", ex );
