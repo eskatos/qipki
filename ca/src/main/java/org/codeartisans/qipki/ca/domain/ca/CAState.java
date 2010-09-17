@@ -25,6 +25,7 @@ import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignme
 import org.codeartisans.qipki.ca.domain.crl.CRL;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.Identity;

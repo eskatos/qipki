@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
@@ -36,6 +37,7 @@ import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
 
 import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 
@@ -43,6 +45,8 @@ public class X509ListContext
         extends Context
 {
 
+    @This
+    private X509ListContext composite;
     @Service
     private CryptIO cryptIO;
 
@@ -51,18 +55,23 @@ public class X509ListContext
         return context.role( X509Repository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509 createX509( String caIdentity, String x509ProfileIdentity, String pkcs10PEM )
+    public X509 createX509( String caIdentity, String x509ProfileIdentity, PKCS10CertificationRequest pkcs10 )
     {
         try {
             CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
             X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
-            X509Certificate cert = ca.sign( x509Profile, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
+            X509Certificate cert = ca.sign( x509Profile, pkcs10 );
             X509 x509 = context.role( X509Factory.class ).create( cert, ca, x509Profile );
             return x509;
 
         } catch ( NoSuchEntityException ex ) {
-            throw new WrongParametersBuilder().title( "Invalid CA identity: " + pkcs10PEM ).build( ex );
+            throw new WrongParametersBuilder().title( "Invalid CA identity: " + caIdentity ).build( ex );
         }
+    }
+
+    public X509 createX509( String caIdentity, String x509ProfileIdentity, String pkcs10PEM )
+    {
+        return composite.createX509( caIdentity, x509ProfileIdentity, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
     }
 
     public X509 findByHexSha256( String hexSha256 )
