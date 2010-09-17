@@ -37,7 +37,6 @@ import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
 
 import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 
@@ -45,8 +44,6 @@ public class X509ListContext
         extends Context
 {
 
-    @This
-    private X509ListContext composite;
     @Service
     private CryptIO cryptIO;
 
@@ -71,7 +68,7 @@ public class X509ListContext
 
     public X509 createX509( String caIdentity, String x509ProfileIdentity, String pkcs10PEM )
     {
-        return composite.createX509( caIdentity, x509ProfileIdentity, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
+        return createX509( caIdentity, x509ProfileIdentity, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
     }
 
     public X509 findByHexSha256( String hexSha256 )
