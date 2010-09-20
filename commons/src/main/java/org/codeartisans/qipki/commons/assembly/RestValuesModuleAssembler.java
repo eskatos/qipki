@@ -21,7 +21,7 @@
  */
 package org.codeartisans.qipki.commons.assembly;
 
-import org.codeartisans.qipki.commons.rest.values.ApiURIsValue;
+import org.codeartisans.qipki.commons.rest.values.CaApiURIsValue;
 import org.codeartisans.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.ParamsFactory;
@@ -36,6 +36,7 @@ import org.codeartisans.qipki.commons.rest.values.representations.X509DetailValu
 import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509Value;
+
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -74,7 +75,7 @@ public class RestValuesModuleAssembler
 
         // Rest values
         module.addValues( RestListValue.class,
-                          ApiURIsValue.class,
+                          CaApiURIsValue.class,
                           CryptoStoreValue.class,
                           CAValue.class,
                           X509ProfileAssignmentValue.class,

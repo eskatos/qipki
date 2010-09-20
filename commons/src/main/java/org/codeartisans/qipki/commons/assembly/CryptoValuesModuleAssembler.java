@@ -44,12 +44,12 @@ import org.codeartisans.qipki.commons.crypto.values.x509.PrivateKeyUsageInterval
 import org.codeartisans.qipki.commons.crypto.values.x509.SubjectKeyIdentifierValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.X509GeneralNameValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.X509GeneralSubtreeValue;
+
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-@SuppressWarnings( "unchecked" )
 public class CryptoValuesModuleAssembler
         implements Assembler
 {
@@ -67,6 +67,7 @@ public class CryptoValuesModuleAssembler
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {

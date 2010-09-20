@@ -66,21 +66,21 @@ public class QiPkiPersistentEmbeddedCaAssembler
     {
         ApplicationAssembly appAssembly = super.assemble( applicationFactory );
 
-        LayerAssembly infrastructure = appAssembly.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
+        LayerAssembly infrastructure = appAssembly.layerAssembly( CaAssemblyNames.LAYER_INFRASTRUCTURE );
         {
-            ModuleAssembly config = infrastructure.moduleAssembly( AssemblyNames.MODULE_CONFIGURATION );
+            ModuleAssembly config = infrastructure.moduleAssembly( CaAssemblyNames.MODULE_CONFIGURATION );
             config.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             config.forMixin( NativeConfiguration.class ).declareDefaults().dataDirectory().set( finderDataDirectory );
 
             if ( dataSource != null ) {
 
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble(
-                        infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+                        infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
 
             } else {
 
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble(
-                        infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+                        infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
 
                 config.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
                 config.forMixin( SQLConfiguration.class ).declareDefaults().connectionString().set( connectionString );
@@ -88,7 +88,7 @@ public class QiPkiPersistentEmbeddedCaAssembler
             }
         }
 
-        LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, AssemblyNames.LAYER_DOMAIN );
+        LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );
         domain.uses( infrastructure );
 
         return appAssembly;

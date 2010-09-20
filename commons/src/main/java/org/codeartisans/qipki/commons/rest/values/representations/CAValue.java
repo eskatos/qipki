@@ -22,8 +22,10 @@
 package org.codeartisans.qipki.commons.rest.values.representations;
 
 import java.util.Set;
+
 import org.codeartisans.qipki.commons.fragments.Listable;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
@@ -42,6 +44,7 @@ public interface CAValue
     @UseDefaults
     Property<Set<X509ProfileAssignmentValue>> allowedX509Profiles();
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements CAValue
     {

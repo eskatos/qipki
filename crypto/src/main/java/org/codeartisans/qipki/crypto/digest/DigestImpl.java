@@ -26,9 +26,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 import org.codeartisans.qipki.crypto.codec.CryptCodex;
+
 import org.qi4j.api.injection.scope.Service;
 
 public class DigestImpl

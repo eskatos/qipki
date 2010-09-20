@@ -22,7 +22,9 @@
 package org.codeartisans.qipki.ca.domain.crl;
 
 import java.math.BigInteger;
+
 import org.codeartisans.qipki.ca.domain.fragments.HasPEM;
+
 import org.qi4j.api.property.Property;
 
 /**

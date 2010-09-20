@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.rest.values.params;
 
 import org.codeartisans.qipki.commons.crypto.states.CryptoStoreState;
+
 import org.qi4j.api.value.ValueComposite;
 
 public interface CryptoStoreFactoryParamsValue

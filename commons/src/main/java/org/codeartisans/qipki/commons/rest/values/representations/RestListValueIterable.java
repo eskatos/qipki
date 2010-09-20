@@ -41,6 +41,7 @@ public class RestListValueIterable<T extends RestValue>
         return new RestListValueIterator();
     }
 
+    @SuppressWarnings( "PublicInnerClass" )
     public class RestListValueIterator
             implements Iterator<T>
     {
@@ -59,6 +60,7 @@ public class RestListValueIterable<T extends RestValue>
         }
 
         @Override
+        @SuppressWarnings( "unchecked" )
         public T next()
         {
             return ( T ) delegate.next();

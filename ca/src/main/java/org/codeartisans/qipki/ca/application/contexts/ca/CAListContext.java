@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
+import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CAFactory;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
@@ -28,7 +29,6 @@ import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
-import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.core.dci.Context;

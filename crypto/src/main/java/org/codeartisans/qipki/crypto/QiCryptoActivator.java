@@ -22,7 +22,9 @@
 package org.codeartisans.qipki.crypto;
 
 import java.security.Security;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
@@ -32,6 +34,7 @@ public interface QiCryptoActivator
         extends Activatable, ServiceComposite
 {
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements QiCryptoActivator
     {

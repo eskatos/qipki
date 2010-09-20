@@ -22,6 +22,9 @@
 package org.codeartisans.qipki.crypto.constraints;
 
 import javax.security.auth.x500.X500Principal;
+
+import org.bouncycastle.asn1.x509.X509Name;
+
 import org.qi4j.api.constraint.Constraint;
 import org.qi4j.library.constraints.annotation.Contains;
 
@@ -29,11 +32,14 @@ public class X500NameConstraint
         implements Constraint<Contains, String>
 {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public boolean isValid( Contains annotation, String value )
     {
         try {
             X500Principal x500Principal = new X500Principal( value );
+            X509Name x509Name = new X509Name( value );
             return true;
         } catch ( IllegalArgumentException ex ) {
             return false;

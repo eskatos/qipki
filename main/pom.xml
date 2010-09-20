@@ -57,7 +57,7 @@
                         <phase>test-compile</phase>
                         <configuration>
                             <outputDirectory>target/felix/bundles</outputDirectory>
-                            <includeArtifactIds>qipki-ca,qipki-swing</includeArtifactIds>
+                            <includeArtifactIds>qipki-ca-http,qipki-swing</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -75,7 +75,7 @@
 
         <dependency>
             <groupId>org.codeartisans.qipki</groupId>
-            <artifactId>qipki-ca</artifactId>
+            <artifactId>qipki-ca-http</artifactId>
             <version>${project.version}</version>
         </dependency>
 

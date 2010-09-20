@@ -23,12 +23,14 @@ package org.codeartisans.qipki.ca.application.contexts.ca;
 
 import java.util.Iterator;
 import java.util.Map;
+
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.core.dci.Context;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;

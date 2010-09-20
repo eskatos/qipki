@@ -25,7 +25,7 @@ import java.io.File;
 import javax.sql.DataSource;
 
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
-import org.codeartisans.qipki.ca.assembly.AssemblyNames;
+import org.codeartisans.qipki.ca.assembly.CaAssemblyNames;
 import org.codeartisans.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
 import org.codeartisans.qipki.ca.assembly.QiPkiVolatileEmbeddedCaAssembler;
 import org.codeartisans.qipki.core.AbstractQiPkiApplication;
@@ -83,7 +83,7 @@ public final class QiPkiEmbeddedCa
     private Module ensureDCIModule()
     {
         if ( dciModule == null ) {
-            dciModule = application.findModule( AssemblyNames.LAYER_APPLICATION, AssemblyNames.MODULE_CA_DCI );
+            dciModule = application.findModule( CaAssemblyNames.LAYER_APPLICATION, CaAssemblyNames.MODULE_CA_DCI );
         }
         return dciModule;
     }

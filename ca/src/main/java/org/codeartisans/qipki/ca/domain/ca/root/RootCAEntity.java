@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca.domain.ca.root;
 
 import org.codeartisans.qipki.ca.domain.ca.CAMixin;
+
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
 

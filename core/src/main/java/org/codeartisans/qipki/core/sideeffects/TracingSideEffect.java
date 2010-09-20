@@ -27,9 +27,12 @@ import java.lang.reflect.Method;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMWriter;
+
 import org.qi4j.api.sideeffect.GenericSideEffect;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

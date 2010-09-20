@@ -26,7 +26,9 @@ import java.security.PublicKey;
 import java.security.interfaces.DSAKey;
 import java.security.interfaces.RSAKey;
 import javax.crypto.interfaces.DHKey;
+
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
+
 import org.qi4j.api.injection.scope.Uses;
 
 public class KeyInformation

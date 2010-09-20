@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.crypto.mac;
 
 import java.security.Key;
+
 import org.codeartisans.qipki.crypto.algorithms.MACAlgorithm;
 
 public class MACParameters

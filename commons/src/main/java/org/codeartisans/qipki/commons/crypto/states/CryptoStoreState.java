@@ -23,6 +23,7 @@ package org.codeartisans.qipki.commons.crypto.states;
 
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 import org.codeartisans.qipki.commons.fragments.Nameable;
+
 import org.qi4j.api.property.Property;
 
 public interface CryptoStoreState

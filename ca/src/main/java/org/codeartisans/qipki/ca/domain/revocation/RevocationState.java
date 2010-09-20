@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca.domain.revocation;
 
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
+
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.property.Property;

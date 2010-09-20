@@ -20,6 +20,7 @@ import org.qi4j.api.structure.Module;
 /**
  * Base class for DCI contexts.
  */
+@SuppressWarnings( "ProtectedField" )
 public abstract class Context
 {
 

@@ -32,7 +32,6 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-@SuppressWarnings( "unchecked" )
 public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
@@ -44,34 +43,34 @@ public abstract class QiPkiEmbeddedCaAssembler
     {
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
 
-        app.setName( AssemblyNames.APPLICATION_NAME );
-        app.setVersion( AssemblyNames.APPLICATION_VERSION );
+        app.setName( CaAssemblyNames.APPLICATION_NAME );
+        app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
 
-        LayerAssembly application = app.layerAssembly( AssemblyNames.LAYER_APPLICATION );
+        LayerAssembly application = app.layerAssembly( CaAssemblyNames.LAYER_APPLICATION );
         {
             new CaDCIModuleAssembler().assemble(
-                    application.moduleAssembly( AssemblyNames.MODULE_CA_DCI ) );
+                    application.moduleAssembly( CaAssemblyNames.MODULE_CA_DCI ) );
         }
 
-        LayerAssembly domain = app.layerAssembly( AssemblyNames.LAYER_DOMAIN );
+        LayerAssembly domain = app.layerAssembly( CaAssemblyNames.LAYER_DOMAIN );
         {
             new CaDomainModuleAssembler().assemble(
-                    domain.moduleAssembly( AssemblyNames.MODULE_CA_DOMAIN ) );
+                    domain.moduleAssembly( CaAssemblyNames.MODULE_CA_DOMAIN ) );
         }
 
-        LayerAssembly crypto = app.layerAssembly( AssemblyNames.LAYER_CRYPTO );
+        LayerAssembly crypto = app.layerAssembly( CaAssemblyNames.LAYER_CRYPTO );
         {
             new CryptoEngineModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( AssemblyNames.MODULE_CRYPTO_ENGINE ) );
+                    crypto.moduleAssembly( CaAssemblyNames.MODULE_CRYPTO_ENGINE ) );
             new CryptoValuesModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( AssemblyNames.MODULE_CRYPTO_VALUES ) );
+                    crypto.moduleAssembly( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
         }
 
-//        LayerAssembly infrastructure = app.layerAssembly( AssemblyNames.LAYER_INFRASTRUCTURE );
+//        LayerAssembly infrastructure = app.layerAssembly( CaAssemblyNames.LAYER_INFRASTRUCTURE );
 //        {
 //            // TODO Add MessagingModule and make it short as qi4j will implement Message type anytime not so soon :)
 //            new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
-//                    infrastructure.moduleAssembly( AssemblyNames.MODULE_PERSISTENCE ) );
+//                    infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
 //        }
 
         application.uses( domain, crypto );

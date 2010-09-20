@@ -25,6 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.DistributionPoint;
@@ -34,7 +35,9 @@ import org.bouncycastle.asn1.x509.NameConstraints;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.ReasonFlags;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+
 import org.joda.time.Interval;
+
 import org.qi4j.api.common.Optional;
 
 public interface X509ExtensionsReader

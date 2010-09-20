@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.rest.values.representations;
 
 import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
+
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 

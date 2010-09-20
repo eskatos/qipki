@@ -13,24 +13,7 @@
     <artifactId>qipki-ca</artifactId>
 
     <name>${project.artifactId}</name>
-    <packaging>bundle</packaging>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-Activator>org.codeartisans.qipki.ca.QiPkiCaBundleActivator</Bundle-Activator>
-                        <Embed-Dependency>*;scope=compile|runtime;type=!pom</Embed-Dependency>
-                        <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>*;resolution:=optional</Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -46,69 +29,6 @@
         </dependency>
 
 
-        <!-- OSGI -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>${version.osgi}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Serving HTTP -->
-        <dependency>
-            <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-http</artifactId>
-            <version>1.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet</artifactId>
-            <version>${version.restlet}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet.ext.xml</artifactId>
-            <version>${version.restlet}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet.ext.servlet</artifactId>
-            <version>${version.restlet}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet</groupId>
-            <artifactId>org.restlet.ext.fileupload</artifactId>
-            <version>2.0-M3</version>
-        </dependency>
-        <!--dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet.ext.atom</artifactId>
-            <version>${version.restlet}</version>
-        </dependency-->
-        <!--dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet.ext.wadl</artifactId>
-            <version>${version.restlet}</version>
-        </dependency-->
-
-        <!-- Shiro -->
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-            <version>1.1.0-incubating-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-shiro</artifactId>
-            <version>1.2-SNAPSHOT</version>
-        </dependency>
-
         <!-- Qi4j runtime -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
@@ -116,45 +36,17 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${version.slf4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${version.slf4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${version.slf4j}</version>
-        </dependency>
-
         <!-- test -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-client-ca</artifactId>
+            <artifactId>qipki-testsupport</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${version.httpclient}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-testsupport</artifactId>
-            <version>${version.qi4j}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-ca-client</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 

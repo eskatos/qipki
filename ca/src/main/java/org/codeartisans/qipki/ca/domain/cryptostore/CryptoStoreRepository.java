@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
+
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.QueryBuilderFactory;
@@ -30,6 +31,7 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( CryptoStoreRepository.Mixin.class )
+@SuppressWarnings( "PublicInnerClass" )
 public interface CryptoStoreRepository
         extends BoxedDomainRepository<CryptoStore>, ServiceComposite
 {
