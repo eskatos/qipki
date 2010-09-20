@@ -23,6 +23,7 @@ package org.codeartisans.qipki.ca.domain.ca.profileassignment;
 
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
+
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -30,6 +31,7 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( X509ProfileAssignmentFactory.Mixin.class )
+@SuppressWarnings( "PublicInnerClass" )
 public interface X509ProfileAssignmentFactory
         extends ServiceComposite
 {

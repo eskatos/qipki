@@ -30,6 +30,7 @@ public enum KeyStoreType
     PKCS11( StringValues.PKCS11 );
 
     // Needed ?
+    @SuppressWarnings( "PublicInnerClass" )
     public interface StringValues
     {
 

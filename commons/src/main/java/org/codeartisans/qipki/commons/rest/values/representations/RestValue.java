@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.rest.values.representations;
 
 import org.codeartisans.qipki.commons.fragments.HasURI;
+
 import org.qi4j.api.value.ValueComposite;
 
 public interface RestValue

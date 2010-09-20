@@ -22,8 +22,10 @@
 package org.codeartisans.qipki.ca.domain.cryptostore;
 
 import java.security.KeyStore;
+
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
@@ -35,6 +37,7 @@ import org.qi4j.api.unitofwork.UnitOfWorkFactory;
  * TODO Handle PKCS11 KeyStores
  */
 @Mixins( CryptoStoreFactory.Mixin.class )
+@SuppressWarnings( "PublicInnerClass" )
 public interface CryptoStoreFactory
         extends ServiceComposite
 {

@@ -22,12 +22,15 @@
 package org.codeartisans.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
+
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.codeartisans.qipki.commons.fragments.HasOID;
+
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
+@SuppressWarnings( "PublicInnerClass" )
 public interface CertificatePoliciesValue
         extends HasCriticality, ValueComposite
 {

@@ -22,7 +22,9 @@
 package org.codeartisans.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
+
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
+
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
@@ -35,6 +37,7 @@ public interface PolicyConstraintsValue
     @UseDefaults
     Property<Set<PolicyConstraintValue>> constraints();
 
+    @SuppressWarnings( "PublicInnerClass" )
     public interface PolicyConstraintValue
             extends ValueComposite
     {

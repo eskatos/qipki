@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca.domain.ca.sub;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
+
 import org.qi4j.api.entity.association.Association;
 
 public interface SubCA

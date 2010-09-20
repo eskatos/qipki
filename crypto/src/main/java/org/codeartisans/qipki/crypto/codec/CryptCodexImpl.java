@@ -23,12 +23,14 @@ package org.codeartisans.qipki.crypto.codec;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DEREncodable;
 import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERString;
 import org.bouncycastle.util.encoders.Base64;
+
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 
 public class CryptCodexImpl

@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.ca.domain.x509profile;
 
 import org.codeartisans.qipki.commons.crypto.states.X509ProfileState;
+
 import org.qi4j.api.entity.Identity;
 
 public interface X509Profile

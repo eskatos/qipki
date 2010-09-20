@@ -24,8 +24,11 @@ package org.codeartisans.qipki.ca.domain.x509;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
+
 import org.bouncycastle.openssl.PEMReader;
+
 import org.codeartisans.qipki.core.QiPkiFailure;
+
 import org.qi4j.api.injection.scope.This;
 
 public class X509Mixin

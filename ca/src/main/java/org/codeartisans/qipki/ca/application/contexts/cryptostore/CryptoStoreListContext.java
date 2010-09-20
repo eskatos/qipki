@@ -26,6 +26,7 @@ import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+
 import org.qi4j.api.query.Query;
 
 public class CryptoStoreListContext

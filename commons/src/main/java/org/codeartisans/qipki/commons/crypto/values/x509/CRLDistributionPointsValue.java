@@ -22,8 +22,10 @@
 package org.codeartisans.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
+
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
+
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;

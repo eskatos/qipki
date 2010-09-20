@@ -35,15 +35,30 @@
     </properties>
 
     <modules>
+
+        <!-- Common building blocks -->
         <module>crypto</module>
         <module>core</module>
         <module>commons</module>
-        <module>client-ca</module>
+
+        <!-- Automated testing support -->
+        <module>testsupport</module>
+
+        <!-- Certificate Authority -->
+        <module>ca-client</module>
         <module>ca</module>
+        <module>ca-http</module>
+
+        <!-- Request Authority -->
         <module>ra</module>
+
+        <!-- Swing UI -->
         <module>swing</module>
+
+        <!-- Packaging -->
         <module>main</module>
         <module>dist</module>
+
     </modules>
 
     <build>

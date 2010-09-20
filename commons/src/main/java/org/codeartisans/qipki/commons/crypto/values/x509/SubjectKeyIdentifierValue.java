@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.commons.crypto.values.x509;
 
 import org.codeartisans.qipki.commons.fragments.HasCriticality;
+
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 

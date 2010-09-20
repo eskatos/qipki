@@ -34,13 +34,13 @@ import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( CARepository.Mixin.class )
+@SuppressWarnings( "PublicInnerClass" )
 public interface CARepository
         extends BoxedDomainRepository<CA>, ServiceComposite
 {
 
     Query<CA> findByNamePaginated( String name, int firstResult, int maxResults );
 
-    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             extends AbstractBoxedDomainRepository<CA>
             implements CARepository

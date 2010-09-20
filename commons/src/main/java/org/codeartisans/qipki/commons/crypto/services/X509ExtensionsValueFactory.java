@@ -25,6 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -36,6 +37,7 @@ import org.bouncycastle.asn1.x509.NameConstraints;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
 import static org.bouncycastle.asn1.x509.X509Extensions.*;
+
 import org.codeartisans.qipki.commons.crypto.values.x509.ConstraintsExtensionsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
@@ -68,7 +70,9 @@ import org.codeartisans.qipki.crypto.x509.PolicyMapping;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
 import org.codeartisans.qipki.crypto.x509.X509GeneralName;
+
 import org.joda.time.Interval;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -104,6 +108,7 @@ public interface X509ExtensionsValueFactory
 
     X509GeneralSubtreeValue buildGeneralSubtree( X509GeneralName nameType, String nameValue, Long subtreeMinimum, Long subtreeMaximum );
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements X509ExtensionsValueFactory
     {

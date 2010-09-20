@@ -22,6 +22,7 @@
 package org.codeartisans.qipki.crypto.codec;
 
 import java.math.BigInteger;
+
 import org.bouncycastle.asn1.DEREncodable;
 
 public interface CryptCodex

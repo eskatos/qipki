@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
@@ -68,10 +69,13 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
+
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 import org.codeartisans.qipki.crypto.codec.CryptCodex;
+
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+
 import org.qi4j.api.injection.scope.Service;
 
 public class X509ExtensionsReaderImpl

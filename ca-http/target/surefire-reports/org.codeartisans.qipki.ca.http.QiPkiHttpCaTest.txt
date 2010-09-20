@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.codeartisans.qipki.ca.http.QiPkiHttpCaTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.418 sec

@@ -43,6 +43,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
 
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.ca.root.RootCAMixin;
@@ -50,7 +51,6 @@ import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
-import org.codeartisans.qipki.ca.presentation.rest.resources.WrongParametersBuilder;
 import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.constants.Time;
 import org.codeartisans.qipki.crypto.io.CryptIO;
