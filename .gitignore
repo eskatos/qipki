@@ -5,6 +5,8 @@ main/target
 ca/target
 ra/target
 swing/target
-client-ca/target
+ca-client/target
+ca-http/target
+testsupport/target
 commons/target
 QIPKI~
