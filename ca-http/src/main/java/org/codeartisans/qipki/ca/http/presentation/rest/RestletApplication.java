@@ -31,9 +31,10 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.Cr
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.CryptoStoreResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairListResource;
-import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairRecoveryResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairPemResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509PemResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileListResource;
@@ -100,12 +101,13 @@ public class RestletApplication
 
         router.attach( "/x509", createFinder( X509ListResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
+        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/pem", createFinder( X509PemResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
 
         router.attach( "/escrow", createFinder( EscrowedKeyPairListResource.class ) );
         router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( EscrowedKeyPairResource.class ) );
-        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}/recovery", createFinder( EscrowedKeyPairRecoveryResource.class ) );
+        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}/pem", createFinder( EscrowedKeyPairPemResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );
     }

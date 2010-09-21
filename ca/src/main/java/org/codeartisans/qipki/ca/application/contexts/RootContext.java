@@ -61,11 +61,11 @@ public class RootContext
 {
 
     @Service
-    private CryptoStoreRepository ksRepos;
+    private CryptoStoreRepository cryptoStoreRepository;
     @Service
-    private CryptoStoreFactory ksFactory;
+    private CryptoStoreFactory cryptoStoreFactory;
     @Service
-    private CARepository caRepos;
+    private CARepository caRepository;
     @Service
     private CAFactory caFactory;
     @Service
@@ -89,30 +89,30 @@ public class RootContext
 
     public CryptoStoreListContext cryptoStoreListContext()
     {
-        context.playRoles( ksRepos, CryptoStoreRepository.class );
-        context.playRoles( ksFactory, CryptoStoreFactory.class );
+        context.playRoles( cryptoStoreRepository, CryptoStoreRepository.class );
+        context.playRoles( cryptoStoreFactory, CryptoStoreFactory.class );
         return subContext( CryptoStoreListContext.class );
     }
 
     public CryptoStoreContext cryptoStoreContext( String identity )
     {
-        CryptoStore ks = ksRepos.findByIdentity( identity );
+        CryptoStore ks = cryptoStoreRepository.findByIdentity( identity );
         context.playRoles( ks, CryptoStore.class );
         return subContext( CryptoStoreContext.class );
     }
 
     public CAListContext caListContext()
     {
-        context.playRoles( caRepos, CARepository.class );
+        context.playRoles( caRepository, CARepository.class );
         context.playRoles( caFactory, CAFactory.class );
-        context.playRoles( ksRepos, CryptoStoreRepository.class );
+        context.playRoles( cryptoStoreRepository, CryptoStoreRepository.class );
         context.playRoles( cryptoValuesFactory, CryptoValuesFactory.class );
         return subContext( CAListContext.class );
     }
 
     public CAContext caContext( String identity )
     {
-        CA ca = caRepos.findByIdentity( identity );
+        CA ca = caRepository.findByIdentity( identity );
         context.playRoles( ca, CA.class );
         context.playRoles( x509Repository, X509Repository.class );
         context.playRoles( x509ProfileAssignmentFactory, X509ProfileAssignmentFactory.class );
@@ -140,7 +140,8 @@ public class RootContext
         context.playRoles( x509Repository, X509Repository.class );
         context.playRoles( x509Factory, X509Factory.class );
         context.playRoles( x509ProfileRepository, X509ProfileRepository.class );
-        context.playRoles( caRepos, CARepository.class );
+        context.playRoles( escrowedKeyPairRepository, EscrowedKeyPairRepository.class );
+        context.playRoles( caRepository, CARepository.class );
         return subContext( X509ListContext.class );
     }
 

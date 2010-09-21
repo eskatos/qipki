@@ -191,6 +191,7 @@ public interface RestletValuesFactory
             X509Value x509Value = x509ValueBuilder.prototype();
 
             x509Value.uri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).build() );
+            x509Value.pemUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).pem().build() );
             x509Value.detailUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
             x509Value.revocationUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509Value.issuerUri().set( caUriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
@@ -220,6 +221,7 @@ public interface RestletValuesFactory
             X509DetailValue x509DetailValue = x509DetailValueBuilder.prototype();
 
             x509DetailValue.uri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).build() );
+            x509DetailValue.pemUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).pem().build() );
             x509DetailValue.detailUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).detail().build() );
             x509DetailValue.revocationUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509DetailValue.issuerUri().set( caUriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
@@ -280,7 +282,7 @@ public interface RestletValuesFactory
             EscrowedKeyPairValue escrowedKeyPairValue = escrowedKeyPairValueBuilder.prototype();
 
             escrowedKeyPairValue.uri().set( caUriBuilder.escrowedKeyPair().withIdentity( escrowedKeyPair.identity().get() ).build() );
-            escrowedKeyPairValue.recoveryUri().set( caUriBuilder.escrowedKeyPair().withIdentity( escrowedKeyPair.identity().get() ).recovery().build() );
+            escrowedKeyPairValue.recoveryUri().set( caUriBuilder.escrowedKeyPair().withIdentity( escrowedKeyPair.identity().get() ).pem().build() );
             List<String> x509sUris = new ArrayList<String>();
             for ( X509 eachX509 : escrowedKeyPair.x509s() ) {
                 x509sUris.add( caUriBuilder.x509().withIdentity( eachX509.identity().get() ).build() );

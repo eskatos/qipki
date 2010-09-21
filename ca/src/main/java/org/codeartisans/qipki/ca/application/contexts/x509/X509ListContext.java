@@ -22,13 +22,18 @@
 package org.codeartisans.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
+import java.security.KeyPair;
 import java.security.cert.X509Certificate;
+import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.asn1.x509.X509Name;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
@@ -36,6 +41,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.x509.X509Generator;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.query.Query;
@@ -47,29 +53,51 @@ public class X509ListContext
 
     @Service
     private CryptIO cryptIO;
+    @Service
+    private X509Generator x509Generator;
 
     public Query<X509> list( int start )
     {
         return context.role( X509Repository.class ).findAllPaginated( start, 25 );
     }
 
-    public X509 createX509( String caIdentity, String x509ProfileIdentity, PKCS10CertificationRequest pkcs10 )
-    {
-        try {
-            CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
-            X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
-            X509Certificate cert = ca.sign( x509Profile, pkcs10 );
-            X509 x509 = context.role( X509Factory.class ).create( cert, ca, x509Profile );
-            return x509;
-
-        } catch ( NoSuchEntityException ex ) {
-            throw new WrongParametersBuilder().title( "Invalid CA identity: " + caIdentity ).build( ex );
-        }
-    }
-
     public X509 createX509( String caIdentity, String x509ProfileIdentity, String pkcs10PEM )
     {
         return createX509( caIdentity, x509ProfileIdentity, cryptIO.readPKCS10PEM( new StringReader( pkcs10PEM ) ) );
+    }
+
+    public X509 createX509( String caIdentity, String x509ProfileIdentity, PKCS10CertificationRequest pkcs10 )
+    {
+        try {
+
+            CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
+            X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
+
+            X509Certificate cert = ca.sign( x509Profile, pkcs10 );
+            X509 x509 = context.role( X509Factory.class ).create( cert, ca, x509Profile );
+
+            return x509;
+
+        } catch ( NoSuchEntityException ex ) {
+            throw new WrongParametersBuilder().title( "Invalid CA or X509Profile identity" ).build( ex );
+        }
+    }
+
+    public X509 createX509( String caIdentity, String x509ProfileIdentity, String escrowedKeyPairIdentity, String distinguishedName )
+    {
+        try {
+
+            EscrowedKeyPair ekp = context.role( EscrowedKeyPairRepository.class ).findByIdentity( escrowedKeyPairIdentity );
+
+            PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new X500Principal( new X509Name( distinguishedName ).toString() ), ekp.keyPair() );
+            X509 x509 = createX509( caIdentity, x509ProfileIdentity, pkcs10 );
+            ekp.x509s().add( x509 );
+
+            return x509;
+
+        } catch ( NoSuchEntityException ex ) {
+            throw new WrongParametersBuilder().title( "Invalid CA or X509Profile or EscrowedKeyPair identity" ).build( ex );
+        }
     }
 
     public X509 findByHexSha256( String hexSha256 )

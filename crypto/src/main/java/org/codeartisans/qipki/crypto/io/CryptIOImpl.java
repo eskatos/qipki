@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -89,6 +90,16 @@ public class CryptIOImpl
             throw new QiCryptoFailure( "Unable to Base64 decode KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
             throw new QiCryptoFailure( "Unable to Base64 decode KeyStore", ex );
+        }
+    }
+
+    @Override
+    public X509Certificate readX509PEM( StringReader reader )
+    {
+        try {
+            return ( X509Certificate ) new PEMReader( reader ).readObject();
+        } catch ( IOException ex ) {
+            throw new IllegalArgumentException( "Unable to read X509Certificate from PEM", ex );
         }
     }
 

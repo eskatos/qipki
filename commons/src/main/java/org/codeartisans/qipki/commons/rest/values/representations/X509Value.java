@@ -30,6 +30,8 @@ public interface X509Value
         extends RestValue, X509State, ValueComposite
 {
 
+    Property<String> pemUri();
+
     Property<String> issuerUri();
 
     Property<String> profileUri();

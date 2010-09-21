@@ -22,7 +22,12 @@
 package org.codeartisans.qipki.ca.http;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import javax.security.auth.x500.X500Principal;
 
@@ -33,6 +38,7 @@ import org.apache.http.entity.StringEntity;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
@@ -75,7 +81,7 @@ public class QiPkiHttpCaTest
 
     @Test
     public void testCA()
-            throws InterruptedException, IOException, JSONException
+            throws InterruptedException, IOException, JSONException, GeneralSecurityException
     {
         // Get CA list
         HttpGet get = new HttpGet( caApi.caListUri().get() );
@@ -202,6 +208,8 @@ public class QiPkiHttpCaTest
         String jsonKeyPairList = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "EscrowedKeyPair List: {}", new JSONObject( jsonKeyPairList ).toString( 2 ) );
 
+
+        // Create KeyPair
         EscrowedKeyPairFactoryParamsValue escrowParams = paramsFactory.createEscrowedKeyPairFactoryParams( AsymetricAlgorithm.RSA, 512 );
         post = new HttpPost( caApi.escrowedKeyPairListUri().get() );
         addAcceptJsonHeader( post );
@@ -211,11 +219,40 @@ public class QiPkiHttpCaTest
         EscrowedKeyPairValue ekp = valueBuilderFactory.newValueFromJSON( EscrowedKeyPairValue.class, jsonEscrowed );
 
 
+        // Recover KeyPair
         get = new HttpGet( ekp.recoveryUri().get() );
         addAcceptJsonHeader( get );
         String kpPem = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "EscrowedKeyPair PEM: {}", kpPem );
+        KeyPair keypair = cryptio.readKeyPairPEM( new StringReader( kpPem ) );
 
+
+        // Issue X509Certificate using an escrowed keypair
+        String dn = "CN=qipki-escrowed";
+        LOGGER.debug( "Will request a new X509 with the following DN: " + dn );
+        x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), ekp.uri().get(), dn );
+        post = new HttpPost( caApi.x509ListUri().get() );
+        addAcceptJsonHeader( post );
+        post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );
+        jsonX509 = httpClient.execute( post, strResponseHandler );
+        newX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
+        LOGGER.debug( "New X509 created using /api/x509/factory and an escrowed keypair after POST/302/REDIRECT: {}", newX509.toJSON() );
+
+
+        // Getting new X509 PEM
+        get = new HttpGet( newX509.pemUri().get() );
+        String x509pem = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "X509 created from escrowed keypair PEM: {}", x509pem );
+        X509Certificate x509Certificate = cryptio.readX509PEM( new StringReader( x509pem ) );
+
+
+        // Create local PKCS#12 keystore with keypair, certificate and full certchain
+        char[] password = "changeit".toCharArray();
+        KeyStore ks = KeyStore.getInstance( KeyStoreType.PKCS12.typeString(), BouncyCastleProvider.PROVIDER_NAME );
+        ks.load( null, password );
+        ks.setEntry( "wow", new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ x509Certificate } ), new KeyStore.PasswordProtection( password ) );
+        String base64encodedp12 = cryptio.base64Encode( ks, password );
+        System.out.println( base64encodedp12 );
 
     }
 

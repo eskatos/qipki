@@ -24,6 +24,7 @@ package org.codeartisans.qipki.ca.http.presentation.rest.uribuilder;
 import org.codeartisans.java.toolbox.exceptions.NullArgumentException;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 
@@ -69,6 +70,8 @@ public class CaUriResolver
             return X509Profile.class;
         } else if ( "x509".equals( fragment ) ) {
             return X509.class;
+        } else if ( "escrow".equals( fragment ) ) {
+            return EscrowedKeyPair.class;
         }
         throw new IllegalArgumentException( "Unknown class fragment: " + fragment );
     }

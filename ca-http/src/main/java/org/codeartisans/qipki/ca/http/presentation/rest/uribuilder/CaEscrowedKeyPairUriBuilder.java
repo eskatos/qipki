@@ -30,9 +30,9 @@ public final class CaEscrowedKeyPairUriBuilder
         return new CaEscrowedKeyPairUriBuilder( baseRef, identity, special );
     }
 
-    public CaEscrowedKeyPairUriBuilder recovery()
+    public CaEscrowedKeyPairUriBuilder pem()
     {
-        return new CaEscrowedKeyPairUriBuilder( baseRef, identity, "recovery" );
+        return new CaEscrowedKeyPairUriBuilder( baseRef, identity, "pem" );
     }
 
 }

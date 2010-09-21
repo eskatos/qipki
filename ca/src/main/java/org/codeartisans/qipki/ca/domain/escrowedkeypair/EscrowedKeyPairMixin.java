@@ -1,5 +1,5 @@
 /*
- * Created on 20 sept. 2010
+ * Created on 21 sept. 2010
  *
  * Licenced under the Netheos Licence, Version 1.0 (the "Licence"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at :
@@ -15,11 +15,27 @@
  */
 package org.codeartisans.qipki.ca.domain.escrowedkeypair;
 
-import org.qi4j.api.entity.EntityComposite;
-import org.qi4j.api.mixin.Mixins;
+import java.io.StringReader;
+import java.security.KeyPair;
 
-@Mixins( EscrowedKeyPairMixin.class )
-public interface EscrowedKeyPairEntity
-        extends EscrowedKeyPair, EntityComposite
+import org.codeartisans.qipki.crypto.io.CryptIO;
+
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.This;
+
+public abstract class EscrowedKeyPairMixin
+        implements EscrowedKeyPair
 {
+
+    @This
+    private EscrowedKeyPair state;
+    @Service
+    private CryptIO cryptio;
+
+    @Override
+    public KeyPair keyPair()
+    {
+        return cryptio.readKeyPairPEM( new StringReader( state.pem().get() ) );
+    }
+
 }
