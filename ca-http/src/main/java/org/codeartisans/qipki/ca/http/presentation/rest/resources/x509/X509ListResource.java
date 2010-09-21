@@ -85,14 +85,23 @@ public class X509ListResource
 
             // Data
             X509FactoryParamsValue params = vbf.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
+            Boolean escrowed = params.escrowedKeyPairUri().get() != null;
 
             // Context
             X509ListContext caListCtx = newRootContext().x509ListContext();
 
             // Interaction
-            X509 x509 = caListCtx.createX509( new CaUriResolver( getRootRef(), params.caUri().get() ).identity(),
-                                              new CaUriResolver( getRootRef(), params.x509ProfileUri().get() ).identity(),
-                                              params.pemPkcs10().get() );
+            X509 x509;
+            if ( escrowed ) {
+                x509 = caListCtx.createX509( new CaUriResolver( getRootRef(), params.caUri().get() ).identity(),
+                                             new CaUriResolver( getRootRef(), params.x509ProfileUri().get() ).identity(),
+                                             new CaUriResolver( getRootRef(), params.escrowedKeyPairUri().get() ).identity(),
+                                             params.distinguishedName().get() );
+            } else {
+                x509 = caListCtx.createX509( new CaUriResolver( getRootRef(), params.caUri().get() ).identity(),
+                                             new CaUriResolver( getRootRef(), params.x509ProfileUri().get() ).identity(),
+                                             params.pemPkcs10().get() );
+            }
 
             // Redirect to created resource
             X509Value x509Value = restValuesFactory.x509( getRootRef(), x509 );

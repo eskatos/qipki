@@ -15,6 +15,11 @@
  */
 package org.codeartisans.qipki.ca.domain.escrowedkeypair;
 
+import java.security.KeyPair;
+
 public interface EscrowedKeyPairBehavior
 {
+
+    KeyPair keyPair();
+
 }

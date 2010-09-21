@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.commons.rest.values.params;
 
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
@@ -32,6 +33,13 @@ public interface X509FactoryParamsValue
 
     Property<String> x509ProfileUri();
 
+    @Optional
     Property<String> pemPkcs10();
+
+    @Optional
+    Property<String> escrowedKeyPairUri();
+
+    @Optional
+    Property<String> distinguishedName();
 
 }

@@ -38,6 +38,11 @@ public final class CaX509UriBuilder
         return new CaX509UriBuilder( baseRef, identity, special );
     }
 
+    public CaX509UriBuilder pem()
+    {
+        return new CaX509UriBuilder( baseRef, identity, "pem" );
+    }
+
     public CaX509UriBuilder detail()
     {
         return new CaX509UriBuilder( baseRef, identity, "detail" );

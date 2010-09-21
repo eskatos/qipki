@@ -61,6 +61,8 @@ public interface ParamsFactory
 
     X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String pemPkcs10 );
 
+    X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String escrowedKeyPairUri, String distinguishedName );
+
     X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
 
     EscrowedKeyPairFactoryParamsValue createEscrowedKeyPairFactoryParams( AsymetricAlgorithm algorithm, Integer length );
@@ -132,6 +134,18 @@ public interface ParamsFactory
             params.caUri().set( caUri );
             params.x509ProfileUri().set( x509ProfileUri );
             params.pemPkcs10().set( pemPkcs10 );
+            return paramsBuilder.newInstance();
+        }
+
+        @Override
+        public X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String escrowedKeyPairUri, String distinguishedName )
+        {
+            ValueBuilder<X509FactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509FactoryParamsValue.class );
+            X509FactoryParamsValue params = paramsBuilder.prototype();
+            params.caUri().set( caUri );
+            params.x509ProfileUri().set( x509ProfileUri );
+            params.escrowedKeyPairUri().set( escrowedKeyPairUri );
+            params.distinguishedName().set( distinguishedName );
             return paramsBuilder.newInstance();
         }
 

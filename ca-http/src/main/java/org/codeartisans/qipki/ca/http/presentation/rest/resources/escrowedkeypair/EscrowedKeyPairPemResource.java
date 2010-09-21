@@ -28,11 +28,11 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
-public class EscrowedKeyPairRecoveryResource
+public class EscrowedKeyPairPemResource
         extends AbstractResource
 {
 
-    public EscrowedKeyPairRecoveryResource( @Structure ObjectBuilderFactory obf )
+    public EscrowedKeyPairPemResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
     }
