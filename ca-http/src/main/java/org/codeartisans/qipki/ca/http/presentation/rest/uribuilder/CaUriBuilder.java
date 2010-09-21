@@ -53,4 +53,9 @@ public final class CaUriBuilder
         return new CaX509UriBuilder( root.clone().addSegment( "x509" ), null, null );
     }
 
+    public CaEscrowedKeyPairUriBuilder escrowedKeyPair()
+    {
+        return new CaEscrowedKeyPairUriBuilder( root.clone().addSegment( "escrow" ), null, null );
+    }
+
 }

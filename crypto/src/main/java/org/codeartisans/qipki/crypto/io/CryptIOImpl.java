@@ -27,9 +27,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 
@@ -111,6 +113,16 @@ public class CryptIOImpl
     }
 
     @Override
+    public KeyPair readKeyPairPEM( Reader reader )
+    {
+        try {
+            return ( KeyPair ) new PEMReader( reader ).readObject();
+        } catch ( IOException ex ) {
+            throw new IllegalArgumentException( "Unable to read KeyPair from PEM", ex );
+        }
+    }
+
+    @Override
     public CharSequence asPEM( X509Certificate certificate )
     {
         return asPEM( certificate.getClass().getSimpleName(), certificate );
@@ -128,11 +140,29 @@ public class CryptIOImpl
         return asPEM( x509CRL.getClass().getSimpleName(), x509CRL );
     }
 
+    @Override
+    public CharSequence asPEM( PublicKey pubKey )
+    {
+        return asPEM( pubKey.getClass().getSimpleName(), pubKey );
+    }
+
+    @Override
+    public CharSequence asPEM( KeyPair keyPair )
+    {
+        return asPEM( keyPair.getClass().getSimpleName(), keyPair );
+    }
+
+    @Override
+    public CharSequence asPEM( KeyPair keyPair, char[] password )
+    {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
     private CharSequence asPEM( String ilk, Object object )
     {
         try {
             StringWriter sw = new StringWriter();
-            PEMWriter pemWriter = new PEMWriter( sw );
+            PEMWriter pemWriter = new PEMWriter( sw, BouncyCastleProvider.PROVIDER_NAME );
             pemWriter.writeObject( object );
             pemWriter.flush();
             return sw.getBuffer();

@@ -30,6 +30,9 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CRLResource
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.CryptoStoreResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairListResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairRecoveryResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource;
@@ -99,6 +102,10 @@ public class RestletApplication
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
+
+        router.attach( "/escrow", createFinder( EscrowedKeyPairListResource.class ) );
+        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( EscrowedKeyPairResource.class ) );
+        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}/recovery", createFinder( EscrowedKeyPairRecoveryResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );
     }

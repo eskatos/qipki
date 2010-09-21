@@ -22,7 +22,9 @@
 package org.codeartisans.qipki.crypto.io;
 
 import java.io.Reader;
+import java.security.KeyPair;
 import java.security.KeyStore;
+import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 
@@ -39,14 +41,22 @@ public interface CryptIO
 
     CharSequence asPEM( X509CRL x509CRL );
 
+    CharSequence asPEM( PublicKey pubKey );
+
+    CharSequence asPEM( KeyPair keyPair );
+
+    CharSequence asPEM( KeyPair keyPair, char[] password );
+
+    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
+
     X509CRL readCRLPEM( Reader reader );
+
+    KeyPair readKeyPairPEM( Reader reader );
 
     KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
 
     String base64Encode( KeyStore keystore, char[] password );
 
     KeyStore createEmptyKeyStore( KeyStoreType storeType );
-
-    PKCS10CertificationRequest readPKCS10PEM( Reader reader );
 
 }

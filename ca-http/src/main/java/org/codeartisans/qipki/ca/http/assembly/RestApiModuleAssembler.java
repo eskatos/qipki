@@ -31,6 +31,9 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CRLResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.CryptoStoreListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.CryptoStoreResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairListResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairRecoveryResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
@@ -69,7 +72,10 @@ public class RestApiModuleAssembler
                            X509ListResource.class,
                            X509Resource.class,
                            X509DetailResource.class,
-                           X509RevocationResource.class ).
+                           X509RevocationResource.class,
+                           EscrowedKeyPairListResource.class,
+                           EscrowedKeyPairResource.class,
+                           EscrowedKeyPairRecoveryResource.class ).
                 visibleIn( Visibility.module );
 
         new RestValuesModuleAssembler( Visibility.layer ).assemble( module );

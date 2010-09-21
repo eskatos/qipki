@@ -37,4 +37,6 @@ public interface CaApiURIsValue
 
     Property<String> x509ListUri();
 
+    Property<String> escrowedKeyPairListUri();
+
 }

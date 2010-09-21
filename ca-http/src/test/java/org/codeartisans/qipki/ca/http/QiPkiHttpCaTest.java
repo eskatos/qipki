@@ -38,11 +38,13 @@ import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.EscrowedKeyPairFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.X509RevocationParamsValue;
 import org.codeartisans.qipki.commons.rest.values.representations.CAValue;
 import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509DetailValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileValue;
@@ -192,6 +194,29 @@ public class QiPkiHttpCaTest
         post.setEntity( new StringEntity( x509RevocationParams.toJSON() ) );
         String jsonRevocation = httpClient.execute( post, strResponseHandler );
         LOGGER.debug( jsonRevocation );
+
+
+        // Get KeyPair list
+        get = new HttpGet( caApi.escrowedKeyPairListUri().get() );
+        addAcceptJsonHeader( get );
+        String jsonKeyPairList = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "EscrowedKeyPair List: {}", new JSONObject( jsonKeyPairList ).toString( 2 ) );
+
+        EscrowedKeyPairFactoryParamsValue escrowParams = paramsFactory.createEscrowedKeyPairFactoryParams( AsymetricAlgorithm.RSA, 512 );
+        post = new HttpPost( caApi.escrowedKeyPairListUri().get() );
+        addAcceptJsonHeader( post );
+        post.setEntity( new StringEntity( escrowParams.toJSON() ) );
+        String jsonEscrowed = httpClient.execute( post, strResponseHandler );
+        LOGGER.debug( "EscrowedKeyPair : {}", new JSONObject( jsonEscrowed ).toString( 2 ) );
+        EscrowedKeyPairValue ekp = valueBuilderFactory.newValueFromJSON( EscrowedKeyPairValue.class, jsonEscrowed );
+
+
+        get = new HttpGet( ekp.recoveryUri().get() );
+        addAcceptJsonHeader( get );
+        String kpPem = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "EscrowedKeyPair PEM: {}", kpPem );
+
+
     }
 
 }

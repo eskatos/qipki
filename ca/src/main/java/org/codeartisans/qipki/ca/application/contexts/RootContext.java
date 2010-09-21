@@ -25,6 +25,8 @@ import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
+import org.codeartisans.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
+import org.codeartisans.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileContext;
@@ -36,6 +38,9 @@ import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFactory;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Factory;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
@@ -77,6 +82,10 @@ public class RootContext
     private X509Repository x509Repository;
     @Service
     private CryptoValuesFactory cryptoValuesFactory;
+    @Service
+    private EscrowedKeyPairRepository escrowedKeyPairRepository;
+    @Service
+    private EscrowedKeyPairFactory escrowedKeyPairFactory;
 
     public CryptoStoreListContext cryptoStoreListContext()
     {
@@ -140,6 +149,20 @@ public class RootContext
         X509 x509 = x509Repository.findByIdentity( identity );
         context.playRoles( x509, X509.class );
         return subContext( X509Context.class );
+    }
+
+    public EscrowedKeyPairListContext escrowedKeyPairListContext()
+    {
+        context.playRoles( escrowedKeyPairRepository, EscrowedKeyPairRepository.class );
+        context.playRoles( escrowedKeyPairFactory, EscrowedKeyPairFactory.class );
+        return subContext( EscrowedKeyPairListContext.class );
+    }
+
+    public EscrowedKeyPairContext escrowedKeyPairContext( String identity )
+    {
+        EscrowedKeyPair ekp = escrowedKeyPairRepository.findByIdentity( identity );
+        context.playRoles( ekp, EscrowedKeyPair.class );
+        return subContext( EscrowedKeyPairContext.class );
     }
 
 }
