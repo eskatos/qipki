@@ -26,6 +26,8 @@ import org.codeartisans.qipki.ca.application.contexts.ca.CAContext;
 import org.codeartisans.qipki.ca.application.contexts.ca.CAListContext;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
 import org.codeartisans.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
+import org.codeartisans.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
+import org.codeartisans.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509Context;
 import org.codeartisans.qipki.ca.application.contexts.x509.X509ListContext;
 import org.codeartisans.qipki.ca.application.contexts.x509profile.X509ProfileContext;
@@ -52,7 +54,9 @@ public class CaDCIModuleAssembler
                            X509ProfileListContext.class,
                            X509ProfileContext.class,
                            X509ListContext.class,
-                           X509Context.class ).
+                           X509Context.class,
+                           EscrowedKeyPairContext.class,
+                           EscrowedKeyPairListContext.class ).
                 visibleIn( Visibility.application );
 
     }

@@ -62,7 +62,6 @@ public class CryptoStoreResource
         // Representation
         return new StringRepresentation( restValuesFactory.cryptoStore( getRootRef(), cs ).toJSON(),
                                          MediaType.APPLICATION_JSON );
-
     }
 
 }

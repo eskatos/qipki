@@ -32,6 +32,9 @@ import org.codeartisans.qipki.ca.domain.crl.CRLFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStoreRepository;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairEntity;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFactory;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationEntity;
 import org.codeartisans.qipki.ca.domain.revocation.RevocationFactory;
 import org.codeartisans.qipki.ca.domain.x509.X509Entity;
@@ -69,7 +72,8 @@ public class CaDomainModuleAssembler
                             X509ProfileAssignmentEntity.class,
                             X509ProfileEntity.class,
                             X509Entity.class,
-                            RevocationEntity.class ).
+                            RevocationEntity.class,
+                            EscrowedKeyPairEntity.class ).
                 visibleIn( Visibility.application );
 
         // Services
@@ -84,7 +88,9 @@ public class CaDomainModuleAssembler
                             X509Repository.class,
                             X509Factory.class,
                             RevocationFactory.class,
-                            CryptoValuesFactory.class ).
+                            CryptoValuesFactory.class,
+                            EscrowedKeyPairFactory.class,
+                            EscrowedKeyPairRepository.class ).
                 visibleIn( Visibility.application ).
                 withSideEffects( TracingSideEffect.class );
     }

@@ -24,12 +24,14 @@ package org.codeartisans.qipki.commons.assembly;
 import org.codeartisans.qipki.commons.rest.values.CaApiURIsValue;
 import org.codeartisans.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.codeartisans.qipki.commons.rest.values.params.EscrowedKeyPairFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.ParamsFactory;
 import org.codeartisans.qipki.commons.rest.values.params.X509FactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
 import org.codeartisans.qipki.commons.rest.values.params.X509RevocationParamsValue;
 import org.codeartisans.qipki.commons.rest.values.representations.CAValue;
 import org.codeartisans.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.codeartisans.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RevocationValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509DetailValue;
@@ -42,7 +44,6 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-@SuppressWarnings( "unchecked" )
 public class RestValuesModuleAssembler
         implements Assembler
 {
@@ -60,6 +61,7 @@ public class RestValuesModuleAssembler
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
@@ -68,7 +70,8 @@ public class RestValuesModuleAssembler
                           CAFactoryParamsValue.class,
                           X509ProfileFactoryParamsValue.class,
                           X509FactoryParamsValue.class,
-                          X509RevocationParamsValue.class ).
+                          X509RevocationParamsValue.class,
+                          EscrowedKeyPairFactoryParamsValue.class ).
                 visibleIn( visibility );
         module.addServices( ParamsFactory.class ).
                 visibleIn( visibility );
@@ -82,7 +85,8 @@ public class RestValuesModuleAssembler
                           X509ProfileValue.class,
                           X509Value.class,
                           X509DetailValue.class,
-                          RevocationValue.class ).
+                          RevocationValue.class,
+                          EscrowedKeyPairValue.class ).
                 visibleIn( visibility );
 
     }

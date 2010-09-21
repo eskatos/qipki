@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.qi4j.library</groupId>
             <artifactId>qi4j-lib-http</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.restlet.jee</groupId>
@@ -100,7 +100,7 @@
         <dependency>
             <groupId>org.qi4j.library</groupId>
             <artifactId>qi4j-lib-shiro</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Qi4j runtime -->

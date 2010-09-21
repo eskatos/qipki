@@ -22,12 +22,15 @@
 package org.codeartisans.qipki.ca.http.presentation.rest;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
@@ -35,6 +38,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.uribuilder.CaUriBuilder;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.codeartisans.qipki.commons.rest.values.CaApiURIsValue;
+import org.codeartisans.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RestListValue;
 import org.codeartisans.qipki.commons.rest.values.representations.RestValue;
 import org.codeartisans.qipki.commons.rest.values.representations.CAValue;
@@ -76,6 +80,8 @@ public interface RestletValuesFactory
 
     RevocationValue revocation( Reference rootRef, Revocation revocation );
 
+    EscrowedKeyPairValue escrowedKeyPair( Reference rootRef, EscrowedKeyPair escrowedKeyPair );
+
     Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects );
 
     RestListValue newListRepresentationValue( Reference listRef, int start, Iterable<RestValue> list );
@@ -113,6 +119,7 @@ public interface RestletValuesFactory
             caApi.caListUri().set( caUriBuilder.ca().build() );
             caApi.x509ProfileListUri().set( caUriBuilder.x509Profile().build() );
             caApi.x509ListUri().set( caUriBuilder.x509().build() );
+            caApi.escrowedKeyPairListUri().set( caUriBuilder.escrowedKeyPair().build() );
 
             return caApiBuilder.newInstance();
         }
@@ -265,6 +272,28 @@ public interface RestletValuesFactory
         }
 
         @Override
+        public EscrowedKeyPairValue escrowedKeyPair( Reference rootRef, EscrowedKeyPair escrowedKeyPair )
+        {
+            ValueBuilder<EscrowedKeyPairValue> escrowedKeyPairValueBuilder = vbf.newValueBuilder( EscrowedKeyPairValue.class );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+
+            EscrowedKeyPairValue escrowedKeyPairValue = escrowedKeyPairValueBuilder.prototype();
+
+            escrowedKeyPairValue.uri().set( caUriBuilder.escrowedKeyPair().withIdentity( escrowedKeyPair.identity().get() ).build() );
+            escrowedKeyPairValue.recoveryUri().set( caUriBuilder.escrowedKeyPair().withIdentity( escrowedKeyPair.identity().get() ).recovery().build() );
+            List<String> x509sUris = new ArrayList<String>();
+            for ( X509 eachX509 : escrowedKeyPair.x509s() ) {
+                x509sUris.add( caUriBuilder.x509().withIdentity( eachX509.identity().get() ).build() );
+            }
+            escrowedKeyPairValue.x509sUris().set( x509sUris );
+
+            escrowedKeyPairValue.algorithm().set( escrowedKeyPair.algorithm().get() );
+            escrowedKeyPairValue.length().set( escrowedKeyPair.length().get() );
+
+            return escrowedKeyPairValueBuilder.newInstance();
+        }
+
+        @Override
         public Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects )
         {
             Set<RestValue> set = new LinkedHashSet<RestValue>();
@@ -275,6 +304,8 @@ public interface RestletValuesFactory
                     set.add( cryptoStore( rootRef, ( CryptoStore ) eachObj ) );
                 } else if ( X509.class.isAssignableFrom( eachObj.getClass() ) ) {
                     set.add( x509( rootRef, ( X509 ) eachObj ) );
+                } else if ( EscrowedKeyPair.class.isAssignableFrom( eachObj.getClass() ) ) {
+                    set.add( escrowedKeyPair( rootRef, ( EscrowedKeyPair ) eachObj ) );
                 } else {
                     throw new IllegalArgumentException( "Object is of unsupported Type: " + eachObj );
                 }

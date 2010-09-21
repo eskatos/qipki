@@ -30,6 +30,7 @@ import org.codeartisans.qipki.commons.crypto.values.x509.KeyUsagesValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.codeartisans.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
+import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 
 import org.qi4j.api.common.Optional;
@@ -61,6 +62,8 @@ public interface ParamsFactory
     X509FactoryParamsValue createX509FactoryParams( String caUri, String x509ProfileUri, String pemPkcs10 );
 
     X509RevocationParamsValue createX509RevocationParams( RevocationReason reason );
+
+    EscrowedKeyPairFactoryParamsValue createEscrowedKeyPairFactoryParams( AsymetricAlgorithm algorithm, Integer length );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
@@ -138,6 +141,16 @@ public interface ParamsFactory
             ValueBuilder<X509RevocationParamsValue> paramsBuilder = vbf.newValueBuilder( X509RevocationParamsValue.class );
             X509RevocationParamsValue params = paramsBuilder.prototype();
             params.reason().set( reason );
+            return paramsBuilder.newInstance();
+        }
+
+        @Override
+        public EscrowedKeyPairFactoryParamsValue createEscrowedKeyPairFactoryParams( AsymetricAlgorithm algorithm, Integer length )
+        {
+            ValueBuilder<EscrowedKeyPairFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( EscrowedKeyPairFactoryParamsValue.class );
+            EscrowedKeyPairFactoryParamsValue params = paramsBuilder.prototype();
+            params.algorithm().set( algorithm );
+            params.length().set( length );
             return paramsBuilder.newInstance();
         }
 
