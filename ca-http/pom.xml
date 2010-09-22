@@ -83,13 +83,8 @@
 
         <!-- Shiro -->
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-            <version>1.1.0-incubating-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-shiro</artifactId>
+            <artifactId>qi4j-lib-shiro-web</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
 
