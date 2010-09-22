@@ -53,4 +53,9 @@ public final class CaX509UriBuilder
         return new CaX509UriBuilder( baseRef, identity, "revocation" );
     }
 
+    public CaX509UriBuilder recovery()
+    {
+        return new CaX509UriBuilder( baseRef, identity, "recovery" );
+    }
+
 }

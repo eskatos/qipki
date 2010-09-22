@@ -246,6 +246,13 @@ public class QiPkiHttpCaTest
         X509Certificate x509Certificate = cryptio.readX509PEM( new StringReader( x509pem ) );
 
 
+        // Getting EscrowedKeyPair from X509Certificate
+        get = new HttpGet(newX509.recoveryUri().get());
+        kpPem = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "EscrowedKeyPair PEM: {}", kpPem );
+        keypair = cryptio.readKeyPairPEM( new StringReader( kpPem ) );
+
+        
         // Create local PKCS#12 keystore with keypair, certificate and full certchain
         char[] password = "changeit".toCharArray();
         KeyStore ks = KeyStore.getInstance( KeyStoreType.PKCS12.typeString(), BouncyCastleProvider.PROVIDER_NAME );

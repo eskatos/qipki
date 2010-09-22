@@ -37,6 +37,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypai
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509ListResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RecoveryResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileListResource;
@@ -75,6 +76,7 @@ public class RestApiModuleAssembler
                            X509PemResource.class,
                            X509DetailResource.class,
                            X509RevocationResource.class,
+                           X509RecoveryResource.class,
                            EscrowedKeyPairListResource.class,
                            EscrowedKeyPairResource.class,
                            EscrowedKeyPairPemResource.class ).

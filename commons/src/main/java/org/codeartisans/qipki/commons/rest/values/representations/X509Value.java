@@ -32,12 +32,14 @@ public interface X509Value
 
     Property<String> pemUri();
 
+    Property<String> detailUri();
+
     Property<String> issuerUri();
 
     Property<String> profileUri();
 
     Property<String> revocationUri();
 
-    Property<String> detailUri();
+    Property<String> recoveryUri();
 
 }

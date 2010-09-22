@@ -21,6 +21,8 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.x509;
 
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.core.dci.Context;
@@ -39,6 +41,12 @@ public class X509Context
     {
         X509 x509 = context.role( X509.class );
         return x509.issuer().get().revoke( x509, reason );
+    }
+
+    public EscrowedKeyPair recover()
+    {
+        X509 x509 = context.role( X509.class );
+        return context.role( EscrowedKeyPairRepository.class ).findByX509Identity( x509.identity().get() );
     }
 
 }

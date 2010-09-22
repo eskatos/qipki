@@ -196,6 +196,7 @@ public interface RestletValuesFactory
             x509Value.revocationUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509Value.issuerUri().set( caUriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
             x509Value.profileUri().set( caUriBuilder.x509Profile().withIdentity( x509.profile().get().identity().get() ).build() );
+            x509Value.recoveryUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).recovery().build() );
 
             x509Value.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
             x509Value.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
@@ -226,6 +227,7 @@ public interface RestletValuesFactory
             x509DetailValue.revocationUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).revocation().build() );
             x509DetailValue.issuerUri().set( caUriBuilder.ca().withIdentity( x509.issuer().get().identity().get() ).build() );
             x509DetailValue.profileUri().set( caUriBuilder.x509Profile().withIdentity( x509.profile().get().identity().get() ).build() );
+            x509DetailValue.recoveryUri().set( caUriBuilder.x509().withIdentity( x509.identity().get() ).recovery().build() );
 
             x509DetailValue.canonicalSubjectDN().set( x509.canonicalSubjectDN().get() );
             x509DetailValue.canonicalIssuerDN().set( x509.canonicalIssuerDN().get() );
