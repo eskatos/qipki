@@ -149,6 +149,7 @@ public class RootContext
     {
         X509 x509 = x509Repository.findByIdentity( identity );
         context.playRoles( x509, X509.class );
+        context.playRoles( escrowedKeyPairRepository, EscrowedKeyPairRepository.class );
         return subContext( X509Context.class );
     }
 

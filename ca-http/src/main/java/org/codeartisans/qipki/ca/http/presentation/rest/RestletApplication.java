@@ -35,6 +35,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypai
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509PemResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RecoveryResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileListResource;
@@ -104,6 +105,7 @@ public class RestletApplication
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/pem", createFinder( X509PemResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
         router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
+        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/recovery", createFinder( X509RecoveryResource.class ) );
 
         router.attach( "/escrow", createFinder( EscrowedKeyPairListResource.class ) );
         router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( EscrowedKeyPairResource.class ) );

@@ -17,8 +17,10 @@ package org.codeartisans.qipki.ca.domain.escrowedkeypair;
 
 import org.codeartisans.java.toolbox.CollectionUtils;
 import org.codeartisans.qipki.ca.domain.x509.X509;
+import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
+import org.qi4j.api.injection.scope.Service;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -42,6 +44,9 @@ public interface EscrowedKeyPairRepository
             implements EscrowedKeyPairRepository
     {
 
+        @Service
+        private X509Repository x509Repository;
+
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )
         {
             super( uowf, qbf );
@@ -52,8 +57,7 @@ public interface EscrowedKeyPairRepository
         {
             QueryBuilder<EscrowedKeyPair> builder = qbf.newQueryBuilder( EscrowedKeyPair.class );
             EscrowedKeyPair ekpTemplate = templateFor( EscrowedKeyPair.class );
-            X509 x509Template = templateFor( X509.class );
-            builder = builder.where( and( contains( ekpTemplate.x509s(), x509Template ), eq( x509Template.identity(), x509Identity ) ) );
+            builder = builder.where( contains( ekpTemplate.x509s(), x509Repository.findByIdentity( x509Identity ) ) );
             Query<EscrowedKeyPair> query = builder.newQuery( uowf.currentUnitOfWork() );
             assert query.count() <= 1;
             return CollectionUtils.firstElementOrNull( query );
