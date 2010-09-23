@@ -25,8 +25,8 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.entitystore.sql.bootstrap.DerbySQLEntityStoreAssembler;
-import org.qi4j.entitystore.sql.datasource.DataSourceService;
+import org.qi4j.entitystore.sql.assembly.DerbySQLEntityStoreAssembler;
+import org.qi4j.entitystore.sql.internal.datasource.DataSourceService;
 import org.qi4j.index.rdf.assembly.RdfNativeSesameStoreAssembler;
 
 public class DerbyStoreAndSesameIndexModuleAssembler
