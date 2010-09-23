@@ -33,7 +33,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.entitystore.sql.bootstrap.ImportableDataSourceService;
+import org.qi4j.entitystore.sql.assembly.ImportableDataSourceService;
 import org.qi4j.library.rdf.repository.NativeConfiguration;
 import org.qi4j.library.sql.common.SQLConfiguration;
 
