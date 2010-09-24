@@ -76,6 +76,8 @@ public class QiPkiPersistentEmbeddedCaAssembler
 
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble(
                         infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
+                
+                config.addEntities( NativeConfiguration.class ).visibleIn( Visibility.layer );
 
             } else {
 
