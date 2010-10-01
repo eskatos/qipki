@@ -35,7 +35,7 @@ public final class AssemblyUtil
             throws AssemblyException
     {
         final ObjectHolder<LayerAssembly> holder = new ObjectHolder<LayerAssembly>();
-        app.visit( new AssemblyVisitorAdapter()
+        app.visit( new AssemblyVisitorAdapter<AssemblyException>()
         {
 
             @Override
