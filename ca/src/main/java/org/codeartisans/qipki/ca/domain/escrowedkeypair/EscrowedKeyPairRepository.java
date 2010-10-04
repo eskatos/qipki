@@ -16,12 +16,11 @@
 package org.codeartisans.qipki.ca.domain.escrowedkeypair;
 
 import org.codeartisans.java.toolbox.CollectionUtils;
-import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509.X509Repository;
 import org.codeartisans.qipki.core.services.AbstractBoxedDomainRepository;
 import org.codeartisans.qipki.core.services.BoxedDomainRepository;
-import org.qi4j.api.injection.scope.Service;
 
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;

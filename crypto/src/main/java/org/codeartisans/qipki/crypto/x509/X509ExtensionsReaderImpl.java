@@ -504,30 +504,40 @@ public class X509ExtensionsReaderImpl
                 x509GeneralName = X509GeneralName.unknownGeneralName;
                 value = generalName.getName().toString();
         }
-        final X509GeneralName finalName = x509GeneralName;
-        final String finalValue = value;
-        return new Map.Entry<X509GeneralName, String>()
+        return new ImmutableMapEntry( x509GeneralName, value );
+    }
+
+    private static class ImmutableMapEntry
+            implements Map.Entry<X509GeneralName, String>
+    {
+
+        private final X509GeneralName key;
+        private final String value;
+
+        public ImmutableMapEntry( X509GeneralName key, String value )
         {
+            this.key = key;
+            this.value = value;
+        }
 
-            @Override
-            public X509GeneralName getKey()
-            {
-                return finalName;
-            }
+        @Override
+        public X509GeneralName getKey()
+        {
+            return key;
+        }
 
-            @Override
-            public String getValue()
-            {
-                return finalValue;
-            }
+        @Override
+        public String getValue()
+        {
+            return value;
+        }
 
-            @Override
-            public String setValue( String value )
-            {
-                throw new UnsupportedOperationException( "This Map.Entry is immutable." );
-            }
+        @Override
+        public String setValue( String value )
+        {
+            throw new UnsupportedOperationException( "This Map.Entry is immutable." );
+        }
 
-        };
     }
 
 }

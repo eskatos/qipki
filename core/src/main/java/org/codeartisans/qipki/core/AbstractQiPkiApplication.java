@@ -52,6 +52,9 @@ public abstract class AbstractQiPkiApplication
     @Override
     public final void run()
     {
+        if ( application != null ) {
+            throw new IllegalStateException( "QiPkiApplication named " + application.name() + " is already active, cannot continue" );
+        }
         try {
 
             LOGGER.debug( "Assembling QiPKI Application" );
