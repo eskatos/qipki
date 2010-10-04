@@ -34,7 +34,7 @@ import org.codeartisans.qipki.core.dci.InteractionContext;
 import org.qi4j.api.structure.Module;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
-public final class QiPkiEmbeddedCa
+public class QiPkiEmbeddedCa
         extends AbstractQiPkiApplication
 {
 
@@ -80,7 +80,7 @@ public final class QiPkiEmbeddedCa
         return ensureDCIModule().objectBuilderFactory().newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
     }
 
-    private Module ensureDCIModule()
+    private synchronized Module ensureDCIModule()
     {
         if ( dciModule == null ) {
             dciModule = application.findModule( CaAssemblyNames.LAYER_APPLICATION, CaAssemblyNames.MODULE_CA_DCI );

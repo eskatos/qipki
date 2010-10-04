@@ -52,14 +52,14 @@ public class ExtensionMediaTypeFilter
     {
         String extensions = request.getResourceRef().getExtensions();
         if ( extensions != null ) {
-            int idx = extensions.lastIndexOf( "." );
+            int idx = extensions.lastIndexOf( '.' );
             if ( idx != -1 ) {
                 extensions = extensions.substring( idx + 1 );
             }
 
             MetadataService metadataService = getApplication().getMetadataService();
             Metadata metadata = metadataService.getMetadata( extensions );
-            if ( metadata != null && metadata instanceof MediaType ) {
+            if ( metadata instanceof MediaType ) {
                 request.getClientInfo().setAcceptedMediaTypes( Collections.singletonList( new Preference<MediaType>( ( MediaType ) metadata ) ) );
                 String path = request.getResourceRef().getPath();
                 path = path.substring( 0, path.length() - extensions.length() - 1 );

@@ -114,9 +114,11 @@ public class CryptoInspectorResource
             LOGGER.warn( "500: {}", ex.getMessage(), ex );
             throw new ResourceException( Status.SERVER_ERROR_INTERNAL, "Unable to read posted value", ex );
         } finally {
-            try {
-                fileInputStream.close();
-            } catch ( IOException ignored ) {
+            if ( fileInputStream != null ) {
+                try {
+                    fileInputStream.close();
+                } catch ( IOException ignored ) {
+                }
             }
         }
     }

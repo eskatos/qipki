@@ -22,14 +22,13 @@
 package org.codeartisans.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
-import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.asn1.x509.X509Name;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
 
+import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.CARepository;
 import org.codeartisans.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;

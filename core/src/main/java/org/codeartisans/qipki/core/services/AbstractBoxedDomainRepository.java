@@ -74,7 +74,7 @@ public abstract class AbstractBoxedDomainRepository<T>
                 }
             }
         }
-        Type[] genericInterfaces = this.getClass().getGenericInterfaces();
+        // Type[] genericInterfaces = this.getClass().getGenericInterfaces();
         return rv;
     }
 

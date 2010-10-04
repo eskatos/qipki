@@ -35,13 +35,14 @@ public class X500NameConstraint
     private static final long serialVersionUID = 1L;
 
     @Override
+    @SuppressWarnings( "ResultOfObjectAllocationIgnored" )
     public boolean isValid( Contains annotation, String value )
     {
         try {
-            X500Principal x500Principal = new X500Principal( value );
-            X509Name x509Name = new X509Name( value );
+            new X500Principal( value );
+            new X509Name( value );
             return true;
-        } catch ( IllegalArgumentException ex ) {
+        } catch ( IllegalArgumentException ignored ) {
             return false;
         }
     }
