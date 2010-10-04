@@ -33,9 +33,9 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.entitystore.sql.assembly.ImportableDataSourceService;
 import org.qi4j.library.rdf.repository.NativeConfiguration;
-import org.qi4j.library.sql.common.SQLConfiguration;
+import org.qi4j.library.sql.ds.DBCPDataSourceConfiguration;
+import org.qi4j.library.sql.ds.assembly.ImportableDataSourceService;
 
 public class QiPkiPersistentEmbeddedCaAssembler
         extends QiPkiEmbeddedCaAssembler
@@ -84,8 +84,8 @@ public class QiPkiPersistentEmbeddedCaAssembler
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble(
                         infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
 
-                config.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
-                config.forMixin( SQLConfiguration.class ).declareDefaults().connectionString().set( connectionString );
+                config.addEntities( DBCPDataSourceConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
+                config.forMixin( DBCPDataSourceConfiguration.class ).declareDefaults().url().set( connectionString );
 
             }
         }
