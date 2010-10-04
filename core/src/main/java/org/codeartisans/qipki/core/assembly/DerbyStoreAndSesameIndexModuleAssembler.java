@@ -26,8 +26,9 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.sql.assembly.DerbySQLEntityStoreAssembler;
-import org.qi4j.entitystore.sql.internal.datasource.DataSourceService;
 import org.qi4j.index.rdf.assembly.RdfNativeSesameStoreAssembler;
+import org.qi4j.library.sql.ds.DataSourceService;
+import org.qi4j.library.sql.ds.assembly.DataSourceAssembler;
 
 public class DerbyStoreAndSesameIndexModuleAssembler
         implements Assembler
@@ -58,7 +59,7 @@ public class DerbyStoreAndSesameIndexModuleAssembler
             throws AssemblyException
     {
         if ( dataSourceService != null ) {
-            new DerbySQLEntityStoreAssembler( visibility, dataSourceService ).assemble( module );
+            new DerbySQLEntityStoreAssembler( visibility, new DataSourceAssembler( dataSourceService ) ).assemble( module );
         } else {
             new DerbySQLEntityStoreAssembler( visibility ).assemble( module );
         }
