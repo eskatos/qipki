@@ -39,6 +39,8 @@ public interface CAValue
 
     Property<String> cryptoStoreUri();
 
+    Property<String> exportUri();
+
     Property<String> crlUri();
 
     @UseDefaults

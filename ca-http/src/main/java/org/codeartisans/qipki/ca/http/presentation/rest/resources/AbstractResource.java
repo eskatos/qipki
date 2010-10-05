@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.http.presentation.rest.resources;
 
+import org.codeartisans.java.toolbox.StringUtils;
 import org.codeartisans.qipki.ca.application.contexts.RootContext;
 import org.codeartisans.qipki.core.dci.InteractionContext;
 
@@ -66,6 +67,26 @@ public class AbstractResource
             LOGGER.trace( "{}: Request attribute named {} is of the wrong type", new Object[]{ ifAbsent, key }, ex );
             throw new ResourceException( ifAbsent, ex );
         }
+    }
+
+    protected final String ensureFormFirstValue( String key, Status ifAbsent )
+    {
+        String value = getRequest().getEntityAsForm().getFirstValue( key );
+        if ( StringUtils.isEmpty( value ) ) {
+            LOGGER.trace( "{}: No form first value named {}", ifAbsent, key );
+            throw new ResourceException( ifAbsent );
+        }
+        return value;
+    }
+
+    protected final String ensureQueryParamValue( String key, Status ifAbsent )
+    {
+        String value = getRequest().getResourceRef().getQueryAsForm().getFirstValue( key );
+        if ( StringUtils.isEmpty( value ) ) {
+            LOGGER.trace( "{}: No query parameter named {}", ifAbsent, key );
+            throw new ResourceException( ifAbsent );
+        }
+        return value;
     }
 
 }

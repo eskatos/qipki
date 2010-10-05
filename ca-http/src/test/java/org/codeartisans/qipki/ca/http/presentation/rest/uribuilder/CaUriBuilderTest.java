@@ -56,6 +56,9 @@ public class CaUriBuilderTest
         String entityUri = new CaUriBuilder( new Reference( ROOT_REF ) ).ca().withIdentity( id ).build();
         Assert.assertEquals( ROOT_REF + "/ca/" + id, entityUri );
 
+        String exportUri = new CaUriBuilder( new Reference( ROOT_REF ) ).ca().withIdentity( id ).export().build();
+        Assert.assertEquals( ROOT_REF + "/ca/" + id + "/export", exportUri );
+
         String crlUri = new CaUriBuilder( new Reference( ROOT_REF ) ).ca().withIdentity( id ).crl().build();
         Assert.assertEquals( ROOT_REF + "/ca/" + id + "/crl", crlUri );
     }
