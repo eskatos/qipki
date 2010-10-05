@@ -31,6 +31,7 @@ import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -247,12 +248,12 @@ public class QiPkiHttpCaTest
 
 
         // Getting EscrowedKeyPair from X509Certificate
-        get = new HttpGet(newX509.recoveryUri().get());
+        get = new HttpGet( newX509.recoveryUri().get() );
         kpPem = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "EscrowedKeyPair PEM: {}", kpPem );
         keypair = cryptio.readKeyPairPEM( new StringReader( kpPem ) );
 
-        
+
         // Create local PKCS#12 keystore with keypair, certificate and full certchain
         char[] password = "changeit".toCharArray();
         KeyStore ks = KeyStore.getInstance( KeyStoreType.PKCS12.typeString(), BouncyCastleProvider.PROVIDER_NAME );
@@ -260,6 +261,18 @@ public class QiPkiHttpCaTest
         ks.setEntry( "wow", new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ x509Certificate } ), new KeyStore.PasswordProtection( password ) );
         String base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
+
+        // Exporting CA in a PKCS#12 keystore
+        get = new HttpGet( ca.exportUri().get() + "?password=changeit" );
+        HttpResponse response = httpClient.execute( get );
+        ks = KeyStore.getInstance( KeyStoreType.PKCS12.typeString(), BouncyCastleProvider.PROVIDER_NAME );
+        ks.load( response.getEntity().getContent(), password );
+
+        base64encodedp12 = cryptio.base64Encode( ks, password );
+        System.out.println( base64encodedp12 );
+
+
+
 
     }
 

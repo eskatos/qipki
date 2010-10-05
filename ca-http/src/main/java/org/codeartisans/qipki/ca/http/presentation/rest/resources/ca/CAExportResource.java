@@ -60,7 +60,7 @@ public class CAExportResource
 
         // Data
         final String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-        final char[] password = ensureRequestAttribute( PARAM_PASSWORD, String.class, Status.CLIENT_ERROR_BAD_REQUEST ).toCharArray();
+        final char[] password = ensureQueryParamValue( PARAM_PASSWORD, Status.CLIENT_ERROR_BAD_REQUEST ).toCharArray();
 
         // Context
         CAContext caCtx = newRootContext().caContext( identity );

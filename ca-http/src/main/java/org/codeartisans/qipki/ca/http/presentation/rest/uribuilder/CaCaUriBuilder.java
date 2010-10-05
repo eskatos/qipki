@@ -38,6 +38,11 @@ public final class CaCaUriBuilder
         return new CaCaUriBuilder( baseRef, identity, special );
     }
 
+    public CaCaUriBuilder export()
+    {
+        return new CaCaUriBuilder( baseRef, identity, "export" );
+    }
+
     public CaCaUriBuilder crl()
     {
         return new CaCaUriBuilder( baseRef, identity, "crl" );

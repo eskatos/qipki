@@ -150,6 +150,7 @@ public interface RestletValuesFactory
             CAValue caValue = caValueBuilder.prototype();
 
             caValue.uri().set( caUriBuilder.ca().withIdentity( ca.identity().get() ).build() );
+            caValue.exportUri().set( caUriBuilder.ca().withIdentity( ca.identity().get() ).export().build() );
             caValue.crlUri().set( caUriBuilder.ca().withIdentity( ca.identity().get() ).crl().build() );
             caValue.cryptoStoreUri().set( caUriBuilder.cryptoStore().withIdentity( ca.cryptoStore().get().identity().get() ).build() );
 
