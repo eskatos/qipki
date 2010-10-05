@@ -24,6 +24,7 @@ package org.codeartisans.qipki.ca.http.presentation.rest;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.AbstractResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
 import org.codeartisans.qipki.ca.application.WrongParametersException;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CRLResource;
@@ -95,6 +96,7 @@ public class RestletApplication
 
         router.attach( "/ca", createFinder( CAListResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
+        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/export", createFinder( CAExportResource.class ) );
         router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
 
         router.attach( "/x509Profile", createFinder( X509ProfileListResource.class ) );

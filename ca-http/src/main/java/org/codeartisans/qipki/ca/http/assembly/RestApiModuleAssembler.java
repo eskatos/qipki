@@ -27,6 +27,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.RestletFinder;
 import org.codeartisans.qipki.ca.http.presentation.rest.RestletServletServerService;
 import org.codeartisans.qipki.ca.http.presentation.rest.RestletValuesFactory;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CAResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.ca.CRLResource;
@@ -68,6 +69,7 @@ public class RestApiModuleAssembler
                            CryptoStoreResource.class,
                            CAListResource.class,
                            CAResource.class,
+                           CAExportResource.class,
                            CRLResource.class,
                            X509ProfileListResource.class,
                            X509ProfileResource.class,

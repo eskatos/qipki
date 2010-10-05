@@ -21,8 +21,13 @@
  */
 package org.codeartisans.qipki.ca.application.contexts.ca;
 
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.cert.Certificate;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
@@ -30,6 +35,9 @@ import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignme
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.QiCryptoFailure;
+import org.codeartisans.qipki.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.storage.KeyStoreType;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.unitofwork.UnitOfWork;
@@ -65,6 +73,21 @@ public class CAContext
             ca.allowedX509Profiles().add( profileAssignmentFactory.create( eachEntry.getValue(), profileRepository.findByIdentity( eachEntry.getKey() ) ) );
         }
         return ca;
+    }
+
+    public KeyStore exportCaKeyPair( char[] password, KeyStoreType keyStoreType )
+    {
+        try {
+            CA ca = context.role( CA.class );
+            CryptIO cryptio = context.role( CryptIO.class );
+            KeyStore keystore = cryptio.createEmptyKeyStore( keyStoreType );
+            keystore.setEntry( ca.name().get(),
+                               new KeyStore.PrivateKeyEntry( ca.privateKey(), new Certificate[]{ ca.certificate() } ),
+                               new KeyStore.PasswordProtection( password ) );
+            return keystore;
+        } catch ( KeyStoreException ex ) {
+            throw new QiCryptoFailure( "Unable to store CA KeyPair for KeyStore export", ex );
+        }
     }
 
 }
