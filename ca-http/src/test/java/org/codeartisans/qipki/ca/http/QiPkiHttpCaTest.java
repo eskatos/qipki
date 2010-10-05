@@ -21,6 +21,7 @@
  */
 package org.codeartisans.qipki.ca.http;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.GeneralSecurityException;
@@ -32,9 +33,12 @@ import java.util.EnumSet;
 import javax.security.auth.x500.X500Principal;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
 
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
@@ -262,16 +266,23 @@ public class QiPkiHttpCaTest
         String base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
 
+
         // Exporting CA in a PKCS#12 keystore
         get = new HttpGet( ca.exportUri().get() + "?password=changeit" );
-        HttpResponse response = httpClient.execute( get );
+        byte[] responseBytes = httpClient.execute( get, bytesResponseHandler );
         ks = KeyStore.getInstance( KeyStoreType.PKCS12.typeString(), BouncyCastleProvider.PROVIDER_NAME );
-        ks.load( response.getEntity().getContent(), password );
-
+        ks.load( new ByteArrayInputStream( responseBytes ), password );
         base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
 
 
+        // Exporting CA in a JKS keystore
+        get = new HttpGet( ca.exportUri().get() + "?password=changeit&kstype=jks" );
+        responseBytes = httpClient.execute( get, bytesResponseHandler );
+        ks = KeyStore.getInstance( KeyStoreType.JKS.typeString() );
+        ks.load( new ByteArrayInputStream( responseBytes ), password );
+        base64encodedp12 = cryptio.base64Encode( ks, password );
+        System.out.println( base64encodedp12 );
 
 
     }

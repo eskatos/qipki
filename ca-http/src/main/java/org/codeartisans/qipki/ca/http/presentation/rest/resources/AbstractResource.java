@@ -89,4 +89,13 @@ public class AbstractResource
         return value;
     }
 
+    protected final String getQueryParamValue( String key, String defaultValue )
+    {
+        String value = getRequest().getResourceRef().getQueryAsForm().getFirstValue( key );
+        if ( StringUtils.isEmpty( value ) ) {
+            value = defaultValue;
+        }
+        return value;
+    }
+
 }
