@@ -33,6 +33,11 @@ public final class CaUriBuilder
         this.root = root;
     }
 
+    public CaToolsUriBuilder tools()
+    {
+        return new CaToolsUriBuilder( root.clone().addSegment( "tools" ), null, null );
+    }
+
     public CaCryptoStoreUriBuilder cryptoStore()
     {
         return new CaCryptoStoreUriBuilder( root.clone().addSegment( "cryptostore" ), null, null );

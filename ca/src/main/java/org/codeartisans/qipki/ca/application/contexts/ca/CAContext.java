@@ -26,8 +26,6 @@ import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.codeartisans.qipki.ca.domain.ca.CA;
 import org.codeartisans.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
@@ -77,6 +75,9 @@ public class CAContext
 
     public KeyStore exportCaKeyPair( char[] password, KeyStoreType keyStoreType )
     {
+        if ( keyStoreType == KeyStoreType.PKCS11 ) {
+            throw new UnsupportedOperationException( "Export in PKCS#11 format is not supported, cannot continue." );
+        }
         try {
             CA ca = context.role( CA.class );
             CryptIO cryptio = context.role( CryptIO.class );

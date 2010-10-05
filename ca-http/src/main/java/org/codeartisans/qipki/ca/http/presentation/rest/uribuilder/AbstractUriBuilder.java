@@ -47,6 +47,9 @@ public class AbstractUriBuilder
             return baseRef.clone().addSegment( "factory" ).toString();
         }
         if ( StringUtils.isEmpty( identity ) ) {
+            if ( !StringUtils.isEmpty( special ) ) {
+                return baseRef.clone().addSegment( special ).toString();
+            }
             return baseRef.toString();
         }
         if ( StringUtils.isEmpty( special ) ) {

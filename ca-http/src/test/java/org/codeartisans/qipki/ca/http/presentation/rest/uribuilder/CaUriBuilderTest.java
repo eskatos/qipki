@@ -34,6 +34,13 @@ public class CaUriBuilderTest
     private static final String ROOT_REF = "http://qipki.codeartisans.org/api";
 
     @Test
+    public void testTools()
+    {
+        String cryptoInspectorUri = new CaUriBuilder( new Reference( ROOT_REF ) ).tools().cryptoInspector().build();
+        Assert.assertEquals( ROOT_REF + "/tools/inspector", cryptoInspectorUri );
+    }
+
+    @Test
     public void testCryptoStore()
     {
         String listUri = new CaUriBuilder( new Reference( ROOT_REF ) ).cryptoStore().build();
