@@ -21,6 +21,8 @@
  */
 package org.codeartisans.qipki.crypto.storage;
 
+import org.codeartisans.java.toolbox.exceptions.NullArgumentException;
+
 public enum KeyStoreType
 {
 
@@ -50,6 +52,24 @@ public enum KeyStoreType
     public String typeString()
     {
         return string;
+    }
+
+    public static KeyStoreType valueOfTypeString( String typeString )
+    {
+        NullArgumentException.ensureNotEmpty( "Type String", typeString );
+        if ( StringValues.JCEKS.equalsIgnoreCase( typeString ) ) {
+            return JCEKS;
+        }
+        if ( StringValues.JKS.equalsIgnoreCase( typeString ) ) {
+            return JKS;
+        }
+        if ( StringValues.PKCS12.equalsIgnoreCase( typeString ) ) {
+            return PKCS12;
+        }
+        if ( StringValues.PKCS11.equalsIgnoreCase( typeString ) ) {
+            return PKCS11;
+        }
+        throw new IllegalArgumentException( "Unsupported KeyStoreType: " + typeString );
     }
 
 }

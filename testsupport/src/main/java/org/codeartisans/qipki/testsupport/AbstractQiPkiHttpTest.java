@@ -21,10 +21,15 @@
  */
 package org.codeartisans.qipki.testsupport;
 
+import java.io.IOException;
+
 import org.apache.http.HttpMessage;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import org.junit.Before;
 
@@ -36,11 +41,9 @@ public abstract class AbstractQiPkiHttpTest
 {
 
     protected static final String LOCALHOST = "localhost";
-
     protected static final int DEFAULT_PORT = 8443;
-
     protected ResponseHandler<String> strResponseHandler;
-
+    protected ResponseHandler<byte[]> bytesResponseHandler;
     protected DefaultHttpClient httpClient;
 
     @Before
@@ -48,6 +51,17 @@ public abstract class AbstractQiPkiHttpTest
             throws Exception
     {
         strResponseHandler = new BasicResponseHandler();
+        bytesResponseHandler = new ResponseHandler<byte[]>()
+        {
+
+            @Override
+            public byte[] handleResponse( HttpResponse response )
+                    throws ClientProtocolException, IOException
+            {
+                return EntityUtils.toByteArray( response.getEntity() );
+            }
+
+        };
         httpClient = new DefaultHttpClient();
     }
 

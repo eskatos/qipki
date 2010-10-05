@@ -48,6 +48,8 @@ public class CAExportResource
 
     private static final String PARAM_PASSWORD = "password";
 
+    private static final String PARAM_KEYSTORE_TYPE = "kstype";
+
     public CAExportResource( @Structure ObjectBuilderFactory obf )
     {
         super( obf );
@@ -61,12 +63,13 @@ public class CAExportResource
         // Data
         final String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
         final char[] password = ensureQueryParamValue( PARAM_PASSWORD, Status.CLIENT_ERROR_BAD_REQUEST ).toCharArray();
+        final KeyStoreType ksType = KeyStoreType.valueOfTypeString( getQueryParamValue( PARAM_KEYSTORE_TYPE, KeyStoreType.PKCS12.typeString() ) );
 
         // Context
         CAContext caCtx = newRootContext().caContext( identity );
 
         // Interaction
-        final KeyStore keyStore = caCtx.exportCaKeyPair( password, KeyStoreType.PKCS12 );
+        final KeyStore keyStore = caCtx.exportCaKeyPair( password, ksType );
 
         // Representation
         return new OutputRepresentation( MediaType.APPLICATION_OCTET_STREAM )
