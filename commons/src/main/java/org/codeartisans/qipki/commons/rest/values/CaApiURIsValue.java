@@ -29,6 +29,8 @@ public interface CaApiURIsValue
         extends RestValue
 {
 
+    Property<String> cryptoInspectorUri();
+
     Property<String> cryptoStoreListUri();
 
     Property<String> caListUri();

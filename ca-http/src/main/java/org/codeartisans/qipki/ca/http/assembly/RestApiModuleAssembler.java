@@ -36,6 +36,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.Cr
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairPemResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.tools.CryptoInspectorResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509ListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RecoveryResource;
@@ -65,6 +66,7 @@ public class RestApiModuleAssembler
 
         module.addObjects( RestletFinder.class,
                            CaApiRootResource.class,
+                           CryptoInspectorResource.class,
                            CryptoStoreListResource.class,
                            CryptoStoreResource.class,
                            CAListResource.class,

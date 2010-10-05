@@ -114,7 +114,13 @@ public interface RestletValuesFactory
 
             CaApiURIsValue caApi = caApiBuilder.prototype();
 
+            // API Root
             caApi.uri().set( rootRef.toString() );
+
+            // Tools
+            caApi.cryptoInspectorUri().set( caUriBuilder.tools().cryptoInspector().build() );
+
+            // Domain
             caApi.cryptoStoreListUri().set( caUriBuilder.cryptoStore().build() );
             caApi.caListUri().set( caUriBuilder.ca().build() );
             caApi.x509ProfileListUri().set( caUriBuilder.x509Profile().build() );

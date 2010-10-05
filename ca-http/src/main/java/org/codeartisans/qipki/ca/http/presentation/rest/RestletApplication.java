@@ -34,6 +34,7 @@ import org.codeartisans.qipki.ca.http.presentation.rest.resources.cryptostore.Cr
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairListResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairPemResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.escrowedkeypair.EscrowedKeyPairResource;
+import org.codeartisans.qipki.ca.http.presentation.rest.resources.tools.CryptoInspectorResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509DetailResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509PemResource;
 import org.codeartisans.qipki.ca.http.presentation.rest.resources.x509.X509RecoveryResource;
@@ -90,6 +91,8 @@ public class RestletApplication
         Finder caApiFinder = createFinder( CaApiRootResource.class );
         router.attach( "", caApiFinder );
         router.attach( "/", caApiFinder );
+
+        router.attach( "/tools/inspector", createFinder( CryptoInspectorResource.class ) );
 
         router.attach( "/cryptostore", createFinder( CryptoStoreListResource.class ) );
         router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
