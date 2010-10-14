@@ -195,7 +195,8 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return Collections.emptySet();
             }
-            org.bouncycastle.asn1.x509.ExtendedKeyUsage usages = org.bouncycastle.asn1.x509.ExtendedKeyUsage.getInstance( ASN1Object.fromByteArray( value ) );
+            byte[] asn1octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
+            org.bouncycastle.asn1.x509.ExtendedKeyUsage usages = org.bouncycastle.asn1.x509.ExtendedKeyUsage.getInstance( ( ASN1Sequence ) ASN1Sequence.fromByteArray( asn1octets ) );
             Set<ExtendedKeyUsage> keyUsages = new LinkedHashSet<ExtendedKeyUsage>();
             for ( ExtendedKeyUsage eachPossible : ExtendedKeyUsage.values() ) {
                 if ( usages.hasKeyPurposeId( eachPossible.getKeyPurposeId() ) ) {
@@ -217,7 +218,8 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return Collections.emptySet();
             }
-            int nctIntValue = new org.bouncycastle.asn1.misc.NetscapeCertType( ( DERBitString ) ASN1Object.fromByteArray( value ) ).intValue();
+            byte[] asn1octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
+            int nctIntValue = new org.bouncycastle.asn1.misc.NetscapeCertType( ( DERBitString ) ASN1Object.fromByteArray( asn1octets ) ).intValue();
             Set<NetscapeCertType> netscapeCertTypes = new LinkedHashSet<NetscapeCertType>();
             for ( NetscapeCertType eachCertType : NetscapeCertType.values() ) {
                 if ( ( nctIntValue & eachCertType.getIntValue() ) == eachCertType.getIntValue() ) {

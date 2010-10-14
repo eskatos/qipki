@@ -32,10 +32,14 @@ import java.security.cert.X509Certificate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
+import org.bouncycastle.asn1.misc.NetscapeCertType;
 
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
@@ -143,6 +147,12 @@ public abstract class CAMixin
             extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, x509profile.keyUsages().get().critical().get(), keyUsages ) );
 
             // TODO add ExtendedKeyUsages and NetscapeCertTypes
+
+            ExtendedKeyUsage extendedKeyUsage = x509ExtBuilder.buildExtendedKeyUsage( x509profile.extendedKeyUsages().get().extendedKeyUsages().get() );
+            extensions.add( new X509ExtensionHolder( X509Extensions.ExtendedKeyUsage, x509profile.extendedKeyUsages().get().critical().get(), extendedKeyUsage ) );
+
+            NetscapeCertType netscapeCertType = x509ExtBuilder.buildNetscapeCertTypes( x509profile.netscapeCertTypes().get().netscapeCertTypes().get() );
+            extensions.add( new X509ExtensionHolder( MiscObjectIdentifiers.netscapeCertType, x509profile.netscapeCertTypes().get().critical().get(), netscapeCertType ) );
 
             // TODO Climb up the CA hierarchy to add inherited CRL distpoints
             // CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );

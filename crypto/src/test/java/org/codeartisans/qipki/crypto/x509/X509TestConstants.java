@@ -21,40 +21,14 @@
  */
 package org.codeartisans.qipki.crypto.x509;
 
-import java.util.Iterator;
-import java.util.Set;
-
-public enum NetscapeCertType
+public final class X509TestConstants
 {
 
-    sslClient( org.bouncycastle.asn1.misc.NetscapeCertType.sslClient ),
-    sslServer( org.bouncycastle.asn1.misc.NetscapeCertType.sslServer ),
-    smime( org.bouncycastle.asn1.misc.NetscapeCertType.smime ),
-    objectSigning( org.bouncycastle.asn1.misc.NetscapeCertType.objectSigning ),
-    reserved( org.bouncycastle.asn1.misc.NetscapeCertType.reserved ),
-    sslCA( org.bouncycastle.asn1.misc.NetscapeCertType.sslCA ),
-    smimeCA( org.bouncycastle.asn1.misc.NetscapeCertType.smimeCA ),
-    objectSigningCA( org.bouncycastle.asn1.misc.NetscapeCertType.objectSigningCA );
-    private int intValue;
+    static final String RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM = "Baltimore_CyberTrust_Code_Signing_Root-cert.pem";
+    static final String RSRC_NAME_CHAMBER_OF_COMMERCE_ROOT_PEM = "Chambers_of_Commerce_Root-cert.pem";
 
-    private NetscapeCertType( int intValue )
+    private X509TestConstants()
     {
-        this.intValue = intValue;
-    }
-
-    public int getIntValue()
-    {
-        return intValue;
-    }
-
-    public static int certTypes( Set<NetscapeCertType> certTypes )
-    {
-        Iterator<NetscapeCertType> it = certTypes.iterator();
-        int usage = 0;
-        while ( it.hasNext() ) {
-            usage |= it.next().getIntValue();
-        }
-        return usage;
     }
 
 }

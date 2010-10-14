@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -94,7 +93,7 @@ public class CryptIOImpl
     }
 
     @Override
-    public X509Certificate readX509PEM( StringReader reader )
+    public X509Certificate readX509PEM( Reader reader )
     {
         try {
             return ( X509Certificate ) new PEMReader( reader ).readObject();

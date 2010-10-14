@@ -37,6 +37,7 @@ import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.misc.NetscapeCertType;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
@@ -102,6 +103,12 @@ public class X509ExtensionsBuilderImpl
     public ExtendedKeyUsage buildExtendedKeyUsage( Set<org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage> extendedKeyUsages )
     {
         return new ExtendedKeyUsage( org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage.usage( extendedKeyUsages ) );
+    }
+
+    @Override
+    public NetscapeCertType buildNetscapeCertTypes( Set<org.codeartisans.qipki.crypto.x509.NetscapeCertType> netscapeCertTypes )
+    {
+        return new NetscapeCertType( org.codeartisans.qipki.crypto.x509.NetscapeCertType.certTypes( netscapeCertTypes ) );
     }
 
     @Override
