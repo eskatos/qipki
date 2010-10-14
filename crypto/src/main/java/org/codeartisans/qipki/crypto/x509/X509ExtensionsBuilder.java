@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
 
+import org.bouncycastle.asn1.misc.NetscapeCertType;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
@@ -47,6 +48,8 @@ public interface X509ExtensionsBuilder
     KeyUsage buildKeyUsages( Set<org.codeartisans.qipki.crypto.x509.KeyUsage> keyUsages );
 
     ExtendedKeyUsage buildExtendedKeyUsage( Set<org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage> extendedKeyUsages );
+
+    NetscapeCertType buildNetscapeCertTypes( Set<org.codeartisans.qipki.crypto.x509.NetscapeCertType> netscapeCertTypes );
 
     CRLDistPoint buildCRLDistributionPoints( Map<X500Principal, Iterable<String>> crlDistPointsData );
 

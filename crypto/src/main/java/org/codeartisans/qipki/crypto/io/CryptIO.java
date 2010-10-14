@@ -22,7 +22,6 @@
 package org.codeartisans.qipki.crypto.io;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PublicKey;
@@ -48,7 +47,7 @@ public interface CryptIO
 
     CharSequence asPEM( KeyPair keyPair, char[] password );
 
-    X509Certificate readX509PEM( StringReader stringReader );
+    X509Certificate readX509PEM( Reader stringReader );
 
     PKCS10CertificationRequest readPKCS10PEM( Reader reader );
 

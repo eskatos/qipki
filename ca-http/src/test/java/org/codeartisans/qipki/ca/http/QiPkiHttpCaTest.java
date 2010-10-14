@@ -71,6 +71,7 @@ import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.qi4j.api.value.ValueBuilder;
@@ -180,6 +181,9 @@ public class QiPkiHttpCaTest
         LOGGER.debug( "New X509 detail: {}", new JSONObject( jsonX509Detail ).toString( 2 ) );
         X509DetailValue newX509Detail = valueBuilderFactory.newValueFromJSON( X509DetailValue.class, jsonX509Detail );
 
+        assertTrue( newX509Detail.keysExtensions().get().extendedKeyUsages().get().extendedKeyUsages().get().contains( ExtendedKeyUsage.clientAuth ) );
+        assertTrue( newX509Detail.keysExtensions().get().netscapeCertTypes().get().netscapeCertTypes().get().contains( NetscapeCertType.sslClient ) );
+        
 
         // Get X509 list
         get = new HttpGet( caApi.x509ListUri().get() );
