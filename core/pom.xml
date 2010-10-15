@@ -46,6 +46,12 @@
             <groupId>org.qi4j.extension</groupId>
             <artifactId>qi4j-entitystore-sql</artifactId>
             <version>${version.qi4j}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.qi4j.library</groupId>
