@@ -30,13 +30,6 @@
             <version>${version.httpclient}</version>
         </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${version.logback}</version>
-        </dependency>
-
     </dependencies>
 
 </project>
