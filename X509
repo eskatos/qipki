@@ -1,0 +1,93 @@
+
+X.509 Extensions Documents
+
+	http://www.ietf.org/rfc/rfc2459.txt
+	http://www.openssl.org/docs/apps/x509.html#CERTIFICATE_EXTENSIONS
+	http://www.redhat.com/docs/manuals/cert-system/8.0/admin/html/Certificate_and_CRL_Extensions.html
+	http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn3.html
+
+
+    extendedKeyUsage : FUCK, need to find reliable info about this
+        Two interpretations as to what extended key usage values mean when set in a CA certificate
+            • Certificate can be used for the indicated usage
+                – Interpretation used by PKIX, some vendors
+            • Certificate can issue certificates with the given usage
+                – Interpretation used by Netscape, Microsoft, other vendors
+        As usual, PKI people are split 50:50 on this
+
+    netscapeCertType
+        Discontinued since 10 years ... is it needed ?
+
+    privateKeyUsagePeriod
+        Disallowed by the PKIX profile, although no-one can provide a reason for this
+
+    nameConstraints
+        On CA only
+        Constrain the DN subtree under which a CA can issue certificates
+
+        Name constraints can be avoided through creative name encoding (Problem in standards)
+            • Multiple encodings for the same character, zero-width spaces, floating diacritics, etc
+            • Can make identical-appearing strings compare as different strings
+            • Can also evade name constraints by using altNames
+
+
+Basic Certificates Profiles
+    TODO: work on SubCAs profiles
+
+RootCAThatDoesEverything ...  :|
+
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, sslCA | objectSigningCA | smimeCA
+
+AuthenticationCA
+
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, sslCA
+
+CipheringCA
+
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+
+NonRepudiationCA
+
+    BC  CA, critical, pathLen=0
+    KU  critical, cRLSign | keyCertSign
+    NCT nonCritical, objectSigningCA | smimeCA
+
+SSL Server Certificates
+
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | keyEncipherment
+    EKU nonCritical, serverAuth, clientAuth
+    NCT nonCritical, sslServer
+
+
+SSL Client Certificates
+
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | keyEncipherment
+    EKU nonCritical, clientAuth
+    NCT nonCritical, sslClient
+
+
+Object & S/MIME Signing Certificates
+
+    BC  NonCA, critical, pathLen=0
+    KU  critical, digitalSignature | nonRepudiation
+    EKU nonCritical, emailProtection
+    NCT nonCritical, objectSigning | smime
+
+
+Key Encipherment & S/MIME Encipherment Certificates
+
+    BC  NonCA,critical,  pathLen=0
+    KU  critical, keyEncipherment
+    EKU nonCritical, emailProtection
+    NCT nonCritical, smime
+
+
+
+
