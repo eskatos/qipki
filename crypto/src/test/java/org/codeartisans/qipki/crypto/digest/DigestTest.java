@@ -23,20 +23,53 @@ package org.codeartisans.qipki.crypto.digest;
 
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.codeartisans.qipki.crypto.QiCryptoActivator;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
+import org.codeartisans.qipki.crypto.codec.CryptCodex;
 import org.codeartisans.qipki.crypto.codec.CryptCodexImpl;
+import org.codeartisans.qipki.crypto.codec.CryptCodexService;
+import org.codeartisans.qipki.crypto.io.CryptIOService;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.test.AbstractQi4jTest;
 
 public class DigestTest
+        extends AbstractQi4jTest
 {
 
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        module.addServices( QiCryptoActivator.class ).instantiateOnStartup();
+        module.addServices( DigestService.class, CryptCodexService.class );
+    }
+
     @Test
-    public void test()
+    public void testWithQi4j()
+    {
+        Digest digester = serviceLocator.<Digest>findService( Digest.class ).get();
+        runTest( digester );
+    }
+
+    @Test
+    @Ignore
+    public void testWithoutQi4j()
     {
         Security.addProvider( new BouncyCastleProvider() );
 
         Digest digester = new DigestImpl( new CryptCodexImpl() );
+
+        runTest( digester );
+
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
+    }
+
+    private void runTest( Digest digester )
+    {
 
         String message = "Le nom des fous est écrit partout.\n";
 
@@ -50,6 +83,7 @@ public class DigestTest
                       digester.hexDigest( message.getBytes(), new DigestParameters( DigestAlgorithm.SHA_384 ) ) );
         assertEquals( "cdbefb2d859f9e984a0032857469c3bba9fe03591772bbf5f1f866a4e8a31f9174e9a30e861d32ba4ff8e7c9f66bcdfed2df36f986e8388ce3cb775808de8bd4",
                       digester.hexDigest( message.getBytes(), new DigestParameters( DigestAlgorithm.SHA_512 ) ) );
+
     }
 
 }

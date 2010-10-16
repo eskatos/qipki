@@ -10,26 +10,24 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-crypto</artifactId>
+    <artifactId>qipki-crypto-dci</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- Libraries -->
         <dependency>
-            <groupId>org.codeartisans.java</groupId>
-            <artifactId>java-toolbox</artifactId>
-            <version>${version.java-toolbox}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-crypto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
-        <!-- Qi4j runtime -->
-        <dependency>
-            <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-api</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>qi4j-core-bootstrap</artifactId>
@@ -42,46 +40,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>${version.bouncy}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
-        </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${version.slf4j}</version>
-        </dependency>
-
-        <!-- Tests -->
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${version.logback}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-testsupport</artifactId>
-            <version>${version.qi4j}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-runtime</artifactId>
-            <version>${version.qi4j}</version>
-            <scope>test</scope>
-        </dependency>
+
+        <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.7</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
