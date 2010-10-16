@@ -21,13 +21,21 @@
  */
 package org.codeartisans.qipki.crypto;
 
+import java.security.Provider;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import org.codeartisans.java.toolbox.StringUtils;
+
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mixins( QiCryptoActivator.Mixin.class )
 public interface QiCryptoActivator
@@ -39,12 +47,27 @@ public interface QiCryptoActivator
             implements QiCryptoActivator
     {
 
+        private static final Logger LOGGER = LoggerFactory.getLogger( QiCryptoActivator.Mixin.class );
+        @This
+        @Optional
+        private QiCryptoConfiguration configuration;
+
         @Override
         public void activate()
                 throws Exception
         {
-            if ( Security.getProvider( BouncyCastleProvider.PROVIDER_NAME ) == null ) {
-                Security.addProvider( new BouncyCastleProvider() );
+            if ( insertProviderOnActivate() ) {
+                String providerName = providerName();
+                if ( Security.getProvider( providerName ) == null ) {
+
+                    Security.addProvider( providerClass().newInstance() );
+
+                    if ( LOGGER.isDebugEnabled() ) {
+                        LOGGER.debug( "Inserted {} with name: {}", providerClass(), providerName() );
+                    }
+                } else if ( LOGGER.isDebugEnabled() ) {
+                    LOGGER.debug( "A Provider is already registered with the name {}. Doing nothing.", providerName );
+                }
             }
         }
 
@@ -52,9 +75,69 @@ public interface QiCryptoActivator
         public void passivate()
                 throws Exception
         {
-            if ( Security.getProvider( BouncyCastleProvider.PROVIDER_NAME ) == null ) {
-                Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
+            if ( removeProviderOnPassivate() ) {
+                String providerName = providerName();
+                if ( Security.getProvider( providerName ) == null ) {
+
+                    Security.removeProvider( providerName );
+
+                    if ( LOGGER.isDebugEnabled() ) {
+                        LOGGER.debug( "Removed Provider named {}", providerName() );
+                    }
+                } else if ( LOGGER.isDebugEnabled() ) {
+                    LOGGER.debug( "No Provider registered with the name {}. Doing nothing.", providerName );
+                }
             }
+        }
+
+        private boolean overrideProvider()
+        {
+            if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
+                return false;
+            }
+            return !StringUtils.isEmpty( configuration.providerName().get() )
+                    && !StringUtils.isEmpty( configuration.providerClass().get() );
+        }
+
+        private String providerName()
+        {
+            if ( overrideProvider() ) {
+                return configuration.providerName().get();
+            }
+            return BouncyCastleProvider.PROVIDER_NAME;
+        }
+
+        private Class<? extends Provider> providerClass()
+                throws ClassNotFoundException
+        {
+            if ( overrideProvider() ) {
+                return ( Class<? extends Provider> ) Class.forName( configuration.providerClass().get() );
+            }
+            return BouncyCastleProvider.class;
+        }
+
+        private boolean insertProviderOnActivate()
+        {
+            if ( configuration == null ) {
+                return true;
+            }
+            Boolean insert = configuration.insertProviderOnActivate().get();
+            if ( insert == null ) {
+                return true;
+            }
+            return insert;
+        }
+
+        private boolean removeProviderOnPassivate()
+        {
+            if ( configuration == null ) {
+                return true;
+            }
+            Boolean remove = configuration.removeProviderOnPassivate().get();
+            if ( remove == null ) {
+                return true;
+            }
+            return remove;
         }
 
     }

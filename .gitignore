@@ -1,4 +1,5 @@
 crypto/target
+crypto-dci/target
 core/target
 dist/target
 main/target
