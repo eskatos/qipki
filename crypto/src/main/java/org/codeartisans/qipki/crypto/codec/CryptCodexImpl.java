@@ -74,7 +74,7 @@ public class CryptCodexImpl
         StringBuilder sb = new StringBuilder();
         for ( int i = 0; i < bytes.length; i++ ) {
             int hexaValue = 0xFF & bytes[i];
-            sb.append( String.format( "%02X", hexaValue ) );
+            sb.append( String.format( "%02x", hexaValue ) );
         }
         return sb.toString();
     }
