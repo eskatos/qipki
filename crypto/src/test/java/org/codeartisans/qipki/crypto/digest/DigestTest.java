@@ -22,16 +22,18 @@
 package org.codeartisans.qipki.crypto.digest;
 
 import java.security.Security;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.codeartisans.qipki.crypto.QiCryptoActivator;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
-import org.codeartisans.qipki.crypto.codec.CryptCodex;
 import org.codeartisans.qipki.crypto.codec.CryptCodexImpl;
 import org.codeartisans.qipki.crypto.codec.CryptCodexService;
-import org.codeartisans.qipki.crypto.io.CryptIOService;
+
 import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.Test;
+
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
@@ -75,7 +77,7 @@ public class DigestTest
 
         assertEquals( "c623709621030a5e84d703b7a160d33a",
                       digester.hexDigest( message.getBytes(), new DigestParameters( DigestAlgorithm.MD5 ) ) );
-        assertEquals( "fddb1ae5b5d1ab7b8503d1b68ff84c6e507ecdf",
+        assertEquals( "0fddb1ae5b5d1ab7b8503d1b68ff84c6e507ecdf",
                       digester.hexDigest( message.getBytes(), new DigestParameters( DigestAlgorithm.SHA_1 ) ) );
         assertEquals( "2b9b4d8d02e5b9609ac1da0a7de879d0b6f41e845f0ba3f29ac3e15e7ee354ed",
                       digester.hexDigest( message.getBytes(), new DigestParameters( DigestAlgorithm.SHA_256 ) ) );
