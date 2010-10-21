@@ -83,9 +83,9 @@ public interface CAFactory
         extends ServiceComposite
 {
 
-    RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
-    SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
@@ -106,7 +106,7 @@ public interface CAFactory
         private CRLFactory crlFactory;
 
         @Override
-        public RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Self signed CA
@@ -119,7 +119,7 @@ public interface CAFactory
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                               pkcs10.getCertificationRequestInfo().getSubject(),
                                                                               pkcs10.getPublicKey(),
-                                                                              Duration.standardDays( 3650 ),
+                                                                              Duration.standardDays( validityDays ),
                                                                               extensions );
 
                 EntityBuilder<RootCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( RootCA.class );
@@ -135,7 +135,7 @@ public interface CAFactory
         }
 
         @Override
-        public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Sub CA
@@ -148,7 +148,7 @@ public interface CAFactory
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                               pkcs10.getCertificationRequestInfo().getSubject(),
                                                                               pkcs10.getPublicKey(),
-                                                                              Duration.standardDays( 3650 ),
+                                                                              Duration.standardDays( validityDays ),
                                                                               extensions );
 
                 EntityBuilder<SubCA> caBuilder = uowf.currentUnitOfWork().newEntityBuilder( SubCA.class );

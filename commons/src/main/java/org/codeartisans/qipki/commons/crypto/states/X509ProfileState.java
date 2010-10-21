@@ -35,6 +35,8 @@ public interface X509ProfileState
         extends Nameable
 {
 
+    Property<Integer> validityDays();
+
     @Optional
     Property<String> netscapeCertComment();
 

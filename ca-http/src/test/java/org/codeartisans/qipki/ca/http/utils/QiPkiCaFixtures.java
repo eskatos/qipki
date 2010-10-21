@@ -49,11 +49,17 @@ public interface QiPkiCaFixtures
 {
 
     String KEYSTORE_NAME = "Test KeyStore";
+
     String ROOT_CA_NAME = "RootCA";
+
     String ROOT_CA_DN = "CN=root-test,OU=qipki,O=codeartisans";
+
     String USERS_CA_NAME = "UsersCA";
+
     String USERS_CA_DN = "CN=users-test,OU=qipki,O=codeartisans";
+
     String SERVICES_CA_NAME = "ServicesCA";
+
     String SERVICES_CA_DN = "CN=services-test,OU=qipki,O=codeartisans";
 
     abstract class Mixin
@@ -62,8 +68,10 @@ public interface QiPkiCaFixtures
 
         @Structure
         private UnitOfWorkFactory uowf;
+
         @Structure
         private ObjectBuilderFactory obf;
+
         @Service
         private CryptoValuesFactory cryptoValuesFactory;
 
@@ -81,9 +89,9 @@ public interface QiPkiCaFixtures
             // Create some test CAs
             CAListContext caListCtx = rootCtx.caListContext();
             KeyPairSpecValue keySpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-            CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, ROOT_CA_DN, keySpec );
-            CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, USERS_CA_DN, keySpec );
-            CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, SERVICES_CA_DN, keySpec );
+            CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec );
+            CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec );
+            CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec );
 
             String cryptoStoreId = cryptoStore.identity().get();
             String rootId = rootCa.identity().get();

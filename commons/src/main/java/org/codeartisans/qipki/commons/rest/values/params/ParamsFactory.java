@@ -47,9 +47,13 @@ public interface ParamsFactory
 
     CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
 
-    CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, @Optional String parentCaUri );
+    CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
+                                                String name, Integer validityDays,
+                                                String distinguishedName, KeyPairSpecValue keySpec,
+                                                @Optional String parentCaUri );
 
     X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name,
+                                                                  Integer validityDays,
                                                                   @Optional String comment,
                                                                   @Optional KeyUsagesValue keyUsages,
                                                                   @Optional ExtendedKeyUsagesValue extendedKeyUsages,
@@ -87,12 +91,13 @@ public interface ParamsFactory
         }
 
         @Override
-        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, String distinguishedName, KeyPairSpecValue keySpec, String parentCaUri )
+        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, String parentCaUri )
         {
             ValueBuilder<CAFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CAFactoryParamsValue.class );
             CAFactoryParamsValue params = paramsBuilder.prototype();
             params.cryptoStoreUri().set( keyStoreUri );
             params.name().set( name );
+            params.validityDays().set( validityDays );
             params.distinguishedName().set( distinguishedName );
             params.keySpec().set( keySpec );
             params.parentCaUri().set( parentCaUri );
@@ -100,13 +105,14 @@ public interface ParamsFactory
         }
 
         @Override
-        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, String comment,
+        public X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name, Integer validityDays, String comment,
                                                                              KeyUsagesValue keyUsages, ExtendedKeyUsagesValue extendedKeyUsages, NetscapeCertTypesValue netscapeCertTypes,
                                                                              BasicConstraintsValue basicConstraints, NameConstraintsValue nameConstraints )
         {
             ValueBuilder<X509ProfileFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( X509ProfileFactoryParamsValue.class );
             X509ProfileFactoryParamsValue params = paramsBuilder.prototype();
             params.name().set( name );
+            params.validityDays().set( validityDays );
             params.netscapeCertComment().set( comment );
             params.keyUsages().set( keyUsages );
             params.extendedKeyUsages().set( extendedKeyUsages );

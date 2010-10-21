@@ -55,6 +55,7 @@ public class X509ProfileListContext
     }
 
     public X509Profile createX509Profile( String name,
+                                          Integer validityDays,
                                           @Optional String comment,
                                           @Optional KeyUsagesValue keyUsages,
                                           @Optional ExtendedKeyUsagesValue extendedKeyUsages,
@@ -62,7 +63,7 @@ public class X509ProfileListContext
                                           @Optional BasicConstraintsValue basicConstraints,
                                           @Optional NameConstraintsValue nameConstraints )
     {
-        return context.role( X509ProfileFactory.class ).create( name, comment,
+        return context.role( X509ProfileFactory.class ).create( name, validityDays, comment,
                                                                 keyUsages, extendedKeyUsages, netscapeCertTypes,
                                                                 basicConstraints, nameConstraints );
     }

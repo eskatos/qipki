@@ -183,8 +183,10 @@ public interface RestletValuesFactory
             CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
 
             X509ProfileValue x509ProfileValue = x509ProfileValueBuilder.prototype();
+
             x509ProfileValue.uri().set( caUriBuilder.x509Profile().withIdentity( x509Profile.identity().get() ).build() );
             x509ProfileValue.name().set( x509Profile.name().get() );
+            x509ProfileValue.validityDays().set( x509Profile.validityDays().get() );
 
             return x509ProfileValueBuilder.newInstance();
         }

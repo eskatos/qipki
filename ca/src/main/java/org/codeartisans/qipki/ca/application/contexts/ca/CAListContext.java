@@ -57,17 +57,17 @@ public class CAListContext
         return context.role( CryptoValuesFactory.class ).createKeySpec( algorithm, length );
     }
 
-    public RootCA createRootCA( String cryptoStoreIdentity, String name, @X500Name String distinguishedName, KeyPairSpecValue keySpec )
+    public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec )
     {
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
-        return context.role( CAFactory.class ).createRootCA( name, distinguishedName, keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createRootCA( name, validityDays, distinguishedName, keySpec, cryptoStore );
     }
 
-    public SubCA createSubCA( String cryptoStoreIdentity, String name, @X500Name String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
+    public SubCA createSubCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
     {
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
         CA parentCA = fetchParentCA( parentCaIdentity );
-        return context.role( CAFactory.class ).createSubCA( parentCA, name, distinguishedName, keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, distinguishedName, keySpec, cryptoStore );
     }
 
     private CA fetchParentCA( String identity )

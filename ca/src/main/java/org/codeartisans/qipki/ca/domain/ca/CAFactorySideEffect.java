@@ -39,17 +39,17 @@ public abstract class CAFactorySideEffect
     private static final Logger LOGGER = LoggerFactory.getLogger( CAFactorySideEffect.class );
 
     @Override
-    public RootCA createRootCA( String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+    public RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
-        RootCA ca = result.createRootCA( name, distinguishedName, keySpec, cryptoStore );
+        RootCA ca = result.createRootCA( name, validityDays, distinguishedName, keySpec, cryptoStore );
         LOGGER.debug( "New RootCA created: " + ca.name() );
         return null;
     }
 
     @Override
-    public SubCA createSubCA( CA parentCA, String name, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+    public SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
-        SubCA ca = result.createSubCA( parentCA, name, distinguishedName, keySpec, cryptoStore );
+        SubCA ca = result.createSubCA( parentCA, name, validityDays, distinguishedName, keySpec, cryptoStore );
         LOGGER.debug( "New SubCA created: " + ca.name() );
         return null;
     }
