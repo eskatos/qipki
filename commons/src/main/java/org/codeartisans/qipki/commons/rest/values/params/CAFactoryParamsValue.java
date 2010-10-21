@@ -35,6 +35,8 @@ public interface CAFactoryParamsValue
 
     Property<String> cryptoStoreUri();
 
+    Property<Integer> validityDays();
+
     @X500Name
     Property<String> distinguishedName();
 

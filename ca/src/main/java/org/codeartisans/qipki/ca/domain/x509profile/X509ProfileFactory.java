@@ -41,6 +41,7 @@ public interface X509ProfileFactory
 {
 
     X509Profile create( String name,
+                        Integer validityDays,
                         @Optional String comment,
                         @Optional KeyUsagesValue keyUsages,
                         @Optional ExtendedKeyUsagesValue extendedKeyUsages,
@@ -60,6 +61,7 @@ public interface X509ProfileFactory
 
         @Override
         public X509Profile create( String name,
+                                   Integer validityDays,
                                    String comment,
                                    KeyUsagesValue keyUsages,
                                    ExtendedKeyUsagesValue extendedKeyUsages,
@@ -70,6 +72,7 @@ public interface X509ProfileFactory
             EntityBuilder<X509Profile> builder = uowf.currentUnitOfWork().newEntityBuilder( X509Profile.class );
             X509Profile profile = builder.instance();
             profile.name().set( name );
+            profile.validityDays().set( validityDays );
             profile.netscapeCertComment().set( comment );
             if ( keyUsages != null ) {
                 profile.keyUsages().set( vbf.newValueBuilder( KeyUsagesValue.class ).

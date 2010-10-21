@@ -50,8 +50,10 @@ public class X509ProfileListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509ProfileListResource.class );
+
     @Structure
     private ValueBuilderFactory vbf;
+
     @Service
     private RestletValuesFactory restValuesFactory;
 
@@ -88,6 +90,7 @@ public class X509ProfileListResource
 
             // Interaction
             X509Profile x509Profile = x509ProfileListCtx.createX509Profile( params.name().get(),
+                                                                            params.validityDays().get(),
                                                                             params.netscapeCertComment().get(),
                                                                             params.keyUsages().get(),
                                                                             params.extendedKeyUsages().get(),

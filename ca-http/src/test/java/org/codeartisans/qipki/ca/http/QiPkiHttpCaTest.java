@@ -32,13 +32,9 @@ import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import javax.security.auth.x500.X500Principal;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
@@ -125,7 +121,7 @@ public class QiPkiHttpCaTest
         post = new HttpPost( caApi.caListUri().get() );
         addAcceptJsonHeader( post );
         KeyPairSpecValue keyPairSpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-        CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), "MyTestCA", "CN=MyTestCA", keyPairSpec, null );
+        CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), "MyTestCA", 1, "CN=MyTestCA", keyPairSpec, null );
         post.setEntity( new StringEntity( caParams.toJSON() ) );
         caJson = httpClient.execute( post, strResponseHandler );
         ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
@@ -135,7 +131,7 @@ public class QiPkiHttpCaTest
         post = new HttpPost( caApi.x509ProfileListUri().get() );
         addAcceptJsonHeader( post );
         X509ProfileFactoryParamsValue profileParams = paramsFactory.createX509ProfileFactoryParams(
-                "SSLClient", "A simple SSLClient x509 profile for unit tests",
+                "SSLClient", 1, "A simple SSLClient x509 profile for unit tests",
                 x509ExtValuesFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.keyEncipherment, KeyUsage.digitalSignature ) ),
                 x509ExtValuesFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.clientAuth ) ),
                 x509ExtValuesFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslClient ) ),
@@ -183,7 +179,7 @@ public class QiPkiHttpCaTest
 
         assertTrue( newX509Detail.keysExtensions().get().extendedKeyUsages().get().extendedKeyUsages().get().contains( ExtendedKeyUsage.clientAuth ) );
         assertTrue( newX509Detail.keysExtensions().get().netscapeCertTypes().get().netscapeCertTypes().get().contains( NetscapeCertType.sslClient ) );
-        
+
 
         // Get X509 list
         get = new HttpGet( caApi.x509ListUri().get() );

@@ -94,10 +94,14 @@ public class CAListResource
             CA ca;
             CaUriResolver cryptoStoreResolver = new CaUriResolver( getRootRef(), params.cryptoStoreUri().get() );
             if ( StringUtils.isEmpty( params.parentCaUri().get() ) ) {
-                ca = caListCtx.createRootCA( cryptoStoreResolver.identity(), params.name().get(), params.distinguishedName().get(), params.keySpec().get() );
+                ca = caListCtx.createRootCA( cryptoStoreResolver.identity(),
+                                             params.name().get(), params.validityDays().get(),
+                                             params.distinguishedName().get(), params.keySpec().get() );
             } else {
                 CaUriResolver parentCaResolver = new CaUriResolver( getRootRef(), params.parentCaUri().get() );
-                ca = caListCtx.createSubCA( cryptoStoreResolver.identity(), params.name().get(), params.distinguishedName().get(), params.keySpec().get(), parentCaResolver.identity() );
+                ca = caListCtx.createSubCA( cryptoStoreResolver.identity(),
+                                            params.name().get(), params.validityDays().get(),
+                                            params.distinguishedName().get(), params.keySpec().get(), parentCaResolver.identity() );
             }
 
             // Redirect to created resource
