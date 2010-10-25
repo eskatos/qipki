@@ -162,7 +162,7 @@ public abstract class CAMixin
                                                                                  BigInteger.probablePrime( 120, new SecureRandom() ),
                                                                                  pkcs10.getCertificationRequestInfo().getSubject(),
                                                                                  pkcs10.getPublicKey(),
-                                                                                 Duration.standardDays( 365 ),
+                                                                                 Duration.standardDays( x509profile.validityDays().get() ),
                                                                                  extensions );
 
             return certificate;
