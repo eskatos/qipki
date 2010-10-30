@@ -3,7 +3,8 @@ DISCLAIMER This file does not deal with cryptography unless it's AAA related.
 
 Permissions defines permissions on interactions
 
-Privileges defines permissions on data : read/write/delete ? maybe more suited to filesystem like systems ?
+Privileges defines permissions on resources: get & head / post & put
+How to deal with domain needs ?
 
 Roles can be built by the deployer
 One role is built in, immutable and can be enabled/disabled live : root

@@ -44,8 +44,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-ca-client</artifactId>
+            <groupId>org.codeartisans.qipki.clients</groupId>
+            <artifactId>qipki-http-ca-client</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

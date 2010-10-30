@@ -19,7 +19,7 @@
 
         <!-- Libraries -->
         <dependency>
-            <groupId>org.codeartisans.java</groupId>
+            <groupId>org.codeartisans</groupId>
             <artifactId>java-toolbox</artifactId>
             <version>${version.java-toolbox}</version>
         </dependency>

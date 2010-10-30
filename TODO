@@ -1,190 +1,118 @@
+Done
+====
 
-QiPKI
-=====
+Add support for certificate profiles
+
+    X509ProfileAssignment aggregated in CA so that when removing a ca, it removes its assignments but still needs to handle X509Profile deletion manually
+    Handle requested extensions in PKCS#10, only SubjectAlternativeNames is allowed for now but the mechanism is in place.
+    Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
+
+Add support for key escrow
+
+
+
 
 
 Next steps
+==========
 
-  Add NetscapeCertType extensions to CAs
+Add CRL Endpoint in issued X509Certificates
 
-  Added CRL Endpoint in issued X509Certificates
-    Need to find a way to get the RootReference data in CAMixin in order to build the URL ... something is weird here
+    Full url given by user
+    Clients could use the uri builder to easily create the default one 
 
-  QUID Add a parameter to CA to say if they allow child CAs to issue CRLs
-       Add a parameter to CA to say if they delegate CRLs issueing to parent CA
-       Which one ?
-       By default, only RootCAs issue CRLs, SubCA can have a parameter "Issue own CRLs"
-       Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
+Release 1.0-alpha aka. Embeddable rustic CA
 
-  IN_PROGESS Write qi4j client library for cryptostore/ca/csr/certificates/revocation
-    QiPkiIURIBuilder : fluent interface to build qipki rest api URIs
-      Immutables QiPkiIURIBuilders sharing a StringBuilder
-    QiPkiCAClientAssembler : assemble everything is needed in a single qi4j module
+Finish to move osgi stuff out of the main code
 
-  IN_PROGESS  Add support for certificate profiles
-    X509ProfileAssignment aggregated in CA so that when removing a ca, it removes its assignments but still needs to handle X509Profile deletion manually
-    Handle requested extensions in PKCS#10, only SubjectAlternativeNames is allowed for now but the mechanism is in place.
-    TODO Model as a CA subresource so client can POST on it to update CA assignments
-        /ca/{identity}/profiles return a list of profiles, POST update this list
-    Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
-    Add basic profiles created at first deployment
-    Discriminate CA and EndEntity profiles ? ... seems overkill
+Strip the repository from binaries and move doc outside
 
-  Add tools resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
-    With this we can write unit tests for certificate parsing using a bunch of external certificates
+Push to github
 
-  Add Netscape extensions handling
-    In X509DetailValue : all of them
-    In X509Profile
-        Netscape Certificate Comment
-        Netscape Certificate Type
-    Automatically filled by CAs
-        Netscape CA Revocation URL
-            Only on CA certificates
-            With only the CRL endpoint of the issuing CA
-            It feels weird .... is this really necessary ?
+Start working really with branches
 
-  Package as a unix daemon
+Apply qi4j data migration system
 
 
-  Release 0.1
 
-  Add support for key escrow
 
-  Use @Concerns to factorize Resources (error handling, logging etc..)
-    Finish WrongParamatersBuilder and integrate in resources concerns
-    Remove loggings from unit tests, the server logs, the client only use http
+After that
+==========
 
-  Add shiro
+Add basic profiles creation in qi4j-test-support
+
+Add NetscapeCertType extensions to CAs
+
+Enhance X509Profile with domain rules and certificate template creation
+
+Create a CAProfile role
+
+    Needed to add rules to CAs that are use case driven and not standard driven
+    A CA will addapt its behavior based on it's profile
+
+Create a CRLIssuer role
+
+    To be a CRLIssuer a CA must be allowed by it's CAProfile
+    One could want to disable CRL issuance on a CA with appropriate CAProfile
+    Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
+
+CronLike scheduler
+
+    See if it's possible to embedd quartz implementing the JobStore with Qi4j
+
+Use @Concerns to factorize http Resources (error handling, logging etc..)
+
+Add shiro for handling roles/permissions
+
     Model with one root Role and Permissions, other Roles will emerge themselves later
     See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
+    See if the security can be applied to domain layer and it's behavior configured in representation layer
 
-  Apply qi4j data migration system to learn it
+Add tool http resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
 
-  Add a domain auditing bounded context filled by @SideEffects
+    With this we can write unit tests for certificate parsing using a bunch of external certificates
 
-  Wrap client api as a small qi4j application usable without qi4j imports
+Expose X509ProfileAssignments as a CA subresource so client can POST on it to update CA assignments
 
-  Simple Client/UI reflecting naive rest api list/factory/entity
-    Example: request to x509 factory is presented with two fields
-      ComboBox: choose Fca in list
-      TextArea: paste pkcs10 pem
+    /ca/{identity}/profiles return a list of profiles, POST update this list
 
+Enhance Netscape extensions handling
 
+    In X509DetailValue : all of them
+    Automatically filled by CAs
+        Netscape CA Revocation URL
 
-X.509 Extensions Documents
+Package a http assembly as a unix daemon
 
-	http://www.ietf.org/rfc/rfc2459.txt
-	http://www.openssl.org/docs/apps/x509.html#CERTIFICATE_EXTENSIONS
+Change the way key pairs are protected
 
-	MORTELISSIME
-	http://www.redhat.com/docs/manuals/cert-system/8.0/admin/html/Certificate_and_CRL_Extensions.html
+    Add PKCS#11 KeyStore support
+    Add encipered filesystem based storage
+    Add a key wallet to officers with the keys they're allowed to use
+    A CAProfile allows, or not, issuance of escrowed certified keypairs
+        The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
+    A CAProfile allows, or not, certificate issuance for known escrowed keypairs
+    Add a warning if a CA signs a PKCS#10 
+    
 
-	NETSCAPE
-	http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn3.html
+Add a domain auditing bounded context filled by @SideEffects
 
+Wrap client api as a small qi4j application usable without qi4j imports
 
-    extendedKeyUsage : FUCK, need to find reliable info about this
-        Two interpretations as to what extended key usage values mean when set in a CA certificate
-            • Certificate can be used for the indicated usage
-                – Interpretation used by PKIX, some vendors
-            • Certificate can issue certificates with the given usage
-                – Interpretation used by Netscape, Microsoft, other vendors
-        As usual, PKI people are split 50:50 on this
+Swing Remote
 
-    netscapeCertType
-        Discontinued since 10 years ... is it needed ?
-
-    privateKeyUsagePeriod
-        Disallowed by the PKIX profile, although no-one can provide a reason for this
-
-    nameConstraints
-        On CA only
-        Constrain the DN subtree under which a CA can issue certificates
-
-        Name constraints can be avoided through creative name encoding (Problem in standards)
-            • Multiple encodings for the same character, zero-width spaces, floating diacritics, etc
-            • Can make identical-appearing strings compare as different strings
-            • Can also evade name constraints by using altNames
-
-
-
-
-Task Scheduling
-
-  qi4j-lib-taskqueue
-    hard to implement in a typesafe way because of java type erasure
-    http://www.developpez.net/forums/d435282/java/general-java/langage/possibilite-dacceder-type-generique-runtime/#post2630861
-    -> find a less clever but more pragmatic way
-
-
-Client UI
-
+    A GUI for dev, debug and test purpose only
+    Start with a single jvm assembly
+    Run with a profile giving urls for http and jmx of components
+        Load configuration values before assembly in a json (SingletonAssembly bootstrap)
+    Simple Client/UI reflecting naive rest api list/factory/entity
+        Example: request to x509 factory is presented with two fields:    ComboBox: choose Fca in list   &   TextArea: paste pkcs10 pem
+  Client UI
   resource my/tasks
     list
     horizontal sliding view
     differenciate with tags so clients could choose icons/styling
     provide (rss?) feed
-
-
-
-Basic Certificates Profiles
-    TODO: work on SubCAs profiles
-
-RootCAThatDoesEverything ...  :|
-
-    BC  CA, critical, pathLen=0
-    KU  critical, cRLSign | keyCertSign
-    NCT nonCritical, sslCA | objectSigningCA | smimeCA
-
-AuthenticationCA
-
-    BC  CA, critical, pathLen=0
-    KU  critical, cRLSign | keyCertSign
-    NCT nonCritical, sslCA
-
-CipheringCA
-
-    BC  CA, critical, pathLen=0
-    KU  critical, cRLSign | keyCertSign
-
-NonRepudiationCA
-
-    BC  CA, critical, pathLen=0
-    KU  critical, cRLSign | keyCertSign
-    NCT nonCritical, objectSigningCA | smimeCA
-
-SSL Server Certificates
-
-    BC  NonCA, critical, pathLen=0
-    KU  critical, digitalSignature | keyEncipherment
-    EKU nonCritical, serverAuth, clientAuth
-    NCT nonCritical, sslServer
-
-
-SSL Client Certificates
-
-    BC  NonCA, critical, pathLen=0
-    KU  critical, digitalSignature | keyEncipherment
-    EKU nonCritical, clientAuth
-    NCT nonCritical, sslClient
-
-
-Object & S/MIME Signing Certificates
-
-    BC  NonCA, critical, pathLen=0
-    KU  critical, digitalSignature | nonRepudiation
-    EKU nonCritical, emailProtection
-    NCT nonCritical, objectSigning | smime
-
-
-Key Encipherment & S/MIME Encipherment Certificates
-
-    BC  NonCA,critical,  pathLen=0
-    KU  critical, keyEncipherment
-    EKU nonCritical, emailProtection
-    NCT nonCritical, smime
-
 
 
 
