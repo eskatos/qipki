@@ -1,46 +1,21 @@
-
-Actual Layout
-.
-├── ca
-├── ca-client
-├── ca-http
-├── client-ca
-├── commons
-├── core
-├── crypto
-├── crypto-dci
-├── dist
-├── main
-├── ra
-├── swing
-└── testsupport
-
-
-
-Target Layout
-
+Here is the project layout, that should get you started browsing the code
 .
 ├── commons
 ├── crypto
 ├── core
 ├── testsupport
 ├── ca
-|   ├── ca-core
-|   ├── ca-http
-|   ├── ca-http-bundle
-|   └── ca-http-client
 ├── ra
-|   ├── ra-core
-|   ├── ra-http
-|   ├── ra-http-bundle
-|   └── ra-http-client
-├── remote
-|   ├── remote-swing
-|   └── remote-swing-bundle
-└── osgi-standalone
+├── http
+|   └── http-ca
+├── clients
+|   ├── http-ca-client
+|   └── qipki-swing-remote
+└── osgi
+    ├── http-ca-bundle
+    ├── remote-swing-bundle
     ├── main
     └── dist
-
 
 osgi-profile
 	not activated by default even for releases for now

@@ -5,12 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeartisans.qipki</groupId>
-        <artifactId>qipki</artifactId>
+        <groupId>org.codeartisans.qipki.clients</groupId>
+        <artifactId>qipki-clients-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-ca-client</artifactId>
+    <groupId>org.codeartisans.qipki.clients</groupId>
+    <artifactId>qipki-http-ca-client</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
@@ -18,7 +19,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.codeartisans.qipki</groupId>
             <artifactId>qipki-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
