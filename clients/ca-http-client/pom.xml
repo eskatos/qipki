@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.codeartisans.qipki.clients</groupId>
         <artifactId>qipki-clients-parent</artifactId>
-        <version>1.0-alpha1</version>
+        <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.codeartisans.qipki.clients</groupId>
