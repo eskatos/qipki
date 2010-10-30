@@ -16,9 +16,9 @@
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
-        <modules>
+    <modules>
         <module>ca-http-client</module>
-        <module>qipki-swing-remote</module>
-</modules>
+        <!--module>qipki-swing-remote</module-->
+   </modules>
 
 </project>

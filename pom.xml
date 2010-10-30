@@ -60,7 +60,7 @@
         <!--module>http</module-->
 
         <!-- Clients -->
-        <!--module>clients</module-->
+        <module>clients</module>
 
         <!-- OSGI Experiment -->
         <!--module>osgi</module-->
@@ -88,11 +88,7 @@
             <id>ops4j-repository</id>
             <url>http://repository.ops4j.org/maven2</url>
         </repository>
-        <repository>
-            <id>ops4j-snapshots-repository</id>
-            <url>http://repository.ops4j.org/mvn-snapshots</url>
-        </repository>
-        <repository>
+        <!--repository>
             <id>architect-rules-repo</id>
             <name>architecture-rules repository</name>
             <layout>default</layout>
@@ -103,7 +99,7 @@
             <snapshots>
                 <checksumPolicy>ignore</checksumPolicy>
             </snapshots>
-        </repository>
+        </repository-->
     </repositories>
 
 </project>
