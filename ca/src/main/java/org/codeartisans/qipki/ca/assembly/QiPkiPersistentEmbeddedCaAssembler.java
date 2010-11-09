@@ -16,6 +16,7 @@ package org.codeartisans.qipki.ca.assembly;
 import javax.sql.DataSource;
 
 import org.codeartisans.qipki.core.assembly.AssemblyUtil;
+import org.codeartisans.qipki.core.assembly.index.AutomaticReindexingAssembler;
 import org.codeartisans.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
@@ -65,22 +66,24 @@ public class QiPkiPersistentEmbeddedCaAssembler
             config.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             config.forMixin( NativeConfiguration.class ).declareDefaults().dataDirectory().set( finderDataDirectory );
 
+            ModuleAssembly persistenceMa = infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE );
+
             if ( dataSource != null ) {
 
-                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble(
-                        infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
+                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble( persistenceMa );
 
                 config.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
 
             } else {
 
-                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble(
-                        infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
+                new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble( persistenceMa );
 
                 config.addEntities( DBCPDataSourceConfiguration.class, SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.layer );
                 config.forMixin( DBCPDataSourceConfiguration.class ).declareDefaults().url().set( connectionString );
 
             }
+
+            new AutomaticReindexingAssembler().assemble( persistenceMa );
         }
 
         LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );

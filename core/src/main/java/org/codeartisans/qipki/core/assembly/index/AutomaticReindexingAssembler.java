@@ -11,41 +11,29 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.core.assembly;
+package org.codeartisans.qipki.core.assembly.index;
 
-import org.codeartisans.qipki.core.assembly.index.AutomaticReindexingAssembler;
+import org.codeartisans.qipki.core.assembly.index.AutomaticReindexerService;
+
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.index.rdf.assembly.RdfMemoryStoreAssembler;
-import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
+import org.qi4j.index.reindexer.ReindexerConfiguration;
+import org.qi4j.index.reindexer.ReindexerService;
 
-public class InMemoryStoreAndIndexModuleAssembler
+public class AutomaticReindexingAssembler
         implements Assembler
 {
-
-    private final Visibility visibility;
-
-    public InMemoryStoreAndIndexModuleAssembler()
-    {
-        this( Visibility.application );
-    }
-
-    public InMemoryStoreAndIndexModuleAssembler( Visibility visibility )
-    {
-        this.visibility = visibility;
-    }
 
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly ma )
             throws AssemblyException
     {
-        ma.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( visibility );
-        new RdfMemoryStoreAssembler( null, visibility, visibility ).assemble( ma );
-        new AutomaticReindexingAssembler().assemble( ma );
+        ma.addServices( ReindexerService.class ).visibleIn( Visibility.module );
+        ma.addEntities( ReindexerConfiguration.class ).visibleIn( Visibility.module );
+        ma.addServices( AutomaticReindexerService.class ).visibleIn( Visibility.module ).instantiateOnStartup();
     }
 
 }
