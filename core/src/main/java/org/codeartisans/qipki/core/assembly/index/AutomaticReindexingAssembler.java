@@ -13,8 +13,6 @@
  */
 package org.codeartisans.qipki.core.assembly.index;
 
-import org.codeartisans.qipki.core.assembly.index.AutomaticReindexerService;
-
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;

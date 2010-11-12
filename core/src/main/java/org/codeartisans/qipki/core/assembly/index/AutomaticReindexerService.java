@@ -14,9 +14,12 @@
 package org.codeartisans.qipki.core.assembly.index;
 
 import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.unitofwork.UnitOfWork;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.index.reindexer.ReindexerService;
 
 import org.slf4j.Logger;
@@ -33,6 +36,8 @@ public interface AutomaticReindexerService
     {
 
         private static final Logger LOGGER = LoggerFactory.getLogger( AutomaticReindexerService.class );
+        @Structure
+        private UnitOfWorkFactory uowf;
         @Service
         private ReindexerService reindexer;
 
@@ -40,10 +45,21 @@ public interface AutomaticReindexerService
         public void activate()
                 throws Exception
         {
+            boolean doDiscard = false;
+            UnitOfWork uow = uowf.currentUnitOfWork();
+            if ( uow == null ) {
+                uow = uowf.newUnitOfWork();
+                doDiscard = true;
+            }
+
             LOGGER.debug( "Will start reindexing now.." );
             long start = System.currentTimeMillis();
             reindexer.reindex();
             LOGGER.info( "Reindexing ended successfully and took {}ms", System.currentTimeMillis() - start );
+
+            if ( doDiscard ) {
+                uow.discard();
+            }
         }
 
         @Override
