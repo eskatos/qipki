@@ -52,16 +52,16 @@
 
         <!-- Domain -->
         <module>ca</module>
-        <module>ra</module>
+        <!--module>ra</module-->
 
         <!-- HTTP Presentation -->
-        <module>http</module>
+        <!--module>http</module-->
 
         <!-- Clients -->
-        <module>clients</module>
+        <!--module>clients</module-->
 
         <!-- OSGI Experiment -->
-        <module>osgi</module>
+        <!--module>osgi</module-->
 
     </modules>
 

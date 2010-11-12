@@ -34,20 +34,6 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- test -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-testsupport</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codeartisans.qipki.clients</groupId>
-            <artifactId>qipki-http-ca-client</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 </project>
