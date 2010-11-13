@@ -45,21 +45,16 @@ public interface AutomaticReindexerService
         public void activate()
                 throws Exception
         {
-            boolean doDiscard = false;
-            UnitOfWork uow = uowf.currentUnitOfWork();
-            if ( uow == null ) {
-                uow = uowf.newUnitOfWork();
-                doDiscard = true;
-            }
+            LOGGER.debug( "Will start automatic reindex now.." );
 
-            LOGGER.debug( "Will start reindexing now.." );
             long start = System.currentTimeMillis();
+            UnitOfWork uow = uowf.newUnitOfWork();
+            
             reindexer.reindex();
-            LOGGER.info( "Reindexing ended successfully and took {}ms", System.currentTimeMillis() - start );
 
-            if ( doDiscard ) {
-                uow.discard();
-            }
+            uow.complete();
+
+            LOGGER.info( "Reindex ended successfully and took {}ms", System.currentTimeMillis() - start );
         }
 
         @Override
