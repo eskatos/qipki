@@ -13,7 +13,6 @@
  */
 package org.codeartisans.qipki.core.assembly;
 
-import org.codeartisans.qipki.core.assembly.index.AutomaticReindexingAssembler;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -45,7 +44,6 @@ public class InMemoryStoreAndIndexModuleAssembler
     {
         ma.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( visibility );
         new RdfMemoryStoreAssembler( null, visibility, visibility ).assemble( ma );
-        new AutomaticReindexingAssembler().assemble( ma );
     }
 
 }

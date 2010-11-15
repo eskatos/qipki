@@ -53,7 +53,7 @@ public final class QiPkiHttpCa
 
     public QiPkiHttpCa()
     {
-        super( new QiPkiHttpCaAssembler() );
+        super( new QiPkiHttpCaAssembler( "TODO REFACTOR", "TODO REFACTOR" ) );
         setUpLogging();
     }
 

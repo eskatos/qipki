@@ -11,3 +11,4 @@ clients/qipki-swing-remote/target
 clients/ca-http-client/target
 target
 clients/target
+http/http-ca/derby.log
