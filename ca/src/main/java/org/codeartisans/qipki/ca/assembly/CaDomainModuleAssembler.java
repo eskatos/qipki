@@ -37,6 +37,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.codeartisans.qipki.commons.crypto.values.ValidityIntervalValue;
+import org.codeartisans.qipki.core.assembly.index.AutomaticReindexingAssembler;
 import org.codeartisans.qipki.core.sideeffects.TracingSideEffect;
 
 import org.qi4j.api.common.Visibility;
@@ -50,41 +51,44 @@ public class CaDomainModuleAssembler
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public void assemble( ModuleAssembly module )
+    public void assemble( ModuleAssembly ma )
             throws AssemblyException
     {
         // Values
-        module.addValues( ValidityIntervalValue.class );
+        ma.addValues( ValidityIntervalValue.class );
 
         // Entities
-        module.addEntities( CryptoStoreEntity.class,
-                            RootCAEntity.class,
-                            SubCAEntity.class,
-                            CRLEntity.class,
-                            X509ProfileAssignmentEntity.class,
-                            X509ProfileEntity.class,
-                            X509Entity.class,
-                            RevocationEntity.class,
-                            EscrowedKeyPairEntity.class ).
+        ma.addEntities( CryptoStoreEntity.class,
+                        RootCAEntity.class,
+                        SubCAEntity.class,
+                        CRLEntity.class,
+                        X509ProfileAssignmentEntity.class,
+                        X509ProfileEntity.class,
+                        X509Entity.class,
+                        RevocationEntity.class,
+                        EscrowedKeyPairEntity.class ).
                 visibleIn( Visibility.application );
 
         // Services
-        module.addServices( CryptoStoreRepository.class,
-                            CryptoStoreFactory.class,
-                            CARepository.class,
-                            CAFactory.class,
-                            CRLFactory.class,
-                            X509ProfileAssignmentFactory.class,
-                            X509ProfileRepository.class,
-                            X509ProfileFactory.class,
-                            X509Repository.class,
-                            X509Factory.class,
-                            RevocationFactory.class,
-                            CryptoValuesFactory.class,
-                            EscrowedKeyPairFactory.class,
-                            EscrowedKeyPairRepository.class ).
+        ma.addServices( CryptoStoreRepository.class,
+                        CryptoStoreFactory.class,
+                        CARepository.class,
+                        CAFactory.class,
+                        CRLFactory.class,
+                        X509ProfileAssignmentFactory.class,
+                        X509ProfileRepository.class,
+                        X509ProfileFactory.class,
+                        X509Repository.class,
+                        X509Factory.class,
+                        RevocationFactory.class,
+                        CryptoValuesFactory.class,
+                        EscrowedKeyPairFactory.class,
+                        EscrowedKeyPairRepository.class ).
                 visibleIn( Visibility.application ).
                 withSideEffects( TracingSideEffect.class );
+
+        // Automatic reindex
+        new AutomaticReindexingAssembler().assemble( ma );
     }
 
 }

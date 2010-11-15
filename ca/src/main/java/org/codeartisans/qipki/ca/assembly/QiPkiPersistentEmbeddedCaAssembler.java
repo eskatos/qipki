@@ -16,7 +16,6 @@ package org.codeartisans.qipki.ca.assembly;
 import javax.sql.DataSource;
 
 import org.codeartisans.qipki.core.assembly.AssemblyUtil;
-import org.codeartisans.qipki.core.assembly.index.AutomaticReindexingAssembler;
 import org.codeartisans.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
@@ -83,7 +82,6 @@ public class QiPkiPersistentEmbeddedCaAssembler
 
             }
 
-            new AutomaticReindexingAssembler().assemble( persistenceMa );
         }
 
         LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );

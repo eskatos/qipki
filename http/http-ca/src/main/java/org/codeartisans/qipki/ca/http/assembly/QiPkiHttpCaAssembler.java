@@ -14,7 +14,7 @@
 package org.codeartisans.qipki.ca.http.assembly;
 
 import org.codeartisans.qipki.ca.assembly.CaAssemblyNames;
-import org.codeartisans.qipki.ca.assembly.QiPkiVolatileEmbeddedCaAssembler;
+import org.codeartisans.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
 import org.codeartisans.qipki.core.assembly.AssemblyUtil;
 
 import org.qi4j.api.common.Visibility;
@@ -25,8 +25,13 @@ import org.qi4j.bootstrap.LayerAssembly;
 
 @SuppressWarnings( "unchecked" )
 public class QiPkiHttpCaAssembler
-        extends QiPkiVolatileEmbeddedCaAssembler
+        extends QiPkiPersistentEmbeddedCaAssembler
 {
+
+    public QiPkiHttpCaAssembler( String connectionString, String finderDataDirectory )
+    {
+        super( connectionString, finderDataDirectory );
+    }
 
     @Override
     public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )

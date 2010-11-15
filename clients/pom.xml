@@ -16,7 +16,7 @@
 
     <modules>
         <module>ca-http-client</module>
-        <module>qipki-swing-remote</module>
+        <!--module>qipki-swing-remote</module-->
    </modules>
 
 </project>

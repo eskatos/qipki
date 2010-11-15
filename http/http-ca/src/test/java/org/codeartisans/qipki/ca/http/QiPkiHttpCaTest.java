@@ -13,7 +13,9 @@
  */
 package org.codeartisans.qipki.ca.http;
 
+import info.aduna.io.FileUtil;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.GeneralSecurityException;
@@ -276,7 +278,21 @@ public class QiPkiHttpCaTest
         base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
 
+        FileUtil.deltree( new File( "target/qi4j-index" ) );
+    }
 
+    @Test
+    public void testReindex()
+            throws IOException, JSONException
+    {
+        // Get CA list
+        HttpGet get = new HttpGet( caApi.caListUri().get() );
+        addAcceptJsonHeader( get );
+        String jsonCaList = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
+        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
+        CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
+        assertNotNull( firstCa );
     }
 
 }
