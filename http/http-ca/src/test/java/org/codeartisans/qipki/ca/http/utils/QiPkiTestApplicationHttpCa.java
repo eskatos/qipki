@@ -25,7 +25,7 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa()
     {
-        super( new QiPkiHttpCaAssembler( "jdbc:derby:memory:unit-testing-jpa;create=true", "target/qi4j-index" )
+        super( new QiPkiHttpCaAssembler( "jdbc:derby:target/qi4j-entities;create=true", "target/qi4j-index" )
         {
 
             @Override

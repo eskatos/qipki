@@ -55,10 +55,10 @@
         <!--module>ra</module-->
 
         <!-- HTTP Presentation -->
-        <!--module>http</module-->
+        <module>http</module>
 
         <!-- Clients -->
-        <!--module>clients</module-->
+        <module>clients</module>
 
         <!-- OSGI Experiment -->
         <!--module>osgi</module-->

@@ -13,6 +13,10 @@
  */
 package org.codeartisans.qipki.testsupport;
 
+import info.aduna.io.FileUtil;
+
+import java.io.File;
+
 import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
 import org.codeartisans.qipki.commons.assembly.RestValuesModuleAssembler;
 import org.codeartisans.qipki.commons.crypto.services.CryptoValuesFactory;
@@ -26,16 +30,23 @@ import org.codeartisans.qipki.crypto.x509.X509Generator;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiTest
         extends AbstractQi4jTest
 {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger( AbstractQiPkiTest.class );
+    protected static final File ENTITIES_DIRECTORY = new File( "target/qi4j-entities" );
+    protected static final File INDEX_DIRECTORY = new File( "target/qi4j-index" );
     protected QiPkiApplication qipkiServer;
     protected CryptIO cryptio;
     protected X509Generator x509Generator;
@@ -54,8 +65,22 @@ public abstract class AbstractQiPkiTest
         new CryptoValuesModuleAssembler().assemble( module );
     }
 
+    @BeforeClass
+    public static void qipPkiTestBeforeClass()
+    {
+        LOGGER.info( "BEFORE_CLASS WILL DELETE INDEX REPOSITORY AND ENTITIES STORE DATA" );
+        FileUtil.deltree( ENTITIES_DIRECTORY );
+        FileUtil.deltree( INDEX_DIRECTORY );
+        if ( ENTITIES_DIRECTORY.exists() ) {
+            throw new IllegalStateException( ENTITIES_DIRECTORY + " still exists cannot continue" );
+        }
+        if ( INDEX_DIRECTORY.exists() ) {
+            throw new IllegalStateException( INDEX_DIRECTORY + " still exists cannot continue" );
+        }
+    }
+
     @Before
-    public void qiPkiBefore()
+    public void qiPkiTestBefore()
     {
         qipkiServer = createQiPkiApplication();
         qipkiServer.run();
@@ -69,7 +94,7 @@ public abstract class AbstractQiPkiTest
     protected abstract QiPkiApplication createQiPkiApplication();
 
     @After
-    public void qiPkiAfter()
+    public void qiPkiTestAfter()
     {
         qipkiServer.stop();
     }

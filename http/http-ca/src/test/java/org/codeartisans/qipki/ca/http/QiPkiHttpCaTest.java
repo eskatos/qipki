@@ -14,6 +14,7 @@
 package org.codeartisans.qipki.ca.http;
 
 import info.aduna.io.FileUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -278,13 +279,16 @@ public class QiPkiHttpCaTest
         base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
 
+        LOGGER.info( "WILL DELETE INDEX REPOSITORY" );
         FileUtil.deltree( new File( "target/qi4j-index" ) );
+        LOGGER.info( "INDEX REPOSITORY DELETED" );
     }
 
     @Test
     public void testReindex()
             throws IOException, JSONException
     {
+        LOGGER.info( "HAS INDEX REPOSITORY BEEN REFILLED?" );
         // Get CA list
         HttpGet get = new HttpGet( caApi.caListUri().get() );
         addAcceptJsonHeader( get );
@@ -293,6 +297,7 @@ public class QiPkiHttpCaTest
         RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
         CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
         assertNotNull( firstCa );
+        LOGGER.info( "INDEX REPOSITORY BEEN REFILLED SUCCESSFULLY" );
     }
 
 }
