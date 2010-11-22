@@ -29,6 +29,7 @@ import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.query.Query;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
@@ -66,28 +67,42 @@ public interface QiPkiCaFixtures
             UnitOfWork uow = uowf.newUnitOfWork();
             RootContext rootCtx = newRootContext();
 
-            // Create a test keystore
-            CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
-            KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CryptoStoreBehavior
+            // Do we need to create fixtures
+            Query<CryptoStore> csList = rootCtx.cryptoStoreListContext().list( 0 );
+            boolean createFixtures = true;
+            for ( CryptoStore eachCS : csList ) {
+                if ( KEYSTORE_NAME.equals( eachCS.name().get() ) ) {
+                    createFixtures = false;
+                    break;
+                }
+            }
 
-            // Create some test CAs
-            CAListContext caListCtx = rootCtx.caListContext();
-            KeyPairSpecValue keySpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-            CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec );
-            CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec );
-            CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec );
+            if ( createFixtures ) {
 
-            String cryptoStoreId = cryptoStore.identity().get();
-            String rootId = rootCa.identity().get();
+                // Create a test keystore
+                CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
+                KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CryptoStoreBehavior
 
-            uow.complete();
+                // Create some test CAs
+                CAListContext caListCtx = rootCtx.caListContext();
+                KeyPairSpecValue keySpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
+                CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec );
+                CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec );
+                CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec );
+
+                String cryptoStoreId = cryptoStore.identity().get();
+                String rootId = rootCa.identity().get();
+
+                uow.complete();
 
 
-            uow = uowf.newUnitOfWork();
-            rootCtx = newRootContext();
+                uow = uowf.newUnitOfWork();
+                rootCtx = newRootContext();
 
-            cryptoStore = rootCtx.cryptoStoreContext( cryptoStoreId ).cryptoStore();
-            rootCa = rootCtx.caContext( rootId ).ca();
+                cryptoStore = rootCtx.cryptoStoreContext( cryptoStoreId ).cryptoStore();
+                rootCa = rootCtx.caContext( rootId ).ca();
+
+            }
 
             uow.complete();
 
