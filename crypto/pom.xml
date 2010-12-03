@@ -65,6 +65,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>qi4j-core-testsupport</artifactId>
             <version>${version.qi4j}</version>
@@ -80,6 +86,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.7</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -50,6 +50,7 @@ import org.codeartisans.qipki.core.QiPkiFailure;
 import org.codeartisans.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.codeartisans.qipki.crypto.constants.Time;
 import org.codeartisans.qipki.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReader;
@@ -88,6 +89,18 @@ public abstract class CAMixin
     private RevocationFactory revocationFactory;
     @This
     private CAState state;
+
+    @Override
+    public DistinguishedName distinguishedName()
+    {
+        return new DistinguishedName( certificate().getSubjectX500Principal() );
+    }
+
+    @Override
+    public DistinguishedName issuerDistinguishedName()
+    {
+        return new DistinguishedName( certificate().getIssuerX500Principal() );
+    }
 
     @Override
     public X509Certificate certificate()
@@ -137,22 +150,24 @@ public abstract class CAMixin
             KeyUsage keyUsages = x509ExtBuilder.buildKeyUsages( x509profile.keyUsages().get().keyUsages().get() );
             extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, x509profile.keyUsages().get().critical().get(), keyUsages ) );
 
-            // TODO add ExtendedKeyUsages and NetscapeCertTypes
-
             ExtendedKeyUsage extendedKeyUsage = x509ExtBuilder.buildExtendedKeyUsage( x509profile.extendedKeyUsages().get().extendedKeyUsages().get() );
             extensions.add( new X509ExtensionHolder( X509Extensions.ExtendedKeyUsage, x509profile.extendedKeyUsages().get().critical().get(), extendedKeyUsage ) );
 
             NetscapeCertType netscapeCertType = x509ExtBuilder.buildNetscapeCertTypes( x509profile.netscapeCertTypes().get().netscapeCertTypes().get() );
             extensions.add( new X509ExtensionHolder( MiscObjectIdentifiers.netscapeCertType, x509profile.netscapeCertTypes().get().critical().get(), netscapeCertType ) );
 
+            // TODO add NetscapeCertTypes
+
             // TODO Climb up the CA hierarchy to add inherited CRL distpoints
             // CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
             // extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
 
+            DistinguishedName issuerDN = new DistinguishedName( certificate().getSubjectX500Principal() );
+            DistinguishedName subjectDN = new DistinguishedName( pkcs10.getCertificationRequestInfo().getSubject() );
             X509Certificate certificate = x509Generator.generateX509Certificate( privateKey(),
-                                                                                 certificate().getSubjectX500Principal(),
+                                                                                 issuerDN,
                                                                                  BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                                 pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                                 subjectDN,
                                                                                  pkcs10.getPublicKey(),
                                                                                  Duration.standardDays( x509profile.validityDays().get() ),
                                                                                  extensions );

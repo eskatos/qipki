@@ -15,9 +15,7 @@ package org.codeartisans.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
-import javax.security.auth.x500.X500Principal;
 
-import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 import org.codeartisans.qipki.ca.application.WrongParametersBuilder;
@@ -32,6 +30,7 @@ import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
 import org.codeartisans.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.codeartisans.qipki.crypto.io.CryptIO;
 import org.codeartisans.qipki.core.dci.Context;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 
 import org.qi4j.api.injection.scope.Service;
@@ -80,7 +79,7 @@ public class X509ListContext
 
             EscrowedKeyPair ekp = context.role( EscrowedKeyPairRepository.class ).findByIdentity( escrowedKeyPairIdentity );
 
-            PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new X500Principal( new X509Name( distinguishedName ).toString() ), ekp.keyPair() );
+            PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new DistinguishedName( distinguishedName ), ekp.keyPair() );
             X509 x509 = createX509( caIdentity, x509ProfileIdentity, pkcs10 );
             ekp.x509s().add( x509 );
 

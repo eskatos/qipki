@@ -36,7 +36,7 @@
         <version.logback>0.9.25</version.logback>
         <version.httpclient>4.0.3</version.httpclient>
         <version.osgi>4.2.0</version.osgi>
-        <version.java-toolbox>1.2</version.java-toolbox>
+        <version.java-toolbox>1.3-SNAPSHOT</version.java-toolbox>
         <version.junit>4.7</version.junit>
     </properties>
 

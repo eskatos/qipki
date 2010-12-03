@@ -20,10 +20,7 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
-import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.x509.GeneralNames;
-import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 import org.joda.time.Duration;
@@ -31,16 +28,16 @@ import org.joda.time.Duration;
 public interface X509Generator
 {
 
-    PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName,
+    PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName,
                                                KeyPair keyPair );
 
-    PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair,
+    PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair,
                                                GeneralNames subjectAlternativeNames );
 
     X509Certificate generateX509Certificate( PrivateKey privateKey,
-                                             X500Principal issuerDN,
+                                             DistinguishedName issuerDN,
                                              BigInteger serialNumber,
-                                             X509Name subjectDN,
+                                             DistinguishedName subjectDN,
                                              PublicKey publicKey,
                                              Duration validity,
                                              List<X509ExtensionHolder> x509Extensions );

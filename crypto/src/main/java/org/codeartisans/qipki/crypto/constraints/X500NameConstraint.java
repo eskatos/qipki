@@ -13,9 +13,9 @@
  */
 package org.codeartisans.qipki.crypto.constraints;
 
-import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.x509.X509Name;
+
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 
 import org.qi4j.api.constraint.Constraint;
 import org.qi4j.library.constraints.annotation.Contains;
@@ -31,8 +31,8 @@ public class X500NameConstraint
     public boolean isValid( Contains annotation, String value )
     {
         try {
-            new X500Principal( value );
             new X509Name( value );
+            new DistinguishedName( value );
             return true;
         } catch ( IllegalArgumentException ignored ) {
             return false;

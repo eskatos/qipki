@@ -26,6 +26,7 @@ import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.codeartisans.qipki.core.dci.Context;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.crypto.constraints.X500Name;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
@@ -52,14 +53,14 @@ public class CAListContext
     public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec )
     {
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
-        return context.role( CAFactory.class ).createRootCA( name, validityDays, distinguishedName, keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createRootCA( name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore );
     }
 
     public SubCA createSubCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
     {
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
         CA parentCA = fetchParentCA( parentCaIdentity );
-        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, distinguishedName, keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore );
     }
 
     private CA fetchParentCA( String identity )
