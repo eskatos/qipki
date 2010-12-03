@@ -25,7 +25,6 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
-import javax.security.auth.x500.X500Principal;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -54,6 +53,7 @@ import org.codeartisans.qipki.commons.rest.values.representations.X509Value;
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.storage.KeyStoreType;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 import org.codeartisans.qipki.crypto.x509.ExtendedKeyUsage;
 import org.codeartisans.qipki.crypto.x509.KeyUsage;
 import org.codeartisans.qipki.crypto.x509.NetscapeCertType;
@@ -152,7 +152,7 @@ public class QiPkiHttpCaTest
         // Request certificate on X509Factory with a PKCS#10 request using the first CA
         KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
         PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10(
-                new X500Principal( "CN=qipki" ), keyPair,
+                new DistinguishedName( "CN=qipki" ), keyPair,
                 new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );
         String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
         LOGGER.debug( "Will request a new X509 with the following PKCS#10: " + pkcs10PEM );

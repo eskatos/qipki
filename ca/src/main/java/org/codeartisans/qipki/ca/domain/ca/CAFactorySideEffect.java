@@ -17,6 +17,7 @@ import org.codeartisans.qipki.ca.domain.ca.root.RootCA;
 import org.codeartisans.qipki.ca.domain.ca.sub.SubCA;
 import org.codeartisans.qipki.ca.domain.cryptostore.CryptoStore;
 import org.codeartisans.qipki.commons.crypto.values.KeyPairSpecValue;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 
 import org.qi4j.api.sideeffect.SideEffectOf;
 
@@ -31,7 +32,7 @@ public abstract class CAFactorySideEffect
     private static final Logger LOGGER = LoggerFactory.getLogger( CAFactorySideEffect.class );
 
     @Override
-    public RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+    public RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
         RootCA ca = result.createRootCA( name, validityDays, distinguishedName, keySpec, cryptoStore );
         LOGGER.debug( "New RootCA created: " + ca.name() );
@@ -39,7 +40,7 @@ public abstract class CAFactorySideEffect
     }
 
     @Override
-    public SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+    public SubCA createSubCA( CA parentCA, String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
     {
         SubCA ca = result.createSubCA( parentCA, name, validityDays, distinguishedName, keySpec, cryptoStore );
         LOGGER.debug( "New SubCA created: " + ca.name() );

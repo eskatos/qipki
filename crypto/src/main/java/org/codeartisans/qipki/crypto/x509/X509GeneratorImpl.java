@@ -21,7 +21,6 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Vector;
-import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
@@ -30,7 +29,6 @@ import org.bouncycastle.asn1.x509.Attribute;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
@@ -47,11 +45,11 @@ public class X509GeneratorImpl
 {
 
     @Override
-    public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair )
+    public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair )
     {
         try {
             return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
-                                                   distinguishedName, keyPair.getPublic(),
+                                                   distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    null,
                                                    keyPair.getPrivate(),
                                                    BouncyCastleProvider.PROVIDER_NAME );
@@ -61,11 +59,11 @@ public class X509GeneratorImpl
     }
 
     @Override
-    public PKCS10CertificationRequest generatePKCS10( X500Principal distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
+    public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
     {
         try {
             return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
-                                                   distinguishedName, keyPair.getPublic(),
+                                                   distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    generateSANAttribute( subjectAlternativeNames ),
                                                    keyPair.getPrivate(),
                                                    BouncyCastleProvider.PROVIDER_NAME );
@@ -76,9 +74,9 @@ public class X509GeneratorImpl
 
     @Override
     public X509Certificate generateX509Certificate( PrivateKey privateKey,
-                                                    X500Principal issuerDN,
+                                                    DistinguishedName issuerDN,
                                                     BigInteger serialNumber,
-                                                    X509Name subjectDN,
+                                                    DistinguishedName subjectDN,
                                                     PublicKey publicKey,
                                                     Duration validity,
                                                     List<X509ExtensionHolder> x509Extensions )
@@ -90,8 +88,8 @@ public class X509GeneratorImpl
             DateTime now = new DateTime();
 
             x509v3Generator.setSerialNumber( serialNumber );
-            x509v3Generator.setSubjectDN( subjectDN );
-            x509v3Generator.setIssuerDN( issuerDN );
+            x509v3Generator.setSubjectDN( subjectDN.toX500Principal() );
+            x509v3Generator.setIssuerDN( issuerDN.toX500Principal() );
             x509v3Generator.setNotBefore( now.minus( Time.CLOCK_SKEW ).toDate() );
             x509v3Generator.setNotAfter( now.plus( validity ).minus( Time.CLOCK_SKEW ).toDate() );
             x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );

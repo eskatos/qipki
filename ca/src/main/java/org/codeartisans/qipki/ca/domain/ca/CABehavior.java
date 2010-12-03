@@ -21,10 +21,15 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.qipki.ca.domain.revocation.Revocation;
 import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.ca.domain.x509profile.X509Profile;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 
 public interface CABehavior
 {
+
+    DistinguishedName distinguishedName();
+
+    DistinguishedName issuerDistinguishedName();
 
     X509Certificate certificate();
 

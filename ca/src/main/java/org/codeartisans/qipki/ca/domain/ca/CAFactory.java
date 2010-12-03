@@ -26,7 +26,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -51,6 +50,7 @@ import org.codeartisans.qipki.crypto.asymetric.AsymetricGenerator;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.codeartisans.qipki.crypto.x509.X509Generator;
 import org.codeartisans.qipki.crypto.io.CryptIO;
+import org.codeartisans.qipki.crypto.x509.DistinguishedName;
 import org.codeartisans.qipki.crypto.x509.KeyUsage;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionHolder;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilder;
@@ -75,9 +75,9 @@ public interface CAFactory
         extends ServiceComposite
 {
 
-    RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
-    SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    SubCA createSubCA( CA parentCA, String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
@@ -98,18 +98,17 @@ public interface CAFactory
         private CRLFactory crlFactory;
 
         @Override
-        public RootCA createRootCA( String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Self signed CA
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
-                X500Principal dn = new X500Principal( distinguishedName );
-                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( distinguishedName, keyPair );
                 List<X509ExtensionHolder> extensions = generateCAExtensions( pkcs10.getPublicKey(), pkcs10.getPublicKey() );
                 X509Certificate cert = x509Generator.generateX509Certificate( keyPair.getPrivate(),
-                                                                              dn,
+                                                                              distinguishedName,
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                              pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                              distinguishedName,
                                                                               pkcs10.getPublicKey(),
                                                                               Duration.standardDays( validityDays ),
                                                                               extensions );
@@ -127,18 +126,17 @@ public interface CAFactory
         }
 
         @Override
-        public SubCA createSubCA( CA parentCA, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public SubCA createSubCA( CA parentCA, String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
         {
             try {
                 // Sub CA
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
-                X500Principal dn = new X500Principal( distinguishedName );
-                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( dn, keyPair );
+                PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( distinguishedName, keyPair );
                 List<X509ExtensionHolder> extensions = generateCAExtensions( pkcs10.getPublicKey(), parentCA.certificate().getPublicKey() );
                 X509Certificate cert = x509Generator.generateX509Certificate( parentCA.privateKey(),
-                                                                              parentCA.certificate().getSubjectX500Principal(),
+                                                                              parentCA.distinguishedName(),
                                                                               BigInteger.probablePrime( 120, new SecureRandom() ),
-                                                                              pkcs10.getCertificationRequestInfo().getSubject(),
+                                                                              distinguishedName,
                                                                               pkcs10.getPublicKey(),
                                                                               Duration.standardDays( validityDays ),
                                                                               extensions );
