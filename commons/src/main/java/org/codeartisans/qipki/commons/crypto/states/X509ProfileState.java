@@ -21,30 +21,38 @@ import org.codeartisans.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.codeartisans.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 
 import org.qi4j.api.common.Optional;
+import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
 
 public interface X509ProfileState
         extends Nameable
 {
 
+    @Queryable( false )
     Property<Integer> validityDays();
 
     @Optional
+    @Queryable( false )
     Property<String> netscapeCertComment();
 
     @Optional
+    @Queryable( false )
     Property<KeyUsagesValue> keyUsages();
 
     @Optional
+    @Queryable( false )
     Property<ExtendedKeyUsagesValue> extendedKeyUsages();
 
     @Optional
+    @Queryable( false )
     Property<NetscapeCertTypesValue> netscapeCertTypes();
 
     @Optional
+    @Queryable( false )
     Property<BasicConstraintsValue> basicConstraints();
 
     @Optional
+    @Queryable( false )
     Property<NameConstraintsValue> nameConstraints();
 
 }
