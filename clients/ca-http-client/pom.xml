@@ -3,13 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeartisans.qipki.clients</groupId>
+        <groupId>org.codeartisans.qipki.qipki-clients</groupId>
         <artifactId>qipki-clients-parent</artifactId>
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.codeartisans.qipki.clients</groupId>
-    <artifactId>qipki-http-ca-client</artifactId>
+    <artifactId>qipki-clients-http-ca</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>

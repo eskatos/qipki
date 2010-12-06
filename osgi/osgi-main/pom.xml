@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeartisans.qipki.osgi</groupId>
+        <groupId>org.codeartisans.qipki.qipki-osgi</groupId>
         <artifactId>qipki-osgi-parent</artifactId>
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
@@ -57,7 +57,7 @@
                         <phase>test-compile</phase>
                         <configuration>
                             <outputDirectory>target/felix/bundles</outputDirectory>
-                            <includeArtifactIds>qipki-http-ca</includeArtifactIds>
+                            <includeArtifactIds>qipki-osgi-http-ca</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -74,8 +74,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codeartisans.qipki.http</groupId>
-            <artifactId>qipki-http-ca</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-osgi-http-ca</artifactId>
             <version>${project.version}</version>
         </dependency>
 

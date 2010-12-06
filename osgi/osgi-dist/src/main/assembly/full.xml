@@ -10,15 +10,14 @@
         <dependencySet>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>org.codeartisans.qipki.osgi:qipki-osgi-main</include>
+                <include>${groupId}:qipki-osgi-main</include>
             </includes>
         </dependencySet>
         <dependencySet>
             <useTransitiveDependencies>false</useTransitiveDependencies>
             <outputDirectory>bundles</outputDirectory>
             <includes>
-                <include>org.codeartisans.qipki.http:qipki-http-ca</include>
-                <include>org.codeartisans.qipki.clients:qipki-swing-remote</include>
+                <include>${groupId}:qipki-osgi-http-ca</include>
             </includes>
         </dependencySet>
     </dependencySets>
