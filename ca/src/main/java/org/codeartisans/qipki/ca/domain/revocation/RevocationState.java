@@ -17,6 +17,7 @@ import org.codeartisans.qipki.ca.domain.x509.X509;
 import org.codeartisans.qipki.crypto.x509.RevocationReason;
 
 import org.qi4j.api.entity.Identity;
+import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.property.Property;
 
@@ -26,6 +27,7 @@ public interface RevocationState
 
     Association<X509> x509();
 
+    @Queryable( false )
     Property<RevocationReason> reason();
 
 }

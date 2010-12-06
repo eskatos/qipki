@@ -16,6 +16,7 @@ package org.codeartisans.qipki.ca.domain.crl;
 import java.math.BigInteger;
 
 import org.codeartisans.qipki.ca.domain.fragments.HasPEM;
+import org.qi4j.api.entity.Queryable;
 
 import org.qi4j.api.property.Property;
 
@@ -52,6 +53,7 @@ public interface CRL
         extends HasPEM
 {
 
+    @Queryable( false )
     Property<BigInteger> lastCRLNumber();
 
 }

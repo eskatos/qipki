@@ -15,13 +15,16 @@ package org.codeartisans.qipki.commons.crypto.states;
 
 import org.codeartisans.qipki.crypto.algorithms.AsymetricAlgorithm;
 
+import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
 
 public interface EscrowedKeyPairState
 {
 
+    @Queryable( false )
     Property<AsymetricAlgorithm> algorithm();
 
+    @Queryable( false )
     Property<Integer> length();
 
 }

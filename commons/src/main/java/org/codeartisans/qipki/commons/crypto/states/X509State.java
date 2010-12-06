@@ -14,22 +14,29 @@
 package org.codeartisans.qipki.commons.crypto.states;
 
 import org.codeartisans.qipki.commons.crypto.values.ValidityIntervalValue;
+import org.qi4j.api.entity.Queryable;
 
 import org.qi4j.api.property.Property;
 
 public interface X509State
 {
 
+    @Queryable( false )
     Property<String> canonicalSubjectDN();
 
+    @Queryable( false )
     Property<String> hexSerialNumber();
 
+    @Queryable( false )
     Property<String> canonicalIssuerDN();
 
+    @Queryable( false )
     Property<ValidityIntervalValue> validityInterval();
 
+    @Queryable( false )
     Property<String> md5Fingerprint();
 
+    @Queryable( false )
     Property<String> sha1Fingerprint();
 
     Property<String> sha256Fingerprint();
