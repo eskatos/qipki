@@ -10,7 +10,7 @@
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-main</artifactId>
+    <artifactId>qipki-osgi-main</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
@@ -57,7 +57,7 @@
                         <phase>test-compile</phase>
                         <configuration>
                             <outputDirectory>target/felix/bundles</outputDirectory>
-                            <includeArtifactIds>qipki-http-ca,qipki-swing-remote</includeArtifactIds>
+                            <includeArtifactIds>qipki-http-ca</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -70,18 +70,12 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
-            <version>2.0.4</version>
+            <version>3.0.6</version>
         </dependency>
 
         <dependency>
             <groupId>org.codeartisans.qipki.http</groupId>
             <artifactId>qipki-http-ca</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codeartisans.qipki.clients</groupId>
-            <artifactId>qipki-swing-remote</artifactId>
             <version>${project.version}</version>
         </dependency>
 

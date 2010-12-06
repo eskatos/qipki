@@ -10,7 +10,7 @@
         <dependencySet>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>org.codeartisans.qipki.osgi:qipki-main</include>
+                <include>org.codeartisans.qipki.osgi:qipki-osgi-main</include>
             </includes>
         </dependencySet>
         <dependencySet>

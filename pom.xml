@@ -35,7 +35,6 @@
         <version.slf4j>1.6.1</version.slf4j>
         <version.logback>0.9.25</version.logback>
         <version.httpclient>4.0.3</version.httpclient>
-        <version.osgi>4.2.0</version.osgi>
         <version.java-toolbox>1.3-SNAPSHOT</version.java-toolbox>
         <version.junit>4.7</version.junit>
     </properties>
@@ -61,43 +60,38 @@
         <module>clients</module>
 
         <!-- OSGI Experiment -->
-        <!--module>osgi</module-->
+        <module>osgi</module>
 
     </modules>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.0.1</version>
-                <extensions>true</extensions>
-            </plugin>
-        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
     </build>
 
     <repositories>
+
+        <!-- Qi4j -->
+        <repository>
+            <id>ops4j-repository</id>
+            <url>http://repository.ops4j.org/maven2</url>
+        </repository>
+
+        <!-- Restlet -->
         <repository>
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
             <url>http://maven.restlet.org</url>
         </repository>
-        <repository>
-            <id>ops4j-repository</id>
-            <url>http://repository.ops4j.org/maven2</url>
-        </repository>
-        <!--repository>
-            <id>architect-rules-repo</id>
-            <name>architecture-rules repository</name>
-            <layout>default</layout>
-            <url>http://architecturerules.googlecode.com/svn/maven2/</url>
-            <releases>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
-        </repository-->
+
     </repositories>
 
 </project>

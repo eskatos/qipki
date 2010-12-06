@@ -10,7 +10,7 @@
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-dist</artifactId>
+    <artifactId>qipki-osgi-dist</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
@@ -42,19 +42,13 @@
 
         <dependency>
             <groupId>org.codeartisans.qipki.osgi</groupId>
-            <artifactId>qipki-main</artifactId>
+            <artifactId>qipki-osgi-main</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.codeartisans.qipki.http</groupId>
             <artifactId>qipki-http-ca</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codeartisans.qipki.clients</groupId>
-            <artifactId>qipki-swing-remote</artifactId>
             <version>${project.version}</version>
         </dependency>
 
