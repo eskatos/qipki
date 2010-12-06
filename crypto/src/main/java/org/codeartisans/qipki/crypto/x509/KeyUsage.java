@@ -16,6 +16,9 @@ package org.codeartisans.qipki.crypto.x509;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * Enum values declaration follows the ASN1 declaration order and must not be changed.
+ */
 public enum KeyUsage
 {
 

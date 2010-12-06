@@ -16,6 +16,7 @@ package org.codeartisans.qipki.crypto.x509;
 import java.io.InputStreamReader;
 import java.security.Security;
 import java.security.cert.X509Certificate;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -39,8 +40,6 @@ public class X509ExtensionsReaderTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509ExtensionsReaderTest.class );
-    private X509Certificate baltimoreCyberTrustCodeSigningRoot;
-    private X509Certificate chamberOfCommerceRoot;
 
     @BeforeClass
     public static void beforeClass()
@@ -48,6 +47,8 @@ public class X509ExtensionsReaderTest
         Security.addProvider( new BouncyCastleProvider() );
     }
 
+    private X509Certificate baltimoreCyberTrustCodeSigningRoot;
+    private X509Certificate chamberOfCommerceRoot;
     private X509ExtensionsReaderImpl x509ExtReader;
 
     @Before
@@ -58,6 +59,20 @@ public class X509ExtensionsReaderTest
         x509ExtReader = new X509ExtensionsReaderImpl( cryptCodex );
         baltimoreCyberTrustCodeSigningRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM ) ) );
         chamberOfCommerceRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_CHAMBER_OF_COMMERCE_ROOT_PEM ) ) );
+    }
+
+    @Test
+    public void testKeyUsage()
+    {
+        Set<KeyUsage> baltimoreKeyUsages = x509ExtReader.getKeyUsages( baltimoreCyberTrustCodeSigningRoot );
+        LOGGER.info( "Key Usages: {}", baltimoreKeyUsages );
+        assertEquals( 2, baltimoreKeyUsages.size() );
+        assertTrue( baltimoreKeyUsages.containsAll( EnumSet.of( KeyUsage.keyCertSign, KeyUsage.cRLSign ) ) );
+
+        Set<KeyUsage> cocKeyUsages = x509ExtReader.getKeyUsages( chamberOfCommerceRoot );
+        LOGGER.info( "Key Usages: {}", cocKeyUsages );
+        assertEquals( 2, cocKeyUsages.size() );
+        assertTrue( cocKeyUsages.containsAll( EnumSet.of( KeyUsage.keyCertSign, KeyUsage.cRLSign ) ) );
     }
 
     @Test

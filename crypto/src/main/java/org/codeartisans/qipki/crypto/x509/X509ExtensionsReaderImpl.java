@@ -160,22 +160,17 @@ public class X509ExtensionsReaderImpl
     @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<KeyUsage> getKeyUsages( X509Certificate cert )
     {
-        try {
-            byte[] value = cert.getExtensionValue( X509Extensions.KeyUsage.getId() );
-            if ( value == null ) {
-                return Collections.emptySet();
-            }
-            int usages = org.bouncycastle.asn1.x509.KeyUsage.getInstance( ASN1Object.fromByteArray( value ) ).intValue();
-            Set<KeyUsage> keyUsages = new LinkedHashSet<KeyUsage>();
-            for ( KeyUsage eachPossibleUsage : KeyUsage.values() ) {
-                if ( ( usages & eachPossibleUsage.usage() ) == eachPossibleUsage.usage() ) {
-                    keyUsages.add( eachPossibleUsage );
+        Set<KeyUsage> keyUsages = new LinkedHashSet<KeyUsage>();
+        boolean[] keyUsagesBools = cert.getKeyUsage();
+        if ( keyUsagesBools != null ) {
+            KeyUsage[] allKeyUsages = KeyUsage.values();
+            for ( int idx = 0; idx < keyUsagesBools.length; idx++ ) {
+                if ( keyUsagesBools[idx] ) {
+                    keyUsages.add( allKeyUsages[idx] );
                 }
             }
-            return keyUsages;
-        } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract KeyUsages from X509Certificate extensions", ex );
         }
+        return keyUsages;
     }
 
     @Override
