@@ -11,10 +11,12 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.core.assembly.index;
+package org.codeartisans.qipki.core.reindex;
 
+import org.qi4j.api.configuration.Configuration;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
@@ -38,6 +40,8 @@ public interface AutomaticReindexerService
         private static final Logger LOGGER = LoggerFactory.getLogger( AutomaticReindexerService.class );
         @Structure
         private UnitOfWorkFactory uowf;
+        @This
+        private Configuration<AutomaticReindexerConfiguration> configuration;
         @Service
         private ReindexerService reindexer;
 
@@ -45,16 +49,21 @@ public interface AutomaticReindexerService
         public void activate()
                 throws Exception
         {
-            LOGGER.debug( "Will start automatic reindex now.." );
+            Boolean doReindex = configuration.configuration().doReindexOnActivation().get();
+            if ( doReindex ) {
+                LOGGER.debug( "Will start automatic reindex now.." );
 
-            long start = System.currentTimeMillis();
-            UnitOfWork uow = uowf.newUnitOfWork();
-            
-            reindexer.reindex();
+                long start = System.currentTimeMillis();
+                UnitOfWork uow = uowf.newUnitOfWork();
 
-            uow.complete();
+                reindexer.reindex();
 
-            LOGGER.info( "Reindex ended successfully and took {}ms", System.currentTimeMillis() - start );
+                uow.complete();
+
+                LOGGER.info( "Reindex ended successfully and took {}ms", System.currentTimeMillis() - start );
+            } else {
+                LOGGER.debug( "Reindex on activation is disabled, not doing anything" );
+            }
         }
 
         @Override

@@ -14,6 +14,7 @@
 package org.codeartisans.qipki.ca.assembly;
 
 import org.codeartisans.qipki.commons.assembly.CryptoValuesModuleAssembler;
+import org.codeartisans.qipki.core.reindex.AutomaticReindexerConfiguration;
 import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
@@ -23,6 +24,7 @@ import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 
 public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
@@ -37,6 +39,13 @@ public abstract class QiPkiEmbeddedCaAssembler
 
         app.setName( CaAssemblyNames.APPLICATION_NAME );
         app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
+
+        LayerAssembly config = app.layerAssembly( CaAssemblyNames.LAYER_CONFIGURATION );
+        {
+            ModuleAssembly configMa = config.moduleAssembly( CaAssemblyNames.MODULE_CONFIGURATION );
+            configMa.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
+            configMa.addEntities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
+        }
 
         LayerAssembly application = app.layerAssembly( CaAssemblyNames.LAYER_APPLICATION );
         {
@@ -58,16 +67,8 @@ public abstract class QiPkiEmbeddedCaAssembler
                     crypto.moduleAssembly( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
         }
 
-//        LayerAssembly infrastructure = app.layerAssembly( CaAssemblyNames.LAYER_INFRASTRUCTURE );
-//        {
-//            // TODO Add MessagingModule and make it short as qi4j will implement Message type anytime not so soon :)
-//            new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
-//                    infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
-//        }
-
-        application.uses( domain, crypto );
-        domain.uses( crypto );
-        // domain.uses( crypto, infrastructure );
+        application.uses( domain, crypto, config );
+        domain.uses( crypto, config );
 
         return app;
     }

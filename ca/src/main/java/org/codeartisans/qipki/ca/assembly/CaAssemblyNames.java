@@ -18,6 +18,7 @@ public interface CaAssemblyNames
 
     String APPLICATION_NAME = "QiPkiCa";
     String APPLICATION_VERSION = "1.0-m1";
+    String LAYER_CONFIGURATION = "config";
     String MODULE_CONFIGURATION = "config";
     String LAYER_APPLICATION = "application";
     String MODULE_CA_DCI = "ca-dci";

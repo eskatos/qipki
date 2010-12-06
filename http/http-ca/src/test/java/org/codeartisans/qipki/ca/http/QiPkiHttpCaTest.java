@@ -295,8 +295,7 @@ public class QiPkiHttpCaTest
         String jsonCaList = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
         RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
-        CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
-        assertNotNull( firstCa );
+        assertEquals( 4, caList.items().get().size() );
         LOGGER.info( "INDEX REPOSITORY BEEN REFILLED SUCCESSFULLY" );
     }
 

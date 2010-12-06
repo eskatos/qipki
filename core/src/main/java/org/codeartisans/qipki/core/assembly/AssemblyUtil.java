@@ -19,6 +19,7 @@ import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.AssemblyVisitorAdapter;
 import org.qi4j.bootstrap.LayerAssembly;
+import org.qi4j.bootstrap.ModuleAssembly;
 
 public final class AssemblyUtil
 {
@@ -40,6 +41,28 @@ public final class AssemblyUtil
             }
 
         } );
+        return holder.getHolded();
+    }
+
+    public static ModuleAssembly getModuleAssembly( ApplicationAssembly app, final String layerName, final String moduleName )
+            throws AssemblyException
+    {
+        final ObjectHolder<ModuleAssembly> holder = new ObjectHolder<ModuleAssembly>();
+        app.visit( new AssemblyVisitorAdapter<AssemblyException>()
+        {
+
+            @Override
+            public void visitModule( ModuleAssembly assembly )
+                    throws AssemblyException
+            {
+                if ( layerName.equals( assembly.layerAssembly().name() ) && moduleName.equals( assembly.name() ) ) {
+                    holder.setHolded( assembly );
+                }
+
+            }
+
+        } );
+
         return holder.getHolded();
     }
 
