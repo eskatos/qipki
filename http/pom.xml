@@ -10,14 +10,14 @@
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.codeartisans.qipki.http</groupId>
+    <groupId>org.codeartisans.qipki.qipki-http</groupId>
     <artifactId>qipki-http-parent</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
-        <modules>
+    <modules>
         <module>http-ca</module>
-</modules>
+    </modules>
 
 </project>

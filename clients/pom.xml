@@ -8,7 +8,7 @@
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.codeartisans.qipki.clients</groupId>
+    <groupId>org.codeartisans.qipki.qipki-clients</groupId>
     <artifactId>qipki-clients-parent</artifactId>
 
     <name>${project.artifactId}</name>

@@ -10,7 +10,7 @@
         <version>1.0-beta1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.codeartisans.qipki.osgi</groupId>
+    <groupId>org.codeartisans.qipki.qipki-osgi</groupId>
     <artifactId>qipki-osgi-parent</artifactId>
 
     <name>${project.artifactId}</name>
