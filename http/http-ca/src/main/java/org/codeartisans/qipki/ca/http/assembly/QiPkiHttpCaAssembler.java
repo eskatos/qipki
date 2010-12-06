@@ -22,8 +22,9 @@ import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.library.http.JettyConfiguration;
 
-@SuppressWarnings( "unchecked" )
 public class QiPkiHttpCaAssembler
         extends QiPkiPersistentEmbeddedCaAssembler
 {
@@ -34,6 +35,7 @@ public class QiPkiHttpCaAssembler
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
             throws AssemblyException
     {
@@ -49,13 +51,15 @@ public class QiPkiHttpCaAssembler
 
             new HttpModuleAssembler().assemble(
                     presentation.moduleAssembly( HttpCaAssemblyNames.MODULE_HTTP ) );
-
-            new TransientConfigurationModuleAssembler( Visibility.layer ).assemble(
-                    presentation.moduleAssembly( CaAssemblyNames.MODULE_CONFIGURATION ) );
         }
 
+        // Add JettyConfiguration to the Configuration module
+        ModuleAssembly config = AssemblyUtil.getModuleAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
+        config.addEntities( JettyConfiguration.class ).visibleIn( Visibility.application );
+
         presentation.uses( AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_APPLICATION ),
-                           AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CRYPTO ) );
+                           AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CRYPTO ),
+                           AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION ) );
 
         return app;
     }
