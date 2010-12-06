@@ -10,7 +10,7 @@
 
     <groupId>org.codeartisans.qipki</groupId>
     <artifactId>qipki</artifactId>
-    <version>1.0-beta1-SNAPSHOT</version>
+    <version>1.0-alpha5</version>
 
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
