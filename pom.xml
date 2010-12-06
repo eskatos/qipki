@@ -60,7 +60,7 @@
         <module>clients</module>
 
         <!-- OSGI Experiment -->
-        <module>osgi</module>
+        <!--module>osgi</module-->
 
     </modules>
 
