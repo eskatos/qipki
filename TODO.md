@@ -16,14 +16,14 @@ Add support for key escrow
 Next steps
 ==========
 
+Add @Aggregated in EscrowedKeyPair
+
+Store keystores and CRLs on the filesystem
+
 Add CRL Endpoint in issued X509Certificates
 
     Full url given by user
     Clients could use the uri builder to easily create the default one 
-
-Release 1.0-alpha aka. Embeddable rustic CA
-
-Finish to move osgi stuff out of the main code
 
 Strip the repository from binaries and move doc outside
 
