@@ -205,8 +205,10 @@ public abstract class CAMixin
         try {
             Revocation revocation = revocationFactory.create( x509, reason );
             X509CRL x509CRL = cryptIO.readCRLPEM( new StringReader( state.crl().get().pem().get() ) );
-            x509CRL = updateCRL( x509CRL, x509.x509Certificate(), reason );
-            state.crl().get().pem().set( cryptIO.asPEM( x509CRL ).toString() );
+            if ( false ) {
+                x509CRL = updateCRL( x509CRL, x509.x509Certificate(), reason );
+                state.crl().get().pem().set( cryptIO.asPEM( x509CRL ).toString() );
+            }
             return revocation;
         } catch ( GeneralSecurityException ex ) {
             throw new QiPkiFailure( "Unable to update CRL", ex );
