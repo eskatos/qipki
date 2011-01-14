@@ -11,22 +11,11 @@ Here is the project layout, that should get you started browsing the code
     ├── ca
     ├── ra
     ├── http
-    |   └── http-ca
+    │   └── http-ca
     ├── clients
-    |   ├── http-ca-client
-    |   └── qipki-swing-remote
+    │   └── ca-http-client
     └── osgi
-        ├── http-ca-bundle
-        ├── remote-swing-bundle
-        ├── main
-        └── dist
-
-osgi-profile
-------------
-
-not activated by default even for releases for now
-add the osgi-standalone module and bundles submodules to the reactor
-
-what will the build look like when shiro will get integrated?
-
+        ├── osgi-http-ca
+        ├── osgi-main
+        └── osgi-dist
 
