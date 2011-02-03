@@ -14,6 +14,7 @@
 
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
+    <url>https://github.com/eskatos/qipki</url>
 
     <licenses>
         <license>
@@ -23,8 +24,18 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <id>paul@nosphere.org</id>
+            <name>Paul Merlin</name>
+            <email>paul@nosphere.org</email>
+        </developer>
+    </developers>
+
     <scm>
-        <developerConnection>scm:git:ssh://gitosis@codebox.codeartisans.org/${project.artifactId}.git</developerConnection>
+        <url>scm:git:git@github.com:eskatos/qipki.git</url>
+        <connection>scm:git:git@github.com:eskatos/qipki.git</connection>
+        <developerConnection>scm:git:git@github.com:eskatos/qipki.git</developerConnection>
     </scm>
 
     <properties>
