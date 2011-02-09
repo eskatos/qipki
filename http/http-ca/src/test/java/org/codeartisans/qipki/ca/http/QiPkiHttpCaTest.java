@@ -24,7 +24,9 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -75,9 +77,107 @@ public class QiPkiHttpCaTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiHttpCaTest.class );
+    private String testCryptoStoreName = "MyCryptoStore";
+    private String testCaName = "MyCa";
 
     @Test
-    public void testCA()
+    public void testOnce()
+            throws InterruptedException, IOException, JSONException, GeneralSecurityException
+    {
+        testCA();
+        LOGGER.info( "WILL DELETE INDEX REPOSITORY" );
+        FileUtil.deltree( new File( "target/qi4j-index" ) );
+        LOGGER.info( "INDEX REPOSITORY DELETED" );
+    }
+
+    @Test
+    public void testReindex()
+            throws IOException, JSONException
+    {
+        LOGGER.info( "HAS INDEX REPOSITORY BEEN REFILLED?" );
+        // Get CA list
+        HttpGet get = new HttpGet( caApi.caListUri().get() );
+        addAcceptJsonHeader( get );
+        String jsonCaList = httpClient.execute( get, strResponseHandler );
+        LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
+        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
+        assertEquals( 4, caList.items().get().size() );
+        LOGGER.info( "INDEX REPOSITORY BEEN REFILLED SUCCESSFULLY" );
+    }
+
+    @Test
+    public void testRepeatedly()
+            throws InterruptedException, IOException, JSONException, GeneralSecurityException
+    {
+        for ( int i = 0; i < 10; i++ ) {
+            testCryptoStoreName = "MyTestCryptoStore" + i;
+            testCaName = "MyTestCa" + i;
+            testCA();
+        }
+    }
+
+    @Test
+    // Run 500 testCA using 20 threads doing 25 testCA each
+    public void testMultiThreaded()
+            throws InterruptedException
+    {
+        List<Thread> threads = new ArrayList<Thread>();
+        List<TestRunnable> runnables = new ArrayList<TestRunnable>();
+        for ( int i = 0; i < 20; i++ ) {
+            TestRunnable runnable = new TestRunnable( this, i );
+            runnables.add( runnable );
+            Thread thread = new Thread( runnable );
+            threads.add( thread );
+            thread.start();
+        }
+        for ( Thread eachThread : threads ) {
+            eachThread.join();
+        }
+        List<Exception> failures = new ArrayList<Exception>();
+        for ( TestRunnable eachRunnable : runnables ) {
+            if ( eachRunnable.failure != null ) {
+                failures.add( eachRunnable.failure );
+                LOGGER.info( "One thread failed because of '{}'", eachRunnable.failure.getMessage(), eachRunnable.failure );
+            }
+        }
+        if ( !failures.isEmpty() ) {
+            LOGGER.info( "Multithreaded test failed with {} failures", failures.size() );
+            fail( "Multithreaded test failed with " + failures.size() + " failures" );
+        }
+    }
+
+    private class TestRunnable
+            implements Runnable
+    {
+
+        private final int number;
+        private final QiPkiHttpCaTest test;
+        private Exception failure;
+
+        public TestRunnable( QiPkiHttpCaTest test, int number )
+        {
+            this.test = test;
+            this.number = number;
+        }
+
+        @Override
+        public void run()
+        {
+            for ( int i = 0; i < 25; i++ ) {
+                test.testCryptoStoreName = "ThreadedTestCryptoStore" + number + "-" + i;
+                test.testCaName = "ThreadedTestCa" + number + "-" + i;
+                try {
+                    test.testCA();
+                } catch ( Exception ex ) {
+                    failure = ex;
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private void testCA()
             throws InterruptedException, IOException, JSONException, GeneralSecurityException
     {
         // Get CA list
@@ -87,7 +187,6 @@ public class QiPkiHttpCaTest
         LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
         RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
         CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
-
 
         // Get first CA as Value
         get = new HttpGet( firstCa.uri().get() );
@@ -106,7 +205,7 @@ public class QiPkiHttpCaTest
         // Create a new CryptoStore
         HttpPost post = new HttpPost( caApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
-        CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( "MyTestCryptoStore", KeyStoreType.JKS, "changeit".toCharArray() );
+        CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( testCryptoStoreName, KeyStoreType.JKS, "changeit".toCharArray() );
         post.setEntity( new StringEntity( csParams.toJSON() ) );
         String csJson = httpClient.execute( post, strResponseHandler );
         CryptoStoreValue cryptoStore = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, csJson );
@@ -116,7 +215,7 @@ public class QiPkiHttpCaTest
         post = new HttpPost( caApi.caListUri().get() );
         addAcceptJsonHeader( post );
         KeyPairSpecValue keyPairSpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-        CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), "MyTestCA", 1, "CN=MyTestCA", keyPairSpec, null );
+        CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), testCaName, 1, "CN=" + testCaName, keyPairSpec, null );
         post.setEntity( new StringEntity( caParams.toJSON() ) );
         caJson = httpClient.execute( post, strResponseHandler );
         ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
@@ -278,25 +377,6 @@ public class QiPkiHttpCaTest
         ks.load( new ByteArrayInputStream( responseBytes ), password );
         base64encodedp12 = cryptio.base64Encode( ks, password );
         System.out.println( base64encodedp12 );
-
-        LOGGER.info( "WILL DELETE INDEX REPOSITORY" );
-        FileUtil.deltree( new File( "target/qi4j-index" ) );
-        LOGGER.info( "INDEX REPOSITORY DELETED" );
-    }
-
-    @Test
-    public void testReindex()
-            throws IOException, JSONException
-    {
-        LOGGER.info( "HAS INDEX REPOSITORY BEEN REFILLED?" );
-        // Get CA list
-        HttpGet get = new HttpGet( caApi.caListUri().get() );
-        addAcceptJsonHeader( get );
-        String jsonCaList = httpClient.execute( get, strResponseHandler );
-        LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
-        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
-        assertEquals( 4, caList.items().get().size() );
-        LOGGER.info( "INDEX REPOSITORY BEEN REFILLED SUCCESSFULLY" );
     }
 
 }

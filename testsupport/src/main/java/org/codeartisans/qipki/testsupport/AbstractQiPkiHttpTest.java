@@ -19,14 +19,26 @@ import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import org.junit.Before;
 
 import org.restlet.data.MediaType;
 
+/**
+ * Base class for QiPKI HTTP based unit tests.
+ *
+ * Provide a preconfigured, thread safe, HttpClient.
+ */
 @SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiHttpTest
         extends AbstractQiPkiTest
@@ -54,7 +66,11 @@ public abstract class AbstractQiPkiHttpTest
             }
 
         };
-        httpClient = new DefaultHttpClient();
+        HttpParams params = new BasicHttpParams();
+        SchemeRegistry registry = new SchemeRegistry();
+        registry.register( new Scheme( "http", PlainSocketFactory.getSocketFactory(), DEFAULT_PORT ) );
+        ClientConnectionManager cm = new ThreadSafeClientConnManager( params, registry );
+        httpClient = new DefaultHttpClient( cm, params );
     }
 
     protected final void addAcceptJsonHeader( HttpMessage httpMessage )
