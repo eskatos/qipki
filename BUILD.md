@@ -1,5 +1,4 @@
-qipki build
-===========
+# QiPki::Build
 
 Here is the project layout, that should get you started browsing the code
 

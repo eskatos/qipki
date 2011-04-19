@@ -13,15 +13,35 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
+/**
+ * @see http://en.wikipedia.org/wiki/Hash_algorithm
+ */
 public enum DigestAlgorithm
 {
-
+    /**
+     * @see http://en.wikipedia.org/wiki/MD2_(cryptography)
+     */
     @Deprecated
     MD2( "MD2" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/MD5
+     */
     MD5( "MD5" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/SHA-1
+     */
     SHA_1( "SHA-1" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/SHA-256
+     */
     SHA_256( "SHA-256" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/SHA-384
+     */
     SHA_384( "SHA-384" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/SHA-512
+     */
     SHA_512( "SHA-512" );
     private String algo;
 
@@ -30,6 +50,9 @@ public enum DigestAlgorithm
         this.algo = algo;
     }
 
+    /**
+     * @return The Java algorithm String
+     */
     public String algoString()
     {
         return algo;

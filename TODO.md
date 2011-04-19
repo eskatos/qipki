@@ -1,6 +1,5 @@
 
-Next steps
-==========
+# Next steps
 
 Upgrade to Qi4j 1.3
 
@@ -24,8 +23,7 @@ CronLike scheduler
 
 
 
-After that
-==========
+# After that
 
 Add basic profiles creation in qi4j-test-support
 

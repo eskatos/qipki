@@ -29,6 +29,9 @@ import org.qi4j.api.service.ServiceComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Composite responsible for Provider registration according to its Configuration.
+ */
 @Mixins( QiCryptoActivator.Mixin.class )
 public interface QiCryptoActivator
         extends Activatable, ServiceComposite

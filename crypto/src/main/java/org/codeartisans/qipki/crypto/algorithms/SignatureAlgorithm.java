@@ -13,12 +13,15 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
+/**
+ * @see http://en.wikipedia.org/wiki/Signature_(cryptography)
+ */
 public enum SignatureAlgorithm
 {
 
     // DSA currently just supports SHA-1.
     SHA1withDSA( "SHA1withDSA" ),
-    // ECDSA is support with both the SHA-1 and SHA-2 family of digest algorithms.
+    // ECDSA is supported with both the SHA-1 and SHA-2 family of digest algorithms.
     SHA1withECDSA( "SHA1withECDSA" ),
     SHA224withECDSA( "SHA224withECDSA" ),
     SHA256withECDSA( "SHA256withECDSA" ),

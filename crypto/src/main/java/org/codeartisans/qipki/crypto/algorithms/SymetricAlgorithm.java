@@ -13,12 +13,26 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
+/**
+ * @see http://en.wikipedia.org/wiki/Symmetric_key_algorithms
+ */
 public enum SymetricAlgorithm
 {
-
+    /**
+     * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+     */
     AES( "AES" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Blowfish_(cipher)
+     */
     Blowfish( "Blowfish" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Data_Encryption_Standard
+     */
     DES( "DES" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Triple_DES
+     */
     TripleDES( "DESede" );
     private String algo;
 
@@ -27,6 +41,9 @@ public enum SymetricAlgorithm
         this.algo = algo;
     }
 
+    /**
+     * @return The Java algorithm String
+     */
     public String algoString()
     {
         return algo;

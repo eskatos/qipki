@@ -1,5 +1,4 @@
-QiPKI
-=====
+# QiPKI
 
 QiPKI is a simple X.509 PKI implemented in Java using Qi4j.
 

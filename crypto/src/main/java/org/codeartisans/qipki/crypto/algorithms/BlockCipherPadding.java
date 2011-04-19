@@ -13,6 +13,9 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
+/**
+ * @see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Padding
+ */
 public enum BlockCipherPadding
 {
 
@@ -35,6 +38,9 @@ public enum BlockCipherPadding
         this.algo = algo;
     }
 
+    /**
+     * @return The Java algorithm String
+     */
     public String algoString()
     {
         return algo;

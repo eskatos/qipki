@@ -19,8 +19,17 @@ public enum KeyStoreType
 {
 
     JCEKS( StringValues.JCEKS ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Jks
+     */
     JKS( StringValues.JKS ),
+    /**
+     * @see http://en.wikipedia.org/wiki/PKCS12
+     */
     PKCS12( StringValues.PKCS12 ),
+    /**
+     * @see http://en.wikipedia.org/wiki/PKCS11
+     */
     PKCS11( StringValues.PKCS11 );
 
     // Needed ?
@@ -41,6 +50,9 @@ public enum KeyStoreType
         this.string = string;
     }
 
+    /**
+     * @return The Java Keystore type String
+     */
     public String typeString()
     {
         return string;

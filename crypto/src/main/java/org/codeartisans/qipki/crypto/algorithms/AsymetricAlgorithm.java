@@ -13,10 +13,18 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
+/**
+ * Asymetric cryptography algorithm.
+ */
 public enum AsymetricAlgorithm
 {
-
+    /**
+     * @see http://en.wikipedia.org/wiki/RSA
+     */
     RSA( "RSA" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/ECDSA
+     */
     ECDSA( "ECDSA" );
     private String algo;
 
@@ -25,6 +33,9 @@ public enum AsymetricAlgorithm
         this.algo = algo;
     }
 
+    /**
+     * @return The Java algorithm String
+     */
     public String algoString()
     {
         return algo;
