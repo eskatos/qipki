@@ -1,37 +1,25 @@
-Done
-====
-
-Add support for certificate profiles
-
-    X509ProfileAssignment aggregated in CA so that when removing a ca, it removes its assignments but still needs to handle X509Profile deletion manually
-    Handle requested extensions in PKCS#10, only SubjectAlternativeNames is allowed for now but the mechanism is in place.
-    Write X509ProfileFactory, certainly needs several iterations so that the code is not plumbed with extensions handling.
-
-Add support for key escrow
-
-
-
-
 
 Next steps
 ==========
 
+Upgrade to Qi4j 1.3
+
 Add @Aggregated in EscrowedKeyPair
 
-Store keystores and CRLs on the filesystem
+Store keystores and CRLs on the filesystem using FileConfiguration API
 
 Add CRL Endpoint in issued X509Certificates
 
-    Full url given by user
+    Full url given by X509Profile
+    If no url on profile creation, create it with a sensible defaut, allow edition too
     Clients could use the uri builder to easily create the default one 
 
-Strip the repository from binaries and move doc outside
-
-Push to github
-
-Start working really with branches
-
 Apply qi4j data migration system
+
+CronLike scheduler
+
+    Embedd the qi4j-library-scheduler
+    Use it to generate CRLs so this is not done in request threads
 
 
 
@@ -55,10 +43,6 @@ Create a CRLIssuer role
     To be a CRLIssuer a CA must be allowed by it's CAProfile
     One could want to disable CRL issuance on a CA with appropriate CAProfile
     Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
-
-CronLike scheduler
-
-    See if it's possible to embedd quartz implementing the JobStore with Qi4j
 
 Use @Concerns to factorize http Resources (error handling, logging etc..)
 
