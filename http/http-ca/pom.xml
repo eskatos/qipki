@@ -49,9 +49,9 @@
             <version>${version.restlet}</version>
         </dependency>
         <dependency>
-            <groupId>org.restlet</groupId>
+            <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet.ext.fileupload</artifactId>
-            <version>2.0-M3</version>
+            <version>${version.restlet}</version>
         </dependency>
 
         <!-- Shiro -->
