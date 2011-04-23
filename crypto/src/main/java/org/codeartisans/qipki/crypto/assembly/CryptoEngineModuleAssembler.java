@@ -21,6 +21,7 @@ import org.codeartisans.qipki.crypto.io.CryptIOService;
 import org.codeartisans.qipki.crypto.mac.MACService;
 import org.codeartisans.qipki.crypto.objects.KeyInformation;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.crypto.symetric.SymetricGeneratorService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilderService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReaderService;
 import org.codeartisans.qipki.crypto.x509.X509GeneratorService;
@@ -57,6 +58,7 @@ public class CryptoEngineModuleAssembler
                             CryptIOService.class,
                             DigestService.class,
                             MACService.class,
+                            SymetricGeneratorService.class,
                             AsymetricGeneratorService.class,
                             X509ExtensionsReaderService.class,
                             X509ExtensionsBuilderService.class ).
