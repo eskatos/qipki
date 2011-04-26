@@ -1,7 +1,7 @@
 
 # Next steps
 
-Upgrade to Qi4j 1.3
+* Global package name change from org.codeartisans.* to org.qipki.*
 
 Add @Aggregated in EscrowedKeyPair
 
