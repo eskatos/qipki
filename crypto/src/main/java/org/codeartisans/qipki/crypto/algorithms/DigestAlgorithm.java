@@ -17,7 +17,9 @@ package org.codeartisans.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/Hash_algorithm
  */
 public enum DigestAlgorithm
+        implements Algorithm
 {
+
     /**
      * @see http://en.wikipedia.org/wiki/MD2_(cryptography)
      */
@@ -50,10 +52,8 @@ public enum DigestAlgorithm
         this.algo = algo;
     }
 
-    /**
-     * @return The Java algorithm String
-     */
-    public String algoString()
+    @Override
+    public String jcaString()
     {
         return algo;
     }

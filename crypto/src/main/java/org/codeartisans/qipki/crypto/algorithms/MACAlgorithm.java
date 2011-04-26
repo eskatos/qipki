@@ -17,6 +17,7 @@ package org.codeartisans.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/HMAC
  */
 public enum MACAlgorithm
+        implements Algorithm
 {
 
     /**
@@ -46,10 +47,8 @@ public enum MACAlgorithm
         this.algo = algo;
     }
 
-    /**
-     * @return The Java algorithm String
-     */
-    public String algoString()
+    @Override
+    public String jcaString()
     {
         return algo;
     }

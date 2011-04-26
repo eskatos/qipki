@@ -41,7 +41,7 @@ public class MACImpl
     public byte[] mac( InputStream data, MACParameters params )
     {
         try {
-            Mac mac = Mac.getInstance( params.algorithm().algoString(), BouncyCastleProvider.PROVIDER_NAME );
+            Mac mac = Mac.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
             mac.init( params.secretKey() );
             byte[] buffer = new byte[ BUFFER_SIZE ];
             int length = 0;
@@ -50,9 +50,9 @@ public class MACImpl
             }
             return mac.doFinal();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to read data to MAC with " + params.algorithm().algoString(), ex );
+            throw new QiCryptoFailure( "Unable to read data to MAC with " + params.algorithm().jcaString(), ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to MAC using " + params.algorithm().algoString(), ex );
+            throw new QiCryptoFailure( "Unable to MAC using " + params.algorithm().jcaString(), ex );
         }
     }
 

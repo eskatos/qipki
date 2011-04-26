@@ -17,6 +17,7 @@ package org.codeartisans.qipki.crypto.algorithms;
  * See http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation
  */
 public enum BlockCipherModeOfOperation
+        implements Algorithm
 {
 
     /**
@@ -64,16 +65,17 @@ public enum BlockCipherModeOfOperation
      * SIC mode is well suited to operation on a multi-processor machine where blocks can be encrypted in parallel.
      */
     SIC( "SIC" );
-    private String algo;
+    private String jcaString;
 
-    private BlockCipherModeOfOperation( String algo )
+    private BlockCipherModeOfOperation( String jcaString )
     {
-        this.algo = algo;
+        this.jcaString = jcaString;
     }
 
-    public String algoString()
+    @Override
+    public String jcaString()
     {
-        return algo;
+        return jcaString;
     }
 
 }

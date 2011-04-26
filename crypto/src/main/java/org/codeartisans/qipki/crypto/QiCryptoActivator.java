@@ -64,6 +64,9 @@ public interface QiCryptoActivator
                     LOGGER.debug( "A Provider is already registered with the name {}. Doing nothing.", providerName );
                 }
             }
+            if ( ensureJCE() ) {
+                // TODO
+            }
         }
 
         @Override
@@ -85,13 +88,28 @@ public interface QiCryptoActivator
             }
         }
 
-        private boolean overrideProvider()
+        private boolean ensureJCE()
         {
-            if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
-                return false;
+            if ( configuration == null ) {
+                return true;
             }
-            return !StringUtils.isEmpty( configuration.providerName().get() )
-                    && !StringUtils.isEmpty( configuration.providerClass().get() );
+            Boolean ensure = configuration.ensureJCE().get();
+            if ( ensure == null ) {
+                return true;
+            }
+            return ensure;
+        }
+
+        private boolean insertProviderOnActivate()
+        {
+            if ( configuration == null ) {
+                return true;
+            }
+            Boolean insert = configuration.insertProviderOnActivate().get();
+            if ( insert == null ) {
+                return true;
+            }
+            return insert;
         }
 
         private String providerName()
@@ -111,16 +129,13 @@ public interface QiCryptoActivator
             return BouncyCastleProvider.class;
         }
 
-        private boolean insertProviderOnActivate()
+        private boolean overrideProvider()
         {
-            if ( configuration == null ) {
-                return true;
+            if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
+                return false;
             }
-            Boolean insert = configuration.insertProviderOnActivate().get();
-            if ( insert == null ) {
-                return true;
-            }
-            return insert;
+            return !StringUtils.isEmpty( configuration.providerName().get() )
+                    && !StringUtils.isEmpty( configuration.providerClass().get() );
         }
 
         private boolean removeProviderOnPassivate()

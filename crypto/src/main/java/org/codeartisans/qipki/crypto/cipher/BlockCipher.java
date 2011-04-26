@@ -11,34 +11,19 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.crypto.algorithms;
+package org.codeartisans.qipki.crypto.cipher;
 
-/**
- * Asymetric cryptography algorithm.
- */
-public enum AsymetricAlgorithm
-        implements Algorithm
+import java.security.Key;
+
+public interface BlockCipher
 {
 
-    /**
-     * @see http://en.wikipedia.org/wiki/RSA
-     */
-    RSA( "RSA" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/ECDSA
-     */
-    ECDSA( "ECDSA" );
-    private String algo;
+    byte[] cipher( byte[] data, Key key );
 
-    private AsymetricAlgorithm( String algo )
-    {
-        this.algo = algo;
-    }
+    byte[] decipher( byte[] ciphered, Key key );
 
-    @Override
-    public String jcaString()
-    {
-        return algo;
-    }
+    byte[] cipher( byte[] data, byte[] key );
+
+    byte[] decipher( byte[] ciphered, byte[] key );
 
 }

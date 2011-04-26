@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,14 @@
 package org.codeartisans.qipki.crypto.algorithms;
 
 /**
- * Asymetric cryptography algorithm.
+ * Type safety marker for algorithm enums.
  */
-public enum AsymetricAlgorithm
-        implements Algorithm
+public interface Algorithm
 {
 
     /**
-     * @see http://en.wikipedia.org/wiki/RSA
+     * @return The JCA "transformation" part
      */
-    RSA( "RSA" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/ECDSA
-     */
-    ECDSA( "ECDSA" );
-    private String algo;
-
-    private AsymetricAlgorithm( String algo )
-    {
-        this.algo = algo;
-    }
-
-    @Override
-    public String jcaString()
-    {
-        return algo;
-    }
+    String jcaString();
 
 }

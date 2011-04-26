@@ -15,6 +15,7 @@ package org.codeartisans.qipki.crypto.assembly;
 
 import org.codeartisans.qipki.crypto.QiCryptoActivator;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorService;
+import org.codeartisans.qipki.crypto.cipher.CipherFactoryService;
 import org.codeartisans.qipki.crypto.codec.CryptCodexService;
 import org.codeartisans.qipki.crypto.digest.DigestService;
 import org.codeartisans.qipki.crypto.io.CryptIOService;
@@ -60,6 +61,7 @@ public class CryptoEngineModuleAssembler
                             MACService.class,
                             SymetricGeneratorService.class,
                             AsymetricGeneratorService.class,
+                            CipherFactoryService.class,
                             X509ExtensionsReaderService.class,
                             X509ExtensionsBuilderService.class ).
                 visibleIn( visibility );

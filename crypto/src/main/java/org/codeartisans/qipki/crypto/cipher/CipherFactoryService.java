@@ -11,34 +11,13 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.crypto.algorithms;
+package org.codeartisans.qipki.crypto.cipher;
 
-/**
- * Asymetric cryptography algorithm.
- */
-public enum AsymetricAlgorithm
-        implements Algorithm
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+
+@Mixins( CipherFactoryImpl.class )
+public interface CipherFactoryService
+        extends CipherFactory, ServiceComposite
 {
-
-    /**
-     * @see http://en.wikipedia.org/wiki/RSA
-     */
-    RSA( "RSA" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/ECDSA
-     */
-    ECDSA( "ECDSA" );
-    private String algo;
-
-    private AsymetricAlgorithm( String algo )
-    {
-        this.algo = algo;
-    }
-
-    @Override
-    public String jcaString()
-    {
-        return algo;
-    }
-
 }

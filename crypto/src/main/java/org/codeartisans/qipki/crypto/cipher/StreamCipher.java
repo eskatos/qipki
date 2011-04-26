@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,34 +11,22 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.crypto.algorithms;
+package org.codeartisans.qipki.crypto.cipher;
 
-/**
- * Asymetric cryptography algorithm.
- */
-public enum AsymetricAlgorithm
-        implements Algorithm
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.Key;
+
+public interface StreamCipher
+        extends BlockCipher
 {
 
-    /**
-     * @see http://en.wikipedia.org/wiki/RSA
-     */
-    RSA( "RSA" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/ECDSA
-     */
-    ECDSA( "ECDSA" );
-    private String algo;
+    void cipher( InputStream in, OutputStream out, Key key );
 
-    private AsymetricAlgorithm( String algo )
-    {
-        this.algo = algo;
-    }
+    void decipher( InputStream in, OutputStream out, Key key );
 
-    @Override
-    public String jcaString()
-    {
-        return algo;
-    }
+    void cipher( InputStream in, OutputStream out, byte[] key );
+
+    void decipher( InputStream in, OutputStream out, byte[] key );
 
 }

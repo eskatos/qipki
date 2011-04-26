@@ -29,11 +29,11 @@ public class AsymetricGeneratorImpl
     public KeyPair generateKeyPair( AsymetricGeneratorParameters params )
     {
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( params.algorithm().algoString(), BouncyCastleProvider.PROVIDER_NAME );
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
             keyGen.initialize( params.keySize() );
             return keyGen.generateKeyPair();
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().algoString() + " " + params.keySize() + " KeyPair", ex );
+            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " KeyPair", ex );
         }
     }
 

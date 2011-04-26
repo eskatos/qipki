@@ -199,7 +199,7 @@ public interface CAFactory
             crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
             crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
             crlGen.setNextUpdate( new DateTime().minus( Time.CLOCK_SKEW ).plusHours( 12 ).toDate() );
-            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
+            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
             crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
             crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
             return crlGen.generate( caPrivKey, BouncyCastleProvider.PROVIDER_NAME );

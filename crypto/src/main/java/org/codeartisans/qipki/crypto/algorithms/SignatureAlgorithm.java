@@ -17,6 +17,7 @@ package org.codeartisans.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/Signature_(cryptography)
  */
 public enum SignatureAlgorithm
+        implements Algorithm
 {
 
     // DSA currently just supports SHA-1.
@@ -45,7 +46,8 @@ public enum SignatureAlgorithm
         this.algo = algo;
     }
 
-    public String algoString()
+    @Override
+    public String jcaString()
     {
         return algo;
     }

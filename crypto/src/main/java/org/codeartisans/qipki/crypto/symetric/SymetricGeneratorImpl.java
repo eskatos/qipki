@@ -30,11 +30,11 @@ public class SymetricGeneratorImpl
     public SecretKey generateSecretKey( SymetricGeneratorParameters params )
     {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance( params.algorithm().algoString(), BouncyCastleProvider.PROVIDER_NAME );
+            KeyGenerator keyGen = KeyGenerator.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
             keyGen.init( params.keySize() );
             return keyGen.generateKey();
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().algoString() + " " + params.keySize() + " SecretKey", ex );
+            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " SecretKey", ex );
         }
     }
 

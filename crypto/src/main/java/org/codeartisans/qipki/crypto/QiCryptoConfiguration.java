@@ -23,6 +23,13 @@ import org.qi4j.api.property.Property;
 public interface QiCryptoConfiguration
 {
 
+    /**
+     * Defaulted to Boolean.TRUE
+     * @return
+     */
+    @Optional
+    Property<Boolean> ensureJCE();
+
     @Optional
     Property<Boolean> overrideProvider();
 

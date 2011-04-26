@@ -223,7 +223,7 @@ public abstract class CAMixin
         DateTime skewedNow = new DateTime().minus( Time.CLOCK_SKEW );
         crlGen.setThisUpdate( skewedNow.toDate() );
         crlGen.setNextUpdate( skewedNow.plusHours( 12 ).toDate() );
-        crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
+        crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
         crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
         state.crl().get().lastCRLNumber().set( state.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
         crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( state.crl().get().lastCRLNumber().get() ) );

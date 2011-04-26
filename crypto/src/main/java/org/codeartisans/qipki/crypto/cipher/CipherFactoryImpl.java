@@ -11,34 +11,20 @@
  * limitations under the License.
  *
  */
-package org.codeartisans.qipki.crypto.algorithms;
+package org.codeartisans.qipki.crypto.cipher;
 
-/**
- * Asymetric cryptography algorithm.
- */
-public enum AsymetricAlgorithm
-        implements Algorithm
+import org.codeartisans.qipki.crypto.algorithms.BlockCipherModeOfOperation;
+import org.codeartisans.qipki.crypto.algorithms.BlockCipherPadding;
+import org.codeartisans.qipki.crypto.algorithms.SymetricAlgorithm;
+
+public class CipherFactoryImpl
+        implements CipherFactory
 {
 
-    /**
-     * @see http://en.wikipedia.org/wiki/RSA
-     */
-    RSA( "RSA" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/ECDSA
-     */
-    ECDSA( "ECDSA" );
-    private String algo;
-
-    private AsymetricAlgorithm( String algo )
-    {
-        this.algo = algo;
-    }
-
     @Override
-    public String jcaString()
+    public BlockCipher newBlockCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
-        return algo;
+        return new BlockCipherImpl( algo, mode, padding );
     }
 
 }

@@ -48,7 +48,7 @@ public class X509GeneratorImpl
     public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair )
     {
         try {
-            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.jcaString(),
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    null,
                                                    keyPair.getPrivate(),
@@ -62,7 +62,7 @@ public class X509GeneratorImpl
     public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
     {
         try {
-            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.algoString(),
+            return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.jcaString(),
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    generateSANAttribute( subjectAlternativeNames ),
                                                    keyPair.getPrivate(),
@@ -92,7 +92,7 @@ public class X509GeneratorImpl
             x509v3Generator.setIssuerDN( issuerDN.toX500Principal() );
             x509v3Generator.setNotBefore( now.minus( Time.CLOCK_SKEW ).toDate() );
             x509v3Generator.setNotAfter( now.plus( validity ).minus( Time.CLOCK_SKEW ).toDate() );
-            x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.algoString() );
+            x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
             x509v3Generator.setPublicKey( publicKey );
 
             for ( X509ExtensionHolder eachExtensionHolder : x509Extensions ) {

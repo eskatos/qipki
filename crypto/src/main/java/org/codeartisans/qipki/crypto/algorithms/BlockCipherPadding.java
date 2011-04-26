@@ -17,6 +17,7 @@ package org.codeartisans.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Padding
  */
 public enum BlockCipherPadding
+        implements Algorithm
 {
 
     // Sun JCE
@@ -31,19 +32,17 @@ public enum BlockCipherPadding
     X932Padding( "X932Padding" ),
     ZeroBytePadding( "ZeroBytePadding" ),
     TBCPadding( "TBCPadding" );
-    private String algo;
+    private String jcaString;
 
-    private BlockCipherPadding( String algo )
+    private BlockCipherPadding( String jcaString )
     {
-        this.algo = algo;
+        this.jcaString = jcaString;
     }
 
-    /**
-     * @return The Java algorithm String
-     */
-    public String algoString()
+    @Override
+    public String jcaString()
     {
-        return algo;
+        return jcaString;
     }
 
 }
