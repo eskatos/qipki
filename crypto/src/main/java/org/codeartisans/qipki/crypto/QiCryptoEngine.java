@@ -32,17 +32,17 @@ import org.slf4j.LoggerFactory;
 /**
  * Composite responsible for Provider registration according to its Configuration.
  */
-@Mixins( QiCryptoActivator.Mixin.class )
-public interface QiCryptoActivator
+@Mixins( QiCryptoEngine.Mixin.class )
+public interface QiCryptoEngine
         extends Activatable, ServiceComposite
 {
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements QiCryptoActivator
+            implements QiCryptoEngine
     {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger( QiCryptoActivator.Mixin.class );
+        private static final Logger LOGGER = LoggerFactory.getLogger( QiCryptoEngine.Mixin.class );
         @This
         @Optional
         private QiCryptoConfiguration configuration;

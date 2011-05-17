@@ -13,7 +13,7 @@
  */
 package org.codeartisans.qipki.crypto.assembly;
 
-import org.codeartisans.qipki.crypto.QiCryptoActivator;
+import org.codeartisans.qipki.crypto.QiCryptoEngine;
 import org.codeartisans.qipki.crypto.asymetric.AsymetricGeneratorService;
 import org.codeartisans.qipki.crypto.cipher.CipherFactoryService;
 import org.codeartisans.qipki.crypto.codec.CryptCodexService;
@@ -22,6 +22,7 @@ import org.codeartisans.qipki.crypto.io.CryptIOService;
 import org.codeartisans.qipki.crypto.mac.MACService;
 import org.codeartisans.qipki.crypto.objects.KeyInformation;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
+import org.codeartisans.qipki.crypto.random.RandomService;
 import org.codeartisans.qipki.crypto.symetric.SymetricGeneratorService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilderService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReaderService;
@@ -55,6 +56,7 @@ public class CryptoEngineModuleAssembler
     {
         module.addServices( CryptObjectsFactory.class,
                             CryptCodexService.class,
+                            RandomService.class,
                             X509GeneratorService.class,
                             CryptIOService.class,
                             DigestService.class,
@@ -69,7 +71,7 @@ public class CryptoEngineModuleAssembler
         module.addObjects( KeyInformation.class ).
                 visibleIn( visibility );
 
-        module.addServices( QiCryptoActivator.class ).
+        module.addServices( QiCryptoEngine.class ).
                 visibleIn( Visibility.module ).
                 instantiateOnStartup();
     }
