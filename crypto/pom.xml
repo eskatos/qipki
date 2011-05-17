@@ -16,6 +16,11 @@
     <dependencies>
 
         <!-- Libraries -->
+        <!--dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${version.shiro}</version>
+        </dependency-->
         <dependency>
             <groupId>org.codeartisans</groupId>
             <artifactId>java-toolbox</artifactId>
