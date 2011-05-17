@@ -15,8 +15,11 @@ package org.codeartisans.qipki.crypto.symetric;
 
 import java.security.Security;
 import javax.crypto.SecretKey;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.codeartisans.qipki.crypto.algorithms.SymetricAlgorithm;
+
 import org.junit.Test;
 
 public class SymetricGeneratorTest
@@ -29,7 +32,6 @@ public class SymetricGeneratorTest
         SymetricGenerator symGen = new SymetricGeneratorImpl();
         SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 128 ) );
         System.out.println( key.toString() );
-        
     }
 
 }

@@ -45,17 +45,17 @@ public enum DigestAlgorithm
      * @see http://en.wikipedia.org/wiki/SHA-512
      */
     SHA_512( "SHA-512" );
-    private String algo;
+    private String jcaString;
 
     private DigestAlgorithm( String algo )
     {
-        this.algo = algo;
+        this.jcaString = algo;
     }
 
     @Override
     public String jcaString()
     {
-        return algo;
+        return jcaString;
     }
 
 }

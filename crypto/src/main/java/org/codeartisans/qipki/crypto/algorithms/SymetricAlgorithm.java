@@ -19,6 +19,7 @@ package org.codeartisans.qipki.crypto.algorithms;
 public enum SymetricAlgorithm
         implements Algorithm
 {
+
     /**
      * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
      */
@@ -30,22 +31,23 @@ public enum SymetricAlgorithm
     /**
      * @see http://en.wikipedia.org/wiki/Data_Encryption_Standard
      */
+    @Deprecated
     DES( "DES" ),
     /**
      * @see http://en.wikipedia.org/wiki/Triple_DES
      */
     TripleDES( "DESede" );
-    private String algo;
+    private String jcaString;
 
     private SymetricAlgorithm( String algo )
     {
-        this.algo = algo;
+        this.jcaString = algo;
     }
 
     @Override
     public String jcaString()
     {
-        return algo;
+        return jcaString;
     }
 
 }

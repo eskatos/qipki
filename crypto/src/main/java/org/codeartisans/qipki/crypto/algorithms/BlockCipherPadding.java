@@ -20,18 +20,23 @@ public enum BlockCipherPadding
         implements Algorithm
 {
 
-    // Sun JCE
-    NoPadding( "NoPadding" ),
-    PKCS5Padding( "PKCS5Padding" ),
-    SSL3Padding( "SSL3Padding" ),
-    ISO10126Padding( "ISO10126Padding" ),
-    // Bouncy Castle
-    PKCS7Padding( "PKCS7Padding" ),
-    ISO10126d2Padding( "ISO10126d2Padding" ),
-    ISO7816d4Padding( "ISO7816d4Padding" ),
-    X932Padding( "X932Padding" ),
-    ZeroBytePadding( "ZeroBytePadding" ),
-    TBCPadding( "TBCPadding" );
+    NO_PADDING( "NoPadding" ), // Need parameters
+    ISO10126( "ISO10126Padding" ), // Need parameters
+    OAEP( "OAEPPadding" ),
+    OAEP_MD5_MGF1( "OAEPWithMD5AndMGF1Padding" ),
+    OAEP_SHA1_MGF1( "OAEPWithSHA-1AndMGF1Padding" ),
+    OAEP_SHA256_MGF1( "OAEPWithSHA-256AndMGF1Padding" ),
+    OAEP_SHA384_MGF1( "OAEPWithSHA-384AndMGF1Padding" ),
+    OAEP_SHA512_MGF1( "OAEPWithSHA-512AndMGF1Padding" ),
+    PKCS1( "PKCS1Padding" ),
+    PKCS5( "PKCS5Padding" ), // Need parameters
+    SSL3( "SSL3Padding" ), // Removed in Java 6 ?
+    PKCS7( "PKCS7Padding" ), // Need IV
+    ISO10126D2( "ISO10126d2Padding" ), // Unknown
+    ISO7816D4( "ISO7816d4Padding" ), // Unknown
+    X932( "X932Padding" ), // Unknown
+    ZERO_BYTE( "ZeroBytePadding" ), // Need IV
+    TBC( "TBCPadding" ); // Need IV
     private String jcaString;
 
     private BlockCipherPadding( String jcaString )

@@ -17,7 +17,7 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import org.codeartisans.qipki.crypto.QiCryptoActivator;
+import org.codeartisans.qipki.crypto.QiCryptoEngine;
 import org.codeartisans.qipki.crypto.algorithms.DigestAlgorithm;
 import org.codeartisans.qipki.crypto.codec.CryptCodexImpl;
 import org.codeartisans.qipki.crypto.codec.CryptCodexService;
@@ -39,7 +39,7 @@ public class DigestTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( QiCryptoActivator.class ).instantiateOnStartup();
+        module.addServices( QiCryptoEngine.class ).instantiateOnStartup();
         module.addServices( DigestService.class, CryptCodexService.class );
     }
 
