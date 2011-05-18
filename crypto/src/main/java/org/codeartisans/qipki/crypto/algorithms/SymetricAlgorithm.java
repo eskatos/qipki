@@ -15,28 +15,63 @@ package org.codeartisans.qipki.crypto.algorithms;
 
 /**
  * @see http://en.wikipedia.org/wiki/Symmetric_key_algorithms
+ *
+ * TODO : Serpent, Camelia ?
  */
 public enum SymetricAlgorithm
         implements Algorithm
 {
 
     /**
+     * @see http://en.wikipedia.org/wiki/Rijndael
+     */
+    Rijndael( "RIJNDAEL" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Serpent_(cipher)
+     */
+    Serpent( "SERPENT" ),
+    /**
      * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
      */
     AES( "AES" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Camellia_(cipher)
+     */
+    Camellia( "CAMELLIA" ),
     /**
      * @see http://en.wikipedia.org/wiki/Blowfish_(cipher)
      */
     Blowfish( "Blowfish" ),
     /**
+     * @see http://en.wikipedia.org/wiki/Triple_DES
+     */
+    TripleDES( "DESede" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Twofish
+     */
+    TwoFish( "Twofish" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/CAST-128
+     */
+    CAST_128( "CAST5" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/CAST-256
+     */
+    CAST_256( "CAST6" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/XTEA
+     */
+    XTEA( "XTEA" ),
+    /**
+     * @see http://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm
+     */
+    @Deprecated
+    TEA( "TEA" ),
+    /**
      * @see http://en.wikipedia.org/wiki/Data_Encryption_Standard
      */
     @Deprecated
-    DES( "DES" ),
-    /**
-     * @see http://en.wikipedia.org/wiki/Triple_DES
-     */
-    TripleDES( "DESede" );
+    DES( "DES" );
     private String jcaString;
 
     private SymetricAlgorithm( String algo )

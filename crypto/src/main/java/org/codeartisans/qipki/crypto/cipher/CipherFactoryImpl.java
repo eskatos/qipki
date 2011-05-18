@@ -16,15 +16,24 @@ package org.codeartisans.qipki.crypto.cipher;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherPadding;
 import org.codeartisans.qipki.crypto.algorithms.SymetricAlgorithm;
+import org.codeartisans.qipki.crypto.random.Random;
+import org.qi4j.api.injection.scope.Service;
 
 public class CipherFactoryImpl
         implements CipherFactory
 {
 
+    private final Random random;
+
+    public CipherFactoryImpl( @Service Random random )
+    {
+        this.random = random;
+    }
+
     @Override
     public BlockCipher newBlockCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
-        return new BlockCipherImpl( algo, mode, padding );
+        return new BlockCipherImpl( random, algo, mode, padding );
     }
 
 }

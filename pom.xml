@@ -48,7 +48,6 @@
         <version.httpclient>4.0.3</version.httpclient>
         <version.java-toolbox>1.4</version.java-toolbox>
         <version.junit>4.7</version.junit>
-        <version.shiro>1.2.0-SNAPSHOT</version.shiro>
     </properties>
 
     <modules>

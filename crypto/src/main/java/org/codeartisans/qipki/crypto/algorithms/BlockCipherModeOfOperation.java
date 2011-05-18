@@ -35,7 +35,8 @@ public enum BlockCipherModeOfOperation
      * The propagating cipher-block chaining or plaintext cipher-block chaining[2] mode was designed to cause small
      * changes in the ciphertext to propagate indefinitely when decrypting, as well as when encrypting.
      */
-    PCBC( "PCBC" ),
+    // @Deprecated
+    // PCBC( "PCBC" ),
     /**
      * Close relative of CBC, makes a block cipher into a self-synchronizing stream cipher.
      * Operation is very similar; in particular, CFB decryption is almost identical to CBC encryption performed

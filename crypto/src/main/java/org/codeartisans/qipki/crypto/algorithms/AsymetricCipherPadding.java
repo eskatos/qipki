@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,20 @@
  */
 package org.codeartisans.qipki.crypto.algorithms;
 
-/**
- * @see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Padding
- */
-public enum BlockCipherPadding
+public enum AsymetricCipherPadding
         implements Algorithm
 {
 
-    // SSL3( "SSL3Padding" ), // Removed in Java 6 ?
-    // ISO10126D2( "ISO10126d2Padding" ), // Unknown
-    // ISO7816D4( "ISO7816d4Padding" ), // Unknown
-    // X932( "X932Padding" ), // Unknown
-    NO_PADDING( "NoPadding" ), // Need parameters
-    ISO10126( "ISO10126Padding" ), // Need parameters
-    PKCS5( "PKCS5Padding" ), // Need parameters
-    PKCS7( "PKCS7Padding" ), // Need IV
-    ZERO_BYTE( "ZeroBytePadding" ), // Need IV
-    TBC( "TBCPadding" ); // Need IV
+    PKCS1( "PKCS1Padding" ),
+    OAEP( "OAEPPadding" ),
+    OAEP_MD5_MGF1( "OAEPWithMD5AndMGF1Padding" ),
+    OAEP_SHA1_MGF1( "OAEPWithSHA-1AndMGF1Padding" ),
+    OAEP_SHA256_MGF1( "OAEPWithSHA-256AndMGF1Padding" ),
+    OAEP_SHA384_MGF1( "OAEPWithSHA-384AndMGF1Padding" ),
+    OAEP_SHA512_MGF1( "OAEPWithSHA-512AndMGF1Padding" );
     private String jcaString;
 
-    private BlockCipherPadding( String jcaString )
+    private AsymetricCipherPadding( String jcaString )
     {
         this.jcaString = jcaString;
     }
