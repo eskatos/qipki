@@ -14,10 +14,12 @@
 package org.codeartisans.qipki.crypto.x509;
 
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import java.util.Set;
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -47,6 +49,8 @@ public class X509ExtensionsReaderTest
         Security.addProvider( new BouncyCastleProvider() );
     }
 
+    private CryptCodexImpl cryptCodex;
+    private CryptIOImpl cryptIO;
     private X509Certificate baltimoreCyberTrustCodeSigningRoot;
     private X509Certificate chamberOfCommerceRoot;
     private X509ExtensionsReaderImpl x509ExtReader;
@@ -54,11 +58,27 @@ public class X509ExtensionsReaderTest
     @Before
     public void before()
     {
-        CryptCodex cryptCodex = new CryptCodexImpl();
-        CryptIO cryptIO = new CryptIOImpl();
+        cryptCodex = new CryptCodexImpl();
+        cryptIO = new CryptIOImpl();
         x509ExtReader = new X509ExtensionsReaderImpl( cryptCodex );
         baltimoreCyberTrustCodeSigningRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM ) ) );
         chamberOfCommerceRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_CHAMBER_OF_COMMERCE_ROOT_PEM ) ) );
+    }
+
+    @Test
+    public void testSubjectKeyIdentifier()
+    {
+        byte[] ski = x509ExtReader.getSubjectKeyIdentifier( baltimoreCyberTrustCodeSigningRoot );
+        String hexSki = cryptCodex.toHexString( ski );
+        LOGGER.info( "SubjectKeyIdentifier: {}", hexSki );
+        assertTrue( hexSki.startsWith( "c841" ) );
+        assertTrue( hexSki.endsWith( "425a" ) );
+
+        ski = x509ExtReader.getSubjectKeyIdentifier( chamberOfCommerceRoot );
+        hexSki = cryptCodex.toHexString( ski );
+        LOGGER.info( "SubjectKeyIdentifier: {}", hexSki );
+        assertTrue( hexSki.startsWith( "e394" ) );
+        assertTrue( hexSki.endsWith( "a28a" ) );
     }
 
     @Test

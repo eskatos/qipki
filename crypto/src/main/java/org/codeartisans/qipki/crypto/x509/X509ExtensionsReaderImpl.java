@@ -150,7 +150,8 @@ public class X509ExtensionsReaderImpl
             if ( value == null ) {
                 return null;
             }
-            return SubjectKeyIdentifier.getInstance( ASN1Object.fromByteArray( value ) ).getKeyIdentifier();
+            byte[] octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
+            return SubjectKeyIdentifier.getInstance( ASN1Object.fromByteArray( octets ) ).getKeyIdentifier();
         } catch ( IOException ex ) {
             throw new QiCryptoFailure( "Unable to extract SubjectKeyIdentifier from X509Certificate extensions", ex );
         }
