@@ -23,6 +23,7 @@ import org.codeartisans.qipki.crypto.mac.MACService;
 import org.codeartisans.qipki.crypto.objects.KeyInformation;
 import org.codeartisans.qipki.crypto.objects.CryptObjectsFactory;
 import org.codeartisans.qipki.crypto.random.RandomService;
+import org.codeartisans.qipki.crypto.random.WeakRandomService;
 import org.codeartisans.qipki.crypto.symetric.SymetricGeneratorService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsBuilderService;
 import org.codeartisans.qipki.crypto.x509.X509ExtensionsReaderService;
@@ -38,6 +39,7 @@ public class CryptoEngineModuleAssembler
 {
 
     private final Visibility visibility;
+    private boolean weakRandom;
 
     public CryptoEngineModuleAssembler()
     {
@@ -49,6 +51,12 @@ public class CryptoEngineModuleAssembler
         this.visibility = visibility;
     }
 
+    public CryptoEngineModuleAssembler withWeakRandom()
+    {
+        weakRandom = true;
+        return this;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
@@ -56,7 +64,7 @@ public class CryptoEngineModuleAssembler
     {
         module.addServices( CryptObjectsFactory.class,
                             CryptCodexService.class,
-                            RandomService.class,
+                            weakRandom ? WeakRandomService.class : RandomService.class,
                             X509GeneratorService.class,
                             CryptIOService.class,
                             DigestService.class,
