@@ -16,20 +16,16 @@ package org.codeartisans.qipki.crypto.cipher;
 import java.io.UnsupportedEncodingException;
 import javax.crypto.SecretKey;
 
-import org.codeartisans.qipki.crypto.QiCryptoEngine;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherPadding;
+import org.codeartisans.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.codeartisans.qipki.crypto.algorithms.SymetricAlgorithm;
-import org.codeartisans.qipki.crypto.codec.CryptCodexService;
-import org.codeartisans.qipki.crypto.digest.DigestService;
+import org.codeartisans.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 import org.codeartisans.qipki.crypto.jca.Transformation;
-import org.codeartisans.qipki.crypto.random.RandomService;
 import org.codeartisans.qipki.crypto.symetric.SymetricGenerator;
 import org.codeartisans.qipki.crypto.symetric.SymetricGeneratorParameters;
-import org.codeartisans.qipki.crypto.symetric.SymetricGeneratorService;
 
-import org.junit.Assert;
-import org.junit.Ignore;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.qi4j.bootstrap.AssemblyException;
@@ -40,39 +36,22 @@ public class CipherTest
         extends AbstractQi4jTest
 {
 
+    private static final String[] SAMPLES = new String[]{
+        "Hello World",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar lobortis."
+    };
+
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( QiCryptoEngine.class ).instantiateOnStartup();
-        module.addServices( RandomService.class,
-                            SymetricGeneratorService.class,
-                            CipherFactoryService.class,
-                            DigestService.class,
-                            CryptCodexService.class );
+        new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
     }
 
     @Test
-    @Ignore
-    public void testAesCBCZeroPadding()
+    public void testAllBlockCipherAlgorithms()
             throws UnsupportedEncodingException
-    {
-        SymetricGenerator symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
-        CipherFactory cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
-
-        BlockCipher cipher = cipherFactory.newBlockCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.ZERO_BYTE );
-        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 128 ) );
-
-        String original = "Le nom des fous est écrit partout.";
-        byte[] ciphered = cipher.cipher( original.getBytes( "UTF-8" ), key );
-        byte[] deciphered = cipher.decipher( ciphered, key );
-        System.out.println( new String( deciphered, "UTF-8" ) );
-    }
-
-    @Test
-    // @Ignore
-    public void testAlgorithms()
     {
         SymetricGenerator symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
         CipherFactory cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
@@ -90,36 +69,26 @@ public class CipherTest
                             keySize = 192;
                             break;
                     }
-                    boolean supported = true;
-                    switch ( eachMode ) {
-                        case SIC:
-                            switch ( eachAlgo ) {
-                                case Blowfish:
-                                case TripleDES:
-                                case CAST_128:
-                                case XTEA:
-                                case TEA:
-                                case DES:
-                                    // Warning: SIC-Mode can become a twotime-pad if the blocksize of the cipher is too small. Use a cipher with a block size of at least 128 bits (e.g. AES)
-                                    supported = false;
-                            }
-                    }
-
-                    if ( supported ) {
+                    try {
                         System.out.println( ">> Generating Key" );
                         BlockCipher cipher = cipherFactory.newBlockCipher( eachAlgo, eachMode, eachPadding );
                         SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( eachAlgo, keySize ) );
 
-                        byte[] data = new byte[]{};
-                        System.out.println( ">> Ciphering" );
-                        byte[] ciphered = cipher.cipher( data, key );
-                        System.out.println( ">> Unciphering" );
-                        byte[] deciphered = cipher.decipher( ciphered, key );
-                        System.out.println( ">> Comparing" );
-                        Assert.assertArrayEquals( data, deciphered );
-                    } else {
-                        System.out.println( ">> UNSUPPORTED" );
+                        for ( String eachSample : SAMPLES ) {
+
+                            byte[] data = eachSample.getBytes( "UTF-8" );
+                            System.out.println( ">> Ciphering: '" + eachSample + "'" );
+                            byte[] ciphered = cipher.cipher( data, key );
+                            System.out.println( ">> Unciphering" );
+                            byte[] deciphered = cipher.decipher( ciphered, key );
+                            System.out.println( ">> Comparing" );
+                            assertArrayEquals( data, deciphered );
+
+                        }
+                    } catch ( IllegalAlgorithmException ex ) {
+                        System.out.println( ">> UNSUPPORTED " + ex.getMessage() );
                     }
+
                 }
             }
         }

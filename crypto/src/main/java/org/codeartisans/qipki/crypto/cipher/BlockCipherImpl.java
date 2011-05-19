@@ -15,14 +15,15 @@ package org.codeartisans.qipki.crypto.cipher;
 
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.util.EnumSet;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.bouncycastle.jce.provider.symmetric.AES.CBC;
 
 import org.codeartisans.qipki.crypto.QiCryptoFailure;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.codeartisans.qipki.crypto.algorithms.BlockCipherPadding;
+import org.codeartisans.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.codeartisans.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.codeartisans.qipki.crypto.jca.Transformation;
 import org.codeartisans.qipki.crypto.random.Random;
@@ -31,8 +32,12 @@ public class BlockCipherImpl
         implements BlockCipher
 {
 
-    private static final int BITS_PER_BYTE = 8;
-    private static final int DEFAULT_IV_BITLENGTH = 128;
+    private static final EnumSet<SymetricAlgorithm> NO_SIC_CIPHER_ALGS = EnumSet.of( SymetricAlgorithm.Blowfish,
+                                                                                     SymetricAlgorithm.TripleDES,
+                                                                                     SymetricAlgorithm.CAST_128,
+                                                                                     SymetricAlgorithm.XTEA,
+                                                                                     SymetricAlgorithm.TEA,
+                                                                                     SymetricAlgorithm.DES );
     private final Random random;
     private final SymetricAlgorithm algo;
     private final BlockCipherModeOfOperation mode;
@@ -40,6 +45,9 @@ public class BlockCipherImpl
 
     /* package */ BlockCipherImpl( Random random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
+        if ( mode == BlockCipherModeOfOperation.SIC && NO_SIC_CIPHER_ALGS.contains( algo ) ) {
+            throw new IllegalAlgorithmException( "SIC-Mode cannot be used with " + algo.name() + " because it can become a twotime-pad if the blocksize of the cipher is too small." );
+        }
         this.random = random;
         this.algo = algo;
         this.mode = mode;
@@ -164,6 +172,7 @@ public class BlockCipherImpl
             throws GeneralSecurityException
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
+        // FIXME Find a way to provide the SecureRandom
         cipher.init( cipherMode,
                      new SecretKeySpec( key, algo.jcaString() ),
                      new IvParameterSpec( iv ) );
@@ -174,6 +183,7 @@ public class BlockCipherImpl
             throws GeneralSecurityException
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
+        // FIXME Find a way to provide the SecureRandom
         cipher.init( cipherMode,
                      new SecretKeySpec( key, algo.jcaString() ) );
         return cipher;

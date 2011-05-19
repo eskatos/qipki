@@ -14,22 +14,22 @@
 package org.codeartisans.qipki.crypto.algorithms;
 
 /**
+ * Block Cipher Padding Algorithms.
+ * 
  * @see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Padding
+ *
+ * The NoPadding algorithm is not supported on purpose because it mandates that the input length is compatible with the
+ * cipher algorithm. This decision tighten the whole api and so keep it simple.
  */
 public enum BlockCipherPadding
         implements Algorithm
 {
 
-    // SSL3( "SSL3Padding" ), // Removed in Java 6 ?
-    // ISO10126D2( "ISO10126d2Padding" ), // Unknown
-    // ISO7816D4( "ISO7816d4Padding" ), // Unknown
-    // X932( "X932Padding" ), // Unknown
-    NO_PADDING( "NoPadding" ), // Need parameters
-    ISO10126( "ISO10126Padding" ), // Need parameters
-    PKCS5( "PKCS5Padding" ), // Need parameters
-    PKCS7( "PKCS7Padding" ), // Need IV
-    ZERO_BYTE( "ZeroBytePadding" ), // Need IV
-    TBC( "TBCPadding" ); // Need IV
+    ZERO_BYTE( "ZeroBytePadding" ),
+    PKCS5( "PKCS5Padding" ),
+    PKCS7( "PKCS7Padding" ),
+    ISO10126( "ISO10126Padding" ),
+    TBC( "TBCPadding" );
     private String jcaString;
 
     private BlockCipherPadding( String jcaString )

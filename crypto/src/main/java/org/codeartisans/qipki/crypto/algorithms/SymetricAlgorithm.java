@@ -14,9 +14,9 @@
 package org.codeartisans.qipki.crypto.algorithms;
 
 /**
+ * Symetric Key Algorithm.
+ * 
  * @see http://en.wikipedia.org/wiki/Symmetric_key_algorithms
- *
- * TODO : Serpent, Camelia ?
  */
 public enum SymetricAlgorithm
         implements Algorithm
