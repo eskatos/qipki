@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+package org.qipki.client.ca.assembly;
+
+import org.qipki.client.ca.services.RestClientService;
+import org.qipki.client.ca.services.CAClientService;
+import org.qipki.client.ca.services.CryptoStoreClientService;
+import org.qipki.commons.assembly.CryptoValuesModuleAssembler;
+import org.qipki.commons.assembly.RestValuesModuleAssembler;
+import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
+
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+
+@SuppressWarnings( "unchecked" )
+public class QiPkiCaClientAssembler
+        implements Assembler
+{
+
+    private final Visibility visibility;
+
+    public QiPkiCaClientAssembler()
+    {
+        visibility = Visibility.module;
+    }
+
+    public QiPkiCaClientAssembler( Visibility visibility )
+    {
+        this.visibility = visibility;
+    }
+
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        new CryptoEngineModuleAssembler( visibility ).assemble( module );
+        new CryptoValuesModuleAssembler( visibility ).assemble( module );
+        new RestValuesModuleAssembler( visibility ).assemble( module );
+
+        module.addServices( RestClientService.class ).
+                visibleIn( Visibility.module );
+
+        module.addServices( CryptoStoreClientService.class,
+                            CAClientService.class ).
+                visibleIn( visibility );
+    }
+
+}
