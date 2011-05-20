@@ -2,8 +2,11 @@
 
 ## master
 
+* Fixed X.509 SubjectKeyIdentifier extension parsing
 * Global package name change from org.codeartisans.* to org.qipki.*
+* Added a configurable Random service
 * Added ciphering capabilities to o.q.crypto
+* Added a JceDetector and a unit test that enforce that the JCE are installed
 * Upstream update: Qi4j 1.3
 * Fixed o.q:ca dependencies
 * Minor impact upstream update : restlet from 2.0-M? to stable 2.0.6
@@ -17,7 +20,7 @@
 
 ## 1.0-alpha5
 
-* Fixed KeyUsage parsing
+* Fixed X.509 KeyUsage extension parsing
 * Index rebuild on startup only if the index directory does not exists
 * Tightened indexed properties in model to reduce data footprint and speed up runtime
 * Unit tests now use persistent Entity Store and Index
