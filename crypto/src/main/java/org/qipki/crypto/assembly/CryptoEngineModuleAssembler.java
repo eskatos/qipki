@@ -33,6 +33,7 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qipki.crypto.jce.JceDetectorService;
 
 public class CryptoEngineModuleAssembler
         implements Assembler
@@ -62,7 +63,8 @@ public class CryptoEngineModuleAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( CryptObjectsFactory.class,
+        module.addServices( JceDetectorService.class,
+                            CryptObjectsFactory.class,
                             CryptCodexService.class,
                             weakRandom ? WeakRandomService.class : RandomService.class,
                             X509GeneratorService.class,
