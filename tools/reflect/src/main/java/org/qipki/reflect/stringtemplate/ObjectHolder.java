@@ -11,17 +11,30 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.reindex;
+package org.qipki.reflect.stringtemplate;
 
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.configuration.ConfigurationComposite;
-import org.qi4j.api.property.Property;
-
-public interface AutomaticReindexerConfiguration
-        extends ConfigurationComposite
+public class ObjectHolder<T>
 {
 
-    @UseDefaults
-    Property<Boolean> doReindexOnActivation();
+    private T holded;
+
+    public ObjectHolder()
+    {
+    }
+
+    public ObjectHolder( T holded )
+    {
+        this.holded = holded;
+    }
+
+    public T getHolded()
+    {
+        return holded;
+    }
+
+    public void setHolded( T holded )
+    {
+        this.holded = holded;
+    }
 
 }

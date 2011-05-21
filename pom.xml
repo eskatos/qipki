@@ -47,10 +47,14 @@
         <version.logback>0.9.25</version.logback>
         <version.httpclient>4.0.3</version.httpclient>
         <version.java-toolbox>1.4</version.java-toolbox>
+        <version.commons-lang>2.5</version.commons-lang>
         <version.junit>4.7</version.junit>
     </properties>
 
     <modules>
+
+        <!-- Tools -->
+        <module>tools</module>
 
         <!-- Common building blocks -->
         <module>crypto</module>

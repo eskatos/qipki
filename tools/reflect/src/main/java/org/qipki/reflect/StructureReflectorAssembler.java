@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,17 +11,21 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.reindex;
+package org.qipki.reflect;
 
-import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.configuration.ConfigurationComposite;
-import org.qi4j.api.property.Property;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
 
-public interface AutomaticReindexerConfiguration
-        extends ConfigurationComposite
+public class StructureReflectorAssembler
+        implements Assembler
 {
 
-    @UseDefaults
-    Property<Boolean> doReindexOnActivation();
+    @Override
+    public void assemble( ModuleAssembly ma )
+            throws AssemblyException
+    {
+        ma.addServices( StructureReflectorService.class );
+    }
 
 }

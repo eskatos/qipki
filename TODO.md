@@ -1,7 +1,10 @@
 
 # Next steps
 
-* Global package name change from org.codeartisans.* to org.qipki.*
+Fix entitystore-sql failures exposed by the multithreaded stress test
+
+Add some generated documentation to the build process
+    envisage screenshots (or something like that)
 
 Add @Aggregated in EscrowedKeyPair
 
@@ -26,8 +29,6 @@ CronLike scheduler
 # After that
 
 Add basic profiles creation in qi4j-test-support
-
-Add NetscapeCertType extensions to CAs
 
 Enhance X509Profile with domain rules and certificate template creation
 
