@@ -1,10 +1,12 @@
 
+# Work in progress
+
+Add some generated documentation to the build process
+
+
 # Next steps
 
 Fix entitystore-sql failures exposed by the multithreaded stress test
-
-Add some generated documentation to the build process
-    envisage screenshots (or something like that)
 
 Add @Aggregated in EscrowedKeyPair
 
