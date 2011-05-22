@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.spi.composite.AbstractCompositeDescriptor;
@@ -26,9 +26,6 @@ import org.qi4j.spi.structure.LayerDescriptor;
 import org.qi4j.spi.structure.ModuleDescriptor;
 import org.qi4j.spi.value.ValueDescriptor;
 
-/**
- * TODO
- */
 public class ApplicationBeanVisitor
         extends DescriptorVisitor<InvalidApplicationException>
 {
@@ -121,7 +118,7 @@ public class ApplicationBeanVisitor
         currentModuleBean.entities.add( populateComposite( entityDescriptor, new EntityBean() ) );
     }
 
-    ApplicationBean applicationBean()
+    public ApplicationBean applicationBean()
     {
         return app;
     }

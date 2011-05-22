@@ -11,22 +11,35 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
-public class ObjectBean
+public class ServiceBean
+        extends CompositeBean
 {
 
-    Class<?> type;
-    String visibility;
+    String identity;
+    boolean imported;
+    Class<?> configurationType;
+    boolean instanciateOnStartup;
 
-    public Class<?> getType()
+    public String getIdentity()
     {
-        return type;
+        return identity;
     }
 
-    public String getVisibility()
+    public boolean isImported()
     {
-        return visibility;
+        return imported;
+    }
+
+    public Class<?> getConfigurationType()
+    {
+        return configurationType;
+    }
+
+    public boolean isInstanciateOnStartup()
+    {
+        return instanciateOnStartup;
     }
 
 }

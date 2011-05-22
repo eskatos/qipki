@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;

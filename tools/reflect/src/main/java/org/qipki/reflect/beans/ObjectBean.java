@@ -11,21 +11,22 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class CompositeBean
-        extends ObjectBean
+public class ObjectBean
 {
 
-    List<Class<?>> mixinTypes = new ArrayList<Class<?>>();
+    Class<?> type;
+    String visibility;
 
-    public Iterable<Class<?>> getMixinTypes()
+    public Class<?> getType()
     {
-        return Collections.unmodifiableCollection( mixinTypes );
+        return type;
+    }
+
+    public String getVisibility()
+    {
+        return visibility;
     }
 
 }

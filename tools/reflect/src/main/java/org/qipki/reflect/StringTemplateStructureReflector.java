@@ -11,8 +11,9 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect;
 
+import org.qipki.reflect.beans.ApplicationBeanVisitor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

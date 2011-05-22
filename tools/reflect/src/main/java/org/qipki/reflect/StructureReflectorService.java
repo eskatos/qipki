@@ -13,7 +13,6 @@
  */
 package org.qipki.reflect;
 
-import org.qipki.reflect.stringtemplate.StringTemplateStructureReflector;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 

@@ -11,26 +11,42 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ApplicationBean
+public class LayerBean
 {
 
     String name;
-    List<LayerBean> layers = new ArrayList<LayerBean>();
+    List<String> usedLayers = new ArrayList<String>();
+    List<ModuleBean> modules = new ArrayList<ModuleBean>();
 
     public String getName()
     {
         return name;
     }
 
-    public Iterable<LayerBean> getLayers()
+    public Iterable<String> getUsedLayers()
     {
-        return Collections.unmodifiableCollection( layers );
+        return Collections.unmodifiableCollection( usedLayers );
+    }
+
+    public Iterable<ModuleBean> getModules()
+    {
+        return Collections.unmodifiableCollection( modules );
+    }
+
+    public boolean getHasUsedLayers()
+    {
+        return !usedLayers.isEmpty();
+    }
+
+    public boolean getHasModules()
+    {
+        return !modules.isEmpty();
     }
 
 }

@@ -11,9 +11,9 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
-public class TransientBean
+public class ValueBean
         extends CompositeBean
 {
 }

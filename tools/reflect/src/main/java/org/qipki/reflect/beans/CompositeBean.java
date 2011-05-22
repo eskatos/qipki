@@ -11,9 +11,21 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
-public class EntityBean
-        extends CompositeBean
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CompositeBean
+        extends ObjectBean
 {
+
+    List<Class<?>> mixinTypes = new ArrayList<Class<?>>();
+
+    public Iterable<Class<?>> getMixinTypes()
+    {
+        return Collections.unmodifiableCollection( mixinTypes );
+    }
+
 }

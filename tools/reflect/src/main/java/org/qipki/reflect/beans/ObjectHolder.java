@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,9 +11,30 @@
  * limitations under the License.
  *
  */
-package org.qipki.reflect.stringtemplate;
+package org.qipki.reflect.beans;
 
-public class ValueBean
-        extends CompositeBean
+public class ObjectHolder<T>
 {
+
+    private T holded;
+
+    public ObjectHolder()
+    {
+    }
+
+    public ObjectHolder( T holded )
+    {
+        this.holded = holded;
+    }
+
+    public T getHolded()
+    {
+        return holded;
+    }
+
+    public void setHolded( T holded )
+    {
+        this.holded = holded;
+    }
+
 }
