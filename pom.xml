@@ -39,7 +39,7 @@
     </scm>
 
     <properties>
-        <version.qi4j>1.2</version.qi4j>
+        <version.qi4j>1.3-SNAPSHOT</version.qi4j>
         <version.restlet>2.0.6</version.restlet>
         <!--version.restlet>2.0-RC1</version.restlet-->
         <version.bouncy>1.45</version.bouncy>
@@ -105,6 +105,13 @@
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
             <url>http://maven.restlet.org</url>
+        </repository>
+
+        <!-- RDF -->
+        <repository>
+            <id>openrdf-repository</id>
+            <name>Public online OpenRDF repository</name>
+            <url>http://repo.aduna-software.org/maven2/releases/</url>
         </repository>
 
     </repositories>

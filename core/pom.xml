@@ -35,14 +35,14 @@
         <!-- Qi4j bootstrap -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-bootstrap</artifactId>
+            <artifactId>org.qi4j.core.bootstrap</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
 
         <!-- Qi4j persistence / query -->
         <dependency>
             <groupId>org.qi4j.extension</groupId>
-            <artifactId>qi4j-entitystore-sql</artifactId>
+            <artifactId>org.qi4j.extension.entitystore-sql</artifactId>
             <version>${version.qi4j}</version>
             <exclusions>
                 <exclusion>
@@ -53,24 +53,24 @@
         </dependency>
         <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-rdf</artifactId>
+            <artifactId>org.qi4j.library.rdf</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
             <groupId>org.qi4j.extension</groupId>
-            <artifactId>qi4j-indexing-rdf</artifactId>
+            <artifactId>org.qi4j.extension.indexing-rdf</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
             <groupId>org.qi4j.extension</groupId>
-            <artifactId>qi4j-reindexer</artifactId>
+            <artifactId>org.qi4j.extension.reindexer</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
 
         <!-- Tests -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-testsupport</artifactId>
+            <artifactId>org.qi4j.core.testsupport</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>

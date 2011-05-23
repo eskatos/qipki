@@ -40,31 +40,31 @@ public abstract class QiPkiEmbeddedCaAssembler
         app.setName( CaAssemblyNames.APPLICATION_NAME );
         app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
 
-        LayerAssembly config = app.layerAssembly( CaAssemblyNames.LAYER_CONFIGURATION );
+        LayerAssembly config = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );
         {
-            ModuleAssembly configMa = config.moduleAssembly( CaAssemblyNames.MODULE_CONFIGURATION );
+            ModuleAssembly configMa = config.module( CaAssemblyNames.MODULE_CONFIGURATION );
             configMa.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             configMa.addEntities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
-        LayerAssembly application = app.layerAssembly( CaAssemblyNames.LAYER_APPLICATION );
+        LayerAssembly application = app.layer( CaAssemblyNames.LAYER_APPLICATION );
         {
             new CaDCIModuleAssembler().assemble(
-                    application.moduleAssembly( CaAssemblyNames.MODULE_CA_DCI ) );
+                    application.module( CaAssemblyNames.MODULE_CA_DCI ) );
         }
 
-        LayerAssembly domain = app.layerAssembly( CaAssemblyNames.LAYER_DOMAIN );
+        LayerAssembly domain = app.layer( CaAssemblyNames.LAYER_DOMAIN );
         {
             new CaDomainModuleAssembler().assemble(
-                    domain.moduleAssembly( CaAssemblyNames.MODULE_CA_DOMAIN ) );
+                    domain.module( CaAssemblyNames.MODULE_CA_DOMAIN ) );
         }
 
-        LayerAssembly crypto = app.layerAssembly( CaAssemblyNames.LAYER_CRYPTO );
+        LayerAssembly crypto = app.layer( CaAssemblyNames.LAYER_CRYPTO );
         {
             new CryptoEngineModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( CaAssemblyNames.MODULE_CRYPTO_ENGINE ) );
+                    crypto.module( CaAssemblyNames.MODULE_CRYPTO_ENGINE ) );
             new CryptoValuesModuleAssembler( Visibility.application ).assemble(
-                    crypto.moduleAssembly( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
+                    crypto.module( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
         }
 
         application.uses( domain, crypto, config );

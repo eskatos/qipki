@@ -25,17 +25,17 @@
         <!-- Qi4j -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-api</artifactId>
+            <artifactId>org.qi4j.core.api</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-bootstrap</artifactId>
+            <artifactId>org.qi4j.core.bootstrap</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-constraints</artifactId>
+            <artifactId>org.qi4j.library.constraints</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
 
@@ -72,13 +72,13 @@
         </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-testsupport</artifactId>
+            <artifactId>org.qi4j.core.testsupport</artifactId>
             <version>${version.qi4j}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
-            <artifactId>qi4j-core-runtime</artifactId>
+            <artifactId>org.qi4j.core.runtime</artifactId>
             <version>${version.qi4j}</version>
             <scope>test</scope>
         </dependency>

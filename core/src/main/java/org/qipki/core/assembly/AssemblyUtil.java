@@ -55,7 +55,7 @@ public final class AssemblyUtil
             public void visitModule( ModuleAssembly assembly )
                     throws AssemblyException
             {
-                if ( layerName.equals( assembly.layerAssembly().name() ) && moduleName.equals( assembly.name() ) ) {
+                if ( layerName.equals( assembly.layer().name() ) && moduleName.equals( assembly.name() ) ) {
                     holder.setHolded( assembly );
                 }
 

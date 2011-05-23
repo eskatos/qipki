@@ -42,15 +42,13 @@ public class QiPkiHttpCaAssembler
 
         ApplicationAssembly app = super.assemble( applicationFactory );
 
-        LayerAssembly presentation = app.layerAssembly( HttpCaAssemblyNames.LAYER_PRESENTATION );
+        LayerAssembly presentation = app.layer( HttpCaAssemblyNames.LAYER_PRESENTATION );
         {
-            assembleDevTestModule( presentation.moduleAssembly( HttpCaAssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
+            assembleDevTestModule( presentation.module( HttpCaAssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
 
-            new RestApiModuleAssembler().assemble(
-                    presentation.moduleAssembly( HttpCaAssemblyNames.MODULE_REST_API ) );
+            new RestApiModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_REST_API ) );
 
-            new HttpModuleAssembler().assemble(
-                    presentation.moduleAssembly( HttpCaAssemblyNames.MODULE_HTTP ) );
+            new HttpModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_HTTP ) );
         }
 
         // Add JettyConfiguration to the Configuration module

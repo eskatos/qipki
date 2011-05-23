@@ -24,7 +24,7 @@
         <!-- Serving HTTP -->
         <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-http</artifactId>
+            <artifactId>org.qi4j.library.http</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
@@ -57,7 +57,7 @@
         <!-- Shiro -->
         <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>qi4j-lib-shiro-web</artifactId>
+            <artifactId>org.qi4j.library.shiro-web</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
 

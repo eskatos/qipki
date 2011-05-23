@@ -61,9 +61,9 @@ public class QiPkiPersistentEmbeddedCaAssembler
         ApplicationAssembly appAssembly = super.assemble( applicationFactory );
 
 
-        LayerAssembly infrastructure = appAssembly.layerAssembly( CaAssemblyNames.LAYER_INFRASTRUCTURE );
+        LayerAssembly infrastructure = appAssembly.layer( CaAssemblyNames.LAYER_INFRASTRUCTURE );
         {
-            ModuleAssembly persistenceMa = infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE );
+            ModuleAssembly persistenceMa = infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE );
 
             if ( dataSource != null ) {
 

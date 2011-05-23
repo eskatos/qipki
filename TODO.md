@@ -8,6 +8,8 @@ Add some generated documentation to the build process
 
 Fix entitystore-sql failures exposed by the multithreaded stress test
 
+Replace indexing-rdf by indexing-solr
+
 Add @Aggregated in EscrowedKeyPair
 
 Store keystores and CRLs on the filesystem using FileConfiguration API

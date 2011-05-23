@@ -32,10 +32,10 @@ public class QiPkiVolatileEmbeddedCaAssembler
     {
         ApplicationAssembly appAssembly = super.assemble( applicationFactory );
 
-        LayerAssembly infrastructure = appAssembly.layerAssembly( CaAssemblyNames.LAYER_INFRASTRUCTURE );
+        LayerAssembly infrastructure = appAssembly.layer( CaAssemblyNames.LAYER_INFRASTRUCTURE );
         {
             new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
-                    infrastructure.moduleAssembly( CaAssemblyNames.MODULE_PERSISTENCE ) );
+                    infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE ) );
         }
 
         LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );

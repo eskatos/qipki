@@ -66,30 +66,30 @@ public class StructureReflectorTest
         {
             ApplicationAssembly app = aaf.newApplicationAssembly();
 
-            LayerAssembly presentation = app.layerAssembly( "Presentation" );
+            LayerAssembly presentation = app.layer( "Presentation" );
             {
-                ModuleAssembly http = presentation.moduleAssembly( "HTTP" );
+                ModuleAssembly http = presentation.module( "HTTP" );
                 http.addServices( HttpService.class ).instantiateOnStartup();
             }
 
-            LayerAssembly application = app.layerAssembly( "Application" );
+            LayerAssembly application = app.layer( "Application" );
             {
-                ModuleAssembly contexts = application.moduleAssembly( "Contexts" );
+                ModuleAssembly contexts = application.module( "Contexts" );
             }
 
-            LayerAssembly domain = app.layerAssembly( "Domain" );
+            LayerAssembly domain = app.layer( "Domain" );
             {
-                ModuleAssembly model = domain.moduleAssembly( "Model" );
+                ModuleAssembly model = domain.module( "Model" );
                 model.addEntities( Thing.class );
                 model.addValues( ThingPart.class );
                 model.addTransients( VolatileThing.class );
                 model.addServices( ThingFactory.class );
             }
 
-            LayerAssembly infra = app.layerAssembly( "Infrastructure" );
+            LayerAssembly infra = app.layer( "Infrastructure" );
             {
-                ModuleAssembly persistence = infra.moduleAssembly( "Persistence" );
-                ModuleAssembly messaging = infra.moduleAssembly( "Messaging" );
+                ModuleAssembly persistence = infra.module( "Persistence" );
+                ModuleAssembly messaging = infra.module( "Messaging" );
                 messaging.addServices( MailerService.class );
             }
 
