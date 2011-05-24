@@ -3,10 +3,11 @@
 
 Add some generated documentation to the build process
 
+Fix entitystore-sql failures exposed by the multithreaded stress test
+
+
 
 # Next steps
-
-Fix entitystore-sql failures exposed by the multithreaded stress test
 
 Replace indexing-rdf by indexing-solr
 

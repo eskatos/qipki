@@ -5,7 +5,7 @@
 * Fixed X.509 SubjectKeyIdentifier extension parsing
 * Global package name change from org.codeartisans.* to org.qipki.*
 * Added a configurable Random service
-* Added ciphering capabilities to o.q.crypto
+* Added symetric ciphering capabilities to o.q.crypto
 * Added a JceDetector and a unit test that enforce that the JCE are installed
 * Upstream update: Qi4j 1.3
 * Fixed o.q:ca dependencies
