@@ -13,14 +13,14 @@
  */
 package org.qipki.reflect;
 
-import org.qipki.reflect.beans.ApplicationBeanVisitor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import org.qi4j.spi.structure.ApplicationModelSPI;
-import org.qipki.reflect.StructureReflector;
+import org.qipki.reflect.beans.ApplicationBean;
+import org.qipki.reflect.beans.ApplicationBeanVisitor;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
@@ -41,24 +41,38 @@ public class StringTemplateStructureReflector
     @Override
     public void writePlainTextStructure( ApplicationModelSPI applicationModel, StringWriter writer )
     {
-        ApplicationBeanVisitor visitor = new ApplicationBeanVisitor();
-        applicationModel.visitDescriptor( visitor );
+        writeTextStructure( applicationModel, writer, "ascii-application.st" );
+    }
 
-        STGroup group = new STGroup();
-        group.defineTemplate( "structure", "app", readTemplate() );
-        ST template = group.getInstanceOf( "structure" );
-        template.add( "app", visitor.applicationBean() );
+    @Override
+    public void writeHtmlStructure( ApplicationModelSPI applicationModel, StringWriter writer )
+    {
+        writeTextStructure( applicationModel, writer, "html-application.st" );
+    }
+
+    private void writeTextStructure( ApplicationModelSPI applicationModel, StringWriter writer, String templateName )
+    {
+        ApplicationBean appBean = buildBean( applicationModel );
+        ST template = readTemplate( templateName );
+        template.add( "app", appBean );
         writer.append( template.render() ).append( "\n" );
     }
 
-    private String readTemplate()
+    private ApplicationBean buildBean( ApplicationModelSPI applicationModel )
+    {
+        ApplicationBeanVisitor visitor = new ApplicationBeanVisitor();
+        applicationModel.visitDescriptor( visitor );
+        return visitor.applicationBean();
+    }
+
+    private ST readTemplate( String templateName )
     {
         InputStream is = null;
         try {
 
             final char[] buffer = new char[ 0x10000 ];
             StringBuilder out = new StringBuilder();
-            is = getClass().getResourceAsStream( "application.st" );
+            is = getClass().getResourceAsStream( templateName );
             Reader in = new InputStreamReader( is, "UTF-8" );
             int read;
             do {
@@ -67,9 +81,11 @@ public class StringTemplateStructureReflector
                     out.append( buffer, 0, read );
                 }
             } while ( read >= 0 );
+
             String template = out.toString();
-            System.out.println( template );
-            return template;
+            STGroup group = new STGroup( '$', '$' );
+            group.defineTemplate( "structure", "app", template );
+            return group.getInstanceOf( "structure" );
 
         } catch ( IOException ex ) {
             throw new RuntimeException( ex.getMessage(), ex );

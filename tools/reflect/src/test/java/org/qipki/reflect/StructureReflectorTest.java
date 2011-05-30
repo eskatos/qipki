@@ -13,10 +13,16 @@
  */
 package org.qipki.reflect;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import org.junit.Test;
 import org.qi4j.api.composite.TransientComposite;
 import org.qi4j.api.entity.EntityComposite;
+import org.qi4j.api.io.Inputs;
+import org.qi4j.api.io.Outputs;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueComposite;
 import org.qi4j.bootstrap.ApplicationAssembler;
@@ -56,6 +62,25 @@ public class StructureReflectorTest
         System.out.println();
     }
 
+    @Test
+    public void testHtml()
+            throws AssemblyException, UnsupportedEncodingException, IOException
+    {
+        ApplicationModelSPI appModel = new Energy4Java().newApplicationModel( new PanCakesAppAssembler() );
+
+        StructureReflector reflector = serviceLocator.<StructureReflector>findService( StructureReflector.class ).get();
+
+        StringWriter sw = new StringWriter();
+        reflector.writeHtmlStructure( appModel, sw );
+
+        System.out.println();
+        System.out.println( sw.toString() );
+        System.out.println();
+
+        Inputs.byteBuffer( new ByteArrayInputStream( sw.toString().getBytes( "UTF-8" ) ), 64 ).
+                transferTo( Outputs.byteBuffer( new File( "target/application.html" ) ) );
+    }
+
     public static class PanCakesAppAssembler
             implements ApplicationAssembler
     {
@@ -80,9 +105,9 @@ public class StructureReflectorTest
             LayerAssembly domain = app.layer( "Domain" );
             {
                 ModuleAssembly model = domain.module( "Model" );
-                model.addEntities( Thing.class );
-                model.addValues( ThingPart.class );
-                model.addTransients( VolatileThing.class );
+                model.entities( Thing.class );
+                model.values( ThingPart.class );
+                model.transients( VolatileThing.class );
                 model.addServices( ThingFactory.class );
             }
 

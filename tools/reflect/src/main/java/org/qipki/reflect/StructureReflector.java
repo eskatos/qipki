@@ -22,4 +22,6 @@ public interface StructureReflector
 
     void writePlainTextStructure( ApplicationModelSPI applicationModel, StringWriter writer );
 
+    void writeHtmlStructure( ApplicationModelSPI applicationModel, StringWriter writer );
+
 }
