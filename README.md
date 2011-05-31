@@ -17,7 +17,7 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 * Added a JceDetector and a unit test that enforce that the JCE are installed
 * Upstream update: Qi4j 1.3
 * Fixed o.q:ca dependencies
-* Minor impact upstream update : restlet from 2.0-M? to stable 2.0.6
+* Minor impact upstream update : restlet from 2.0-M? to stable 2.0.7
 * Added code documentation
 
 ### 1.0-alpha6
