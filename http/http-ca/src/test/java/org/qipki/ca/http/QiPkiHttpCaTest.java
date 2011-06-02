@@ -134,6 +134,7 @@ public class QiPkiHttpCaTest
     }
 
     @Test
+    @Ignore // Ignored for speeding up the release process
     // Run 500 testCA using 20 threads doing 25 testCA each
     public void testMultiThreaded()
             throws InterruptedException
