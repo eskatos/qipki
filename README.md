@@ -10,6 +10,10 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 
 ### master
 
+* Upstream update: Qi4j 1.4-SNAPSHOT
+
+### 1.0-alpha7 - 2011/06/02
+
 * Global package name change from org.codeartisans.* to org.qipki.*
 * Fixed entitystore-sql failures exposed by the multithreaded stress test
 * Fixed X.509 SubjectKeyIdentifier extension parsing
@@ -22,13 +26,13 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 * Upstream update: Qi4j 1.3
 * Minor impact upstream update : restlet from 2.0-M? to stable 2.0.7
 
-### 1.0-alpha6
+### 1.0-alpha6 - 2011/02/03
 
 * Deactivated CRL generation as the property was growing infinetely, CRLs ...
 * Hacking documentation
 * Minor impact upstream update : o.c.j:java-toolbox:1.4
 
-### 1.0-alpha5
+### 1.0-alpha5 - 2010/12/06
 
 * Fixed X.509 KeyUsage extension parsing
 * Index rebuild on startup only if the index directory does not exists
@@ -38,11 +42,11 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 * Factor out osgi in the build system to make cleaner releases and global cleanup
 * Minor impact upstream update : o.c.j:java-toolbox:1.3
 
-### 1.0-alpha4
+### 1.0-alpha4 - 2011/11/15
 
 * Inconditional index rebuild on startup
 
-### 1.0-alpha1
+### 1.0-alpha1 - 2010/10/30
 
 * Initial release
 
