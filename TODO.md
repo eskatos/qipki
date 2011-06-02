@@ -3,15 +3,12 @@
 
 Add some generated documentation to the build process
 
-Fix entitystore-sql failures exposed by the multithreaded stress test
-
+Store keystores and CRLs on the filesystem using FileConfiguration API
 
 
 # Next steps
 
 Replace indexing-rdf by indexing-solr
-
-Store keystores and CRLs on the filesystem using FileConfiguration API
 
 Add CRL Endpoint in issued X509Certificates
 
