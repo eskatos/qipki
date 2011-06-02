@@ -10,15 +10,17 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 
 ### master
 
-* Fixed X.509 SubjectKeyIdentifier extension parsing
 * Global package name change from org.codeartisans.* to org.qipki.*
+* Fixed entitystore-sql failures exposed by the multithreaded stress test
+* Fixed X.509 SubjectKeyIdentifier extension parsing
+* Fixed o.q:ca dependencies
+* Added @UnitOfWorkRetry concern on CAContext.updateCa
 * Added a configurable Random service
 * Added symetric ciphering capabilities to o.q.crypto
 * Added a JceDetector and a unit test that enforce that the JCE are installed
-* Upstream update: Qi4j 1.3
-* Fixed o.q:ca dependencies
-* Minor impact upstream update : restlet from 2.0-M? to stable 2.0.7
 * Added code documentation
+* Upstream update: Qi4j 1.3
+* Minor impact upstream update : restlet from 2.0-M? to stable 2.0.7
 
 ### 1.0-alpha6
 
