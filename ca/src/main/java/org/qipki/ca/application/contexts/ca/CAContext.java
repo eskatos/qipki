@@ -32,6 +32,7 @@ import org.qipki.crypto.storage.KeyStoreType;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.api.unitofwork.UnitOfWorkRetry;
 
 public class CAContext
         extends Context
@@ -45,6 +46,7 @@ public class CAContext
         return context.role( CA.class );
     }
 
+    @UnitOfWorkRetry
     public CA updateCA( Map<String, KeyEscrowPolicy> profileAssignments )
     {
         UnitOfWork uow = uowf.currentUnitOfWork();
