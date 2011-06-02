@@ -18,26 +18,30 @@ import java.io.IOException;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
 
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
+import org.junit.AfterClass;
+import org.junit.Before;
+
 import org.qipki.commons.rest.values.CaApiURIsValue;
 import org.qipki.core.QiPkiApplication;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.testsupport.AbstractQiPkiHttpTest;
-
-import org.junit.Before;
 
 @SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiHttpCaTest
         extends AbstractQiPkiHttpTest
 {
 
-    protected CaApiURIsValue caApi;
+    protected static QiPkiApplication qipkiServer;
 
-    @Override
-    protected QiPkiApplication createQiPkiApplication()
+    @AfterClass
+    public static void stopQiPkiHttpCa()
     {
-        return new QiPkiTestApplicationHttpCa();
+        if ( qipkiServer != null ) {
+            qipkiServer.stop();
+        }
     }
+
+    protected CaApiURIsValue caApi;
 
     @Before
     public void before()

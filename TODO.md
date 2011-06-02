@@ -11,8 +11,6 @@ Fix entitystore-sql failures exposed by the multithreaded stress test
 
 Replace indexing-rdf by indexing-solr
 
-Add @Aggregated in EscrowedKeyPair
-
 Store keystores and CRLs on the filesystem using FileConfiguration API
 
 Add CRL Endpoint in issued X509Certificates
@@ -49,6 +47,7 @@ Create a CRLIssuer role
     Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
 
 Use @Concerns to factorize http Resources (error handling, logging etc..)
+
 
 Add shiro for handling roles/permissions
 
@@ -103,4 +102,12 @@ Swing Remote
     provide (rss?) feed
 
 
+
+
+# Quid ?
+
+
+Add @Aggregated in EscrowedKeyPair
+    On ManyAssociation<X509> x509s() ?
+    This would mean that when a EKP is deleted every associated X509 are deleted too
 

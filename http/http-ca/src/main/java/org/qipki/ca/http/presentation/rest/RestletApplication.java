@@ -135,9 +135,9 @@ public class RestletApplication
             response.setEntity( new ExceptionRepresentation( ex ) );
             // More info to send...
         } catch ( ConcurrentEntityModificationException ex ) {
-            LOGGER.warn( "423: {}", ex.getMessage(), ex );
+            LOGGER.warn( "409: {}", ex.getMessage(), ex );
             uow.discard();
-            response.setStatus( Status.CLIENT_ERROR_LOCKED );
+            response.setStatus( Status.CLIENT_ERROR_CONFLICT );
             response.setEntity( new ExceptionRepresentation( ex ) );
             // Info to try again...
         } catch ( UnitOfWorkCompletionException ex ) {

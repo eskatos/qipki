@@ -71,6 +71,7 @@ public abstract class AbstractQiPkiHttpTest
         registry.register( new Scheme( "http", PlainSocketFactory.getSocketFactory(), DEFAULT_PORT ) );
         ClientConnectionManager cm = new ThreadSafeClientConnManager( params, registry );
         httpClient = new DefaultHttpClient( cm, params );
+
     }
 
     protected final void addAcceptJsonHeader( HttpMessage httpMessage )

@@ -14,26 +14,29 @@
 package org.qipki.ca.http;
 
 import org.qipki.client.ca.assembly.QiPkiCaClientAssembler;
-import org.qipki.client.ca.services.CAClientService;
 import org.qipki.client.ca.services.CryptoStoreClientService;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 
 public class QiPkiHttpCaClientTest
         extends AbstractQiPkiHttpCaTest
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiHttpCaClientTest.class );
+    @BeforeClass
+    public static void startQiPkiHttpCa()
+    {
+        qipkiServer = new QiPkiTestApplicationHttpCa( QiPkiHttpCaClientTest.class.getSimpleName() );
+        qipkiServer.run();
+    }
+
     private CryptoStoreClientService cryptoStoreClient;
-    private CAClientService caClient;
 
     @Override
     public void assemble( ModuleAssembly module )
@@ -46,7 +49,6 @@ public class QiPkiHttpCaClientTest
     public void beforeClient()
     {
         cryptoStoreClient = serviceLocator.<CryptoStoreClientService>findService( CryptoStoreClientService.class ).get();
-        caClient = serviceLocator.<CAClientService>findService( CAClientService.class ).get();
     }
 
     @Test

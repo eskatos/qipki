@@ -27,7 +27,9 @@ import org.qipki.commons.rest.values.representations.RestListValue;
 import org.qipki.commons.rest.values.representations.RestValue;
 
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,13 @@ public class QiPkiCryptoStoreTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiCryptoStoreTest.class );
+
+    @BeforeClass
+    public static void startQiPkiHttpCa()
+    {
+        qipkiServer = new QiPkiTestApplicationHttpCa( QiPkiCryptoStoreTest.class.getSimpleName() );
+        qipkiServer.run();
+    }
 
     @Test
     public void testListKeystores()
@@ -73,6 +82,7 @@ public class QiPkiCryptoStoreTest
                                                                                           "changeit".toCharArray() );
         post.setEntity( new StringEntity( params.toJSON() ) );
         String ksJson = httpClient.execute( post, strResponseHandler );
+        LOGGER.info( "testCreateKeyStore JSON: " + ksJson );
         CryptoStoreValue ks = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, ksJson );
 
         assertEquals( ksName, ks.name().get() );

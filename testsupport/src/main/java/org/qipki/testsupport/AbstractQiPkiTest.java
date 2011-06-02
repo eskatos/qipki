@@ -13,41 +13,27 @@
  */
 package org.qipki.testsupport;
 
-import info.aduna.io.FileUtil;
+import org.junit.Before;
 
-import java.io.File;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.test.AbstractQi4jTest;
 
 import org.qipki.commons.assembly.CryptoValuesModuleAssembler;
 import org.qipki.commons.assembly.RestValuesModuleAssembler;
 import org.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.rest.values.params.ParamsFactory;
-import org.qipki.core.QiPkiApplication;
 import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.x509.X509Generator;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.AbstractQi4jTest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiTest
         extends AbstractQi4jTest
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( AbstractQiPkiTest.class );
-    protected static final File ENTITIES_DIRECTORY = new File( "target/qi4j-entities" );
-    protected static final File INDEX_DIRECTORY = new File( "target/qi4j-index" );
-    protected QiPkiApplication qipkiServer;
     protected CryptIO cryptio;
     protected X509Generator x509Generator;
     protected AsymetricGenerator asymGenerator;
@@ -61,42 +47,18 @@ public abstract class AbstractQiPkiTest
             throws AssemblyException
     {
         new CryptoEngineModuleAssembler().assemble( module );
-        new RestValuesModuleAssembler().assemble( module );
         new CryptoValuesModuleAssembler().assemble( module );
-    }
-
-    @BeforeClass
-    public static void qipPkiTestBeforeClass()
-    {
-        LOGGER.info( "BEFORE_CLASS WILL DELETE INDEX REPOSITORY AND ENTITIES STORE DATA" );
-        FileUtil.deltree( ENTITIES_DIRECTORY );
-        FileUtil.deltree( INDEX_DIRECTORY );
-        if ( ENTITIES_DIRECTORY.exists() ) {
-            throw new IllegalStateException( ENTITIES_DIRECTORY + " still exists cannot continue" );
-        }
-        if ( INDEX_DIRECTORY.exists() ) {
-            throw new IllegalStateException( INDEX_DIRECTORY + " still exists cannot continue" );
-        }
+        new RestValuesModuleAssembler().assemble( module );
     }
 
     @Before
     public void qiPkiTestBefore()
     {
-        qipkiServer = createQiPkiApplication();
-        qipkiServer.run();
         x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
         asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
         paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
         cryptoValuesFactory = serviceLocator.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
         x509ExtValuesFactory = serviceLocator.<X509ExtensionsValueFactory>findService( X509ExtensionsValueFactory.class ).get();
-    }
-
-    protected abstract QiPkiApplication createQiPkiApplication();
-
-    @After
-    public void qiPkiTestAfter()
-    {
-        qipkiServer.stop();
     }
 
 }
