@@ -25,6 +25,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.library.fileconfig.FileConfiguration;
 
 public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
@@ -43,8 +44,9 @@ public abstract class QiPkiEmbeddedCaAssembler
         LayerAssembly config = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );
         {
             ModuleAssembly configMa = config.module( CaAssemblyNames.MODULE_CONFIGURATION );
+            configMa.addServices( FileConfiguration.class ).visibleIn( Visibility.application );
             configMa.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
-            configMa.addEntities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
+            configMa.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
         LayerAssembly application = app.layer( CaAssemblyNames.LAYER_APPLICATION );
