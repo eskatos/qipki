@@ -15,3 +15,5 @@ osgi/osgi-main/target
 osgi/osgi-dist/target
 tools/target
 tools/reflect/target
+main/target
+main/http-ca/target

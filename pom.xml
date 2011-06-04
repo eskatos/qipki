@@ -13,8 +13,10 @@
     <version>1.0-alpha8-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
+    <description>${project.artifactId}</description>
     <packaging>pom</packaging>
-    <url>https://github.com/eskatos/qipki</url>
+    <url>http://qipki.org</url>
+    <inceptionYear>2010</inceptionYear>
 
     <licenses>
         <license>
@@ -39,7 +41,7 @@
     </scm>
 
     <properties>
-        <version.qi4j>1.4-SNAPSHOT</version.qi4j>
+        <version.qi4j>1.3</version.qi4j>
         <version.restlet>2.0.7</version.restlet>
         <version.bouncy>1.45</version.bouncy>
         <version.slf4j>1.6.1</version.slf4j>
@@ -73,8 +75,8 @@
         <!-- Clients -->
         <module>clients</module>
 
-        <!-- OSGI Experiment -->
-        <!--module>osgi</module-->
+	<!-- Mains -->
+        <module>main</module>
 
     </modules>
 

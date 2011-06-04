@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.codeartisans.qipki.qipki-main</groupId>
+    <artifactId>qipki-main-parent</artifactId>
+    <version>1.0-alpha8-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>qipki-main-http-ca</artifactId>
+
+  <name>${project.artifactId}</name>
+  <url>http://qipki.org</url>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codeartisans</groupId>
+        <artifactId>artifactinfo-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>artifactinfo</id>
+            <goals>
+              <goal>artifactinfo</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <packageName>org.qipki.main.http.ca</packageName>
+              <className>QiPkiHttpCaArtifactInfo</className>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.codeartisans.qipki.qipki-http</groupId>
+      <artifactId>qipki-http-ca</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.jopt-simple</groupId>
+      <artifactId>jopt-simple</artifactId>
+      <version>3.3</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
