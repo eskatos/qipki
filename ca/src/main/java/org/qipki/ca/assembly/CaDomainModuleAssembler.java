@@ -55,18 +55,18 @@ public class CaDomainModuleAssembler
             throws AssemblyException
     {
         // Values
-        ma.addValues( ValidityIntervalValue.class );
+        ma.values( ValidityIntervalValue.class );
 
         // Entities
-        ma.addEntities( CryptoStoreEntity.class,
-                        RootCAEntity.class,
-                        SubCAEntity.class,
-                        CRLEntity.class,
-                        X509ProfileAssignmentEntity.class,
-                        X509ProfileEntity.class,
-                        X509Entity.class,
-                        RevocationEntity.class,
-                        EscrowedKeyPairEntity.class ).
+        ma.entities( CryptoStoreEntity.class,
+                     RootCAEntity.class,
+                     SubCAEntity.class,
+                     CRLEntity.class,
+                     X509ProfileAssignmentEntity.class,
+                     X509ProfileEntity.class,
+                     X509Entity.class,
+                     RevocationEntity.class,
+                     EscrowedKeyPairEntity.class ).
                 visibleIn( Visibility.application );
 
         // Services
