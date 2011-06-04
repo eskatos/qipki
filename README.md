@@ -11,6 +11,7 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 ### master
 
 * Upstream update: Qi4j 1.4-SNAPSHOT
+* Completely removed OSGi support
 
 ### 1.0-alpha7 - 2011/06/02
 
