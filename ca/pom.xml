@@ -32,6 +32,12 @@
             <version>${version.qi4j}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.qi4j.extension</groupId>
+            <artifactId>org.qi4j.extension.migration</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
