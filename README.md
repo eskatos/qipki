@@ -10,6 +10,9 @@ This is Work In Progress, don't expect something with easy setup and comprehensi
 
 ### master
 
+* Added a Management layer to the QiPkiHttpCa application exposing the Qi4j application structure through JMX
+* Added a main program to run qipki-http-ca
+* Added a distribution assembly for qipki-htp-ca with startup scripts for Unix and Windows
 * Upstream update: Qi4j 1.4-SNAPSHOT
 * Completely removed OSGi support
 
