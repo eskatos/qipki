@@ -13,6 +13,8 @@
  */
 package org.qipki.ca.http.assembly;
 
+import java.io.IOException;
+import org.codeartisans.java.toolbox.network.FreePortFinder;
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qipki.ca.assembly.CaAssemblyNames;
 import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
@@ -34,9 +36,12 @@ public class QiPkiHttpCaAssembler
         extends QiPkiPersistentEmbeddedCaAssembler
 {
 
-    public QiPkiHttpCaAssembler( String connectionString, String finderDataDirectory )
+    private final Integer jmxPort;
+
+    public QiPkiHttpCaAssembler( String connectionString, String finderDataDirectory, Integer jmxPort )
     {
         super( connectionString, finderDataDirectory );
+        this.jmxPort = jmxPort;
     }
 
     @Override
@@ -69,7 +74,15 @@ public class QiPkiHttpCaAssembler
             config.entities( JettyConfiguration.class, JMXConnectorConfiguration.class ).visibleIn( Visibility.application );
             JMXConnectorConfiguration jmxConfigDefaults = config.forMixin( JMXConnectorConfiguration.class ).declareDefaults();
             jmxConfigDefaults.enabled().set( Boolean.TRUE );
-            jmxConfigDefaults.port().set( 1099 );
+            if ( jmxPort != null && jmxPort != -1 ) {
+                jmxConfigDefaults.port().set( jmxPort );
+            } else {
+                try {
+                    jmxConfigDefaults.port().set( FreePortFinder.findRandom() );
+                } catch ( IOException ex ) {
+                    throw new AssemblyException( "No default JMX port provided and unable to dynamicaly find a free one", ex );
+                }
+            }
         }
 
         // Management Layer uses all application layers

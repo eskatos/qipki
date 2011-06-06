@@ -126,10 +126,10 @@
         <configuration>
           <executable>sh</executable>
           <arguments>
-            <argument>${project.build.directory}/${project.artifactId}/bin/${project.artifactId}</argument>
+            <argument>${project.build.directory}/${dist.name}/bin/${dist.name}</argument>
             <argument>--verbose</argument>
             <argument>--data-dir</argument>
-            <argument>${project.build.directory}/${project.artifactId}-data</argument>
+            <argument>${project.build.directory}/${dist.name}-data</argument>
           </arguments>
         </configuration>
       </plugin>

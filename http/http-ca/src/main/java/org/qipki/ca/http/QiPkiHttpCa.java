@@ -52,10 +52,11 @@ public final class QiPkiHttpCa
         extends AbstractQiPkiApplication
 {
 
-    public QiPkiHttpCa( File baseDataDirectory )
+    public QiPkiHttpCa( File baseDataDirectory, Integer jmxPort )
     {
         super( new QiPkiHttpCaAssembler( "jdbc:derby:" + new File( baseDataDirectory, "ca-store" ).getAbsolutePath() + ";create=true",
-                                         new File( baseDataDirectory, "ca-index" ).getAbsolutePath() ) );
+                                         new File( baseDataDirectory, "ca-index" ).getAbsolutePath(),
+                                         jmxPort ) );
         setUpLogging();
     }
 

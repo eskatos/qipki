@@ -22,8 +22,8 @@ import java.util.Calendar;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.qipki.ca.http.QiPkiHttpCa;
 
+import org.qipki.ca.http.QiPkiHttpCa;
 import static org.qipki.main.http.ca.QiPkiHttpCaOptionParser.Options.*;
 
 public class Main
@@ -43,23 +43,20 @@ public class Main
             }
 
             boolean verbose = options.has( VERBOSE );
-            boolean daemon = options.has( DAEMON );
             File dataDir = options.valueOf( parser.getDataDirSpec() );
             Integer jmxPort = options.valueOf( parser.getJMXPortSpec() );
             String host = options.valueOf( parser.getHostSpec() );
             Integer port = options.valueOf( parser.getPortSpec() );
 
-            System.out.println( "Will start with the following options:" );
-            System.out.println( "\tverbose: " + verbose );
-            System.out.println( "\tdaemon: " + daemon );
-            System.out.println( "\tdata-dir: " + dataDir.getAbsolutePath() );
-            System.out.println( "\tJMX port: " + jmxPort );
-            System.out.println( "\thost: " + host );
-            System.out.println( "\tport: " + port );
+            if ( verbose ) {
+                System.out.println( QiPkiHttpCaArtifactInfo.NAME + " will start with the following options:" );
+                System.out.println( "\tverbose: " + verbose );
+                System.out.println( "\tdata-dir: " + dataDir.getAbsolutePath() );
+                System.out.println( "\thost: " + host );
+                System.out.println( "\tport: " + port );
+            }
 
-            enableJMX( jmxPort );
-
-            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( dataDir );
+            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( dataDir, jmxPort );
             qiPkiHttpCa.run();
             Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
             {
@@ -72,8 +69,6 @@ public class Main
 
             } ) );
 
-            sleep();
-
         } catch ( OptionException ex ) {
 
             System.out.println( ex.getMessage() );
@@ -83,24 +78,6 @@ public class Main
         }
     }
 
-    private static void sleep()
-    {
-        try {
-            Thread.sleep( Integer.MAX_VALUE );
-        } catch ( InterruptedException ex ) {
-            ex.printStackTrace();
-        }
-    }
-
-    private static void enableJMX( Integer jmxPort )
-    {
-        // Enable JMX
-        System.setProperty( "com.sun.management.jmxremote", "" );
-        if ( jmxPort != null ) {
-            // Enable remote JMX on given port
-            System.setProperty( "com.sun.management.jmxremote.port", jmxPort.toString() );
-        }
-    }
 
     /* package */ static void printHelp( OptionParser parser )
             throws IOException

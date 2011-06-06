@@ -27,7 +27,6 @@ import joptsimple.ValueConverter;
 
         String HELP = "help";
         String VERBOSE = "verbose";
-        String DAEMON = "daemon";
         String DATA_DIR = "data-dir";
         String JMX_PORT = "jmx-port";
         String HOST = "host";
@@ -36,7 +35,6 @@ import joptsimple.ValueConverter;
 
     private final OptionSpec<Void> helpSpec;
     private final OptionSpec<Void> verboseSpec;
-    private final OptionSpec<Void> daemonSpec;
     private final OptionSpec<File> dataDirSpec;
     private final OptionSpec<Integer> jmxPortSpec;
     private final OptionSpec<String> hostSpec;
@@ -52,7 +50,6 @@ import joptsimple.ValueConverter;
 
         helpSpec = accepts( Options.HELP, "Show help" );
         verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
-        daemonSpec = accepts( Options.DAEMON, "Daemonize" );
         dataDirSpec = accepts( Options.DATA_DIR, "Base data directory" ).
                 withRequiredArg().
                 ofType( File.class ).
@@ -84,11 +81,6 @@ import joptsimple.ValueConverter;
     /* package */ OptionSpec<Void> getVerboseSpec()
     {
         return verboseSpec;
-    }
-
-    /* package */ OptionSpec<Void> getDaemonSpec()
-    {
-        return daemonSpec;
     }
 
     /* package */ OptionSpec<File> getDataDirSpec()

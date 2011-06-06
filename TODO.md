@@ -63,4 +63,5 @@
 * Add @Aggregated in EscrowedKeyPair
   * On ManyAssociation<X509> x509s() ?
   * This would mean that when a EKP is deleted every associated X509 are deleted too
+* Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 

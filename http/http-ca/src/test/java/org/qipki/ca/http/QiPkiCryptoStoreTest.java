@@ -19,17 +19,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
+import static org.junit.Assert.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import org.qipki.ca.http.utils.QiPkiCaFixtures;
+import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
 import org.qipki.commons.rest.values.representations.RestListValue;
 import org.qipki.commons.rest.values.representations.RestValue;
-
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
