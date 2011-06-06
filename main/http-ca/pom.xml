@@ -110,6 +110,8 @@
           <arguments>
             <argument>${project.build.directory}/${project.artifactId}/bin/${project.artifactId}</argument>
             <argument>--verbose</argument>
+            <argument>--data-dir</argument>
+            <argument>${project.build.directory}/${project.artifactId}-data</argument>
           </arguments>
         </configuration>
       </plugin>
@@ -129,6 +131,24 @@
       <artifactId>jopt-simple</artifactId>
       <version>3.3</version>
     </dependency>
+
+    <!-- SQLEntityStore -->
+    <dependency>
+      <groupId>org.java-sql-generator.implementation</groupId>
+      <artifactId>java-sql-generator-implementation</artifactId>
+      <version>0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>${version.derby}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+      <version>${version.derby}</version>
+    </dependency>
+
 
   </dependencies>
 

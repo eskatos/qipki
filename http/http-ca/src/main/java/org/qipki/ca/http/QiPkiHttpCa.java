@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.http;
 
+import java.io.File;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -51,9 +52,10 @@ public final class QiPkiHttpCa
         extends AbstractQiPkiApplication
 {
 
-    public QiPkiHttpCa()
+    public QiPkiHttpCa( File baseDataDirectory )
     {
-        super( new QiPkiHttpCaAssembler( "TODO REFACTOR", "TODO REFACTOR" ) );
+        super( new QiPkiHttpCaAssembler( "jdbc:derby:" + new File( baseDataDirectory, "ca-store" ).getAbsolutePath() + ";create=true",
+                                         new File( baseDataDirectory, "ca-index" ).getAbsolutePath() ) );
         setUpLogging();
     }
 

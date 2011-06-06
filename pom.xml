@@ -43,6 +43,7 @@
     <properties>
         <version.qi4j>1.3</version.qi4j>
         <version.restlet>2.0.7</version.restlet>
+        <version.derby>10.7.1.1</version.derby>
         <version.bouncy>1.45</version.bouncy>
         <version.slf4j>1.6.1</version.slf4j>
         <version.logback>0.9.25</version.logback>

@@ -13,8 +13,10 @@
  */
 package org.qipki.main.http.ca;
 
+import java.io.File;
 import joptsimple.OptionParser;
 import joptsimple.OptionSpec;
+import joptsimple.ValueConverter;
 
 /* package */ class QiPkiHttpCaOptionParser
         extends OptionParser
@@ -26,6 +28,7 @@ import joptsimple.OptionSpec;
         String HELP = "help";
         String VERBOSE = "verbose";
         String DAEMON = "daemon";
+        String DATA_DIR = "data-dir";
         String JMX_PORT = "jmx-port";
         String HOST = "host";
         String PORT = "port";
@@ -34,6 +37,7 @@ import joptsimple.OptionSpec;
     private final OptionSpec<Void> helpSpec;
     private final OptionSpec<Void> verboseSpec;
     private final OptionSpec<Void> daemonSpec;
+    private final OptionSpec<File> dataDirSpec;
     private final OptionSpec<Integer> jmxPortSpec;
     private final OptionSpec<String> hostSpec;
     private final OptionSpec<Integer> portSpec;
@@ -43,11 +47,17 @@ import joptsimple.OptionSpec;
     {
         super();
 
-        PortValueConverter portConverter = new PortValueConverter();
+        ValueConverter<Integer> portConverter = new PortValueConverter();
+        ValueConverter<File> fileConverter = new FileValueConverter();
 
         helpSpec = accepts( Options.HELP, "Show help" );
         verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
         daemonSpec = accepts( Options.DAEMON, "Daemonize" );
+        dataDirSpec = accepts( Options.DATA_DIR, "Base data directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter ).
+                describedAs( "Data basedir" );
         jmxPortSpec = accepts( Options.JMX_PORT, "Enable remote JMX on given port" ).
                 withRequiredArg().
                 ofType( Integer.class ).
@@ -79,6 +89,11 @@ import joptsimple.OptionSpec;
     /* package */ OptionSpec<Void> getDaemonSpec()
     {
         return daemonSpec;
+    }
+
+    /* package */ OptionSpec<File> getDataDirSpec()
+    {
+        return dataDirSpec;
     }
 
     /* package */ OptionSpec<Integer> getJMXPortSpec()

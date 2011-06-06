@@ -21,6 +21,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- JMX -->
+        <dependency>
+            <groupId>org.qi4j.library</groupId>
+            <artifactId>org.qi4j.library.jmx</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
+
         <!-- Serving HTTP -->
         <dependency>
             <groupId>org.qi4j.library</groupId>
@@ -105,13 +112,13 @@
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.7.1.1</version>
+            <version>${version.derby}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyclient</artifactId>
-            <version>10.7.1.1</version>
+            <version>${version.derby}</version>
             <scope>test</scope>
         </dependency>
 

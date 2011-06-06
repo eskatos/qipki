@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.http.assembly;
 
+import org.qi4j.api.common.InvalidApplicationException;
 import org.qipki.ca.assembly.CaAssemblyNames;
 import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
 import org.qipki.core.assembly.AssemblyUtil;
@@ -21,9 +22,13 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.AssemblyVisitorAdapter;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.library.http.JettyConfiguration;
+import org.qi4j.library.jmx.JMXAssembler;
+import org.qi4j.library.jmx.JMXConnectorConfiguration;
+import org.qi4j.library.jmx.JMXConnectorService;
 
 public class QiPkiHttpCaAssembler
         extends QiPkiPersistentEmbeddedCaAssembler
@@ -42,6 +47,13 @@ public class QiPkiHttpCaAssembler
 
         ApplicationAssembly app = super.assemble( applicationFactory );
 
+        final LayerAssembly management = app.layer( HttpCaAssemblyNames.LAYER_MANAGEMENT );
+        {
+            ModuleAssembly jmx = management.module( HttpCaAssemblyNames.MODULE_JMX );
+            new JMXAssembler().assemble( jmx );
+            jmx.services( JMXConnectorService.class ).instantiateOnStartup();
+        }
+
         LayerAssembly presentation = app.layer( HttpCaAssemblyNames.LAYER_PRESENTATION );
         {
             assembleDevTestModule( presentation.module( HttpCaAssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
@@ -51,9 +63,29 @@ public class QiPkiHttpCaAssembler
             new HttpModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_HTTP ) );
         }
 
-        // Add JettyConfiguration to the Configuration module
+        // Add Configuration entities to the configuration module
         ModuleAssembly config = AssemblyUtil.getModuleAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
-        config.addEntities( JettyConfiguration.class ).visibleIn( Visibility.application );
+        {
+            config.entities( JettyConfiguration.class, JMXConnectorConfiguration.class ).visibleIn( Visibility.application );
+            JMXConnectorConfiguration jmxConfigDefaults = config.forMixin( JMXConnectorConfiguration.class ).declareDefaults();
+            jmxConfigDefaults.enabled().set( Boolean.TRUE );
+            jmxConfigDefaults.port().set( 1099 );
+        }
+
+        // Management Layer uses all application layers
+        app.visit( new AssemblyVisitorAdapter<InvalidApplicationException>()
+        {
+
+            @Override
+            public void visitLayer( LayerAssembly eachLayer )
+                    throws InvalidApplicationException
+            {
+                if ( !management.name().equals( eachLayer.name() ) ) {
+                    management.uses( eachLayer );
+                }
+            }
+
+        } );
 
         presentation.uses( AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_APPLICATION ),
                            AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CRYPTO ),

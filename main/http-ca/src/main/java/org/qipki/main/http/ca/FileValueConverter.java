@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,15 +11,32 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http.assembly;
+package org.qipki.main.http.ca;
 
-public interface HttpCaAssemblyNames
+import java.io.File;
+
+import joptsimple.ValueConverter;
+
+public class FileValueConverter
+        implements ValueConverter<File>
 {
 
-    String LAYER_MANAGEMENT = "management";
-    String MODULE_JMX = "jmx";
-    String LAYER_PRESENTATION = "presentation";
-    String MODULE_TESTS_IN_PRESENTATION = "tests-presentation";
-    String MODULE_REST_API = "rest-api";
-    String MODULE_HTTP = "http";
+    @Override
+    public File convert( String value )
+    {
+        return new File( value );
+    }
+
+    @Override
+    public Class<File> valueType()
+    {
+        return File.class;
+    }
+
+    @Override
+    public String valuePattern()
+    {
+        return "*.*";
+    }
+
 }

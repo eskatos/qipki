@@ -13,6 +13,7 @@
  */
 package org.qipki.main.http.ca;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -21,6 +22,7 @@ import java.util.Calendar;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.qipki.ca.http.QiPkiHttpCa;
 
 import static org.qipki.main.http.ca.QiPkiHttpCaOptionParser.Options.*;
 
@@ -42,6 +44,7 @@ public class Main
 
             boolean verbose = options.has( VERBOSE );
             boolean daemon = options.has( DAEMON );
+            File dataDir = options.valueOf( parser.getDataDirSpec() );
             Integer jmxPort = options.valueOf( parser.getJMXPortSpec() );
             String host = options.valueOf( parser.getHostSpec() );
             Integer port = options.valueOf( parser.getPortSpec() );
@@ -49,11 +52,25 @@ public class Main
             System.out.println( "Will start with the following options:" );
             System.out.println( "\tverbose: " + verbose );
             System.out.println( "\tdaemon: " + daemon );
+            System.out.println( "\tdata-dir: " + dataDir.getAbsolutePath() );
             System.out.println( "\tJMX port: " + jmxPort );
             System.out.println( "\thost: " + host );
             System.out.println( "\tport: " + port );
 
             enableJMX( jmxPort );
+
+            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( dataDir );
+            qiPkiHttpCa.run();
+            Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
+            {
+
+                @Override
+                public void run()
+                {
+                    qiPkiHttpCa.stop();
+                }
+
+            } ) );
 
             sleep();
 

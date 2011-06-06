@@ -6,7 +6,6 @@ testsupport/target
 ca/target
 http/target
 http/http-ca/target
-http/http-ca/derby.log
 clients/target
 clients/ca-http-client/target
 osgi/target
@@ -17,3 +16,4 @@ tools/target
 tools/reflect/target
 main/target
 main/http-ca/target
+derby.log
