@@ -14,6 +14,7 @@
 package org.qipki.main.http.ca;
 
 import joptsimple.OptionParser;
+import joptsimple.OptionSpec;
 
 /* package */ class QiPkiHttpCaOptionParser
         extends OptionParser
@@ -25,18 +26,74 @@ import joptsimple.OptionParser;
         String HELP = "help";
         String VERBOSE = "verbose";
         String DAEMON = "daemon";
+        String JMX_PORT = "jmx-port";
         String HOST = "host";
         String PORT = "port";
     }
 
+    private final OptionSpec<Void> helpSpec;
+    private final OptionSpec<Void> verboseSpec;
+    private final OptionSpec<Void> daemonSpec;
+    private final OptionSpec<Integer> jmxPortSpec;
+    private final OptionSpec<String> hostSpec;
+    private final OptionSpec<Integer> portSpec;
+
+
     /* package */ QiPkiHttpCaOptionParser()
     {
         super();
-        accepts( Options.HELP, "Show help" );
-        accepts( Options.VERBOSE, "Turn on verbose mode" );
-        accepts( Options.DAEMON, "Daemonize" );
-        accepts( Options.HOST, "HTTP service hostname or IP address" ).withRequiredArg().ofType( String.class ).describedAs( "host" ).defaultsTo( "127.0.0.1" );
-        accepts( Options.PORT, "HTTP service port number" ).withRequiredArg().ofType( Integer.class ).withValuesConvertedBy( new PortValueConverter() ).describedAs( "port" ).defaultsTo( 8443 );
+
+        PortValueConverter portConverter = new PortValueConverter();
+
+        helpSpec = accepts( Options.HELP, "Show help" );
+        verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
+        daemonSpec = accepts( Options.DAEMON, "Daemonize" );
+        jmxPortSpec = accepts( Options.JMX_PORT, "Enable remote JMX on given port" ).
+                withRequiredArg().
+                ofType( Integer.class ).
+                withValuesConvertedBy( portConverter ).
+                describedAs( "JMX port" );
+        hostSpec = accepts( Options.HOST, "HTTP service hostname or IP address" ).
+                withRequiredArg().
+                ofType( String.class ).
+                describedAs( "host" ).
+                defaultsTo( "127.0.0.1" );
+        portSpec = accepts( Options.PORT, "HTTP service port number" ).
+                withRequiredArg().
+                ofType( Integer.class ).
+                withValuesConvertedBy( portConverter ).
+                describedAs( "port" ).
+                defaultsTo( 8443 );
+    }
+
+    /* package */ OptionSpec<Void> getHelpSpec()
+    {
+        return helpSpec;
+    }
+
+    /* package */ OptionSpec<Void> getVerboseSpec()
+    {
+        return verboseSpec;
+    }
+
+    /* package */ OptionSpec<Void> getDaemonSpec()
+    {
+        return daemonSpec;
+    }
+
+    /* package */ OptionSpec<Integer> getJMXPortSpec()
+    {
+        return jmxPortSpec;
+    }
+
+    /* package */ OptionSpec<String> getHostSpec()
+    {
+        return hostSpec;
+    }
+
+    /* package */ OptionSpec<Integer> getPortSpec()
+    {
+        return portSpec;
     }
 
 }

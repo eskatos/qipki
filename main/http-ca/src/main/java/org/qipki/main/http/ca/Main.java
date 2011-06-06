@@ -13,8 +13,10 @@
  */
 package org.qipki.main.http.ca;
 
-import java.util.Calendar;
+import java.io.PrintWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Calendar;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
@@ -28,7 +30,7 @@ public class Main
     public static void main( String[] args )
             throws IOException
     {
-        OptionParser parser = new QiPkiHttpCaOptionParser();
+        QiPkiHttpCaOptionParser parser = new QiPkiHttpCaOptionParser();
         try {
 
             OptionSet options = parser.parse( args );
@@ -37,6 +39,23 @@ public class Main
                 printHelp( parser );
                 System.exit( 0 );
             }
+
+            boolean verbose = options.has( VERBOSE );
+            boolean daemon = options.has( DAEMON );
+            Integer jmxPort = options.valueOf( parser.getJMXPortSpec() );
+            String host = options.valueOf( parser.getHostSpec() );
+            Integer port = options.valueOf( parser.getPortSpec() );
+
+            System.out.println( "Will start with the following options:" );
+            System.out.println( "\tverbose: " + verbose );
+            System.out.println( "\tdaemon: " + daemon );
+            System.out.println( "\tJMX port: " + jmxPort );
+            System.out.println( "\thost: " + host );
+            System.out.println( "\tport: " + port );
+
+            enableJMX( jmxPort );
+
+            sleep();
 
         } catch ( OptionException ex ) {
 
@@ -47,15 +66,36 @@ public class Main
         }
     }
 
+    private static void sleep()
+    {
+        try {
+            Thread.sleep( Integer.MAX_VALUE );
+        } catch ( InterruptedException ex ) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void enableJMX( Integer jmxPort )
+    {
+        // Enable JMX
+        System.setProperty( "com.sun.management.jmxremote", "" );
+        if ( jmxPort != null ) {
+            // Enable remote JMX on given port
+            System.setProperty( "com.sun.management.jmxremote.port", jmxPort.toString() );
+        }
+    }
+
     /* package */ static void printHelp( OptionParser parser )
             throws IOException
     {
-        System.out.println();
-        System.out.println( QiPkiHttpCaArtifactInfo.NAME + ' ' + QiPkiHttpCaArtifactInfo.INCEPTION_YEAR + '-' + Calendar.getInstance().get( Calendar.YEAR ) );
-        System.out.println( QiPkiHttpCaArtifactInfo.VERSION );
-        System.out.println();
-        parser.printHelpOn( System.out );
-        System.out.println();
+        PrintWriter sw = new PrintWriter( new StringWriter() );
+        sw.println();
+        sw.println( QiPkiHttpCaArtifactInfo.NAME + ' ' + QiPkiHttpCaArtifactInfo.INCEPTION_YEAR + '-' + Calendar.getInstance().get( Calendar.YEAR ) );
+        sw.println( QiPkiHttpCaArtifactInfo.VERSION );
+        sw.println();
+        parser.printHelpOn( sw );
+        sw.println();
+        System.out.println( sw );
     }
 
 }
