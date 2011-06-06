@@ -17,6 +17,7 @@
 
   <properties>
     <main.class>org.qipki.main.http.ca.Main</main.class>
+    <dist.name>qipki-http-ca</dist.name>
   </properties>
 
   <build>
@@ -52,6 +53,9 @@
           </archive>
         </configuration>
       </plugin>
+
+
+      <!-- Application assembly -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
@@ -66,21 +70,14 @@
           </execution>
         </executions>
         <configuration>
-          <!-- Set the target configuration directory to be used in the bin scripts -->
-          <configurationDirectory>conf</configurationDirectory>
-          <!-- Copy the contents from "/src/main/config" to the target configuration directory in the assembled application -->
+          <configurationDirectory>etc</configurationDirectory>
           <copyConfigurationDirectory>true</copyConfigurationDirectory>
-          <!-- Include the target configuration directory in the beginning of the classpath declaration in the bin scripts -->
           <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-          <!-- prefix all bin files with "mycompany" -->
-          <binPrefix>qipki</binPrefix>
-          <!-- set alternative assemble directory -->
-          <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
-          <!-- Extra JVM arguments that will be included in the bin scripts -->
+          <!--binPrefix>qipki</binPrefix-->
+          <assembleDirectory>${project.build.directory}/${dist.name}</assembleDirectory>
           <extraJvmArguments>-Xms128m</extraJvmArguments>
           <repositoryName>lib</repositoryName>
           <repositoryLayout>flat</repositoryLayout>
-          <!-- Generate bin scripts for windows and unix pr default -->
           <platforms>
             <platform>windows</platform>
             <platform>unix</platform>
@@ -88,11 +85,32 @@
           <programs>
             <program>
               <mainClass>${main.class}</mainClass>
-              <name>${project.artifactId}</name>
+              <name>${dist.name}</name>
             </program>
           </programs>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>qipki-http-ca-assemblies</id>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/dist.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- Execution helper -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -115,6 +133,8 @@
           </arguments>
         </configuration>
       </plugin>
+
+
     </plugins>
   </build>
 
