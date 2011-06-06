@@ -26,10 +26,19 @@ import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
+import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
+
+    private FileConfigurationOverride fileConfigOverride;
+
+    public ApplicationAssembler withFileConfigurationOverride( FileConfigurationOverride fileConfigOverride )
+    {
+        this.fileConfigOverride = fileConfigOverride;
+        return this;
+    }
 
     @Override
     @SuppressWarnings( "unchecked" )
@@ -45,6 +54,9 @@ public abstract class QiPkiEmbeddedCaAssembler
         {
             ModuleAssembly configMa = config.module( CaAssemblyNames.MODULE_CONFIGURATION );
             configMa.addServices( FileConfiguration.class ).visibleIn( Visibility.application );
+            if ( fileConfigOverride != null ) {
+                configMa.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
+            }
             configMa.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             configMa.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }

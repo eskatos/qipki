@@ -1,10 +1,10 @@
 
 # Work in progress
 
-* Add some generated documentation to the build process
-* Package a http assembly as a unix daemon
-* Apply Qi4j data migration system
 * Apply Qi4j FileConfiguration API to all filesystem storage
+* Package a http assembly as a unix daemon
+* Add some generated documentation to the build process
+* Apply Qi4j data migration system
 
 
 # Next steps

@@ -14,6 +14,7 @@
 package org.qipki.main.http.ca;
 
 import java.io.File;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSpec;
 import joptsimple.ValueConverter;
@@ -27,7 +28,11 @@ import joptsimple.ValueConverter;
 
         String HELP = "help";
         String VERBOSE = "verbose";
-        String DATA_DIR = "data-dir";
+        String CONFIGURATION_DIR = "configuration";
+        String DATA_DIR = "data";
+        String TEMPORARY_DIR = "temporary";
+        String CACHE_DIR = "cache";
+        String LOG_DIR = "log";
         String JMX_PORT = "jmx-port";
         String HOST = "host";
         String PORT = "port";
@@ -35,7 +40,11 @@ import joptsimple.ValueConverter;
 
     private final OptionSpec<Void> helpSpec;
     private final OptionSpec<Void> verboseSpec;
+    private final OptionSpec<File> configurationDirSpec;
     private final OptionSpec<File> dataDirSpec;
+    private final OptionSpec<File> temporaryDirSpec;
+    private final OptionSpec<File> cacheDirSpec;
+    private final OptionSpec<File> logDirSpec;
     private final OptionSpec<Integer> jmxPortSpec;
     private final OptionSpec<String> hostSpec;
     private final OptionSpec<Integer> portSpec;
@@ -50,12 +59,28 @@ import joptsimple.ValueConverter;
 
         helpSpec = accepts( Options.HELP, "Show help" );
         verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
+        configurationDirSpec = accepts( Options.CONFIGURATION_DIR, "Base configuration directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter );
         dataDirSpec = accepts( Options.DATA_DIR, "Base data directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter ).
                 describedAs( "Data basedir" );
-        jmxPortSpec = accepts( Options.JMX_PORT, "Enable remote JMX on given port" ).
+        temporaryDirSpec = accepts( Options.TEMPORARY_DIR, "Base temporary directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter );
+        cacheDirSpec = accepts( Options.CACHE_DIR, "Base cache directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter );
+        logDirSpec = accepts( Options.LOG_DIR, "Base log directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter );
+        jmxPortSpec = accepts( Options.JMX_PORT, "Fix remote JMX port" ).
                 withRequiredArg().
                 ofType( Integer.class ).
                 withValuesConvertedBy( portConverter ).
@@ -83,9 +108,29 @@ import joptsimple.ValueConverter;
         return verboseSpec;
     }
 
+    /* package */ OptionSpec<File> getConfigurationDirSpec()
+    {
+        return configurationDirSpec;
+    }
+
     /* package */ OptionSpec<File> getDataDirSpec()
     {
         return dataDirSpec;
+    }
+
+    /* package */ OptionSpec<File> getTemporaryDirSpec()
+    {
+        return temporaryDirSpec;
+    }
+
+    /* package */ OptionSpec<File> getCacheDirSpec()
+    {
+        return cacheDirSpec;
+    }
+
+    /* package */ OptionSpec<File> getLogDirSpec()
+    {
+        return logDirSpec;
     }
 
     /* package */ OptionSpec<Integer> getJMXPortSpec()

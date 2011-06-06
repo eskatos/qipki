@@ -128,7 +128,7 @@
           <arguments>
             <argument>${project.build.directory}/${dist.name}/bin/${dist.name}</argument>
             <argument>--verbose</argument>
-            <argument>--data-dir</argument>
+            <argument>--data</argument>
             <argument>${project.build.directory}/${dist.name}-data</argument>
           </arguments>
         </configuration>

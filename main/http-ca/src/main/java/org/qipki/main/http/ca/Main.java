@@ -22,6 +22,9 @@ import java.util.Calendar;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+
+import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 import org.qipki.ca.http.QiPkiHttpCa;
 import static org.qipki.main.http.ca.QiPkiHttpCaOptionParser.Options.*;
@@ -29,34 +32,50 @@ import static org.qipki.main.http.ca.QiPkiHttpCaOptionParser.Options.*;
 public class Main
 {
 
+    private static final QiPkiHttpCaOptionParser PARSER = new QiPkiHttpCaOptionParser();
+    private static final String BASEDIR = System.getProperty( "basedir" );
+
     public static void main( String[] args )
             throws IOException
     {
-        QiPkiHttpCaOptionParser parser = new QiPkiHttpCaOptionParser();
         try {
 
-            OptionSet options = parser.parse( args );
+            OptionSet options = PARSER.parse( args );
 
             if ( options.has( HELP ) || !options.nonOptionArguments().isEmpty() ) {
-                printHelp( parser );
+                printHelp( PARSER );
                 System.exit( 0 );
             }
 
             boolean verbose = options.has( VERBOSE );
-            File dataDir = options.valueOf( parser.getDataDirSpec() );
-            Integer jmxPort = options.valueOf( parser.getJMXPortSpec() );
-            String host = options.valueOf( parser.getHostSpec() );
-            Integer port = options.valueOf( parser.getPortSpec() );
+            File configuration = resolveDirectory( CONFIGURATION_DIR, options, PARSER.getConfigurationDirSpec(), "etc" );
+            File data = resolveDirectory( DATA_DIR, options, PARSER.getDataDirSpec(), "var/data" );
+            File temporary = resolveDirectory( TEMPORARY_DIR, options, PARSER.getTemporaryDirSpec(), "tmp" );
+            File cache = resolveDirectory( CACHE_DIR, options, PARSER.getCacheDirSpec(), "var/cache" );
+            File log = resolveDirectory( LOG_DIR, options, PARSER.getLogDirSpec(), "var/log" );
+            Integer jmxPort = options.valueOf( PARSER.getJMXPortSpec() );
+            String host = options.valueOf( PARSER.getHostSpec() );
+            Integer port = options.valueOf( PARSER.getPortSpec() );
 
             if ( verbose ) {
                 System.out.println( QiPkiHttpCaArtifactInfo.NAME + " will start with the following options:" );
                 System.out.println( "\tverbose: " + verbose );
-                System.out.println( "\tdata-dir: " + dataDir.getAbsolutePath() );
+                System.out.println( "\tconfiguration: " + configuration );
+                System.out.println( "\tdata: " + data );
+                System.out.println( "\ttemporary: " + temporary );
+                System.out.println( "\tcache: " + cache );
+                System.out.println( "\tlog: " + log );
                 System.out.println( "\thost: " + host );
                 System.out.println( "\tport: " + port );
             }
 
-            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( dataDir, jmxPort );
+            FileConfigurationOverride fileConfigOverride = new FileConfigurationOverride().withConfiguration( configuration ).
+                    withData( data ).
+                    withTemporary( temporary ).
+                    withCache( cache ).
+                    withLog( log );
+
+            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( fileConfigOverride, jmxPort );
             qiPkiHttpCa.run();
             Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
             {
@@ -72,10 +91,22 @@ public class Main
         } catch ( OptionException ex ) {
 
             System.out.println( ex.getMessage() );
-            printHelp( parser );
+            printHelp( PARSER );
             System.exit( 1 );
 
         }
+    }
+
+    private static File resolveDirectory( String ilk, OptionSet options, OptionSpec<File> optionSpec, String baseDirChild )
+    {
+        File dir = options.valueOf( optionSpec );
+        if ( dir == null ) {
+            if ( BASEDIR == null ) {
+                throw new IllegalStateException( "No " + ilk + " directory given and basedir system property is not set" );
+            }
+            dir = new File( BASEDIR, baseDirChild );
+        }
+        return dir;
     }
 
 
@@ -89,7 +120,7 @@ public class Main
         sw.println();
         parser.printHelpOn( sw );
         sw.println();
-        System.out.println( sw );
+        System.out.println( sw.toString() );
     }
 
 }
