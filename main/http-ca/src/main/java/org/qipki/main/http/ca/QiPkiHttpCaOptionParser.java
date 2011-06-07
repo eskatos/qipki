@@ -14,10 +14,13 @@
 package org.qipki.main.http.ca;
 
 import java.io.File;
+import java.util.Arrays;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSpec;
 import joptsimple.ValueConverter;
+
+import org.qi4j.api.structure.Application.Mode;
 
 /* package */ class QiPkiHttpCaOptionParser
         extends OptionParser
@@ -28,6 +31,7 @@ import joptsimple.ValueConverter;
 
         String HELP = "help";
         String VERBOSE = "verbose";
+        String MODE = "mode";
         String CONFIGURATION_DIR = "configuration";
         String DATA_DIR = "data";
         String TEMPORARY_DIR = "temporary";
@@ -40,6 +44,7 @@ import joptsimple.ValueConverter;
 
     private final OptionSpec<Void> helpSpec;
     private final OptionSpec<Void> verboseSpec;
+    private final OptionSpec<Mode> modeSpec;
     private final OptionSpec<File> configurationDirSpec;
     private final OptionSpec<File> dataDirSpec;
     private final OptionSpec<File> temporaryDirSpec;
@@ -59,6 +64,11 @@ import joptsimple.ValueConverter;
 
         helpSpec = accepts( Options.HELP, "Show help" );
         verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
+        modeSpec = accepts( Options.MODE, "Application mode" ).
+                withRequiredArg().
+                ofType( Mode.class ).
+                describedAs( Arrays.toString( Mode.values() ) ).
+                defaultsTo( Mode.production );
         configurationDirSpec = accepts( Options.CONFIGURATION_DIR, "Base configuration directory" ).
                 withRequiredArg().
                 ofType( File.class ).
@@ -106,6 +116,11 @@ import joptsimple.ValueConverter;
     /* package */ OptionSpec<Void> getVerboseSpec()
     {
         return verboseSpec;
+    }
+
+    /* package */ OptionSpec<Mode> getModeSpec()
+    {
+        return modeSpec;
     }
 
     /* package */ OptionSpec<File> getConfigurationDirSpec()

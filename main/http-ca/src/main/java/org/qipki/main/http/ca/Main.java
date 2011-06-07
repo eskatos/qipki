@@ -49,6 +49,7 @@ public class Main
             }
 
             boolean verbose = options.has( VERBOSE );
+            Mode appMode = options.valueOf( PARSER.getModeSpec() );
             File configuration = resolveDirectory( CONFIGURATION_DIR, options, PARSER.getConfigurationDirSpec(), "etc" );
             File data = resolveDirectory( DATA_DIR, options, PARSER.getDataDirSpec(), "var/data" );
             File temporary = resolveDirectory( TEMPORARY_DIR, options, PARSER.getTemporaryDirSpec(), "tmp" );
@@ -61,6 +62,7 @@ public class Main
             if ( verbose ) {
                 System.out.println( QiPkiHttpCaArtifactInfo.NAME + " will start with the following options:" );
                 System.out.println( "\tverbose: " + verbose );
+                System.out.println( "\tmode: " + appMode.name() );
                 System.out.println( "\tconfiguration: " + configuration );
                 System.out.println( "\tdata: " + data );
                 System.out.println( "\ttemporary: " + temporary );
@@ -71,7 +73,7 @@ public class Main
             }
 
             final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa(
-                    Mode.production,
+                    appMode,
                     new FileConfigurationOverride().withConfiguration( configuration ).
                     withData( data ).
                     withTemporary( temporary ).
