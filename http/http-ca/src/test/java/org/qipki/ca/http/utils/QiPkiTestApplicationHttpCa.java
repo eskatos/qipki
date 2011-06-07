@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.http.utils;
 
+import org.qi4j.api.structure.Application.Mode;
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
 
@@ -25,7 +26,7 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa( String testCodeName )
     {
-        super( new QiPkiHttpCaAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true", "target/" + testCodeName + "-qi4j-index", null )
+        super( new QiPkiHttpCaAssembler( testCodeName, Mode.test, "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true", "target/" + testCodeName + "-qi4j-index", null )
         {
 
             @Override

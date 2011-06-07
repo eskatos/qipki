@@ -21,6 +21,7 @@ import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
 import org.qipki.core.assembly.AssemblyUtil;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
@@ -38,9 +39,9 @@ public class QiPkiHttpCaAssembler
 
     private final Integer jmxPort;
 
-    public QiPkiHttpCaAssembler( String connectionString, String finderDataDirectory, Integer jmxPort )
+    public QiPkiHttpCaAssembler( String appName, Mode appMode, String connectionString, String finderDataDirectory, Integer jmxPort )
     {
-        super( connectionString, finderDataDirectory );
+        super( appName, appMode, connectionString, finderDataDirectory );
         this.jmxPort = jmxPort;
     }
 

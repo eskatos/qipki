@@ -17,6 +17,7 @@ import org.qipki.core.assembly.AssemblyUtil;
 import org.qipki.core.assembly.InMemoryStoreAndIndexModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
@@ -25,6 +26,11 @@ import org.qi4j.bootstrap.LayerAssembly;
 public class QiPkiVolatileEmbeddedCaAssembler
         extends QiPkiEmbeddedCaAssembler
 {
+
+    public QiPkiVolatileEmbeddedCaAssembler( String appName, Mode appMode )
+    {
+        super( appName, appMode );
+    }
 
     @Override
     public ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )

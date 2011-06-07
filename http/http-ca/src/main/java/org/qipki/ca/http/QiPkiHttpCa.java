@@ -17,8 +17,10 @@ import java.io.File;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import org.qi4j.api.structure.Application.Mode;
 
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
+import org.qipki.ca.assembly.CaAssemblyNames;
 
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
@@ -54,9 +56,10 @@ public final class QiPkiHttpCa
         extends AbstractQiPkiApplication
 {
 
-    public QiPkiHttpCa( FileConfigurationOverride fileConfigOverride, Integer jmxPort )
+    public QiPkiHttpCa( Mode appMode, FileConfigurationOverride fileConfigOverride, Integer jmxPort )
     {
-        super( new QiPkiHttpCaAssembler( "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true",
+        super( new QiPkiHttpCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode,
+                                         "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true",
                                          new File( fileConfigOverride.data(), "ca-index" ).getAbsolutePath(),
                                          jmxPort ).withFileConfigurationOverride( fileConfigOverride ) );
         setUpLogging();

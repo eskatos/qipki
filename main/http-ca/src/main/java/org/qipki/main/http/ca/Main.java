@@ -13,6 +13,7 @@
  */
 package org.qipki.main.http.ca;
 
+import org.qi4j.api.structure.Application.Mode;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
@@ -69,14 +70,16 @@ public class Main
                 System.out.println( "\tport: " + port );
             }
 
-            FileConfigurationOverride fileConfigOverride = new FileConfigurationOverride().withConfiguration( configuration ).
+            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa(
+                    Mode.production,
+                    new FileConfigurationOverride().withConfiguration( configuration ).
                     withData( data ).
                     withTemporary( temporary ).
                     withCache( cache ).
-                    withLog( log );
-
-            final QiPkiHttpCa qiPkiHttpCa = new QiPkiHttpCa( fileConfigOverride, jmxPort );
+                    withLog( log ),
+                    jmxPort );
             qiPkiHttpCa.run();
+
             Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
             {
 

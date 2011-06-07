@@ -18,6 +18,7 @@ import org.qipki.core.reindex.AutomaticReindexerConfiguration;
 import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
@@ -32,7 +33,20 @@ public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
 
+    private String appName = CaAssemblyNames.APPLICATION_NAME;
+    private final Mode appMode;
     private FileConfigurationOverride fileConfigOverride;
+
+    public QiPkiEmbeddedCaAssembler( Mode appMode )
+    {
+        this.appMode = appMode;
+    }
+
+    public QiPkiEmbeddedCaAssembler( String appName, Mode appMode )
+    {
+        this( appMode );
+        this.appName = appName;
+    }
 
     public ApplicationAssembler withFileConfigurationOverride( FileConfigurationOverride fileConfigOverride )
     {
@@ -46,8 +60,8 @@ public abstract class QiPkiEmbeddedCaAssembler
             throws AssemblyException
     {
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
-
-        app.setName( CaAssemblyNames.APPLICATION_NAME );
+        app.setName( appName );
+        app.setMode( appMode );
         app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
 
         LayerAssembly config = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );

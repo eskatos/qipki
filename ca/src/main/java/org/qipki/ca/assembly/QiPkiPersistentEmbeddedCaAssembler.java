@@ -21,6 +21,7 @@ import org.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
 import org.qipki.core.reindex.AutomaticReindexerConfiguration;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
 import org.qi4j.bootstrap.AssemblyException;
@@ -39,15 +40,17 @@ public class QiPkiPersistentEmbeddedCaAssembler
     private final DataSource dataSource;
     private final String finderDataDirectory;
 
-    public QiPkiPersistentEmbeddedCaAssembler( String connectionString, String finderDataDirectory )
+    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, String connectionString, String finderDataDirectory )
     {
+        super( appName, appMode );
         this.connectionString = connectionString;
         this.dataSource = null;
         this.finderDataDirectory = finderDataDirectory;
     }
 
-    public QiPkiPersistentEmbeddedCaAssembler( DataSource dataSource, String finderDataDirectory )
+    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, DataSource dataSource, String finderDataDirectory )
     {
+        super( appName, appMode );
         this.connectionString = null;
         this.finderDataDirectory = finderDataDirectory;
         this.dataSource = dataSource;
