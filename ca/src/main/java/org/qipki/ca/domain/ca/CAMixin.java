@@ -39,6 +39,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.This;
+
 import org.qipki.ca.application.WrongParametersBuilder;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.qipki.ca.domain.ca.root.RootCAMixin;
@@ -56,12 +62,6 @@ import org.qipki.crypto.x509.X509Generator;
 import org.qipki.crypto.x509.X509ExtensionsReader;
 import org.qipki.crypto.x509.X509ExtensionHolder;
 import org.qipki.crypto.x509.X509ExtensionsBuilder;
-
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.This;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,6 +214,15 @@ public abstract class CAMixin
     }
 
     // TODO move CRL updating crypto code into a crypto service
+    /**
+     * @param previousCRL   Previous CRL, can be null
+     * @param cert          Revoked certificate
+     * @param reason        Revocation reason
+     * 
+     * @return              New CRL
+     * 
+     * @throws GeneralSecurityException if something goes wrong
+     */
     private X509CRL updateCRL( X509CRL previousCRL, X509Certificate cert, RevocationReason reason )
             throws GeneralSecurityException
     {

@@ -15,10 +15,10 @@ package org.qipki.ca.domain.crl;
 
 import java.math.BigInteger;
 
-import org.qipki.ca.domain.fragments.HasPEM;
 import org.qi4j.api.entity.Queryable;
-
 import org.qi4j.api.property.Property;
+
+import org.qipki.ca.domain.fragments.HasPEM;
 
 /**
  *

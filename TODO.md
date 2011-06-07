@@ -1,28 +1,42 @@
 
+# Quid ?
+
+* Add @Aggregated in EscrowedKeyPair
+  * On ManyAssociation<X509> x509s() ?
+  * This would mean that when a EKP is deleted every associated X509 are deleted too
+
+
 # Work in progress
 
-* Apply Qi4j FileConfiguration API to all filesystem storage
-* Package a http assembly as a unix daemon
-* Add some generated documentation to the build process
-* Apply Qi4j data migration system
+* (#---) Follow state refactoring with the Qi4j data migration system
+  * Move code to qipki-main-core
+  * Write integration tests for migrations
+* (#---) Apply Qi4j FileConfiguration API to all filesystem storage
+  * Store CRLs on the Filesystem
+  * Store KeyStores on the Filesystem
+* (##--) Package a http assembly as a unix daemon
+  * Remove work done on QiPkiApplication in favour of the new Main creating a qipki-main-core
+  * Refactor assembly to create a JSW based application
+* (#---) Add some generated documentation to the build process
 
 
 # Next steps
 
-* Store KeyStores on the Filesystem
-* Store CRLs on the Filesystem
-* Replace indexing-rdf by indexing-solr
+* Add a CryptoContext in qipki-crypto with at least the configured provider name for use with JCA apis
 * Add CRL Endpoint in issued X509Certificates
   * Full url given by X509Profile
   * If no url on profile creation, create it with a sensible defaut, allow edition too
   * Clients could use the uri builder to easily create the default one 
-* CronLike scheduler
+* Turn CRL generation as a background system task
   * Embedd the Qi4j-library-scheduler
   * Use it to generate CRLs so this is not done in request threads
-
+* Implements CRL next-update mechanism (See CRL.java in qipki-ca)
+  * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
+* Replace indexing-rdf by indexing-solr
 
 # After that
 
+* Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Add basic profiles creation in Qi4j-test-support
 * Enhance X509Profile with domain rules and certificate template creation
 * Create a CAProfile role
@@ -57,11 +71,3 @@
   * Start with a single jvm assembly
   * Simple Client/UI reflecting naive rest api list/factory/entity
     * Example: request to x509 factory is presented with two fields:    ComboBox: choose ca in list & TextArea: paste pkcs10 pem
-
-# Quid ?
-
-* Add @Aggregated in EscrowedKeyPair
-  * On ManyAssociation<X509> x509s() ?
-  * This would mean that when a EKP is deleted every associated X509 are deleted too
-* Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
-
