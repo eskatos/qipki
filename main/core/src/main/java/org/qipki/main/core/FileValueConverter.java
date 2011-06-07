@@ -11,33 +11,32 @@
  * limitations under the License.
  *
  */
-package org.qipki.main.http.ca;
+package org.qipki.main.core;
 
-import java.io.IOException;
+import java.io.File;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
+import joptsimple.ValueConverter;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-
-import static org.qipki.main.http.ca.QiPkiHttpCaOptionParser.Options.*;
-
-public class CliArgsTest
+public class FileValueConverter
+        implements ValueConverter<File>
 {
 
-    @Test
-    public void testArgs()
-            throws IOException
+    @Override
+    public File convert( String value )
     {
-        OptionParser parser = new QiPkiHttpCaOptionParser();
+        return new File( value );
+    }
 
-        OptionSet options = parser.parse( "--help" );
+    @Override
+    public Class<File> valueType()
+    {
+        return File.class;
+    }
 
-        // assertTrue( options.has( "verbose" ) );
-        if ( options.has( HELP ) ) {
-            Main.printHelp( parser );
-        }
+    @Override
+    public String valuePattern()
+    {
+        return "*.*";
     }
 
 }

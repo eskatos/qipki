@@ -8,15 +8,15 @@
 
 # Work in progress
 
+* (##--) Package a http assembly as a unix daemon
+  * Remove work done on QiPkiApplication in favour of the new Main creating a qipki-main-core
+  * Refactor assembly to create a JSW based application
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Move code to qipki-main-core
   * Write integration tests for migrations
 * (#---) Apply Qi4j FileConfiguration API to all filesystem storage
   * Store CRLs on the Filesystem
   * Store KeyStores on the Filesystem
-* (##--) Package a http assembly as a unix daemon
-  * Remove work done on QiPkiApplication in favour of the new Main creating a qipki-main-core
-  * Refactor assembly to create a JSW based application
 * (#---) Add some generated documentation to the build process
 
 
@@ -34,8 +34,12 @@
   * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
 * Replace indexing-rdf by indexing-solr
 
+
 # After that
 
+* Use @Concerns to factorize http Resources (error handling, logging etc..)
+  * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
+  * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
 * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Add basic profiles creation in Qi4j-test-support
 * Enhance X509Profile with domain rules and certificate template creation
@@ -46,7 +50,6 @@
   * To be a CRLIssuer a CA must be allowed by it's CAProfile
   * One could want to disable CRL issuance on a CA with appropriate CAProfile
   * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
-* Use @Concerns to factorize http Resources (error handling, logging etc..)
 * Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts

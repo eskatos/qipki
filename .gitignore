@@ -15,5 +15,6 @@ osgi/osgi-dist/target
 tools/target
 tools/reflect/target
 main/target
+main/core/target
 main/http-ca/target
 derby.log

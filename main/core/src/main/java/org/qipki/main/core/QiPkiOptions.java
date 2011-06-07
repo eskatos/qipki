@@ -11,32 +11,20 @@
  * limitations under the License.
  *
  */
-package org.qipki.main.http.ca;
+package org.qipki.main.core;
 
-import java.io.File;
-
-import joptsimple.ValueConverter;
-
-public class FileValueConverter
-        implements ValueConverter<File>
+public interface QiPkiOptions
 {
 
-    @Override
-    public File convert( String value )
-    {
-        return new File( value );
-    }
-
-    @Override
-    public Class<File> valueType()
-    {
-        return File.class;
-    }
-
-    @Override
-    public String valuePattern()
-    {
-        return "*.*";
-    }
-
+    String HELP = "help";
+    String VERBOSE = "verbose";
+    String MODE = "mode";
+    String CONFIGURATION_DIR = "configuration";
+    String DATA_DIR = "data";
+    String TEMPORARY_DIR = "temporary";
+    String CACHE_DIR = "cache";
+    String LOG_DIR = "log";
+    String JMX_PORT = "jmx-port";
+    String HOST = "host";
+    String PORT = "port";
 }

@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.main.http.ca;
+package org.qipki.main.core;
 
 import joptsimple.ValueConversionException;
 import joptsimple.ValueConverter;

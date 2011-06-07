@@ -13,6 +13,7 @@
  */
 package org.qipki.core;
 
+import org.qi4j.api.Qi4j;
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
@@ -34,7 +35,7 @@ public abstract class AbstractQiPkiApplication
     protected ApplicationModelSPI applicationModel;
     protected ApplicationSPI application;
     protected Qi4jSPI spi;
-    protected Qi4jSPI api;
+    protected Qi4j api;
 
     protected AbstractQiPkiApplication( ApplicationAssembler appAssembler )
     {

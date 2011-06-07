@@ -141,15 +141,15 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.codeartisans.qipki.qipki-http</groupId>
-      <artifactId>qipki-http-ca</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>qipki-main-core</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>net.sf.jopt-simple</groupId>
-      <artifactId>jopt-simple</artifactId>
-      <version>3.3</version>
+      <groupId>org.codeartisans.qipki.qipki-http</groupId>
+      <artifactId>qipki-http-ca</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- SQLEntityStore -->

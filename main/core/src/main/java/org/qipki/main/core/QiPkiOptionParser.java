@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.main.http.ca;
+package org.qipki.main.core;
 
 import java.io.File;
 import java.util.Arrays;
@@ -22,25 +22,9 @@ import joptsimple.ValueConverter;
 
 import org.qi4j.api.structure.Application.Mode;
 
-/* package */ class QiPkiHttpCaOptionParser
+public class QiPkiOptionParser
         extends OptionParser
 {
-
-    /* package */ static interface Options
-    {
-
-        String HELP = "help";
-        String VERBOSE = "verbose";
-        String MODE = "mode";
-        String CONFIGURATION_DIR = "configuration";
-        String DATA_DIR = "data";
-        String TEMPORARY_DIR = "temporary";
-        String CACHE_DIR = "cache";
-        String LOG_DIR = "log";
-        String JMX_PORT = "jmx-port";
-        String HOST = "host";
-        String PORT = "port";
-    }
 
     private final OptionSpec<Void> helpSpec;
     private final OptionSpec<Void> verboseSpec;
@@ -54,53 +38,52 @@ import org.qi4j.api.structure.Application.Mode;
     private final OptionSpec<String> hostSpec;
     private final OptionSpec<Integer> portSpec;
 
-
-    /* package */ QiPkiHttpCaOptionParser()
+    public QiPkiOptionParser()
     {
         super();
 
         ValueConverter<Integer> portConverter = new PortValueConverter();
         ValueConverter<File> fileConverter = new FileValueConverter();
 
-        helpSpec = accepts( Options.HELP, "Show help" );
-        verboseSpec = accepts( Options.VERBOSE, "Turn on verbose mode" );
-        modeSpec = accepts( Options.MODE, "Application mode" ).
+        helpSpec = accepts( QiPkiOptions.HELP, "Show help" );
+        verboseSpec = accepts( QiPkiOptions.VERBOSE, "Turn on verbose mode" );
+        modeSpec = accepts( QiPkiOptions.MODE, "Application mode" ).
                 withRequiredArg().
                 ofType( Mode.class ).
                 describedAs( Arrays.toString( Mode.values() ) ).
                 defaultsTo( Mode.production );
-        configurationDirSpec = accepts( Options.CONFIGURATION_DIR, "Base configuration directory" ).
+        configurationDirSpec = accepts( QiPkiOptions.CONFIGURATION_DIR, "Base configuration directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter );
-        dataDirSpec = accepts( Options.DATA_DIR, "Base data directory" ).
+        dataDirSpec = accepts( QiPkiOptions.DATA_DIR, "Base data directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter ).
                 describedAs( "Data basedir" );
-        temporaryDirSpec = accepts( Options.TEMPORARY_DIR, "Base temporary directory" ).
+        temporaryDirSpec = accepts( QiPkiOptions.TEMPORARY_DIR, "Base temporary directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter );
-        cacheDirSpec = accepts( Options.CACHE_DIR, "Base cache directory" ).
+        cacheDirSpec = accepts( QiPkiOptions.CACHE_DIR, "Base cache directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter );
-        logDirSpec = accepts( Options.LOG_DIR, "Base log directory" ).
+        logDirSpec = accepts( QiPkiOptions.LOG_DIR, "Base log directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter );
-        jmxPortSpec = accepts( Options.JMX_PORT, "Fix remote JMX port" ).
+        jmxPortSpec = accepts( QiPkiOptions.JMX_PORT, "Fix remote JMX port" ).
                 withRequiredArg().
                 ofType( Integer.class ).
                 withValuesConvertedBy( portConverter ).
                 describedAs( "JMX port" );
-        hostSpec = accepts( Options.HOST, "HTTP service hostname or IP address" ).
+        hostSpec = accepts( QiPkiOptions.HOST, "HTTP service hostname or IP address" ).
                 withRequiredArg().
                 ofType( String.class ).
                 describedAs( "host" ).
                 defaultsTo( "127.0.0.1" );
-        portSpec = accepts( Options.PORT, "HTTP service port number" ).
+        portSpec = accepts( QiPkiOptions.PORT, "HTTP service port number" ).
                 withRequiredArg().
                 ofType( Integer.class ).
                 withValuesConvertedBy( portConverter ).
@@ -108,57 +91,57 @@ import org.qi4j.api.structure.Application.Mode;
                 defaultsTo( 8443 );
     }
 
-    /* package */ OptionSpec<Void> getHelpSpec()
+    public OptionSpec<Void> getHelpSpec()
     {
         return helpSpec;
     }
 
-    /* package */ OptionSpec<Void> getVerboseSpec()
+    public OptionSpec<Void> getVerboseSpec()
     {
         return verboseSpec;
     }
 
-    /* package */ OptionSpec<Mode> getModeSpec()
+    public OptionSpec<Mode> getModeSpec()
     {
         return modeSpec;
     }
 
-    /* package */ OptionSpec<File> getConfigurationDirSpec()
+    public OptionSpec<File> getConfigurationDirSpec()
     {
         return configurationDirSpec;
     }
 
-    /* package */ OptionSpec<File> getDataDirSpec()
+    public OptionSpec<File> getDataDirSpec()
     {
         return dataDirSpec;
     }
 
-    /* package */ OptionSpec<File> getTemporaryDirSpec()
+    public OptionSpec<File> getTemporaryDirSpec()
     {
         return temporaryDirSpec;
     }
 
-    /* package */ OptionSpec<File> getCacheDirSpec()
+    public OptionSpec<File> getCacheDirSpec()
     {
         return cacheDirSpec;
     }
 
-    /* package */ OptionSpec<File> getLogDirSpec()
+    public OptionSpec<File> getLogDirSpec()
     {
         return logDirSpec;
     }
 
-    /* package */ OptionSpec<Integer> getJMXPortSpec()
+    public OptionSpec<Integer> getJMXPortSpec()
     {
         return jmxPortSpec;
     }
 
-    /* package */ OptionSpec<String> getHostSpec()
+    public OptionSpec<String> getHostSpec()
     {
         return hostSpec;
     }
 
-    /* package */ OptionSpec<Integer> getPortSpec()
+    public OptionSpec<Integer> getPortSpec()
     {
         return portSpec;
     }
