@@ -18,7 +18,6 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
-import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
@@ -79,25 +78,13 @@ public class Main
     protected QiPkiApplication buildApplication( QiPkiApplicationArguments args )
     {
         FileConfigurationOverride fileConfigOverride = args.buildFileConfigOverride();
-        ApplicationAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, args.getMode(),
+        QiPkiHttpCaAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, args.getMode(),
                                                                       "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true",
-                                                                      new File( fileConfigOverride.data(), "ca-index" ).getAbsolutePath(),
-                                                                      args.getJmxPort() ).withFileConfigurationOverride( fileConfigOverride );
+                                                                      args.getJmxPort() );
+        appAssembler.withFileConfigurationOverride( fileConfigOverride );
+
         return new AbstractQiPkiApplication( appAssembler )
         {
-
-            @Override
-            protected void afterActivate()
-            {
-                System.out.println( "After application activation" );
-            }
-
-            @Override
-            protected void beforePassivate()
-            {
-                System.out.println( "Before application passivation" );
-            }
-
         };
     }
 

@@ -14,7 +14,7 @@
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Move code to qipki-main-core
   * Write integration tests for migrations
-* (#---) Apply Qi4j FileConfiguration API to all filesystem storage
+* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
   * Store CRLs on the Filesystem
   * Store KeyStores on the Filesystem
 * (#---) Add some generated documentation to the build process

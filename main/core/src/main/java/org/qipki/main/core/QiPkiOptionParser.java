@@ -22,6 +22,9 @@ import joptsimple.ValueConverter;
 
 import org.qi4j.api.structure.Application.Mode;
 
+import static org.qipki.main.core.DefaultFileConfigOptions.*;
+import static org.qipki.main.core.QiPkiOptions.*;
+
 public class QiPkiOptionParser
         extends OptionParser
 {
@@ -45,45 +48,49 @@ public class QiPkiOptionParser
         ValueConverter<Integer> portConverter = new PortValueConverter();
         ValueConverter<File> fileConverter = new FileValueConverter();
 
-        helpSpec = accepts( QiPkiOptions.HELP, "Show help" );
-        verboseSpec = accepts( QiPkiOptions.VERBOSE, "Turn on verbose mode" );
-        modeSpec = accepts( QiPkiOptions.MODE, "Application mode" ).
+        helpSpec = accepts( HELP, "Show help" );
+        verboseSpec = accepts( VERBOSE, "Turn on verbose mode" );
+        modeSpec = accepts( MODE, "Application mode" ).
                 withRequiredArg().
                 ofType( Mode.class ).
                 describedAs( Arrays.toString( Mode.values() ) ).
                 defaultsTo( Mode.production );
-        configurationDirSpec = accepts( QiPkiOptions.CONFIGURATION_DIR, "Base configuration directory" ).
-                withRequiredArg().
-                ofType( File.class ).
-                withValuesConvertedBy( fileConverter );
-        dataDirSpec = accepts( QiPkiOptions.DATA_DIR, "Base data directory" ).
+        configurationDirSpec = accepts( CONFIGURATION_DIR, "Base configuration directory" ).
                 withRequiredArg().
                 ofType( File.class ).
                 withValuesConvertedBy( fileConverter ).
-                describedAs( "Data basedir" );
-        temporaryDirSpec = accepts( QiPkiOptions.TEMPORARY_DIR, "Base temporary directory" ).
+                describedAs( "Defaults to $INSTALL_DIR/" + DEFAULT_CONFIGURATION_DIR );
+        dataDirSpec = accepts( DATA_DIR, "Base data directory" ).
                 withRequiredArg().
                 ofType( File.class ).
-                withValuesConvertedBy( fileConverter );
-        cacheDirSpec = accepts( QiPkiOptions.CACHE_DIR, "Base cache directory" ).
+                withValuesConvertedBy( fileConverter ).
+                describedAs( "Defaults to $INSTALL_DIR/" + DEFAULT_DATA_DIR );
+        temporaryDirSpec = accepts( TEMPORARY_DIR, "Base temporary directory" ).
                 withRequiredArg().
                 ofType( File.class ).
-                withValuesConvertedBy( fileConverter );
-        logDirSpec = accepts( QiPkiOptions.LOG_DIR, "Base log directory" ).
+                withValuesConvertedBy( fileConverter ).
+                describedAs( "Defaults to $INSTALL_DIR/" + DEFAULT_TEMPORARY_DIR );
+        cacheDirSpec = accepts( CACHE_DIR, "Base cache directory" ).
                 withRequiredArg().
                 ofType( File.class ).
-                withValuesConvertedBy( fileConverter );
-        jmxPortSpec = accepts( QiPkiOptions.JMX_PORT, "Fix remote JMX port" ).
+                withValuesConvertedBy( fileConverter ).
+                describedAs( "Defaults to $INSTALL_DIR/" + DEFAULT_CACHE_DIR );
+        logDirSpec = accepts( LOG_DIR, "Base log directory" ).
+                withRequiredArg().
+                ofType( File.class ).
+                withValuesConvertedBy( fileConverter ).
+                describedAs( "Defaults to $INSTALL_DIR/" + DEFAULT_LOG_DIR );
+        jmxPortSpec = accepts( JMX_PORT, "Fix remote JMX port" ).
                 withRequiredArg().
                 ofType( Integer.class ).
                 withValuesConvertedBy( portConverter ).
                 describedAs( "JMX port" );
-        hostSpec = accepts( QiPkiOptions.HOST, "HTTP service hostname or IP address" ).
+        hostSpec = accepts( HOST, "HTTP service hostname or IP address" ).
                 withRequiredArg().
                 ofType( String.class ).
                 describedAs( "host" ).
                 defaultsTo( "127.0.0.1" );
-        portSpec = accepts( QiPkiOptions.PORT, "HTTP service port number" ).
+        portSpec = accepts( PORT, "HTTP service port number" ).
                 withRequiredArg().
                 ofType( Integer.class ).
                 withValuesConvertedBy( portConverter ).

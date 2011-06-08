@@ -25,6 +25,7 @@ import joptsimple.OptionException;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+import static org.qipki.main.core.DefaultFileConfigOptions.*;
 import org.qipki.core.QiPkiApplication;
 import static org.qipki.main.core.QiPkiOptions.*;
 
@@ -63,11 +64,11 @@ public abstract class QiPkiMain
 
             args.setVerbose( options.has( VERBOSE ) );
             args.setMode( options.valueOf( parser.getModeSpec() ) );
-            args.setConfiguration( resolveDirectory( CONFIGURATION_DIR, options, parser.getConfigurationDirSpec(), "etc" ) );
-            args.setData( resolveDirectory( DATA_DIR, options, parser.getDataDirSpec(), "var/data" ) );
-            args.setTemporary( resolveDirectory( TEMPORARY_DIR, options, parser.getTemporaryDirSpec(), "tmp" ) );
-            args.setCache( resolveDirectory( CACHE_DIR, options, parser.getCacheDirSpec(), "var/cache" ) );
-            args.setLog( resolveDirectory( LOG_DIR, options, parser.getLogDirSpec(), "var/log" ) );
+            args.setConfiguration( resolveDirectory( CONFIGURATION_DIR, options, parser.getConfigurationDirSpec(), DEFAULT_CONFIGURATION_DIR ) );
+            args.setData( resolveDirectory( DATA_DIR, options, parser.getDataDirSpec(), DEFAULT_DATA_DIR ) );
+            args.setTemporary( resolveDirectory( TEMPORARY_DIR, options, parser.getTemporaryDirSpec(), DEFAULT_TEMPORARY_DIR ) );
+            args.setCache( resolveDirectory( CACHE_DIR, options, parser.getCacheDirSpec(), DEFAULT_CACHE_DIR ) );
+            args.setLog( resolveDirectory( LOG_DIR, options, parser.getLogDirSpec(), DEFAULT_LOG_DIR ) );
             args.setJmxPort( options.valueOf( parser.getJMXPortSpec() ) );
             args.setHost( options.valueOf( parser.getHostSpec() ) );
             args.setPort( options.valueOf( parser.getPortSpec() ) );
@@ -93,10 +94,12 @@ public abstract class QiPkiMain
     private void printHelp( QiPkiOptionParser parser )
     {
         try {
-            PrintWriter sw = new PrintWriter( new StringWriter() );
-            outputBanner( sw );
-            parser.printHelpOn( sw );
-            sw.println();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter( sw );
+            outputBanner( pw );
+            parser.printHelpOn( pw );
+            pw.println();
+            pw.flush();
             System.out.println( sw.toString() );
         } catch ( IOException ex ) {
             throw new RuntimeException( "Unable to print help, something is really wrong", ex );

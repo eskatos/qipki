@@ -13,12 +13,15 @@
  */
 package org.qipki.ca.http.utils;
 
-import org.qi4j.api.structure.Application.Mode;
-import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
-import org.qipki.core.AbstractQiPkiApplication;
+import java.io.File;
 
+import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.library.fileconfig.FileConfigurationOverride;
+
+import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
+import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiTestApplicationHttpCa
         extends AbstractQiPkiApplication
@@ -26,7 +29,7 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa( String testCodeName )
     {
-        super( new QiPkiHttpCaAssembler( testCodeName, Mode.test, "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true", "target/" + testCodeName + "-qi4j-index", null )
+        super( new QiPkiHttpCaAssembler( testCodeName, Mode.test, "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true", null )
         {
 
             @Override
@@ -37,7 +40,11 @@ public class QiPkiTestApplicationHttpCa
                 devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        } );
+        }.withFileConfigurationOverride( new FileConfigurationOverride().withConfiguration( new File( "target/" + testCodeName + "-qi4j-configuration" ) ).
+                withData( new File( "target/" + testCodeName + "-qi4j-data" ) ).
+                withCache( new File( "target/" + testCodeName + "-qi4j-cache" ) ).
+                withTemporary( new File( "target/" + testCodeName + "-qi4j-temporary" ) ).
+                withLog( new File( "target/" + testCodeName + "-qi4j-log" ) ) ) );
     }
 
 }

@@ -13,12 +13,10 @@
  */
 package org.qipki.ca.assembly;
 
-import java.io.File;
 import javax.sql.DataSource;
 
 import org.qipki.core.assembly.AssemblyUtil;
 import org.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
-import org.qipki.core.reindex.AutomaticReindexerConfiguration;
 
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
@@ -38,21 +36,18 @@ public class QiPkiPersistentEmbeddedCaAssembler
 
     private final String connectionString;
     private final DataSource dataSource;
-    private final String finderDataDirectory;
 
-    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, String connectionString, String finderDataDirectory )
+    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, String connectionString )
     {
         super( appName, appMode );
         this.connectionString = connectionString;
         this.dataSource = null;
-        this.finderDataDirectory = finderDataDirectory;
     }
 
-    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, DataSource dataSource, String finderDataDirectory )
+    public QiPkiPersistentEmbeddedCaAssembler( String appName, Mode appMode, DataSource dataSource )
     {
         super( appName, appMode );
         this.connectionString = null;
-        this.finderDataDirectory = finderDataDirectory;
         this.dataSource = dataSource;
     }
 
@@ -69,13 +64,9 @@ public class QiPkiPersistentEmbeddedCaAssembler
             ModuleAssembly persistenceMa = infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE );
 
             if ( dataSource != null ) {
-
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application, new ImportableDataSourceService( dataSource ) ).assemble( persistenceMa );
-
             } else {
-
                 new DerbyStoreAndSesameIndexModuleAssembler( Visibility.application ).assemble( persistenceMa );
-
             }
 
         }
@@ -83,22 +74,13 @@ public class QiPkiPersistentEmbeddedCaAssembler
         LayerAssembly config = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_CONFIGURATION );
         {
             ModuleAssembly configMa = AssemblyUtil.getModuleAssembly( appAssembly, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
-            configMa.forMixin( NativeConfiguration.class ).declareDefaults().dataDirectory().set( finderDataDirectory );
+            configMa.entities( NativeConfiguration.class ).visibleIn( Visibility.application );
 
             if ( dataSource != null ) {
-
-                configMa.addEntities( SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.application );
-
+                configMa.entities( SQLConfiguration.class ).visibleIn( Visibility.application );
             } else {
-
-                configMa.addEntities( DBCPDataSourceConfiguration.class, SQLConfiguration.class, NativeConfiguration.class ).visibleIn( Visibility.application );
+                configMa.entities( DBCPDataSourceConfiguration.class, SQLConfiguration.class ).visibleIn( Visibility.application );
                 configMa.forMixin( DBCPDataSourceConfiguration.class ).declareDefaults().url().set( connectionString );
-
-            }
-
-            File finderDataDirFile = new File( finderDataDirectory );
-            if ( !finderDataDirFile.exists() ) {
-                configMa.forMixin( AutomaticReindexerConfiguration.class ).declareDefaults().doReindexOnActivation().set( Boolean.TRUE );
             }
         }
 

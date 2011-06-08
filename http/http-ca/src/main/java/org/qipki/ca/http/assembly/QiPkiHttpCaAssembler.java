@@ -39,9 +39,9 @@ public class QiPkiHttpCaAssembler
 
     private final Integer jmxPort;
 
-    public QiPkiHttpCaAssembler( String appName, Mode appMode, String connectionString, String finderDataDirectory, Integer jmxPort )
+    public QiPkiHttpCaAssembler( String appName, Mode appMode, String connectionString, Integer jmxPort )
     {
-        super( appName, appMode, connectionString, finderDataDirectory );
+        super( appName, appMode, connectionString );
         this.jmxPort = jmxPort;
     }
 

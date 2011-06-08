@@ -1,4 +1,4 @@
-# QiPKI
+# QiPKI ![Project status](http://stillmaintained.com/eskatos/qipki.png)
 
 QiPKI is a simple X.509 PKI implemented in Java using Qi4j.
 

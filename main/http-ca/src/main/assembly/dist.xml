@@ -8,25 +8,33 @@
   </formats>
   <fileSets>
     <fileSet>
+      <outputDirectory></outputDirectory>
       <directory>${build.directory}/${dist.name}</directory>
       <excludes>
         <exclude>bin/*</exclude>
       </excludes>
+      <fileMode>0600</fileMode>
+      <directoryMode>0700</directoryMode>
     </fileSet>
     <fileSet>
+      <outputDirectory></outputDirectory>
       <directory>${build.directory}/${dist.name}</directory>
       <includes>
         <include>bin/*</include>
       </includes>
-      <fileMode>0744</fileMode>
+      <fileMode>0700</fileMode>
+      <directoryMode>0700</directoryMode>
     </fileSet>
     <fileSet>
+      <outputDirectory></outputDirectory>
       <directory>${project.basedir}</directory>
       <includes>
         <include>README*</include>
         <include>LICENSE*</include>
         <include>NOTICE*</include>
       </includes>
+      <fileMode>0600</fileMode>
+      <directoryMode>0700</directoryMode>
     </fileSet>
   </fileSets>
 </assembly>

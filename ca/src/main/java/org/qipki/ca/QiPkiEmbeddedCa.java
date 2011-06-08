@@ -45,22 +45,20 @@ public class QiPkiEmbeddedCa
      * Instanciate an embedded QiPki CA application using Apache Derby storage and Sesame RDF index.
      *
      * @param storePath     Path of the Apache Derby database
-     * @param indexPath     Path of the Sesame native RDF index
      */
-    public QiPkiEmbeddedCa( Mode appMode, File storePath, File indexPath )
+    public QiPkiEmbeddedCa( Mode appMode, File storePath )
     {
-        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, "jdbc:derby:" + storePath.getAbsolutePath() + ";create=true", indexPath.getAbsolutePath() ) );
+        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, "jdbc:derby:" + storePath.getAbsolutePath() + ";create=true" ) );
     }
 
     /**
      * Instanciate an embedded QiPki CA application using Apache Derby from a DataSource and Sesame RDF index.
      * 
      * @param dataSource    DataSource to use
-     * @param indexPath     Path of the Sesame native RDF index
      */
-    public QiPkiEmbeddedCa( Mode appMode, DataSource dataSource, File indexPath )
+    public QiPkiEmbeddedCa( Mode appMode, DataSource dataSource )
     {
-        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, dataSource, indexPath.getAbsolutePath() ) );
+        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, dataSource ) );
     }
 
     public UnitOfWorkFactory unitOfWorkFactory()
