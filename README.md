@@ -1,3 +1,24 @@
+
+> An engineer, a chemist, and a standards designer are stranded on a desert
+> island with absolutely nothing on it.  One of them finds a can of spam washed
+> up by the waves.
+>
+> The engineer says "Taking the strength of the seams into account, we can
+> calculate that bashing it against a rock with a given force will open it up
+> without destroying the contents".
+>
+> The chemist says "Taking the type of metal the can is made of into account,
+> we can calculate that further immersion in salt water will corrode it enough
+> to allow it to be easily opened after a day".
+>
+> The standards designer gives the other two a condescending look, gazes into
+> the middle distance, and begins "Assuming we have an electric can opener...".
+>
+>                                                     X.509 Style Guide - October 2000
+>                                             Peter Gutmann, pgut001@cs.auckland.ac.nz
+>                             http://www.cs.auckland.ac.nz/~pgut001/pubs/x509guide.txt
+
+
 # QiPKI ![Project status](http://stillmaintained.com/eskatos/qipki.png)
 
 QiPKI is a simple X.509 PKI implemented in Java using Qi4j.
