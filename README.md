@@ -1,3 +1,5 @@
+# QiPKI ![Project status](http://stillmaintained.com/eskatos/qipki.png)
+
 
     An engineer, a chemist, and a standards designer are stranded on a desert
     island with absolutely nothing on it.  One of them finds a can of spam washed
@@ -19,13 +21,22 @@
                                  http://www.cs.auckland.ac.nz/~pgut001/pubs/x509guide.txt
 
 
-# QiPKI ![Project status](http://stillmaintained.com/eskatos/qipki.png)
-
 QiPKI is a simple X.509 PKI implemented in Java using Qi4j.
 
 Each component is built as a library and has a http service as restfull as possible using json format for data structures.
 
-This is Work In Progress, don't expect something with easy setup and comprehensive documentation for now.
+This is Work In Progress, don't expect something with easy setup and comprehensive documentation for now but in case
+you're already using the embedded API or want to show your support, use the widgets bellow:
+
+[![I use this][2]][1]
+
+[![Flattr this][4]][3]
+
+[1]: https://www.ohloh.net/p/qipki
+[2]: https://www.ohloh.net/images/stack/iusethis/static_logo.png
+[3]: https://flattr.com/thing/294404/QiPki
+[4]: http://api.flattr.com/button/button-static-50x60.png
+
 
 ## Changelog
 
