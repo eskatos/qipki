@@ -45,6 +45,7 @@ you're already using the embedded API or want to show your support, use the widg
 * Added a Management layer to the QiPkiHttpCa application exposing the Qi4j application structure through JMX
 * Added a main program to run qipki-http-ca
 * Added a distribution assembly for qipki-htp-ca with startup scripts for Unix and Windows
+* Simplified bootstrap supporting both embedded and standalone ways
 * Upstream update: Qi4j 1.4-SNAPSHOT
 * Completely removed OSGi support
 

@@ -15,6 +15,7 @@ package org.qipki.ca;
 
 import java.io.File;
 import javax.sql.DataSource;
+
 import org.qi4j.api.structure.Application.Mode;
 
 import org.qipki.ca.application.contexts.RootContext;
@@ -22,16 +23,10 @@ import org.qipki.ca.assembly.CaAssemblyNames;
 import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
 import org.qipki.ca.assembly.QiPkiVolatileEmbeddedCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
-import org.qipki.core.dci.InteractionContext;
-
-import org.qi4j.api.structure.Module;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 public class QiPkiEmbeddedCa
-        extends AbstractQiPkiApplication
+        extends AbstractQiPkiApplication<RootContext>
 {
-
-    private Module dciModule;
 
     /**
      * Instanciate an embedded QiPki CA application using in-memory storage.
@@ -59,30 +54,6 @@ public class QiPkiEmbeddedCa
     public QiPkiEmbeddedCa( Mode appMode, DataSource dataSource )
     {
         super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, dataSource ) );
-    }
-
-    public UnitOfWorkFactory unitOfWorkFactory()
-    {
-        return ensureDCIModule().unitOfWorkFactory();
-    }
-
-    public RootContext newRootContext()
-    {
-        return ensureDCIModule().objectBuilderFactory().newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
-    }
-
-    private synchronized Module ensureDCIModule()
-    {
-        if ( dciModule == null ) {
-            dciModule = application.findModule( CaAssemblyNames.LAYER_APPLICATION, CaAssemblyNames.MODULE_CA_DCI );
-        }
-        return dciModule;
-    }
-
-    @Override
-    protected void afterPassivate()
-    {
-        dciModule = null;
     }
 
 }

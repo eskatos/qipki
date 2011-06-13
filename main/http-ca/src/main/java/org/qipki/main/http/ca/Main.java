@@ -20,8 +20,8 @@ import java.util.Calendar;
 
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
+import org.qipki.ca.http.QiPkiHttpCa;
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
-import org.qipki.core.AbstractQiPkiApplication;
 import org.qipki.core.QiPkiApplication;
 import org.qipki.main.core.QiPkiMain;
 import org.qipki.main.core.QiPkiApplicationArguments;
@@ -61,9 +61,7 @@ public class Main
                                                                       args.getJmxPort() );
         appAssembler.withFileConfigurationOverride( fileConfigOverride );
 
-        return new AbstractQiPkiApplication( appAssembler )
-        {
-        };
+        return new QiPkiHttpCa( appAssembler );
     }
 
     @Override

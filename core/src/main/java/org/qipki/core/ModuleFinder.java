@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,15 @@
  */
 package org.qipki.core;
 
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.api.structure.Module;
+import org.qi4j.spi.structure.ApplicationSPI;
 
-import org.qipki.core.dci.Context;
-
-public interface QiPkiApplication<RootContextType extends Context>
-        extends Runnable
+public class ModuleFinder
 {
 
-    void stop();
-
-    RootContextType newRootContext();
-
-    UnitOfWorkFactory unitOfWorkFactory();
+    public Module findModule( ApplicationSPI application )
+    {
+        return null;
+    }
 
 }

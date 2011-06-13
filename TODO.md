@@ -8,8 +8,7 @@
 
 # Work in progress
 
-* (##--) Package a http assembly as a unix daemon
-  * Remove work done on QiPkiApplication in favour of the new Main creating a qipki-main-core
+* (###-) Package a http assembly as a unix daemon
   * Refactor assembly to create a JSW based application
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Move code to qipki-main-core

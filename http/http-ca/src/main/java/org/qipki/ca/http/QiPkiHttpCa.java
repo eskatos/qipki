@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,20 +11,19 @@
  * limitations under the License.
  *
  */
-package org.qipki.core;
+package org.qipki.ca.http;
 
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
+import org.qipki.core.AbstractQiPkiApplication;
 
-import org.qipki.core.dci.Context;
-
-public interface QiPkiApplication<RootContextType extends Context>
-        extends Runnable
+public class QiPkiHttpCa
+        extends AbstractQiPkiApplication<RootContext>
 {
 
-    void stop();
-
-    RootContextType newRootContext();
-
-    UnitOfWorkFactory unitOfWorkFactory();
+    public QiPkiHttpCa( QiPkiHttpCaAssembler appAssembler )
+    {
+        super( appAssembler );
+    }
 
 }

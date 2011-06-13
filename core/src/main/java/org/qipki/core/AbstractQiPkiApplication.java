@@ -15,18 +15,22 @@ package org.qipki.core;
 
 import org.qi4j.api.Qi4j;
 import org.qi4j.api.common.InvalidApplicationException;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
 import org.qi4j.spi.Qi4jSPI;
 import org.qi4j.spi.structure.ApplicationModelSPI;
 import org.qi4j.spi.structure.ApplicationSPI;
 
+import org.qipki.core.dci.Context;
+import org.qipki.core.dci.InteractionContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings( "ProtectedField" )
-public abstract class AbstractQiPkiApplication
-        implements QiPkiApplication
+public abstract class AbstractQiPkiApplication<RootContextType extends Context>
+        implements QiPkiApplication<RootContextType>
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractQiPkiApplication.class );
@@ -37,7 +41,7 @@ public abstract class AbstractQiPkiApplication
     protected Qi4jSPI spi;
     protected Qi4j api;
 
-    protected AbstractQiPkiApplication( ApplicationAssembler appAssembler )
+    public AbstractQiPkiApplication( ApplicationAssembler appAssembler )
     {
         this.appAssembler = appAssembler;
     }
@@ -86,6 +90,25 @@ public abstract class AbstractQiPkiApplication
     }
 
     @Override
+    public final RootContextType newRootContext()
+    {
+        return dciModuleFinder().
+                findModule( application ).
+                objectBuilderFactory().
+                newObjectBuilder( rootContextType() ).
+                use( new InteractionContext() ).
+                newInstance();
+    }
+
+    @Override
+    public UnitOfWorkFactory unitOfWorkFactory()
+    {
+        return dciModuleFinder().
+                findModule( application ).
+                unitOfWorkFactory();
+    }
+
+    @Override
     public final void stop()
     {
         try {
@@ -99,6 +122,16 @@ public abstract class AbstractQiPkiApplication
         } catch ( Exception ex ) {
             LOGGER.warn( "Unable to passivate QiPKI Application", ex );
         }
+    }
+
+    protected ModuleFinder dciModuleFinder()
+    {
+        return null;
+    }
+
+    protected Class<RootContextType> rootContextType()
+    {
+        return null;
     }
 
     protected void beforeActivate()
