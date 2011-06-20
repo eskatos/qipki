@@ -45,12 +45,6 @@ public class Main
             }
 
         } ) );
-        System.out.println( "" );
-        System.out.println( "" );
-        System.out.println( "MAIN METHOD FINISHED! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" );
-        System.out.println( "" );
-        System.out.println( "" );
-
     }
 
     public Main( String[] mainArgs )

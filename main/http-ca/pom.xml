@@ -70,20 +70,13 @@
             <configuration>
               <outputDirectory>${project.build.directory}/${dist.name}</outputDirectory>
               <globals>
-                <wrapperDebug>false</wrapperDebug>
                 <wrapperJmx>false</wrapperJmx>
                 <javaLogGeneratedCommand>false</javaLogGeneratedCommand>
               </globals>
               <services>
                 <service>
-                  <javaArguments>
-                    <javaArgument>-Dbasedir=../</javaArgument>
-                  </javaArguments>
                   <appName>${dist.name}-${project.version}</appName>
                   <appMainClass>${wrapped.main.class}</appMainClass>
-                  <appArguments>
-                    <appArgument>--verbose</appArgument>
-                  </appArguments>
                   <daemonName>${dist.name}</daemonName>
                 </service>
               </services>

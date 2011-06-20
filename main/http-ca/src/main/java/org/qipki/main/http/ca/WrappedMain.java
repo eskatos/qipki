@@ -32,20 +32,9 @@ public class WrappedMain
             public Integer start( String[] strings )
             {
                 app = new Main( mainArgs ).bootstrap();
+                WrapperManager.signalStarting( 30 );
                 app.run();
-                Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        if ( app != null ) {
-                            app.stop();
-                            app = null;
-                        }
-                    }
-
-                } ) );
+                WrapperManager.signalStarting( 1 );
                 return null;
             }
 
