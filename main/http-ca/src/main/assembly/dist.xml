@@ -10,6 +10,7 @@
     <fileSet>
       <outputDirectory></outputDirectory>
       <directory>${build.directory}/${dist.name}</directory>
+      <!--
       <excludes>
         <exclude>bin/*</exclude>
       </excludes>
@@ -24,6 +25,7 @@
       </includes>
       <fileMode>0700</fileMode>
       <directoryMode>0700</directoryMode>
+      -->
     </fileSet>
     <fileSet>
       <outputDirectory></outputDirectory>

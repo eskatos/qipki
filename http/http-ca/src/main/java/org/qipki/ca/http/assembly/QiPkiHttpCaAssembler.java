@@ -14,12 +14,10 @@
 package org.qipki.ca.http.assembly;
 
 import java.io.IOException;
-import org.codeartisans.java.toolbox.network.FreePortFinder;
-import org.qi4j.api.common.InvalidApplicationException;
-import org.qipki.ca.assembly.CaAssemblyNames;
-import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
-import org.qipki.core.assembly.AssemblyUtil;
 
+import org.codeartisans.java.toolbox.network.FreePortFinder;
+
+import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -32,6 +30,10 @@ import org.qi4j.library.http.JettyConfiguration;
 import org.qi4j.library.jmx.JMXAssembler;
 import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
+
+import org.qipki.ca.assembly.CaAssemblyNames;
+import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
+import org.qipki.core.assembly.AssemblyUtil;
 
 public class QiPkiHttpCaAssembler
         extends QiPkiPersistentEmbeddedCaAssembler

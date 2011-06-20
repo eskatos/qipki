@@ -9,7 +9,7 @@
 # Work in progress
 
 * (###-) Package a http assembly as a unix daemon
-  * Refactor assembly to create a JSW based application
+  * Clean up directory layout in assembly
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Move code to qipki-main-core
   * Write integration tests for migrations

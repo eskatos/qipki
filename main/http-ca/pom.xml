@@ -17,6 +17,7 @@
 
   <properties>
     <main.class>org.qipki.main.http.ca.Main</main.class>
+    <wrapped.main.class>org.qipki.main.http.ca.WrappedMain</wrapped.main.class>
     <dist.name>qipki-http-ca</dist.name>
   </properties>
 
@@ -57,38 +58,38 @@
 
       <!-- Application assembly -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>appassembler-maven-plugin</artifactId>
-        <version>1.1.1</version>
+        <groupId>org.codeartisans</groupId>
+        <artifactId>jsw-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
         <executions>
           <execution>
-            <id>qipki-http-ca-appassemble</id>
             <goals>
-              <goal>assemble</goal>
+              <goal>jsw</goal>
             </goals>
             <phase>package</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${dist.name}</outputDirectory>
+              <globals>
+                <wrapperDebug>false</wrapperDebug>
+                <wrapperJmx>false</wrapperJmx>
+                <javaLogGeneratedCommand>false</javaLogGeneratedCommand>
+              </globals>
+              <services>
+                <service>
+                  <javaArguments>
+                    <javaArgument>-Dbasedir=../</javaArgument>
+                  </javaArguments>
+                  <appName>${dist.name}-${project.version}</appName>
+                  <appMainClass>${wrapped.main.class}</appMainClass>
+                  <appArguments>
+                    <appArgument>--verbose</appArgument>
+                  </appArguments>
+                  <daemonName>${dist.name}</daemonName>
+                </service>
+              </services>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <configurationDirectory>etc</configurationDirectory>
-          <copyConfigurationDirectory>true</copyConfigurationDirectory>
-          <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-          <!--binPrefix>qipki</binPrefix-->
-          <assembleDirectory>${project.build.directory}/${dist.name}</assembleDirectory>
-          <extraJvmArguments>-Xms128m</extraJvmArguments>
-          <repositoryName>lib</repositoryName>
-          <repositoryLayout>flat</repositoryLayout>
-          <platforms>
-            <platform>windows</platform>
-            <platform>unix</platform>
-          </platforms>
-          <programs>
-            <program>
-              <mainClass>${main.class}</mainClass>
-              <name>${dist.name}</name>
-            </program>
-          </programs>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -139,6 +140,14 @@
   </build>
 
   <dependencies>
+
+    <dependency>
+      <groupId>tanukisoft</groupId>
+      <artifactId>wrapper</artifactId>
+      <version>3.2.3</version>
+      <scope>provided</scope>
+    </dependency>
+
 
     <dependency>
       <groupId>${project.groupId}</groupId>

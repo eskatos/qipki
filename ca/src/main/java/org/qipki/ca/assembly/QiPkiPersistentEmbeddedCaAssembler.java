@@ -15,9 +15,6 @@ package org.qipki.ca.assembly;
 
 import javax.sql.DataSource;
 
-import org.qipki.core.assembly.AssemblyUtil;
-import org.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
-
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -29,6 +26,9 @@ import org.qi4j.library.rdf.repository.NativeConfiguration;
 import org.qi4j.library.sql.common.SQLConfiguration;
 import org.qi4j.library.sql.ds.DBCPDataSourceConfiguration;
 import org.qi4j.library.sql.ds.assembly.ImportableDataSourceService;
+
+import org.qipki.core.assembly.AssemblyUtil;
+import org.qipki.core.assembly.DerbyStoreAndSesameIndexModuleAssembler;
 
 public class QiPkiPersistentEmbeddedCaAssembler
         extends QiPkiEmbeddedCaAssembler
