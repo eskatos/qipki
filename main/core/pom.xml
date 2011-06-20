@@ -15,12 +15,6 @@
   <name>${project.artifactId}</name>
   <url>http://qipki.org</url>
 
-  <build>
-    <plugins>
-
-    </plugins>
-  </build>
-
   <dependencies>
 
     <dependency>
@@ -30,9 +24,33 @@
     </dependency>
 
     <dependency>
+      <groupId>tanukisoft</groupId>
+      <artifactId>wrapper</artifactId>
+      <version>3.2.3</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>net.sf.jopt-simple</groupId>
       <artifactId>jopt-simple</artifactId>
       <version>3.3</version>
+    </dependency>
+
+    <!-- SQLEntityStore -->
+    <dependency>
+      <groupId>org.java-sql-generator.implementation</groupId>
+      <artifactId>java-sql-generator-implementation</artifactId>
+      <version>0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>${version.derby}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+      <version>${version.derby}</version>
     </dependency>
 
     <!-- Logging -->

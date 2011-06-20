@@ -44,7 +44,6 @@ you're already using the embedded API or want to show your support, use the widg
 
 * Distribution packaged as a unix daemon in qipki-main-http-ca
 * Management layer in QiPkiHttpCa exposing the Qi4j application structure through JMX
-* Distribution assembly for QiPkiHttpCa with startup scripts based on Java Service Wrapper http://wrapper.tanukisoftware.com/
 * Simplified bootstrap supporting both embedded and standalone ways
 * No more OSGi support
 * Upstream update: Qi4j 1.4-SNAPSHOT

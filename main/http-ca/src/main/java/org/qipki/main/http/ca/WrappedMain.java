@@ -13,47 +13,24 @@
  */
 package org.qipki.main.http.ca;
 
-import org.qipki.core.QiPkiApplication;
-
-import org.tanukisoftware.wrapper.WrapperListener;
-import org.tanukisoftware.wrapper.WrapperManager;
+import org.qipki.main.core.QiPkiMain;
+import org.qipki.main.core.QiPkiWrappedMain;
 
 public class WrappedMain
 {
 
     public static void main( final String[] mainArgs )
     {
-        WrapperManager.start( new WrapperListener()
+        new QiPkiWrappedMain( mainArgs )
         {
 
-            private QiPkiApplication app;
-
             @Override
-            public Integer start( String[] strings )
+            protected QiPkiMain buildQiPkiMain()
             {
-                app = new Main( mainArgs ).bootstrap();
-                WrapperManager.signalStarting( 30 );
-                app.run();
-                WrapperManager.signalStarting( 1 );
-                return null;
+                return new Main( args );
             }
 
-            @Override
-            public int stop( int exitCode )
-            {
-                if ( app != null ) {
-                    app.stop();
-                    app = null;
-                }
-                return exitCode;
-            }
-
-            @Override
-            public void controlEvent( int i )
-            {
-            }
-
-        }, mainArgs );
+        }.startWrapped();
     }
 
 }

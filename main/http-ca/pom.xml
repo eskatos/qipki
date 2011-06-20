@@ -135,42 +135,16 @@
   <dependencies>
 
     <dependency>
-      <groupId>tanukisoft</groupId>
-      <artifactId>wrapper</artifactId>
-      <version>3.2.3</version>
-      <scope>provided</scope>
-    </dependency>
-
-
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>qipki-main-core</artifactId>
       <version>${project.version}</version>
     </dependency>
-
+    
     <dependency>
       <groupId>org.codeartisans.qipki.qipki-http</groupId>
       <artifactId>qipki-http-ca</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <!-- SQLEntityStore -->
-    <dependency>
-      <groupId>org.java-sql-generator.implementation</groupId>
-      <artifactId>java-sql-generator-implementation</artifactId>
-      <version>0.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
-      <version>${version.derby}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derbyclient</artifactId>
-      <version>${version.derby}</version>
-    </dependency>
-
 
   </dependencies>
 
