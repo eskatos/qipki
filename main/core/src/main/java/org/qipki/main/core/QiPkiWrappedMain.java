@@ -14,11 +14,12 @@
 package org.qipki.main.core;
 
 import org.qipki.core.QiPkiApplication;
+import org.qipki.core.dci.Context;
 
 import org.tanukisoftware.wrapper.WrapperListener;
 import org.tanukisoftware.wrapper.WrapperManager;
 
-public abstract class QiPkiWrappedMain
+public abstract class QiPkiWrappedMain<RootContextType extends Context>
 {
 
     private final WrapperListener listener = new WrapperListener()
@@ -27,10 +28,11 @@ public abstract class QiPkiWrappedMain
         @Override
         public final Integer start( String[] args )
         {
-            app = buildQiPkiMain().bootstrap();
-            WrapperManager.signalStarting( 30 );
-            app.run();
+            QiPkiApplication<RootContextType> application = buildQiPkiMain( args ).bootstrap();
+            WrapperManager.signalStarting( 60 );
+            application.run();
             WrapperManager.signalStarting( 1 );
+            app = application;
             return null;
         }
 
@@ -50,15 +52,15 @@ public abstract class QiPkiWrappedMain
         }
 
     };
-    protected final String[] args;
-    private QiPkiApplication app;
+    private final String[] args;
+    private QiPkiApplication<RootContextType> app;
 
     public QiPkiWrappedMain( String[] args )
     {
         this.args = args;
     }
 
-    protected abstract QiPkiMain buildQiPkiMain();
+    protected abstract QiPkiMain<RootContextType> buildQiPkiMain( String[] args );
 
     public final void startWrapped()
     {

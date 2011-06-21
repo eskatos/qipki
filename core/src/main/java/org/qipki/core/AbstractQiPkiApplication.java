@@ -92,10 +92,10 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     @Override
     public final RootContextType newRootContext()
     {
-        return dciModuleFinder().
+        return ensureDciModuleFinder().
                 findModule( application ).
                 objectBuilderFactory().
-                newObjectBuilder( rootContextType() ).
+                newObjectBuilder( ensureRootContextType() ).
                 use( new InteractionContext() ).
                 newInstance();
     }
@@ -103,7 +103,7 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     @Override
     public UnitOfWorkFactory unitOfWorkFactory()
     {
-        return dciModuleFinder().
+        return ensureDciModuleFinder().
                 findModule( application ).
                 unitOfWorkFactory();
     }
@@ -124,6 +124,24 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
         }
     }
 
+    private ModuleFinder ensureDciModuleFinder()
+    {
+        ModuleFinder finder = dciModuleFinder();
+        if ( finder == null ) {
+            throw new UnsupportedOperationException( "This QiPkiApplication do not support DCI" );
+        }
+        return finder;
+    }
+
+    protected Class<RootContextType> ensureRootContextType()
+    {
+        Class<RootContextType> rootContextType = rootContextType();
+        if ( rootContextType == null ) {
+            throw new UnsupportedOperationException( "This QiPkiApplication do not support DCI" );
+        }
+        return rootContextType;
+    }
+
     protected ModuleFinder dciModuleFinder()
     {
         return null;
@@ -135,18 +153,22 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     }
 
     protected void beforeActivate()
+            throws Exception
     {
     }
 
     protected void afterActivate()
+            throws Exception
     {
     }
 
     protected void beforePassivate()
+            throws Exception
     {
     }
 
     protected void afterPassivate()
+            throws Exception
     {
     }
 

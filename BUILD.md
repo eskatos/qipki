@@ -16,5 +16,6 @@ Here is the project layout, that should get you started browsing the code
     ├── clients
     │   └── ca-http-client
     └── main
-        └── main-http-ca
+        ├── core
+        └── http-ca
 

@@ -27,11 +27,12 @@ import joptsimple.OptionSpec;
 
 import static org.qipki.main.core.DefaultFileConfigOptions.*;
 import org.qipki.core.QiPkiApplication;
+import org.qipki.core.dci.Context;
 import static org.qipki.main.core.QiPkiOptions.*;
 
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-public abstract class QiPkiMain
+public abstract class QiPkiMain<RootContextType extends Context>
 {
 
     private static final String BASEDIR = System.getProperty( "basedir" );
@@ -42,11 +43,11 @@ public abstract class QiPkiMain
         this.mainArgs = mainArgs;
     }
 
-    protected abstract QiPkiApplication buildApplication( QiPkiApplicationArguments args );
+    protected abstract QiPkiApplication<RootContextType> buildApplication( QiPkiApplicationArguments args );
 
     protected abstract void outputBanner( PrintWriter out );
 
-    public final QiPkiApplication bootstrap()
+    public final QiPkiApplication<RootContextType> bootstrap()
     {
 
         QiPkiOptionParser parser = new QiPkiOptionParser();

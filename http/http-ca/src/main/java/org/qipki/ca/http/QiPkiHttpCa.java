@@ -13,17 +13,45 @@
  */
 package org.qipki.ca.http;
 
+import org.qi4j.api.structure.Module;
+import org.qi4j.spi.structure.ApplicationSPI;
+
 import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.assembly.CaAssemblyNames;
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
+import org.qipki.core.ModuleFinder;
 
 public class QiPkiHttpCa
         extends AbstractQiPkiApplication<RootContext>
 {
 
+    private static ModuleFinder dciFinder = new ModuleFinder()
+    {
+
+        @Override
+        public Module findModule( ApplicationSPI application )
+        {
+            return application.findModule( CaAssemblyNames.LAYER_APPLICATION, CaAssemblyNames.MODULE_CA_DCI );
+        }
+
+    };
+
     public QiPkiHttpCa( QiPkiHttpCaAssembler appAssembler )
     {
         super( appAssembler );
+    }
+
+    @Override
+    protected ModuleFinder dciModuleFinder()
+    {
+        return dciFinder;
+    }
+
+    @Override
+    protected Class<RootContext> rootContextType()
+    {
+        return RootContext.class;
     }
 
 }

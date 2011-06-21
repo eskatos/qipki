@@ -17,23 +17,29 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import org.qi4j.api.unitofwork.UnitOfWork;
+import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
+import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
+import org.qipki.ca.domain.cryptostore.CryptoStore;
 
 import org.qipki.ca.http.QiPkiHttpCa;
 import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
 import org.qipki.core.QiPkiApplication;
+import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.main.core.QiPkiMain;
 import org.qipki.main.core.QiPkiApplicationArguments;
 
 public class Main
-        extends QiPkiMain
+        extends QiPkiMain<RootContext>
 {
 
     public static void main( String[] mainArgs )
-            throws IOException
+            throws IOException, UnitOfWorkCompletionException
     {
-        final QiPkiApplication app = new Main( mainArgs ).bootstrap();
+        final QiPkiApplication<RootContext> app = new Main( mainArgs ).bootstrap();
         app.run();
         Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
         {
@@ -53,7 +59,7 @@ public class Main
     }
 
     @Override
-    protected QiPkiApplication buildApplication( QiPkiApplicationArguments args )
+    protected QiPkiApplication<RootContext> buildApplication( QiPkiApplicationArguments args )
     {
         FileConfigurationOverride fileConfigOverride = args.buildFileConfigOverride();
         QiPkiHttpCaAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, args.getMode(),
@@ -61,7 +67,21 @@ public class Main
                                                                       args.getJmxPort() );
         appAssembler.withFileConfigurationOverride( fileConfigOverride );
 
-        return new QiPkiHttpCa( appAssembler );
+        return new QiPkiHttpCa( appAssembler )
+        {
+
+            @Override
+            protected void afterActivate()
+                    throws Exception
+            {
+                // TODO Only for debugging purpose until we deploy a client in the assembly, remove this then !
+                UnitOfWork uow = unitOfWorkFactory().newUnitOfWork();
+                CryptoStoreListContext ctx = newRootContext().cryptoStoreListContext();
+                ctx.createCryptoStore( "foo-" + System.currentTimeMillis(), KeyStoreType.JCEKS, "changeit".toCharArray() );
+                uow.complete();
+            }
+
+        };
     }
 
     @Override

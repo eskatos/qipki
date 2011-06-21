@@ -13,19 +13,20 @@
  */
 package org.qipki.main.http.ca;
 
+import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.main.core.QiPkiMain;
 import org.qipki.main.core.QiPkiWrappedMain;
 
 public class WrappedMain
 {
 
-    public static void main( final String[] mainArgs )
+    public static void main( String[] mainArgs )
     {
-        new QiPkiWrappedMain( mainArgs )
+        new QiPkiWrappedMain<RootContext>( mainArgs )
         {
 
             @Override
-            protected QiPkiMain buildQiPkiMain()
+            protected QiPkiMain<RootContext> buildQiPkiMain( String[] args )
             {
                 return new Main( args );
             }
