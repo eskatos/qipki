@@ -77,7 +77,7 @@ public class QiPkiCryptoStoreTest
         HttpPost post = new HttpPost( caApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
         String ksName = "Another KeyStore";
-        CryptoStoreFactoryParamsValue params = paramsFactory.createKeyStoreFactoryParams( ksName,
+        CryptoStoreFactoryParamsValue params = paramsFactory.createCryptoStoreFactoryParams( ksName,
                                                                                           KeyStoreType.JKS,
                                                                                           "changeit".toCharArray() );
         post.setEntity( new StringEntity( params.toJSON() ) );

@@ -13,17 +13,17 @@
  */
 package org.qipki.client.ca.api;
 
-import org.qipki.client.ca.spi.RestClientService;
-import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.CryptoStoreValue;
-import org.qipki.commons.rest.values.representations.RestListValue;
-import org.qipki.commons.rest.values.representations.RestListValueIterable;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.client.ca.spi.RestClientService;
+import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestListValueIterable;
 
 @Mixins( CryptoStoreClientService.Mixin.class )
 public interface CryptoStoreClientService
@@ -36,29 +36,31 @@ public interface CryptoStoreClientService
             implements CryptoStoreClientService
     {
 
-        @Structure
-        private ValueBuilderFactory valueBuilderFactory;
         @Service
-        private RestClientService restClientService;
+        private RestClientService restClient;
+        @Structure
+        private ValueBuilderFactory vbf;
 
         @Override
         public Iterable<CryptoStoreValue> list( int start )
         {
-            String jsonCryptoStoreList = restClientService.getJSON( restClientService.fetchApiURIs().cryptoStoreListUri().get() );
-            RestListValue restList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCryptoStoreList );
+            String jsonCryptoStoreList = restClient.getJSON( restClient.fetchApiURIs().cryptoStoreListUri().get() );
+            RestListValue restList = vbf.newValueFromJSON( RestListValue.class, jsonCryptoStoreList );
             return new RestListValueIterable<CryptoStoreValue>( restList );
         }
 
         @Override
         public CryptoStoreValue get( String uri )
         {
-            throw new UnsupportedOperationException( "Not supported yet." );
+            String jsonCryptoStore = restClient.getJSON( uri );
+            return vbf.newValueFromJSON( CryptoStoreValue.class, jsonCryptoStore );
         }
 
         @Override
         public CryptoStoreValue create( CryptoStoreFactoryParamsValue params )
         {
-            throw new UnsupportedOperationException( "Not supported yet." );
+            String jsonCryptoStore = restClient.postJSON( restClient.fetchApiURIs().cryptoStoreListUri().get(), params.toJSON() );
+            return vbf.newValueFromJSON( CryptoStoreValue.class, jsonCryptoStore );
         }
 
     }

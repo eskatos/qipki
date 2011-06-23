@@ -13,11 +13,17 @@
  */
 package org.qipki.client.ca.api;
 
-import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.CAValue;
-
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.client.ca.spi.RestClientService;
+import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.CAValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestListValueIterable;
 
 @Mixins( CAClientService.Mixin.class )
 public interface CAClientService
@@ -30,22 +36,31 @@ public interface CAClientService
             implements CAClientService
     {
 
+        @Service
+        private RestClientService restClient;
+        @Structure
+        private ValueBuilderFactory vbf;
+
         @Override
         public Iterable<CAValue> list( int start )
         {
-            throw new UnsupportedOperationException( "Not supported yet." );
+            String jsonCaList = restClient.getJSON( restClient.fetchApiURIs().caListUri().get() );
+            RestListValue restList = vbf.newValueFromJSON( RestListValue.class, jsonCaList );
+            return new RestListValueIterable<CAValue>( restList );
         }
 
         @Override
         public CAValue get( String uri )
         {
-            throw new UnsupportedOperationException( "Not supported yet." );
+            String jsonCa = restClient.getJSON( uri );
+            return vbf.newValueFromJSON( CAValue.class, jsonCa );
         }
 
         @Override
         public CAValue create( CAFactoryParamsValue params )
         {
-            throw new UnsupportedOperationException( "Not supported yet." );
+            String jsonCa = restClient.postJSON( restClient.fetchApiURIs().caListUri().get(), params.toJSON() );
+            return vbf.newValueFromJSON( CAValue.class, jsonCa );
         }
 
     }

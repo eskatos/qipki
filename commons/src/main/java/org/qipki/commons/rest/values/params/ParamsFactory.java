@@ -13,8 +13,14 @@
  */
 package org.qipki.commons.rest.values.params;
 
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.value.ValueBuilder;
+import org.qi4j.api.value.ValueBuilderFactory;
+
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
-import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
@@ -23,21 +29,15 @@ import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.crypto.x509.RevocationReason;
-
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.value.ValueBuilder;
-import org.qi4j.api.value.ValueBuilderFactory;
 
 @Mixins( ParamsFactory.Mixin.class )
 public interface ParamsFactory
         extends ServiceComposite
 {
 
-    CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
+    CryptoStoreFactoryParamsValue createCryptoStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
 
     CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
                                                 String name, Integer validityDays,
@@ -72,7 +72,7 @@ public interface ParamsFactory
         private ValueBuilderFactory vbf;
 
         @Override
-        public CryptoStoreFactoryParamsValue createKeyStoreFactoryParams( String name, KeyStoreType storeType, char[] password )
+        public CryptoStoreFactoryParamsValue createCryptoStoreFactoryParams( String name, KeyStoreType storeType, char[] password )
         {
             ValueBuilder<CryptoStoreFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CryptoStoreFactoryParamsValue.class );
             CryptoStoreFactoryParamsValue params = paramsBuilder.prototype();

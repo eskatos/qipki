@@ -11,15 +11,17 @@
  * limitations under the License.
  *
  */
-package org.qipki.client.ca;
+package org.qipki.client.ca.api;
 
-import org.qi4j.api.configuration.ConfigurationComposite;
-import org.qi4j.api.property.Property;
+import org.qipki.commons.rest.values.params.ParamsFactory;
 
-public interface QiPkiCaHttpClientConfiguration
-        extends ConfigurationComposite
+public interface QiPkiHttpCaClient
 {
 
-    Property<String> apiUri();
+    ParamsFactory paramsFactory();
+
+    CryptoStoreClientService cryptoStore();
+
+    CAClientService ca();
 
 }

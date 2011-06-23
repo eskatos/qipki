@@ -13,17 +13,23 @@
  */
 package org.qipki.ca.http;
 
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.test.EntityTestAssembler;
 
 import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
+import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
 import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
-import org.qipki.client.ca.api.CryptoStoreClientService;
+import org.qipki.client.ca.api.QiPkiHttpCaClient;
+import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.qipki.crypto.storage.KeyStoreType;
 
 public class QiPkiHttpCaClientTest
         extends AbstractQiPkiHttpCaTest
@@ -36,28 +42,39 @@ public class QiPkiHttpCaClientTest
         qipkiServer.run();
     }
 
-    private CryptoStoreClientService cryptoStoreClient;
+    private QiPkiHttpCaClient caClient;
 
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
         new QiPkiCaClientAssembler().assemble( module );
+        ModuleAssembly config = module.layer().module( "config" );
+        new EntityTestAssembler( Visibility.layer ).assemble( config );
+        config.entities( QiPkiCaHttpClientConfiguration.class );
+        config.forMixin( QiPkiCaHttpClientConfiguration.class ).declareDefaults().apiUri().set( "http://localhost:8443/api" );
     }
 
     @Before
     public void beforeClient()
     {
-        cryptoStoreClient = serviceLocator.<CryptoStoreClientService>findService( CryptoStoreClientService.class ).get();
+        caClient = serviceLocator.<QiPkiHttpCaClient>findService( QiPkiHttpCaClient.class ).get();
     }
 
     @Test
     public void test()
     {
-        Iterable<CryptoStoreValue> cryptoStores = cryptoStoreClient.list( 0 );
+        Iterable<CryptoStoreValue> cryptoStores = caClient.cryptoStore().list( 0 );
         for ( CryptoStoreValue eachCryptoStore : cryptoStores ) {
+            String csName = eachCryptoStore.name().get();
             System.out.println( "CryptoStore: " + eachCryptoStore.name().get() );
+            CryptoStoreValue cs = caClient.cryptoStore().get( eachCryptoStore.uri().get() );
+            assertEquals( csName, cs.name().get() );
         }
+        String newName = "AnotherOne-" + System.currentTimeMillis();
+        CryptoStoreFactoryParamsValue params = paramsFactory.createCryptoStoreFactoryParams( newName, KeyStoreType.JCEKS, "changeit".toCharArray() );
+        CryptoStoreValue newCs = caClient.cryptoStore().create( params );
+        assertEquals( newName, newCs.name().get() );
     }
 
 }

@@ -37,6 +37,9 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import org.qi4j.api.value.ValueBuilder;
+
+import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
@@ -68,9 +71,6 @@ import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import org.qi4j.api.value.ValueBuilder;
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -223,7 +223,7 @@ public class QiPkiHttpCaTest
         // Create a new CryptoStore
         HttpPost post = new HttpPost( caApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
-        CryptoStoreFactoryParamsValue csParams = paramsFactory.createKeyStoreFactoryParams( testCryptoStoreName, KeyStoreType.JKS, "changeit".toCharArray() );
+        CryptoStoreFactoryParamsValue csParams = paramsFactory.createCryptoStoreFactoryParams( testCryptoStoreName, KeyStoreType.JKS, "changeit".toCharArray() );
         post.setEntity( new StringEntity( csParams.toJSON() ) );
         String csJson = httpClient.execute( post, strResponseHandler );
         CryptoStoreValue cryptoStore = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, csJson );

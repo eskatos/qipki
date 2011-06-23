@@ -20,6 +20,7 @@ import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.client.ca.api.CAClientService;
 import org.qipki.client.ca.api.CryptoStoreClientService;
+import org.qipki.client.ca.api.QiPkiHttpCaClientService;
 import org.qipki.client.ca.spi.RestClientService;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
@@ -53,7 +54,8 @@ public class QiPkiCaClientAssembler
         module.addServices( RestClientService.class ).
                 visibleIn( Visibility.module );
 
-        module.addServices( CryptoStoreClientService.class,
+        module.addServices( QiPkiHttpCaClientService.class,
+                            CryptoStoreClientService.class,
                             CAClientService.class ).
                 visibleIn( visibility );
     }
