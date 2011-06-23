@@ -15,8 +15,8 @@ package org.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
 
-import org.qipki.commons.fragments.HasCriticality;
-import org.qipki.commons.fragments.HasOID;
+import org.qipki.commons.crypto.values.HasCriticality;
+import org.qipki.commons.crypto.values.HasOID;
 
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;

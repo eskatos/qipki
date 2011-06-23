@@ -73,7 +73,7 @@ public class DigestImpl
     @Override
     public String base64Digest( InputStream data, DigestParameters params )
     {
-        return cryptCodex.toBase64( digest( data, params ) );
+        return cryptCodex.toBase64String( digest( data, params ) );
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DigestImpl
     @Override
     public String base64Digest( byte[] data, DigestParameters params )
     {
-        return cryptCodex.toBase64( digest( data, params ) );
+        return cryptCodex.toBase64String( digest( data, params ) );
     }
 
 }

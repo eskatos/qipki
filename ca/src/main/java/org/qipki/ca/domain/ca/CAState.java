@@ -13,19 +13,19 @@
  */
 package org.qipki.ca.domain.ca;
 
-import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
-import org.qipki.ca.domain.crl.CRL;
-import org.qipki.ca.domain.cryptostore.CryptoStore;
-import org.qipki.commons.fragments.Nameable;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.association.Association;
 import org.qi4j.api.entity.association.ManyAssociation;
 
+import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
+import org.qipki.ca.domain.crl.CRL;
+import org.qipki.ca.domain.cryptostore.CryptoStore;
+import org.qipki.commons.fragments.HasName;
+
 public interface CAState
-        extends Nameable, Identity
+        extends HasName, Identity
 {
 
     Association<CryptoStore> cryptoStore();

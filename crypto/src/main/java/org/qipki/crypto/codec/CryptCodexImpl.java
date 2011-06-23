@@ -82,7 +82,7 @@ public class CryptCodexImpl
     }
 
     @Override
-    public String toBase64( byte[] bytes )
+    public String toBase64String( byte[] bytes )
     {
         try {
             return new String( Base64.encode( bytes ), "UTF-8" );

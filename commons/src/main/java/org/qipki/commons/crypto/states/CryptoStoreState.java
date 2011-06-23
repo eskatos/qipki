@@ -14,13 +14,13 @@
 package org.qipki.commons.crypto.states;
 
 import org.qipki.crypto.storage.KeyStoreType;
-import org.qipki.commons.fragments.Nameable;
+import org.qipki.commons.fragments.HasName;
 import org.qi4j.api.entity.Queryable;
 
 import org.qi4j.api.property.Property;
 
 public interface CryptoStoreState
-        extends Nameable
+        extends HasName
 {
 
     Property<KeyStoreType> storeType();

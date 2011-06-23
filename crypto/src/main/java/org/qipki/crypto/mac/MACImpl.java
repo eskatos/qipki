@@ -65,7 +65,7 @@ public class MACImpl
     @Override
     public String base64Mac( InputStream data, MACParameters params )
     {
-        return cryptCodex.toBase64( mac( data, params ) );
+        return cryptCodex.toBase64String( mac( data, params ) );
     }
 
     @Override
@@ -83,7 +83,7 @@ public class MACImpl
     @Override
     public String base64Mac( byte[] data, MACParameters params )
     {
-        return cryptCodex.toBase64( mac( data, params ) );
+        return cryptCodex.toBase64String( mac( data, params ) );
     }
 
 }

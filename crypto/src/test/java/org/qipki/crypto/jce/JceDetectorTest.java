@@ -20,7 +20,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
 
-import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 
 public class JceDetectorTest
         extends AbstractQi4jTest

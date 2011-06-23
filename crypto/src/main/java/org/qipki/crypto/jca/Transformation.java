@@ -44,7 +44,7 @@ public final class Transformation
     public String jcaTransformation()
     {
         StringBuilder sb = new StringBuilder( algo.jcaString() );
-        if ( mode != null || padding != null && ( mode != null && padding != null ) ) { // Unnecessary optimisation ?
+        if ( mode != null && padding != null ) {
             sb.append( "/" ).append( mode.jcaString() ).append( "/" ).append( padding.jcaString() );
         }
         return sb.toString();

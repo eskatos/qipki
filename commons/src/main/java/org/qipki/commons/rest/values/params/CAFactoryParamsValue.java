@@ -14,7 +14,7 @@
 package org.qipki.commons.rest.values.params;
 
 import org.qipki.crypto.constraints.X500Name;
-import org.qipki.commons.fragments.Nameable;
+import org.qipki.commons.fragments.HasName;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 
 import org.qi4j.api.common.Optional;
@@ -22,7 +22,7 @@ import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface CAFactoryParamsValue
-        extends Nameable, ValueComposite
+        extends HasName, ValueComposite
 {
 
     Property<String> cryptoStoreUri();

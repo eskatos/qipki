@@ -28,6 +28,6 @@ public interface CryptCodex
 
     String toHexString( boolean[] bools );
 
-    String toBase64( byte[] bytes );
+    String toBase64String( byte[] bytes );
 
 }

@@ -51,6 +51,7 @@ public enum KeyStoreType
     }
 
     /**
+     * @see http://download.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html
      * @return The Java Keystore type String
      */
     public String typeString()

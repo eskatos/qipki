@@ -13,6 +13,7 @@
  */
 package org.qipki.core;
 
+import org.qipki.core.bootstrap.ModuleFinder;
 import org.qi4j.api.Qi4j;
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;

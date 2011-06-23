@@ -26,7 +26,7 @@ import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
 
 import org.qipki.ca.http.QiPkiHttpCa;
-import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
+import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.core.QiPkiApplication;
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.main.core.QiPkiMain;

@@ -19,12 +19,12 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
 
-import org.qipki.commons.assembly.CryptoValuesModuleAssembler;
-import org.qipki.commons.assembly.RestValuesModuleAssembler;
+import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
+import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
 import org.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.rest.values.params.ParamsFactory;
-import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.x509.X509Generator;

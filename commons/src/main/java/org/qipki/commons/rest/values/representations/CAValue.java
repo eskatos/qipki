@@ -15,18 +15,14 @@ package org.qipki.commons.rest.values.representations;
 
 import java.util.Set;
 
-import org.qipki.commons.fragments.Listable;
-import org.qipki.commons.fragments.Nameable;
-
 import org.qi4j.api.common.UseDefaults;
-import org.qi4j.api.injection.scope.This;
-import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
-@Mixins( CAValue.Mixin.class )
+import org.qipki.commons.fragments.HasName;
+
 public interface CAValue
-        extends RestValue, Nameable, Listable, ValueComposite
+        extends RestValue, HasName, ValueComposite
 {
 
     Property<String> cryptoStoreUri();
@@ -37,21 +33,5 @@ public interface CAValue
 
     @UseDefaults
     Property<Set<X509ProfileAssignmentValue>> allowedX509Profiles();
-
-    @SuppressWarnings( "PublicInnerClass" )
-    abstract class Mixin
-            implements CAValue
-    {
-
-        @This
-        private CAValue ca;
-
-        @Override
-        public String listTitle()
-        {
-            return ca.name().get();
-        }
-
-    }
 
 }

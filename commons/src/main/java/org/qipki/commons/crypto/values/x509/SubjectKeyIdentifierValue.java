@@ -13,7 +13,7 @@
  */
 package org.qipki.commons.crypto.values.x509;
 
-import org.qipki.commons.fragments.HasCriticality;
+import org.qipki.commons.crypto.values.HasCriticality;
 
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;

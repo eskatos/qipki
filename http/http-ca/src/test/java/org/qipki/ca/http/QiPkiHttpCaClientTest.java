@@ -21,8 +21,8 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
-import org.qipki.client.ca.assembly.QiPkiCaClientAssembler;
-import org.qipki.client.ca.services.CryptoStoreClientService;
+import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
+import org.qipki.client.ca.api.CryptoStoreClientService;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
 
 public class QiPkiHttpCaClientTest

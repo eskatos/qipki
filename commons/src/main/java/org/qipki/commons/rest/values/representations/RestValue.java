@@ -13,11 +13,13 @@
  */
 package org.qipki.commons.rest.values.representations;
 
-import org.qipki.commons.fragments.HasURI;
-
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface RestValue
-        extends HasURI, ValueComposite
+        extends ValueComposite
 {
+
+    Property<String> uri();
+
 }

@@ -17,10 +17,10 @@ import org.qi4j.api.structure.Module;
 import org.qi4j.spi.structure.ApplicationSPI;
 
 import org.qipki.ca.application.contexts.RootContext;
-import org.qipki.ca.assembly.CaAssemblyNames;
-import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
+import org.qipki.ca.bootstrap.CaAssemblyNames;
+import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
-import org.qipki.core.ModuleFinder;
+import org.qipki.core.bootstrap.ModuleFinder;
 
 public class QiPkiHttpCa
         extends AbstractQiPkiApplication<RootContext>

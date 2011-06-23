@@ -20,7 +20,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
-import org.qipki.ca.http.assembly.QiPkiHttpCaAssembler;
+import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiTestApplicationHttpCa

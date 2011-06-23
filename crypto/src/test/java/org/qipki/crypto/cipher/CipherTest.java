@@ -20,7 +20,7 @@ import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
-import org.qipki.crypto.assembly.CryptoEngineModuleAssembler;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.jca.Transformation;
 import org.qipki.crypto.symetric.SymetricGenerator;
 import org.qipki.crypto.symetric.SymetricGeneratorParameters;

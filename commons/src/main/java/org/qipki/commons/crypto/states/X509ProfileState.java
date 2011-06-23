@@ -13,7 +13,7 @@
  */
 package org.qipki.commons.crypto.states;
 
-import org.qipki.commons.fragments.Nameable;
+import org.qipki.commons.fragments.HasName;
 import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
@@ -25,7 +25,7 @@ import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
 
 public interface X509ProfileState
-        extends Nameable
+        extends HasName
 {
 
     @Queryable( false )

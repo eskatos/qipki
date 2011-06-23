@@ -19,9 +19,9 @@ import javax.sql.DataSource;
 import org.qi4j.api.structure.Application.Mode;
 
 import org.qipki.ca.application.contexts.RootContext;
-import org.qipki.ca.assembly.CaAssemblyNames;
-import org.qipki.ca.assembly.QiPkiPersistentEmbeddedCaAssembler;
-import org.qipki.ca.assembly.QiPkiVolatileEmbeddedCaAssembler;
+import org.qipki.ca.bootstrap.CaAssemblyNames;
+import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
+import org.qipki.ca.bootstrap.QiPkiVolatileEmbeddedCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiEmbeddedCa
