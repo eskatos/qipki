@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 @Mixins( QiCryptoEngine.Mixin.class )
 public interface QiCryptoEngine
-        extends Activatable, ServiceComposite
+        extends CryptoContext, Activatable, ServiceComposite
 {
 
     @SuppressWarnings( "PublicInnerClass" )
@@ -46,25 +46,26 @@ public interface QiCryptoEngine
         @This
         @Optional
         private QiCryptoConfiguration configuration;
+        private String providerName;
 
         @Override
         public void activate()
                 throws Exception
         {
-            if ( insertProviderOnActivate() ) {
-                String providerName = providerName();
+            providerName = readProviderName();
+            if ( readInsertProviderOnActivate() ) {
                 if ( Security.getProvider( providerName ) == null ) {
 
-                    Security.addProvider( providerClass().newInstance() );
+                    Security.addProvider( readProviderClass().newInstance() );
 
                     if ( LOGGER.isDebugEnabled() ) {
-                        LOGGER.debug( "Inserted {} with name: {}", providerClass(), providerName() );
+                        LOGGER.debug( "Inserted {} with name: {}", readProviderClass(), readProviderName() );
                     }
                 } else if ( LOGGER.isDebugEnabled() ) {
                     LOGGER.debug( "A Provider is already registered with the name {}. Doing nothing.", providerName );
                 }
             }
-            if ( ensureJCE() ) {
+            if ( readEnsureJCE() ) {
                 // TODO
             }
         }
@@ -73,14 +74,13 @@ public interface QiCryptoEngine
         public void passivate()
                 throws Exception
         {
-            if ( removeProviderOnPassivate() ) {
-                String providerName = providerName();
+            if ( readRemoveProviderOnPassivate() ) {
                 if ( Security.getProvider( providerName ) == null ) {
 
                     Security.removeProvider( providerName );
 
                     if ( LOGGER.isDebugEnabled() ) {
-                        LOGGER.debug( "Removed Provider named {}", providerName() );
+                        LOGGER.debug( "Removed Provider named {}", readProviderName() );
                     }
                 } else if ( LOGGER.isDebugEnabled() ) {
                     LOGGER.debug( "No Provider registered with the name {}. Doing nothing.", providerName );
@@ -88,7 +88,13 @@ public interface QiCryptoEngine
             }
         }
 
-        private boolean ensureJCE()
+        @Override
+        public String providerName()
+        {
+            return providerName;
+        }
+
+        private boolean readEnsureJCE()
         {
             if ( configuration == null ) {
                 return true;
@@ -100,7 +106,7 @@ public interface QiCryptoEngine
             return ensure;
         }
 
-        private boolean insertProviderOnActivate()
+        private boolean readInsertProviderOnActivate()
         {
             if ( configuration == null ) {
                 return true;
@@ -112,24 +118,24 @@ public interface QiCryptoEngine
             return insert;
         }
 
-        private String providerName()
+        private String readProviderName()
         {
-            if ( overrideProvider() ) {
+            if ( readOverrideProvider() ) {
                 return configuration.providerName().get();
             }
             return BouncyCastleProvider.PROVIDER_NAME;
         }
 
-        private Class<? extends Provider> providerClass()
+        private Class<? extends Provider> readProviderClass()
                 throws ClassNotFoundException
         {
-            if ( overrideProvider() ) {
+            if ( readOverrideProvider() ) {
                 return ( Class<? extends Provider> ) Class.forName( configuration.providerClass().get() );
             }
             return BouncyCastleProvider.class;
         }
 
-        private boolean overrideProvider()
+        private boolean readOverrideProvider()
         {
             if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
                 return false;
@@ -138,7 +144,7 @@ public interface QiCryptoEngine
                     && !StringUtils.isEmpty( configuration.providerClass().get() );
         }
 
-        private boolean removeProviderOnPassivate()
+        private boolean readRemoveProviderOnPassivate()
         {
             if ( configuration == null ) {
                 return true;

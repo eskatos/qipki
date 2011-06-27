@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
+import org.qipki.crypto.CryptoContext;
 
 public class DigestTest
         extends AbstractQi4jTest
@@ -56,7 +57,18 @@ public class DigestTest
     {
         Security.addProvider( new BouncyCastleProvider() );
 
-        Digest digester = new DigestImpl( new CryptCodexImpl() );
+        CryptoContext cryptoContext = new CryptoContext()
+        {
+
+            @Override
+            public String providerName()
+            {
+                return BouncyCastleProvider.PROVIDER_NAME;
+            }
+
+        };
+
+        Digest digester = new DigestImpl( cryptoContext, new CryptCodexImpl() );
 
         runTest( digester );
 

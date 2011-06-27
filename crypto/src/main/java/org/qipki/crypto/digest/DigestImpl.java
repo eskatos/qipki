@@ -19,22 +19,23 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import org.qipki.crypto.QiCryptoFailure;
-import org.qipki.crypto.codec.CryptCodex;
-
 import org.qi4j.api.injection.scope.Service;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.CryptoFailure;
+import org.qipki.crypto.codec.CryptCodex;
 
 public class DigestImpl
         implements Digest
 {
 
     private static final int BUFFER_SIZE = 128;
+    private final CryptoContext cryptoContext;
     private final CryptCodex cryptCodex;
 
-    public DigestImpl( @Service CryptCodex cryptCodex )
+    public DigestImpl( @Service CryptoContext cryptoContext, @Service CryptCodex cryptCodex )
     {
+        this.cryptoContext = cryptoContext;
         this.cryptCodex = cryptCodex;
     }
 
@@ -42,7 +43,7 @@ public class DigestImpl
     public byte[] digest( InputStream data, DigestParameters params )
     {
         try {
-            MessageDigest digest = MessageDigest.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
+            MessageDigest digest = MessageDigest.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             if ( params.salt() != null ) {
                 digest.update( params.salt() );
             }
@@ -58,9 +59,9 @@ public class DigestImpl
             }
             return hashed;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to read data to digest with " + params.algorithm().jcaString(), ex );
+            throw new CryptoFailure( "Unable to read data to digest with " + params.algorithm().jcaString(), ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to digest using " + params.algorithm().jcaString(), ex );
+            throw new CryptoFailure( "Unable to digest using " + params.algorithm().jcaString(), ex );
         }
     }
 

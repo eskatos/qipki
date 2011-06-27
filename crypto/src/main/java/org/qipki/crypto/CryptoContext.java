@@ -11,17 +11,11 @@
  * limitations under the License.
  *
  */
-package org.qipki.crypto.algorithms;
+package org.qipki.crypto;
 
-import org.qipki.crypto.CryptoFailure;
-
-public class IllegalAlgorithmException
-        extends CryptoFailure
+public interface CryptoContext
 {
 
-    public IllegalAlgorithmException( String msg )
-    {
-        super( msg );
-    }
+    String providerName();
 
 }

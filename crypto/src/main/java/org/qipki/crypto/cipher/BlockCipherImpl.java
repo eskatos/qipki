@@ -20,7 +20,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
@@ -89,7 +89,7 @@ public class BlockCipherImpl
 
             }
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( ex.getMessage(), ex );
+            throw new CryptoFailure( ex.getMessage(), ex );
         }
     }
 
@@ -117,7 +117,7 @@ public class BlockCipherImpl
             }
 
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( ex.getMessage(), ex );
+            throw new CryptoFailure( ex.getMessage(), ex );
         }
     }
 

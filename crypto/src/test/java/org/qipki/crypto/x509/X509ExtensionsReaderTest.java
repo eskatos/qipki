@@ -14,26 +14,24 @@
 package org.qipki.crypto.x509;
 
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import java.util.Set;
-import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import org.codeartisans.java.toolbox.CollectionUtils;
-import org.qipki.crypto.codec.CryptCodex;
-import org.qipki.crypto.codec.CryptCodexImpl;
-import org.qipki.crypto.io.CryptIO;
-import org.qipki.crypto.io.CryptIOImpl;
-import static org.qipki.crypto.x509.X509TestConstants.*;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.qipki.crypto.CryptoContext;
+
+import org.qipki.crypto.codec.CryptCodexImpl;
+import org.qipki.crypto.io.CryptIOImpl;
+import static org.qipki.crypto.x509.X509TestConstants.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +57,17 @@ public class X509ExtensionsReaderTest
     public void before()
     {
         cryptCodex = new CryptCodexImpl();
-        cryptIO = new CryptIOImpl();
+        CryptoContext cryptoContext = new CryptoContext()
+        {
+
+            @Override
+            public String providerName()
+            {
+                return BouncyCastleProvider.PROVIDER_NAME;
+            }
+
+        };
+        cryptIO = new CryptIOImpl( cryptoContext );
         x509ExtReader = new X509ExtensionsReaderImpl( cryptCodex );
         baltimoreCyberTrustCodeSigningRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM ) ) );
         chamberOfCommerceRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_CHAMBER_OF_COMMERCE_ROOT_PEM ) ) );

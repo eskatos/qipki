@@ -30,6 +30,7 @@ import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.qipki.crypto.CryptoContext;
 
 public class CryptIOTest
 {
@@ -44,9 +45,19 @@ public class CryptIOTest
     public void testKeyPairIO()
             throws IOException
     {
+        CryptoContext cryptoContext = new CryptoContext()
+        {
 
-        AsymetricGenerator asymGen = new AsymetricGeneratorImpl();
-        CryptIO cryptIO = new CryptIOImpl();
+            @Override
+            public String providerName()
+            {
+                return BouncyCastleProvider.PROVIDER_NAME;
+            }
+
+        };
+
+        AsymetricGenerator asymGen = new AsymetricGeneratorImpl( cryptoContext );
+        CryptIO cryptIO = new CryptIOImpl( cryptoContext );
 
         KeyPair keypair = asymGen.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
 

@@ -25,7 +25,7 @@ import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.qipki.ca.domain.x509profile.X509ProfileRepository;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.core.dci.Context;
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.storage.KeyStoreType;
 
@@ -81,7 +81,7 @@ public class CAContext
                                new KeyStore.PasswordProtection( password ) );
             return keystore;
         } catch ( KeyStoreException ex ) {
-            throw new QiCryptoFailure( "Unable to store CA KeyPair for KeyStore export", ex );
+            throw new CryptoFailure( "Unable to store CA KeyPair for KeyStore export", ex );
         }
     }
 

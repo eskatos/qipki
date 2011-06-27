@@ -19,7 +19,7 @@ import java.security.interfaces.DSAKey;
 import java.security.interfaces.RSAKey;
 import javax.crypto.interfaces.DHKey;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 
 import org.qi4j.api.injection.scope.Uses;
 
@@ -53,9 +53,9 @@ public class KeyInformation
             } else if ( DHKey.class.isAssignableFrom( key.getClass() ) ) {
                 return ( ( DHKey ) key ).getParams().getP().bitLength();
             }
-            throw new QiCryptoFailure( "Unsupported PublicKey type" );
+            throw new CryptoFailure( "Unsupported PublicKey type" );
         }
-        throw new QiCryptoFailure( "Unsupported Key type" );
+        throw new CryptoFailure( "Unsupported Key type" );
     }
 
 }

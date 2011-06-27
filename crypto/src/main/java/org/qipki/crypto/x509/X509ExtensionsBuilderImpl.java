@@ -43,7 +43,7 @@ import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.asn1.x509.X509Name;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 
 public class X509ExtensionsBuilderImpl
         implements X509ExtensionsBuilder
@@ -57,7 +57,7 @@ public class X509ExtensionsBuilderImpl
             SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
             return new SubjectKeyIdentifier( spki );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
+            throw new CryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
         }
     }
 
@@ -69,7 +69,7 @@ public class X509ExtensionsBuilderImpl
             SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
             return new AuthorityKeyIdentifier( apki );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to build AuthorityKeyIdentifier", ex );
+            throw new CryptoFailure( "Unable to build AuthorityKeyIdentifier", ex );
         }
     }
 

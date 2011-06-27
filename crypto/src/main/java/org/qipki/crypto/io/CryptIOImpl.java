@@ -28,18 +28,27 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qi4j.api.injection.scope.Service;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.constants.IOConstants;
 import org.qipki.crypto.storage.KeyStoreType;
 
 public class CryptIOImpl
         implements CryptIO
 {
+
+    private final CryptoContext cryptoContext;
+
+    public CryptIOImpl( @Service CryptoContext cryptoContext )
+    {
+        this.cryptoContext = cryptoContext;
+    }
 
     @Override
     public KeyStore createEmptyKeyStore( KeyStoreType storeType )
@@ -49,9 +58,9 @@ public class CryptIOImpl
             keystore.load( null, null );
             return keystore;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            throw new CryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            throw new CryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
         }
     }
 
@@ -64,9 +73,9 @@ public class CryptIOImpl
             baos.flush();
             return new String( Base64.encode( baos.toByteArray() ), IOConstants.UTF_8 );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to Base64 encode KeyStore", ex );
+            throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to Base64 encode KeyStore", ex );
+            throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
         }
     }
 
@@ -78,9 +87,9 @@ public class CryptIOImpl
             keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( IOConstants.UTF_8 ) ) ), password );
             return keystore;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to Base64 decode KeyStore", ex );
+            throw new CryptoFailure( "Unable to Base64 decode KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to Base64 decode KeyStore", ex );
+            throw new CryptoFailure( "Unable to Base64 decode KeyStore", ex );
         }
     }
 
@@ -164,12 +173,12 @@ public class CryptIOImpl
     {
         try {
             StringWriter sw = new StringWriter();
-            PEMWriter pemWriter = new PEMWriter( sw, BouncyCastleProvider.PROVIDER_NAME );
+            PEMWriter pemWriter = new PEMWriter( sw, cryptoContext.providerName() );
             pemWriter.writeObject( object );
             pemWriter.flush();
             return sw.getBuffer();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to write " + ilk + " as PEM", ex );
+            throw new CryptoFailure( "Unable to write " + ilk + " as PEM", ex );
         }
     }
 
@@ -177,7 +186,7 @@ public class CryptIOImpl
             throws KeyStoreException, NoSuchProviderException
     {
         if ( KeyStoreType.PKCS12 == storeType ) {
-            return KeyStore.getInstance( storeType.typeString(), BouncyCastleProvider.PROVIDER_NAME );
+            return KeyStore.getInstance( storeType.typeString(), cryptoContext.providerName() );
         }
         return KeyStore.getInstance( storeType.typeString() );
     }

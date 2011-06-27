@@ -30,10 +30,12 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qi4j.api.injection.scope.Service;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.qipki.crypto.constants.Time;
 
@@ -44,6 +46,13 @@ public class X509GeneratorImpl
         implements X509Generator
 {
 
+    private CryptoContext cryptoContext;
+
+    public X509GeneratorImpl( @Service CryptoContext cryptoContext )
+    {
+        this.cryptoContext = cryptoContext;
+    }
+
     @Override
     public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair )
     {
@@ -52,9 +61,9 @@ public class X509GeneratorImpl
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    null,
                                                    keyPair.getPrivate(),
-                                                   BouncyCastleProvider.PROVIDER_NAME );
+                                                   cryptoContext.providerName() );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate PKCS#10", ex );
+            throw new CryptoFailure( "Unable to generate PKCS#10", ex );
         }
     }
 
@@ -66,9 +75,9 @@ public class X509GeneratorImpl
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    generateSANAttribute( subjectAlternativeNames ),
                                                    keyPair.getPrivate(),
-                                                   BouncyCastleProvider.PROVIDER_NAME );
+                                                   cryptoContext.providerName() );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate PKCS#10", ex );
+            throw new CryptoFailure( "Unable to generate PKCS#10", ex );
         }
     }
 
@@ -99,12 +108,12 @@ public class X509GeneratorImpl
                 x509v3Generator.addExtension( eachExtensionHolder.getDerOID(), eachExtensionHolder.isCritical(), eachExtensionHolder.getValue() );
             }
 
-            return x509v3Generator.generate( privateKey, BouncyCastleProvider.PROVIDER_NAME );
+            return x509v3Generator.generate( privateKey, cryptoContext.providerName() );
 
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate X509Certificate", ex );
+            throw new CryptoFailure( "Unable to generate X509Certificate", ex );
         } catch ( IllegalStateException ex ) {
-            throw new QiCryptoFailure( "Unable to generate X509Certificate", ex );
+            throw new CryptoFailure( "Unable to generate X509Certificate", ex );
         }
     }
 

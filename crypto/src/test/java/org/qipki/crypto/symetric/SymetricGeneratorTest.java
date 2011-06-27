@@ -18,9 +18,10 @@ import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
-
 import org.junit.Test;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.algorithms.SymetricAlgorithm;
 
 public class SymetricGeneratorTest
 {
@@ -29,7 +30,17 @@ public class SymetricGeneratorTest
     public void test()
     {
         Security.addProvider( new BouncyCastleProvider() );
-        SymetricGenerator symGen = new SymetricGeneratorImpl();
+        CryptoContext cryptoContext = new CryptoContext()
+        {
+
+            @Override
+            public String providerName()
+            {
+                return BouncyCastleProvider.PROVIDER_NAME;
+            }
+
+        };
+        SymetricGenerator symGen = new SymetricGeneratorImpl( cryptoContext );
         SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 128 ) );
         System.out.println( key.toString() );
     }

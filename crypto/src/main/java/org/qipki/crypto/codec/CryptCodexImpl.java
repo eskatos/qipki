@@ -23,7 +23,7 @@ import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERString;
 import org.bouncycastle.util.encoders.Base64;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 
 public class CryptCodexImpl
         implements CryptCodex
@@ -87,7 +87,7 @@ public class CryptCodexImpl
         try {
             return new String( Base64.encode( bytes ), "UTF-8" );
         } catch ( UnsupportedEncodingException ex ) {
-            throw new QiCryptoFailure( "Unable to encode data in Base64", ex );
+            throw new CryptoFailure( "Unable to encode data in Base64", ex );
         }
     }
 

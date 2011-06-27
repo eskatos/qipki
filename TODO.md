@@ -8,19 +8,18 @@
 
 # Work in progress
 
+* (###-) Add a CryptoContext in qipki-crypto with at least the configured provider name for use with JCA apis
 * (##--) Apply Qi4j FileConfiguration API to all filesystem storage
   * Store EntityStore on the Filesystem
   * Store CRLs on the Filesystem
   * Store KeyStores on the Filesystem
 * (#---) Follow state refactoring with the Qi4j data migration system
-  * Move code to qipki-main-core
+  * Move code to qipki-main-core ?
   * Write integration tests for migrations
-* (#---) Add some generated documentation to the build process
 
 
 # Next steps
 
-* Add a CryptoContext in qipki-crypto with at least the configured provider name for use with JCA apis
 * Add CRL Endpoint in issued X509Certificates
   * Full url given by X509Profile
   * If no url on profile creation, create it with a sensible defaut, allow edition too
@@ -30,7 +29,7 @@
   * Use it to generate CRLs so this is not done in request threads
 * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
   * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
-* Replace indexing-rdf by indexing-solr
+* Replace indexing-rdf by indexing-solr ?
 
 
 # After that
@@ -38,6 +37,19 @@
 * Use @Concerns to factorize http Resources (error handling, logging etc..)
   * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
+* See if it's possible to hook in the http/java serialization and make it as generic as possible
+* WebUI
+  * Http resources produces their autonomous views with their html/js code
+  * The css must be as global as possible
+  * Provide a generic host page (html/js) that use an event bus for views collaboration
+* Implement http cache handling
+  * @Cacheable Concern using a payload store
+  * UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries
+* Monitoring BoundedContext
+  * See how it would be possible to reuse the JMX world in a web UI
+  * JMX client in web, in an applet, as a webstart ?
+  * JMX over websockets ?
+* (#---) Add some generated documentation to the build process
 * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Add basic profiles creation in Qi4j-test-support
 * Enhance X509Profile with domain rules and certificate template creation
@@ -67,8 +79,3 @@
   * Add a warning if a CA signs a PKCS#10 
 * Add a domain auditing bounded context filled by @SideEffects
 * Wrap client api as a small Qi4j Application usable without Qi4j imports
-* Swing Remote
-  * A GUI for dev, debug and test purpose only
-  * Start with a single jvm assembly
-  * Simple Client/UI reflecting naive rest api list/factory/entity
-    * Example: request to x509 factory is presented with two fields:    ComboBox: choose ca in list & TextArea: paste pkcs10 pem

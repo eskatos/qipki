@@ -18,22 +18,31 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.qi4j.api.injection.scope.Service;
+import org.qipki.crypto.CryptoContext;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 
 public class AsymetricGeneratorImpl
         implements AsymetricGenerator
 {
 
+    private final CryptoContext cryptoContext;
+
+    public AsymetricGeneratorImpl( @Service CryptoContext cryptoContext )
+    {
+        this.cryptoContext = cryptoContext;
+    }
+
     @Override
     public KeyPair generateKeyPair( AsymetricGeneratorParameters params )
     {
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             keyGen.initialize( params.keySize() );
             return keyGen.generateKeyPair();
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " KeyPair", ex );
+            throw new CryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " KeyPair", ex );
         }
     }
 

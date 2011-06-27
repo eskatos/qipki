@@ -18,7 +18,7 @@ import javax.crypto.SecretKey;
 
 import org.qi4j.api.injection.scope.Service;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
@@ -51,7 +51,7 @@ public class JceDetectorImpl
             BlockCipher aesSicPkcs7 = cipherFactory.newBlockCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS7 );
             aesSicPkcs7.cipher( new byte[]{}, key );
             return true;
-        } catch ( QiCryptoFailure ex ) {
+        } catch ( CryptoFailure ex ) {
             if ( ex.getCause() != null && InvalidKeyException.class.isAssignableFrom( ex.getCause().getClass() ) ) {
                 return false;
             }
@@ -63,7 +63,7 @@ public class JceDetectorImpl
     public void ensureJceAreInstalled()
     {
         if ( !areJceInstalled() ) {
-            throw new QiCryptoFailure( "JCE must be installed" );
+            throw new CryptoFailure( "JCE must be installed" );
         }
     }
 

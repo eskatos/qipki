@@ -18,23 +18,31 @@ import java.security.GeneralSecurityException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.qi4j.api.injection.scope.Service;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.CryptoFailure;
 
 public class SymetricGeneratorImpl
         implements SymetricGenerator
 {
 
+    private final CryptoContext cryptoContext;
+
+    public SymetricGeneratorImpl( @Service CryptoContext cryptoContext )
+    {
+        this.cryptoContext = cryptoContext;
+    }
+
     @Override
     public SecretKey generateSecretKey( SymetricGeneratorParameters params )
     {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
+            KeyGenerator keyGen = KeyGenerator.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             keyGen.init( params.keySize() );
             return keyGen.generateKey();
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " SecretKey", ex );
+            throw new CryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " SecretKey", ex );
         }
     }
 

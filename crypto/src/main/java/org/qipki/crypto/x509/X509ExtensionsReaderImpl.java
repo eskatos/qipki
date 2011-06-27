@@ -62,7 +62,7 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
-import org.qipki.crypto.QiCryptoFailure;
+import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
 
 import org.joda.time.DateTime;
@@ -138,7 +138,7 @@ public class X509ExtensionsReaderImpl
             DEROctetString oct = ( DEROctetString ) ( new ASN1InputStream( new ByteArrayInputStream( value ) ).readObject() );
             return new AuthorityKeyIdentifier( ( ASN1Sequence ) new ASN1InputStream( new ByteArrayInputStream( oct.getOctets() ) ).readObject() );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract AuthorityKeyIdentifier from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract AuthorityKeyIdentifier from X509Certificate extensions", ex );
         }
     }
 
@@ -153,7 +153,7 @@ public class X509ExtensionsReaderImpl
             byte[] octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
             return SubjectKeyIdentifier.getInstance( ASN1Object.fromByteArray( octets ) ).getKeyIdentifier();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract SubjectKeyIdentifier from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract SubjectKeyIdentifier from X509Certificate extensions", ex );
         }
     }
 
@@ -193,7 +193,7 @@ public class X509ExtensionsReaderImpl
             }
             return keyUsages;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract ExtendedKeyUsages from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract ExtendedKeyUsages from X509Certificate extensions", ex );
         }
     }
 
@@ -216,7 +216,7 @@ public class X509ExtensionsReaderImpl
             }
             return netscapeCertTypes;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract NetscapeCertType from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract NetscapeCertType from X509Certificate extensions", ex );
         }
     }
 
@@ -230,7 +230,7 @@ public class X509ExtensionsReaderImpl
             }
             return ASN1Object.fromByteArray( value ).toString();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract NetscapeCertComment from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract NetscapeCertComment from X509Certificate extensions", ex );
         }
     }
 
@@ -248,9 +248,9 @@ public class X509ExtensionsReaderImpl
             Date notAfter = derDateFormat.parse( privKeyUsagePeriod.getNotAfter().getTime() );
             return new Interval( new DateTime( notBefore ), new DateTime( notAfter ) );
         } catch ( ParseException ex ) {
-            throw new QiCryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
         }
     }
 
@@ -265,7 +265,7 @@ public class X509ExtensionsReaderImpl
             CRLDistPoint crlDistPoints = CRLDistPoint.getInstance( X509ExtensionUtil.fromExtensionValue( value ) );
             return crlDistPoints.getDistributionPoints();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract CRLDistributionPoints from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract CRLDistributionPoints from X509Certificate extensions", ex );
         }
 
     }
@@ -286,7 +286,7 @@ public class X509ExtensionsReaderImpl
             }
             return certPolicies;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract CertificatePolicies from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract CertificatePolicies from X509Certificate extensions", ex );
         }
     }
 
@@ -314,7 +314,7 @@ public class X509ExtensionsReaderImpl
             }
             return mappings;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract PolicyMappings from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract PolicyMappings from X509Certificate extensions", ex );
         }
     }
 
@@ -328,7 +328,7 @@ public class X509ExtensionsReaderImpl
             }
             return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract SubjectAlternativeName from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract SubjectAlternativeName from X509Certificate extensions", ex );
         }
     }
 
@@ -342,7 +342,7 @@ public class X509ExtensionsReaderImpl
             }
             return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract IssuerAlternativeName from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract IssuerAlternativeName from X509Certificate extensions", ex );
         }
     }
 
@@ -357,7 +357,7 @@ public class X509ExtensionsReaderImpl
             return BasicConstraints.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
             // return BasicConstraints.getInstance( ASN1Object.fromByteArray( value ) );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract BasicConstraints from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract BasicConstraints from X509Certificate extensions", ex );
         }
     }
 
@@ -371,7 +371,7 @@ public class X509ExtensionsReaderImpl
             }
             return new NameConstraints( ( ASN1Sequence ) ASN1Object.fromByteArray( value ) );
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract NameConstraints from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract NameConstraints from X509Certificate extensions", ex );
         }
     }
 
@@ -400,7 +400,7 @@ public class X509ExtensionsReaderImpl
             }
             return constraints;
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to extract PolicyConstraints from X509Certificate extensions", ex );
+            throw new CryptoFailure( "Unable to extract PolicyConstraints from X509Certificate extensions", ex );
         }
     }
 

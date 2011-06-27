@@ -19,21 +19,23 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import javax.crypto.Mac;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.qipki.crypto.QiCryptoFailure;
-import org.qipki.crypto.codec.CryptCodex;
-
 import org.qi4j.api.injection.scope.Service;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.CryptoFailure;
+import org.qipki.crypto.codec.CryptCodex;
 
 public class MACImpl
         implements MAC
 {
 
     private static final int BUFFER_SIZE = 128;
+    private final CryptoContext cryptoContext;
     private final CryptCodex cryptCodex;
 
-    public MACImpl( @Service CryptCodex cryptCodex )
+    public MACImpl( @Service CryptoContext cryptoContext, @Service CryptCodex cryptCodex )
     {
+        this.cryptoContext = cryptoContext;
         this.cryptCodex = cryptCodex;
     }
 
@@ -41,7 +43,7 @@ public class MACImpl
     public byte[] mac( InputStream data, MACParameters params )
     {
         try {
-            Mac mac = Mac.getInstance( params.algorithm().jcaString(), BouncyCastleProvider.PROVIDER_NAME );
+            Mac mac = Mac.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             mac.init( params.secretKey() );
             byte[] buffer = new byte[ BUFFER_SIZE ];
             int length = 0;
@@ -50,9 +52,9 @@ public class MACImpl
             }
             return mac.doFinal();
         } catch ( IOException ex ) {
-            throw new QiCryptoFailure( "Unable to read data to MAC with " + params.algorithm().jcaString(), ex );
+            throw new CryptoFailure( "Unable to read data to MAC with " + params.algorithm().jcaString(), ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new QiCryptoFailure( "Unable to MAC using " + params.algorithm().jcaString(), ex );
+            throw new CryptoFailure( "Unable to MAC using " + params.algorithm().jcaString(), ex );
         }
     }
 

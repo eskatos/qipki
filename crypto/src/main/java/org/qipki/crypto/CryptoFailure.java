@@ -13,18 +13,18 @@
  */
 package org.qipki.crypto;
 
-public class QiCryptoFailure
+public class CryptoFailure
         extends RuntimeException
 {
 
     private static final long serialVersionUID = 1L;
 
-    public QiCryptoFailure( String msg )
+    public CryptoFailure( String msg )
     {
         super( msg );
     }
 
-    public QiCryptoFailure( String msg, Throwable cause )
+    public CryptoFailure( String msg, Throwable cause )
     {
         super( msg, cause );
     }
