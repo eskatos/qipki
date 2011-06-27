@@ -14,10 +14,12 @@
 package org.qipki.ca.http.presentation.rest.resources;
 
 import org.codeartisans.java.toolbox.StringUtils;
-import org.qipki.ca.application.contexts.RootContext;
-import org.qipki.core.dci.InteractionContext;
 
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.core.dci.InteractionContext;
+import org.restlet.data.Form;
 
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -61,7 +63,7 @@ public class AbstractResource
 
     protected final String ensureFormFirstValue( String key, Status ifAbsent )
     {
-        String value = getRequest().getEntityAsForm().getFirstValue( key );
+        String value = new Form( getRequest().getEntity() ).getFirstValue( key );
         if ( StringUtils.isEmpty( value ) ) {
             LOGGER.trace( "{}: No form first value named {}", ifAbsent, key );
             throw new ResourceException( ifAbsent );

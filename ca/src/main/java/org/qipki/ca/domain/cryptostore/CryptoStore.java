@@ -13,15 +13,18 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
-import org.qipki.commons.crypto.states.CryptoStoreState;
-
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
 
+import org.qipki.commons.crypto.states.CryptoStoreState;
+
 public interface CryptoStore
         extends CryptoStoreState, Identity, CryptoStoreBehavior
 {
+
+    @Queryable( false )
+    Property<char[]> password();
 
     @Queryable( false )
     Property<String> payload();

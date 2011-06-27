@@ -13,9 +13,9 @@
  */
 package org.qipki.ca.http.presentation.rest.resources;
 
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-
 import org.qi4j.api.injection.scope.Service;
+
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;

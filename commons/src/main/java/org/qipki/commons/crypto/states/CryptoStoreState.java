@@ -13,19 +13,15 @@
  */
 package org.qipki.commons.crypto.states;
 
+import org.qi4j.api.property.Property;
+
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.commons.fragments.HasName;
-import org.qi4j.api.entity.Queryable;
-
-import org.qi4j.api.property.Property;
 
 public interface CryptoStoreState
         extends HasName
 {
 
     Property<KeyStoreType> storeType();
-
-    @Queryable( false )
-    Property<char[]> password();
 
 }

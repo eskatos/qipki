@@ -13,9 +13,19 @@
  */
 package org.qipki.ca.http.presentation.rest;
 
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.injection.scope.Uses;
+import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.unitofwork.ConcurrentEntityModificationException;
+import org.qi4j.api.unitofwork.NoSuchEntityException;
+import org.qi4j.api.unitofwork.UnitOfWork;
+import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
+import org.qi4j.api.unitofwork.UnitOfWorkException;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+
+import org.qipki.ca.application.WrongParametersException;
 import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
 import org.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
-import org.qipki.ca.application.WrongParametersException;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAListResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAResource;
@@ -34,16 +44,6 @@ import org.qipki.ca.http.presentation.rest.resources.x509.X509Resource;
 import org.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource;
 import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileListResource;
 import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileResource;
-
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.injection.scope.Uses;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.unitofwork.ConcurrentEntityModificationException;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
-import org.qi4j.api.unitofwork.UnitOfWork;
-import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
-import org.qi4j.api.unitofwork.UnitOfWorkException;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 import org.restlet.Application;
 import org.restlet.Context;
@@ -150,7 +150,6 @@ public class RestletApplication
             uow.discard();
             response.setStatus( Status.CLIENT_ERROR_BAD_REQUEST );
             response.setEntity( new ExceptionRepresentation( ex ) );
-
         }
     }
 

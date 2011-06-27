@@ -13,11 +13,15 @@
  */
 package org.qipki.commons.rest.values.params;
 
-import org.qipki.commons.crypto.states.CryptoStoreState;
-
+import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+
+import org.qipki.commons.crypto.states.CryptoStoreState;
 
 public interface CryptoStoreFactoryParamsValue
         extends CryptoStoreState, ValueComposite
 {
+
+    Property<char[]> password();
+
 }

@@ -130,7 +130,6 @@ public interface RestletValuesFactory
 
             ksValue.name().set( cs.name().get() );
             ksValue.storeType().set( cs.storeType().get() );
-            ksValue.password().set( cs.password().get() );
 
             return ksValueBuilder.newInstance();
         }

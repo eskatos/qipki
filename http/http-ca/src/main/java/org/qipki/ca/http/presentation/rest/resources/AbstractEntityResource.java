@@ -15,6 +15,8 @@ package org.qipki.ca.http.presentation.rest.resources;
 
 import java.io.IOException;
 import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import org.qi4j.api.object.ObjectBuilderFactory;
 
@@ -77,18 +79,23 @@ public abstract class AbstractEntityResource
             Element html = d.createElement( "html" );
             Element body = d.createElement( "body" );
             Element title = d.createElement( "h1" );
-            title.setTextContent( getReference().toString() );
             Element json = d.createElement( "pre" );
-            json.setTextContent( representJson().getText() );
+            
+            title.setTextContent( getReference().toString() );
+            json.setTextContent( new JSONObject( representJson().getText() ).toString( 2 ) );
+
             body.appendChild( title );
             body.appendChild( json );
-            html.appendChild( body );
-            d.appendChild( html );
 
+            html.appendChild( body );
+
+            d.appendChild( html );
             d.normalizeDocument();
 
             return representation;
 
+        } catch ( JSONException ex ) {
+            throw new ResourceException( ex );
         } catch ( IOException ex ) {
             throw new ResourceException( ex );
         }
