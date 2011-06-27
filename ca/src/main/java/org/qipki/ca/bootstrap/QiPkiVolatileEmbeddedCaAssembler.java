@@ -13,7 +13,6 @@
  */
 package org.qipki.ca.bootstrap;
 
-import org.qipki.core.bootstrap.AssemblyUtil;
 import org.qipki.core.bootstrap.InMemoryStoreAndIndexModuleAssembler;
 
 import org.qi4j.api.common.Visibility;
@@ -43,10 +42,6 @@ public class QiPkiVolatileEmbeddedCaAssembler
             new InMemoryStoreAndIndexModuleAssembler( Visibility.application ).assemble(
                     infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE ) );
         }
-
-        LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );
-
-        domain.uses( infrastructure );
 
         return appAssembly;
     }

@@ -27,7 +27,6 @@ import org.qi4j.library.sql.common.SQLConfiguration;
 import org.qi4j.library.sql.ds.DBCPDataSourceConfiguration;
 import org.qi4j.library.sql.ds.assembly.ImportableDataSourceService;
 
-import org.qipki.core.bootstrap.AssemblyUtil;
 import org.qipki.core.bootstrap.DerbyStoreAndSesameIndexModuleAssembler;
 
 public class QiPkiPersistentEmbeddedCaAssembler
@@ -71,9 +70,9 @@ public class QiPkiPersistentEmbeddedCaAssembler
 
         }
 
-        LayerAssembly config = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_CONFIGURATION );
+        LayerAssembly config = appAssembly.layer( CaAssemblyNames.LAYER_CONFIGURATION );
         {
-            ModuleAssembly configMa = AssemblyUtil.getModuleAssembly( appAssembly, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
+            ModuleAssembly configMa = config.module( CaAssemblyNames.MODULE_CONFIGURATION );
             configMa.entities( NativeConfiguration.class ).visibleIn( Visibility.application );
 
             if ( dataSource != null ) {
@@ -83,11 +82,6 @@ public class QiPkiPersistentEmbeddedCaAssembler
                 configMa.forMixin( DBCPDataSourceConfiguration.class ).declareDefaults().url().set( connectionString );
             }
         }
-
-        LayerAssembly domain = AssemblyUtil.getLayerAssembly( appAssembly, CaAssemblyNames.LAYER_DOMAIN );
-
-        domain.uses( infrastructure );
-        infrastructure.uses( config );
 
         return appAssembly;
     }

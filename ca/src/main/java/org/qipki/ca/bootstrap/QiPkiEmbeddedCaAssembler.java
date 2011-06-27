@@ -28,6 +28,8 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
+import org.qi4j.library.scheduler.SchedulerConfiguration;
+import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
 
 public abstract class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
@@ -64,15 +66,15 @@ public abstract class QiPkiEmbeddedCaAssembler
         app.setMode( appMode );
         app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
 
-        LayerAssembly config = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );
+        LayerAssembly configuration = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );
         {
-            ModuleAssembly configMa = config.module( CaAssemblyNames.MODULE_CONFIGURATION );
-            configMa.addServices( FileConfiguration.class ).visibleIn( Visibility.application );
+            ModuleAssembly config = configuration.module( CaAssemblyNames.MODULE_CONFIGURATION );
+            config.addServices( FileConfiguration.class ).visibleIn( Visibility.application );
             if ( fileConfigOverride != null ) {
-                configMa.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
+                config.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
             }
-            configMa.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
-            configMa.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
+            config.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
+            config.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
         LayerAssembly application = app.layer( CaAssemblyNames.LAYER_APPLICATION );
@@ -95,8 +97,20 @@ public abstract class QiPkiEmbeddedCaAssembler
                     crypto.module( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
         }
 
-        application.uses( domain, crypto, config );
-        domain.uses( crypto, config );
+        LayerAssembly infrastructure = app.layer( CaAssemblyNames.LAYER_INFRASTRUCTURE );
+        {
+            ModuleAssembly scheduler = infrastructure.module( CaAssemblyNames.MODULE_SCHEDULER );
+            ModuleAssembly config = configuration.module( CaAssemblyNames.MODULE_CONFIGURATION );
+            new SchedulerAssembler().withConfigAssembly( config ).
+                    withConfigVisibility( Visibility.application ).
+                    withTimeline().
+                    visibleIn( Visibility.application ).
+                    assemble( scheduler );
+        }
+
+        application.uses( domain, crypto, configuration );
+        domain.uses( crypto, configuration, infrastructure );
+        infrastructure.uses( configuration );
 
         return app;
     }

@@ -31,6 +31,11 @@
             <artifactId>org.qi4j.library.fileconfig</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
+        <dependency>
+            <groupId>org.qi4j.library</groupId>
+            <artifactId>org.qi4j.library.scheduler</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.qi4j.extension</groupId>

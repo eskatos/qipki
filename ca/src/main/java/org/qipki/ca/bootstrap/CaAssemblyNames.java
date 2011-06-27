@@ -18,15 +18,21 @@ public interface CaAssemblyNames
 
     String APPLICATION_NAME = "QiPkiCa";
     String APPLICATION_VERSION = "1.0-m1";
+    // Configuration Layer
     String LAYER_CONFIGURATION = "config";
     String MODULE_CONFIGURATION = "config";
+    // Application Layer
     String LAYER_APPLICATION = "application";
     String MODULE_CA_DCI = "ca-dci";
+    // Domain Layer
     String LAYER_DOMAIN = "domain";
     String MODULE_CA_DOMAIN = "ca-domain";
+    // Crypto Layer
     String LAYER_CRYPTO = "crypto";
     String MODULE_CRYPTO_ENGINE = "crypto-engine";
     String MODULE_CRYPTO_VALUES = "crypto-values";
+    // Infrastructure Layer
     String LAYER_INFRASTRUCTURE = "infrastructure";
     String MODULE_PERSISTENCE = "persistence";
+    String MODULE_SCHEDULER = "scheduler";
 }
