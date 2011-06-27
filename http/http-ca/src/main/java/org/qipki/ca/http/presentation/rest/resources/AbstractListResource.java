@@ -42,7 +42,8 @@ public abstract class AbstractListResource
     @Override
     protected final Representation representJson()
     {
-        int start = 0;
+        String startParam = getQueryParamValue( "start", "0" );
+        int start = Integer.valueOf( startParam );
         return new StringRepresentation( list( start ).toJSON() );
     }
 
