@@ -15,10 +15,14 @@ package org.qipki.ca.http.presentation.rest.resources;
 
 import java.io.IOException;
 import java.util.Arrays;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.qi4j.api.injection.scope.Service;
 
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -35,14 +39,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class AbstractEntityResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractEntityResource.class );
 
-    protected AbstractEntityResource( ObjectBuilderFactory obf )
+    protected AbstractEntityResource( ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
         getVariants().addAll( Arrays.asList(
                 new Variant( MediaType.TEXT_HTML ),
                 new Variant( MediaType.APPLICATION_JSON ) ) );
@@ -80,7 +84,7 @@ public abstract class AbstractEntityResource
             Element body = d.createElement( "body" );
             Element title = d.createElement( "h1" );
             Element json = d.createElement( "pre" );
-            
+
             title.setTextContent( getReference().toString() );
             json.setTextContent( new JSONObject( representJson().getText() ).toString( 2 ) );
 

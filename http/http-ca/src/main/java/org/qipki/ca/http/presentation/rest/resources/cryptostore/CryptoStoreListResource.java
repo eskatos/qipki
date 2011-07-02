@@ -15,20 +15,21 @@ package org.qipki.ca.http.presentation.rest.resources.cryptostore;
 
 import java.io.IOException;
 
-import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
-import org.qipki.ca.domain.cryptostore.CryptoStore;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
-import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.CryptoStoreValue;
-import org.qipki.commons.rest.values.representations.RestListValue;
-import org.qipki.commons.rest.values.representations.RestValue;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
+import org.qipki.ca.domain.cryptostore.CryptoStore;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
+import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.CryptoStoreValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestValue;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -47,9 +48,9 @@ public class CryptoStoreListResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CryptoStoreListResource( @Structure ObjectBuilderFactory obf )
+    public CryptoStoreListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -62,7 +63,7 @@ public class CryptoStoreListResource
         Query<CryptoStore> csList = csListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), csList );
+        Iterable<RestValue> values = restValuesFactory.asValues( csList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 
@@ -82,7 +83,7 @@ public class CryptoStoreListResource
             CryptoStore cs = csListCtx.createCryptoStore( params.name().get(), params.storeType().get(), params.password().get() );
 
             // Redirect to created resource
-            CryptoStoreValue csValue = restValuesFactory.cryptoStore( getRootRef(), cs );
+            CryptoStoreValue csValue = restValuesFactory.cryptoStore( cs );
             return redirectToCreatedResource( csValue.uri().get() );
 
         } catch ( IOException ex ) {

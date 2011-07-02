@@ -15,20 +15,21 @@ package org.qipki.ca.http.presentation.rest.resources.escrowedkeypair;
 
 import java.io.IOException;
 
-import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
-import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
-import org.qipki.commons.rest.values.params.EscrowedKeyPairFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
-import org.qipki.commons.rest.values.representations.RestListValue;
-import org.qipki.commons.rest.values.representations.RestValue;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
+import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
+import org.qipki.commons.rest.values.params.EscrowedKeyPairFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestValue;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -47,9 +48,9 @@ public class EscrowedKeyPairListResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public EscrowedKeyPairListResource( @Structure ObjectBuilderFactory obf )
+    public EscrowedKeyPairListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -62,7 +63,7 @@ public class EscrowedKeyPairListResource
         Query<EscrowedKeyPair> escrowList = escrowListContext.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), escrowList );
+        Iterable<RestValue> values = restValuesFactory.asValues( escrowList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 
@@ -82,7 +83,7 @@ public class EscrowedKeyPairListResource
             EscrowedKeyPair kp = escrowListContext.createEscrowedKeyPair( params.algorithm().get(), params.length().get() );
 
             // Redirect to created resource
-            EscrowedKeyPairValue kpValue = restValuesFactory.escrowedKeyPair( getRootRef(), kp );
+            EscrowedKeyPairValue kpValue = restValuesFactory.escrowedKeyPair( kp );
             return redirectToCreatedResource( kpValue.uri().get() );
 
         } catch ( IOException ex ) {

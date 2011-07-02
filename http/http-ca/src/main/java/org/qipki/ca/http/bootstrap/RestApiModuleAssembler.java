@@ -13,11 +13,18 @@
  */
 package org.qipki.ca.http.bootstrap;
 
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import static org.qi4j.library.http.Servlets.*;
+
 import org.qipki.ca.http.presentation.rest.resources.x509.X509PemResource;
 import org.qipki.ca.http.presentation.rest.RestletApplication;
-import org.qipki.ca.http.presentation.rest.RestletFinder;
+import org.qipki.ca.http.presentation.rest.ObjectResourceFinder;
 import org.qipki.ca.http.presentation.rest.RestletServletServerService;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAListResource;
@@ -38,12 +45,6 @@ import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileList
 import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
 
-import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import static org.qi4j.library.http.Servlets.*;
-
 public class RestApiModuleAssembler
         implements Assembler
 {
@@ -53,34 +54,34 @@ public class RestApiModuleAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addObjects( RestletApplication.class ).
+        module.objects( RestletApplication.class ).
                 visibleIn( Visibility.layer );
 
-        module.addObjects( RestletFinder.class,
-                           CaApiRootResource.class,
-                           CryptoInspectorResource.class,
-                           CryptoStoreListResource.class,
-                           CryptoStoreResource.class,
-                           CAListResource.class,
-                           CAResource.class,
-                           CAExportResource.class,
-                           CRLResource.class,
-                           X509ProfileListResource.class,
-                           X509ProfileResource.class,
-                           X509ListResource.class,
-                           X509Resource.class,
-                           X509PemResource.class,
-                           X509DetailResource.class,
-                           X509RevocationResource.class,
-                           X509RecoveryResource.class,
-                           EscrowedKeyPairListResource.class,
-                           EscrowedKeyPairResource.class,
-                           EscrowedKeyPairPemResource.class ).
+        module.objects( ObjectResourceFinder.class,
+                        CaApiRootResource.class,
+                        CryptoInspectorResource.class,
+                        CryptoStoreListResource.class,
+                        CryptoStoreResource.class,
+                        CAListResource.class,
+                        CAResource.class,
+                        CAExportResource.class,
+                        CRLResource.class,
+                        X509ProfileListResource.class,
+                        X509ProfileResource.class,
+                        X509ListResource.class,
+                        X509Resource.class,
+                        X509PemResource.class,
+                        X509DetailResource.class,
+                        X509RevocationResource.class,
+                        X509RecoveryResource.class,
+                        EscrowedKeyPairListResource.class,
+                        EscrowedKeyPairResource.class,
+                        EscrowedKeyPairPemResource.class ).
                 visibleIn( Visibility.module );
 
         new RestValuesModuleAssembler( Visibility.layer ).assemble( module );
 
-        module.addServices( RestletValuesFactory.class ).
+        module.services( RestApiService.class, RestletValuesFactory.class ).
                 visibleIn( Visibility.module );
 
         addServlets( serve( "/api/*" ).with( RestletServletServerService.class ) ).

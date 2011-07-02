@@ -33,6 +33,7 @@ import org.qi4j.library.jmx.JMXConnectorService;
 
 import org.qipki.ca.bootstrap.CaAssemblyNames;
 import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
+import org.qipki.ca.http.presentation.rest.api.RestApiConfiguration;
 import org.qipki.core.bootstrap.AssemblyUtil;
 
 public class QiPkiHttpCaAssembler
@@ -74,7 +75,11 @@ public class QiPkiHttpCaAssembler
         // Add Configuration entities to the configuration module
         ModuleAssembly config = AssemblyUtil.getModuleAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
         {
-            config.entities( JettyConfiguration.class, JMXConnectorConfiguration.class ).visibleIn( Visibility.application );
+            config.entities( RestApiConfiguration.class,
+                             JettyConfiguration.class,
+                             JMXConnectorConfiguration.class ).
+                    visibleIn( Visibility.application );
+
             JMXConnectorConfiguration jmxConfigDefaults = config.forMixin( JMXConnectorConfiguration.class ).declareDefaults();
             jmxConfigDefaults.enabled().set( Boolean.TRUE );
             if ( jmxPort != null && jmxPort != -1 ) {

@@ -13,14 +13,15 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.escrowedkeypair;
 
-import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
-import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
+import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -34,9 +35,9 @@ public class EscrowedKeyPairResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public EscrowedKeyPairResource( @Structure ObjectBuilderFactory obf )
+    public EscrowedKeyPairResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -52,8 +53,7 @@ public class EscrowedKeyPairResource
         EscrowedKeyPair ekp = ekpCtx.escrowedKeyPair();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.escrowedKeyPair( getRootRef(), ekp ).toJSON(),
-                                         MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.escrowedKeyPair( ekp ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

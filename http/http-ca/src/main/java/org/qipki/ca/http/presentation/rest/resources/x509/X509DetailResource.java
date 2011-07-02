@@ -13,14 +13,15 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.x509;
 
-import org.qipki.ca.application.contexts.x509.X509Context;
-import org.qipki.ca.domain.x509.X509;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.x509.X509Context;
+import org.qipki.ca.domain.x509.X509;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -34,9 +35,9 @@ public class X509DetailResource
     @Service
     private RestletValuesFactory valuesFactory;
 
-    public X509DetailResource( @Structure ObjectBuilderFactory obf )
+    public X509DetailResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -52,8 +53,7 @@ public class X509DetailResource
         X509 x509 = x509Ctx.x509();
 
         // Representation
-        return new StringRepresentation( valuesFactory.x509Detail( getRootRef(), x509 ).toJSON(),
-                                         MediaType.APPLICATION_JSON );
+        return new StringRepresentation( valuesFactory.x509Detail( x509 ).toJSON(), MediaType.APPLICATION_JSON );
 
     }
 

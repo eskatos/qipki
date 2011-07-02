@@ -24,7 +24,7 @@ import org.qi4j.api.unitofwork.UnitOfWorkException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 import org.qipki.ca.application.WrongParametersException;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
 import org.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAListResource;
@@ -85,26 +85,26 @@ public class RestletApplication
         router.attach( "/tools/inspector", createFinder( CryptoInspectorResource.class ) );
 
         router.attach( "/cryptostore", createFinder( CryptoStoreListResource.class ) );
-        router.attach( "/cryptostore/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
+        router.attach( "/cryptostore/{" + AbstractDCIResource.PARAM_IDENTITY + "}", createFinder( CryptoStoreResource.class ) );
 
         router.attach( "/ca", createFinder( CAListResource.class ) );
-        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
-        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/export", createFinder( CAExportResource.class ) );
-        router.attach( "/ca/{" + AbstractResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
+        router.attach( "/ca/{" + AbstractDCIResource.PARAM_IDENTITY + "}", createFinder( CAResource.class ) );
+        router.attach( "/ca/{" + AbstractDCIResource.PARAM_IDENTITY + "}/export", createFinder( CAExportResource.class ) );
+        router.attach( "/ca/{" + AbstractDCIResource.PARAM_IDENTITY + "}/crl", createFinder( CRLResource.class ) );
 
         router.attach( "/x509Profile", createFinder( X509ProfileListResource.class ) );
-        router.attach( "/x509Profile/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509ProfileResource.class ) );
+        router.attach( "/x509Profile/{" + AbstractDCIResource.PARAM_IDENTITY + "}", createFinder( X509ProfileResource.class ) );
 
         router.attach( "/x509", createFinder( X509ListResource.class ) );
-        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
-        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/pem", createFinder( X509PemResource.class ) );
-        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
-        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
-        router.attach( "/x509/{" + AbstractResource.PARAM_IDENTITY + "}/recovery", createFinder( X509RecoveryResource.class ) );
+        router.attach( "/x509/{" + AbstractDCIResource.PARAM_IDENTITY + "}", createFinder( X509Resource.class ) );
+        router.attach( "/x509/{" + AbstractDCIResource.PARAM_IDENTITY + "}/pem", createFinder( X509PemResource.class ) );
+        router.attach( "/x509/{" + AbstractDCIResource.PARAM_IDENTITY + "}/detail", createFinder( X509DetailResource.class ) );
+        router.attach( "/x509/{" + AbstractDCIResource.PARAM_IDENTITY + "}/revocation", createFinder( X509RevocationResource.class ) );
+        router.attach( "/x509/{" + AbstractDCIResource.PARAM_IDENTITY + "}/recovery", createFinder( X509RecoveryResource.class ) );
 
         router.attach( "/escrow", createFinder( EscrowedKeyPairListResource.class ) );
-        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}", createFinder( EscrowedKeyPairResource.class ) );
-        router.attach( "/escrow/{" + AbstractResource.PARAM_IDENTITY + "}/pem", createFinder( EscrowedKeyPairPemResource.class ) );
+        router.attach( "/escrow/{" + AbstractDCIResource.PARAM_IDENTITY + "}", createFinder( EscrowedKeyPairResource.class ) );
+        router.attach( "/escrow/{" + AbstractDCIResource.PARAM_IDENTITY + "}/pem", createFinder( EscrowedKeyPairPemResource.class ) );
 
         return new ExtensionMediaTypeFilter( getContext(), router );
     }

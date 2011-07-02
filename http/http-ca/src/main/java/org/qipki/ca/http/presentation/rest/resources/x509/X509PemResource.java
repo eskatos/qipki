@@ -13,12 +13,14 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.x509;
 
-import org.qipki.ca.application.contexts.x509.X509Context;
-import org.qipki.ca.domain.x509.X509;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
-
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.x509.X509Context;
+import org.qipki.ca.domain.x509.X509;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -27,12 +29,12 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
 public class X509PemResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
-    public X509PemResource( @Structure ObjectBuilderFactory obf )
+    public X509PemResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override

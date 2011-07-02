@@ -17,13 +17,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-
-import org.qipki.ca.application.contexts.ca.CAContext;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
-import org.qipki.crypto.storage.KeyStoreType;
+import org.qi4j.api.injection.scope.Service;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.ca.CAContext;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
+import org.qipki.crypto.storage.KeyStoreType;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -35,15 +37,15 @@ import org.restlet.resource.ResourceException;
  * This ressource allow to export a CA KeyPair in a PKCS#12 container protected using a provided password.
  */
 public class CAExportResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_KEYSTORE_TYPE = "kstype";
 
-    public CAExportResource( @Structure ObjectBuilderFactory obf )
+    public CAExportResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override

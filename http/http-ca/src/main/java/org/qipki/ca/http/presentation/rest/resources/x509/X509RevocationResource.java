@@ -15,17 +15,18 @@ package org.qipki.ca.http.presentation.rest.resources.x509;
 
 import java.io.IOException;
 
-import org.qipki.ca.application.contexts.RootContext;
-import org.qipki.ca.application.contexts.x509.X509Context;
-import org.qipki.ca.domain.revocation.Revocation;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
-import org.qipki.commons.rest.values.params.X509RevocationParamsValue;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.application.contexts.x509.X509Context;
+import org.qipki.ca.domain.revocation.Revocation;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
+import org.qipki.commons.rest.values.params.X509RevocationParamsValue;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -37,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class X509RevocationResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509RevocationResource.class );
@@ -46,9 +47,9 @@ public class X509RevocationResource
     @Service
     private RestletValuesFactory valuesFactory;
 
-    public X509RevocationResource( @Structure ObjectBuilderFactory obf )
+    public X509RevocationResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
         setNegotiated( false );
     }
 
@@ -70,8 +71,7 @@ public class X509RevocationResource
             Revocation revocation = x509Ctx.revoke( params.reason().get() );
 
             // Representation
-            return new StringRepresentation( valuesFactory.revocation( getRootRef(), revocation ).toJSON(),
-                                             MediaType.APPLICATION_JSON );
+            return new StringRepresentation( valuesFactory.revocation( revocation ).toJSON(), MediaType.APPLICATION_JSON );
 
         } catch ( IOException ex ) {
             LOGGER.warn( "500: {}", ex.getMessage(), ex );

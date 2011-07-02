@@ -13,14 +13,15 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.cryptostore;
 
-import org.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
-import org.qipki.ca.domain.cryptostore.CryptoStore;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
+import org.qipki.ca.domain.cryptostore.CryptoStore;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -34,9 +35,9 @@ public class CryptoStoreResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CryptoStoreResource( @Structure ObjectBuilderFactory obf )
+    public CryptoStoreResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -52,8 +53,7 @@ public class CryptoStoreResource
         CryptoStore cs = csCtx.cryptoStore();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.cryptoStore( getRootRef(), cs ).toJSON(),
-                                         MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.cryptoStore( cs ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

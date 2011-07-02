@@ -14,14 +14,16 @@
 package org.qipki.ca.http.presentation.rest.resources.ca;
 
 import java.util.Collections;
+import org.qi4j.api.injection.scope.Service;
+
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.object.ObjectBuilderFactory;
 
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.domain.crl.CRL;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
-
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -35,14 +37,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CRLResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CRLResource.class );
 
-    public CRLResource( @Structure ObjectBuilderFactory obf )
+    public CRLResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
         setAllowedMethods( Collections.singleton( Method.GET ) );
         setNegotiated( false );
         getVariants().add( new Variant( MediaType.TEXT_PLAIN ) );

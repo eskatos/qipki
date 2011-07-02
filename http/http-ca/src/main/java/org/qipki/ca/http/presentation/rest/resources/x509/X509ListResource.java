@@ -15,21 +15,22 @@ package org.qipki.ca.http.presentation.rest.resources.x509;
 
 import java.io.IOException;
 
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.value.ValueBuilderFactory;
+
 import org.qipki.ca.application.contexts.x509.X509ListContext;
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
 import org.qipki.ca.http.presentation.rest.uribuilder.CaUriResolver;
 import org.qipki.commons.rest.values.params.X509FactoryParamsValue;
 import org.qipki.commons.rest.values.representations.RestListValue;
 import org.qipki.commons.rest.values.representations.RestValue;
 import org.qipki.commons.rest.values.representations.X509Value;
-
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -48,9 +49,9 @@ public class X509ListResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public X509ListResource( @Structure ObjectBuilderFactory obf )
+    public X509ListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -63,7 +64,7 @@ public class X509ListResource
         Query<X509> x509List = x509ListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), x509List );
+        Iterable<RestValue> values = restValuesFactory.asValues( x509List );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 
@@ -94,7 +95,7 @@ public class X509ListResource
             }
 
             // Redirect to created resource
-            X509Value x509Value = restValuesFactory.x509( getRootRef(), x509 );
+            X509Value x509Value = restValuesFactory.x509( x509 );
             return redirectToCreatedResource( x509Value.uri().get() );
 
         } catch ( IOException ex ) {

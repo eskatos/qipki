@@ -23,7 +23,7 @@ import org.restlet.Response;
 import org.restlet.resource.Finder;
 import org.restlet.resource.ServerResource;
 
-public class RestletFinder
+public class ObjectResourceFinder
         extends Finder
 {
 

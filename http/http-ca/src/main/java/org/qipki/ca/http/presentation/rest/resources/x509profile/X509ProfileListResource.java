@@ -15,20 +15,21 @@ package org.qipki.ca.http.presentation.rest.resources.x509profile;
 
 import java.io.IOException;
 
-import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
-import org.qipki.ca.domain.x509profile.X509Profile;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
-import org.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.RestListValue;
-import org.qipki.commons.rest.values.representations.RestValue;
-import org.qipki.commons.rest.values.representations.X509ProfileValue;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
+import org.qipki.ca.domain.x509profile.X509Profile;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
+import org.qipki.commons.rest.values.params.X509ProfileFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestValue;
+import org.qipki.commons.rest.values.representations.X509ProfileValue;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -47,9 +48,9 @@ public class X509ProfileListResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public X509ProfileListResource( @Structure ObjectBuilderFactory obf )
+    public X509ProfileListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -62,7 +63,7 @@ public class X509ProfileListResource
         Query<X509Profile> x509ProfileList = x509ProfileListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), x509ProfileList );
+        Iterable<RestValue> values = restValuesFactory.asValues( x509ProfileList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 
@@ -89,7 +90,7 @@ public class X509ProfileListResource
                                                                             params.nameConstraints().get() );
 
             // Redirect to created resource
-            X509ProfileValue x509ProfileValue = restValuesFactory.x509Profile( getRootRef(), x509Profile );
+            X509ProfileValue x509ProfileValue = restValuesFactory.x509Profile( x509Profile );
             return redirectToCreatedResource( x509ProfileValue.uri().get() );
 
         } catch ( IOException ex ) {

@@ -50,6 +50,7 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 
 import org.restlet.data.Reference;
 
@@ -58,23 +59,23 @@ public interface RestletValuesFactory
         extends ServiceComposite
 {
 
-    CaApiURIsValue caApiURIs( Reference rootRef );
+    CaApiURIsValue caApiURIs();
 
-    CryptoStoreValue cryptoStore( Reference rootRef, CryptoStore ks );
+    CryptoStoreValue cryptoStore( CryptoStore ks );
 
-    CAValue ca( Reference rootRef, CA ca );
+    CAValue ca( CA ca );
 
-    X509ProfileValue x509Profile( Reference rootRef, X509Profile x509Profile );
+    X509ProfileValue x509Profile( X509Profile x509Profile );
 
-    X509Value x509( Reference rootRef, X509 x509 );
+    X509Value x509( X509 x509 );
 
-    X509DetailValue x509Detail( Reference rootRef, X509 x509 );
+    X509DetailValue x509Detail( X509 x509 );
 
-    RevocationValue revocation( Reference rootRef, Revocation revocation );
+    RevocationValue revocation( Revocation revocation );
 
-    EscrowedKeyPairValue escrowedKeyPair( Reference rootRef, EscrowedKeyPair escrowedKeyPair );
+    EscrowedKeyPairValue escrowedKeyPair( EscrowedKeyPair escrowedKeyPair );
 
-    Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects );
+    Iterable<RestValue> asValues( Iterable<?> objects );
 
     RestListValue newListRepresentationValue( Reference listRef, int start, Iterable<RestValue> list );
 
@@ -86,6 +87,8 @@ public interface RestletValuesFactory
         @Structure
         private ValueBuilderFactory vbf;
         @Service
+        private RestApiService restApi;
+        @Service
         private CryptoValuesFactory commonValuesFactory;
         @Service
         private X509ExtensionsValueFactory x509ExtensionsValueFactory;
@@ -95,8 +98,10 @@ public interface RestletValuesFactory
         private CryptObjectsFactory cryptoToolFactory;
 
         @Override
-        public CaApiURIsValue caApiURIs( Reference rootRef )
+        public CaApiURIsValue caApiURIs()
         {
+            Reference rootRef = restApi.apiRootRef();
+
             ValueBuilder<CaApiURIsValue> caApiBuilder = vbf.newValueBuilder( CaApiURIsValue.class );
             CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
 
@@ -119,10 +124,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public CryptoStoreValue cryptoStore( Reference rootRef, CryptoStore cs )
+        public CryptoStoreValue cryptoStore( CryptoStore cs )
         {
             ValueBuilder<CryptoStoreValue> ksValueBuilder = vbf.newValueBuilder( CryptoStoreValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             CryptoStoreValue ksValue = ksValueBuilder.prototype();
 
@@ -135,10 +140,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public CAValue ca( Reference rootRef, CA ca )
+        public CAValue ca( CA ca )
         {
             ValueBuilder<CAValue> caValueBuilder = vbf.newValueBuilder( CAValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             CAValue caValue = caValueBuilder.prototype();
 
@@ -164,10 +169,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public X509ProfileValue x509Profile( Reference rootRef, X509Profile x509Profile )
+        public X509ProfileValue x509Profile( X509Profile x509Profile )
         {
             ValueBuilder<X509ProfileValue> x509ProfileValueBuilder = vbf.newValueBuilder( X509ProfileValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             X509ProfileValue x509ProfileValue = x509ProfileValueBuilder.prototype();
 
@@ -179,10 +184,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public X509Value x509( Reference rootRef, X509 x509 )
+        public X509Value x509( X509 x509 )
         {
             ValueBuilder<X509Value> x509ValueBuilder = vbf.newValueBuilder( X509Value.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             X509Value x509Value = x509ValueBuilder.prototype();
 
@@ -207,13 +212,13 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public X509DetailValue x509Detail( Reference rootRef, X509 x509 )
+        public X509DetailValue x509Detail( X509 x509 )
         {
             X509Certificate cert = x509.x509Certificate();
             KeyInformation publicKeyInfo = cryptoToolFactory.newKeyInformationInstance( cert.getPublicKey() );
 
             ValueBuilder<X509DetailValue> x509DetailValueBuilder = vbf.newValueBuilder( X509DetailValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             X509DetailValue x509DetailValue = x509DetailValueBuilder.prototype();
 
@@ -256,10 +261,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public RevocationValue revocation( Reference rootRef, Revocation revocation )
+        public RevocationValue revocation( Revocation revocation )
         {
             ValueBuilder<RevocationValue> revocationValueBuilder = vbf.newValueBuilder( RevocationValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             RevocationValue revocationValue = revocationValueBuilder.prototype();
 
@@ -272,10 +277,10 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public EscrowedKeyPairValue escrowedKeyPair( Reference rootRef, EscrowedKeyPair escrowedKeyPair )
+        public EscrowedKeyPairValue escrowedKeyPair( EscrowedKeyPair escrowedKeyPair )
         {
             ValueBuilder<EscrowedKeyPairValue> escrowedKeyPairValueBuilder = vbf.newValueBuilder( EscrowedKeyPairValue.class );
-            CaUriBuilder caUriBuilder = new CaUriBuilder( rootRef );
+            CaUriBuilder caUriBuilder = new CaUriBuilder( restApi.apiRootRef() );
 
             EscrowedKeyPairValue escrowedKeyPairValue = escrowedKeyPairValueBuilder.prototype();
 
@@ -294,18 +299,19 @@ public interface RestletValuesFactory
         }
 
         @Override
-        public Iterable<RestValue> asValues( Reference rootRef, Iterable<?> objects )
+        public Iterable<RestValue> asValues( Iterable<?> objects )
         {
+            Reference rootRef = restApi.apiRootRef();
             Set<RestValue> set = new LinkedHashSet<RestValue>();
             for ( Object eachObj : objects ) {
                 if ( CA.class.isAssignableFrom( eachObj.getClass() ) ) {
-                    set.add( ca( rootRef, ( CA ) eachObj ) );
+                    set.add( ca( ( CA ) eachObj ) );
                 } else if ( CryptoStore.class.isAssignableFrom( eachObj.getClass() ) ) {
-                    set.add( cryptoStore( rootRef, ( CryptoStore ) eachObj ) );
+                    set.add( cryptoStore( ( CryptoStore ) eachObj ) );
                 } else if ( X509.class.isAssignableFrom( eachObj.getClass() ) ) {
-                    set.add( x509( rootRef, ( X509 ) eachObj ) );
+                    set.add( x509( ( X509 ) eachObj ) );
                 } else if ( EscrowedKeyPair.class.isAssignableFrom( eachObj.getClass() ) ) {
-                    set.add( escrowedKeyPair( rootRef, ( EscrowedKeyPair ) eachObj ) );
+                    set.add( escrowedKeyPair( ( EscrowedKeyPair ) eachObj ) );
                 } else {
                     throw new IllegalArgumentException( "Object is of unsupported Type: " + eachObj );
                 }

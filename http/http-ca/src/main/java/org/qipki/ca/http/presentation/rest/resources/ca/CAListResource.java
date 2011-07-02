@@ -16,21 +16,23 @@ package org.qipki.ca.http.presentation.rest.resources.ca;
 import java.io.IOException;
 
 import org.codeartisans.java.toolbox.StringUtils;
-import org.qipki.ca.application.contexts.ca.CAListContext;
-import org.qipki.ca.domain.ca.CA;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
-import org.qipki.ca.http.presentation.rest.uribuilder.CaUriResolver;
-import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
-import org.qipki.commons.rest.values.representations.CAValue;
-import org.qipki.commons.rest.values.representations.RestListValue;
-import org.qipki.commons.rest.values.representations.RestValue;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.value.ValueBuilderFactory;
+
+import org.qipki.ca.application.contexts.ca.CAListContext;
+import org.qipki.ca.domain.ca.CA;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
+import org.qipki.ca.http.presentation.rest.uribuilder.CaUriResolver;
+import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
+import org.qipki.commons.rest.values.representations.CAValue;
+import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestValue;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -49,9 +51,9 @@ public class CAListResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CAListResource( @Structure ObjectBuilderFactory obf )
+    public CAListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -64,7 +66,7 @@ public class CAListResource
         Query<CA> caList = caListCtx.list( start );
 
         // Representation
-        Iterable<RestValue> values = restValuesFactory.asValues( getRootRef(), caList );
+        Iterable<RestValue> values = restValuesFactory.asValues( caList );
         return restValuesFactory.newListRepresentationValue( getReference(), start, values );
     }
 
@@ -95,7 +97,7 @@ public class CAListResource
             }
 
             // Redirect to created resource
-            CAValue caValue = restValuesFactory.ca( getRootRef(), ca );
+            CAValue caValue = restValuesFactory.ca( ca );
             return redirectToCreatedResource( caValue.uri().get() );
 
         } catch ( IOException ex ) {

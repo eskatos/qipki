@@ -13,14 +13,15 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.x509profile;
 
-import org.qipki.ca.application.contexts.x509profile.X509ProfileContext;
-import org.qipki.ca.domain.x509profile.X509Profile;
-import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
-import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
+
+import org.qipki.ca.application.contexts.x509profile.X509ProfileContext;
+import org.qipki.ca.domain.x509profile.X509Profile;
+import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -34,9 +35,9 @@ public class X509ProfileResource
     @Service
     private RestletValuesFactory valuesFactory;
 
-    public X509ProfileResource( @Structure ObjectBuilderFactory obf )
+    public X509ProfileResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
@@ -52,8 +53,7 @@ public class X509ProfileResource
         X509Profile x509Profile = x509Ctx.x509Profile();
 
         // Representation
-        return new StringRepresentation( valuesFactory.x509Profile( getRootRef(), x509Profile ).toJSON(),
-                                         MediaType.APPLICATION_JSON );
+        return new StringRepresentation( valuesFactory.x509Profile( x509Profile ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

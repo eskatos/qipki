@@ -16,25 +16,30 @@ package org.qipki.ca.http.presentation.rest.resources;
 import org.qi4j.api.injection.scope.Service;
 
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 public class CaApiRootResource
-        extends ServerResource
+        extends AbstractResource
 {
 
     @Service
     private RestletValuesFactory restValuesFactory;
 
+    public CaApiRootResource( @Service RestApiService restApi )
+    {
+        super( restApi );
+    }
+
     @Override
     protected Representation get()
             throws ResourceException
     {
-        return new StringRepresentation( restValuesFactory.caApiURIs( getRootRef() ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.caApiURIs().toJSON(), MediaType.APPLICATION_JSON );
     }
 
 }

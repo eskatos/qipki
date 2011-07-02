@@ -19,19 +19,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.value.ValueBuilderFactory;
+
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.AbstractEntityResource;
 import org.qipki.ca.http.presentation.rest.uribuilder.CaUriResolver;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.rest.values.representations.CAValue;
 import org.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
-
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.value.ValueBuilderFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -54,9 +55,9 @@ public class CAResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CAResource( @Structure ObjectBuilderFactory obf )
+    public CAResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
         setAllowedMethods( new HashSet<Method>( Arrays.asList( new Method[]{ Method.GET, Method.POST } ) ) );
     }
 
@@ -74,7 +75,7 @@ public class CAResource
         CA ca = caCtx.ca();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.ca( getRootRef(), ca ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.ca( ca ).toJSON(), MediaType.APPLICATION_JSON );
     }
 
     @Override
@@ -98,7 +99,7 @@ public class CAResource
             CA ca = caCtx.updateCA( profileAssignments );
 
             // Redirect to updated resource
-            caValue = restValuesFactory.ca( getRootRef(), ca );
+            caValue = restValuesFactory.ca( ca );
             return redirectToUpdatedResource( caValue.uri().get() );
 
         } catch ( IOException ex ) {

@@ -13,26 +13,28 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.escrowedkeypair;
 
-import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
-import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
-import org.qipki.ca.http.presentation.rest.resources.AbstractResource;
-
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
-import org.restlet.data.MediaType;
 
+import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
+import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
+import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
+
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
 public class EscrowedKeyPairPemResource
-        extends AbstractResource
+        extends AbstractDCIResource
 {
 
-    public EscrowedKeyPairPemResource( @Structure ObjectBuilderFactory obf )
+    public EscrowedKeyPairPemResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
-        super( obf );
+        super( obf, restApi );
     }
 
     @Override
