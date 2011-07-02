@@ -70,8 +70,8 @@
             <configuration>
               <outputDirectory>${project.build.directory}/${dist.name}</outputDirectory>
               <globals>
-                <wrapperJmx>false</wrapperJmx>
-                <javaLogGeneratedCommand>false</javaLogGeneratedCommand>
+                <wrapperJmx>true</wrapperJmx>
+                <javaLogGeneratedCommand>true</javaLogGeneratedCommand>
               </globals>
               <services>
                 <service>
