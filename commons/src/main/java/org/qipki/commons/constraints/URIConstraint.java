@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,17 +11,27 @@
  * limitations under the License.
  *
  */
-package org.qipki.crypto.constraints;
+package org.qipki.commons.constraints;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.net.URISyntaxException;
 
-import org.qi4j.api.constraint.ConstraintDeclaration;
-import org.qi4j.library.constraints.annotation.NotEmpty;
+import org.qi4j.api.constraint.Constraint;
 
-@ConstraintDeclaration
-@NotEmpty
-@Retention( RetentionPolicy.RUNTIME )
-public @interface X500Name
+public class URIConstraint
+        implements Constraint<URI, String>
 {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public boolean isValid( URI annotation, String value )
+    {
+        try {
+            new java.net.URI( value );
+            return true;
+        } catch ( URISyntaxException ignored ) {
+            return false;
+        }
+    }
+
 }

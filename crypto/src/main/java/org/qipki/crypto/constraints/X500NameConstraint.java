@@ -18,17 +18,16 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.qipki.crypto.x509.DistinguishedName;
 
 import org.qi4j.api.constraint.Constraint;
-import org.qi4j.library.constraints.annotation.Contains;
 
 public class X500NameConstraint
-        implements Constraint<Contains, String>
+        implements Constraint<X500Name, String>
 {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     @SuppressWarnings( "ResultOfObjectAllocationIgnored" )
-    public boolean isValid( Contains annotation, String value )
+    public boolean isValid( X500Name annotation, String value )
     {
         try {
             new X509Name( value );
