@@ -17,6 +17,8 @@ import org.qi4j.api.common.Optional;
 import org.qi4j.api.configuration.ConfigurationComposite;
 import org.qi4j.api.property.Property;
 
+import org.qipki.commons.constraints.URL;
+
 public interface RestApiConfiguration
         extends ConfigurationComposite
 {
@@ -24,6 +26,7 @@ public interface RestApiConfiguration
     /**
      * @return The base api url used by clients, autodetected if empty.
      */
+    @URL
     @Optional
     Property<String> clientBaseUrl();
 

@@ -45,10 +45,12 @@ public interface RestApiService
         public void setApiRootRef( Reference detected )
         {
             config.refresh();
-            if ( config == null || config.configuration() == null ) {
-                // Configuration was null, will use detected
-                apiRootRef = detected;
-                return;
+            if ( false ) {
+                if ( config == null || config.configuration() == null ) {
+                    // Configuration was null, will use detected
+                    apiRootRef = detected;
+                    return;
+                }
             }
             String configured = config.configuration().clientBaseUrl().get();
             if ( StringUtils.isEmpty( configured ) ) {
