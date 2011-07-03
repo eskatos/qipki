@@ -9,9 +9,7 @@
 
 # Work in progress
 
-* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Store EntityStore on the Filesystem
-  * Store KeyStores on the Filesystem
+* (#---) Reduce LOC in ReST Resources
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Move code to qipki-main-core ?
   * Write integration tests for migrations
@@ -24,7 +22,9 @@
     * Full url given by X509Profile
     * If no url on profile creation, create it with a sensible defaut, allow edition too
     * Clients could use the uri builder to easily create the default one 
-
+* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
+  * Store EntityStore on the Filesystem
+  * Store KeyStores on the Filesystem
 
 # Next steps
 

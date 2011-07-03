@@ -16,6 +16,7 @@
 
     <modules>
         <module>ca-http-client</module>
-    </modules>
+    <module>qipki-clients-web</module>
+  </modules>
 
 </project>

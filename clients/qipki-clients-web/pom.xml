@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- POM file generated with GWT webAppCreator -->
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>qipki-clients-parent</artifactId>
+    <groupId>org.codeartisans.qipki.qipki-clients</groupId>
+    <version>1.0-alpha8-SNAPSHOT</version>
+  </parent>
+  <artifactId>qipki-clients-web</artifactId>
+  <packaging>war</packaging>
+  <name>${project.artifactId}</name>
+
+  <properties>
+    <!-- Convenience property to set the GWT version -->
+    <version.gwt>2.3.0</version.gwt>
+    <!-- GWT needs at least java 1.5 -->
+    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.target>1.5</maven.compiler.target>
+    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.fusesource.restygwt</groupId>
+      <artifactId>restygwt</artifactId>
+      <version>1.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.googlecode.gwt-proxy-servlet</groupId>
+      <artifactId>proxy</artifactId>
+      <version>1.0.2-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${version.gwt}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.7</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Generate compiled stuff in the folder used for developing mode -->
+    <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+    <plugins>
+
+      <!-- GWT Maven Plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${version.gwt}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>test</goal>
+              <goal>i18n</goal>
+              <!--goal>generateAsync</goal-->
+            </goals>
+          </execution>
+        </executions>
+        <!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
+          documentation at codehaus.org -->
+        <configuration>
+          <runTarget>qipkiweb.html</runTarget>
+          <hostedWebapp>${webappDirectory}</hostedWebapp>
+          <i18nMessagesBundle>org.qipki.clients.web.client.Messages</i18nMessagesBundle>
+        </configuration>
+      </plugin>
+
+      <!-- Copy static web files before executing gwt:run -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>exploded</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <webappDirectory>${webappDirectory}</webappDirectory>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

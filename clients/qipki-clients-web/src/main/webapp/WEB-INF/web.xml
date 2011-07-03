@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:web="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>qipkiweb.html</welcome-file>
+  </welcome-file-list>
+
+  <servlet>
+    <servlet-name>ProxyServlet</servlet-name>
+    <servlet-class>com.woonoz.proxy.servlet.ProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUrl</param-name>
+      <param-value>http://localhost:8443/api</param-value>
+      </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProxyServlet</servlet-name>
+    <url-pattern>/api</url-pattern>
+  </servlet-mapping>
+
+</web-app>
