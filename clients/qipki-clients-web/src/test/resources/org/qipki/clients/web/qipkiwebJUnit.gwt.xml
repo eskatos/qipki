@@ -4,6 +4,6 @@
   <inherits name='org.qipki.clients.web.qipkiweb'/>
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/qipkiweb/greet" class="org.qipki.clients.web.server.GreetingServiceImpl" />
+  <!--servlet path="/qipkiweb/greet" class="org.qipki.clients.web.server.GreetingServiceImpl" /-->
 
 </module>
