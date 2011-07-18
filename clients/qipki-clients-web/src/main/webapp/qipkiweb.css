@@ -1,34 +1,28 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+.qipki-Root {
+    background-color: #dedeee;
 }
-
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.qipki-Ribbon {
+    border-bottom: 1px solid #000;
 }
-
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.qipki-Splitted {
+    border-top: 1px solid #559;
+    background-color: #eeeefe;
 }
-
-.dialogVPanel {
-  margin: 5px;
+.qipki-Main {
+    background-color: #fefeff;
 }
-
-.serverResponseLabelError {
-  color: red;
+.qipki-WestSidebar {
+    border-right: 1px solid #559;
 }
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.qipki-EastSidebar {
+    border-left: 1px solid #559;
+}
+.qipki-NorthSidebar {
+    border-bottom: 1px solid #559;
+}
+.qipki-SouthSidebar {
+    border-top: 1px solid #559;
+}
+.qipki-Footer {
+    border-top: 1px solid #559;
 }

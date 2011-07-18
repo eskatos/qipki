@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    
+    <ui:style>
+        .qipki-MenuView { 
+            width: 100%;
+            height: 42px;
+        }
+        .qipki-MenuButton {
+            margin: 10px 0 0 10px;
+            font-size: 11px;
+            line-height: 18px;
+            padding: 0 8px 0 24px;
+        }
+    </ui:style>
+    
+    <g:FlowPanel addStyleNames="{style.qipki-MenuView}">
+        
+        <g:Button ui:field="buttonWelcome"          text="Welcome"          styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonX509VA"           text="X509 VA"          styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonX509RA"           text="X509 RA"          styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonX509CA"           text="X509 CA"          styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonTasks"            text="Tasks"            styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonConfiguration"    text="Configuration"    styleName="{style.qipki-MenuButton}" />
+        <g:Button ui:field="buttonTools"            text="Tools"            styleName="{style.qipki-MenuButton}" />
+        
+    </g:FlowPanel>
+    
+</ui:UiBinder>

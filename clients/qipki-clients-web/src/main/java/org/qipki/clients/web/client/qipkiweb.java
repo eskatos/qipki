@@ -13,20 +13,22 @@
  */
 package org.qipki.clients.web.client;
 
+import org.qipki.clients.web.client.regions.MainActivityMapper;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
-import org.qipki.clients.web.client.menu.Menu;
+import org.qipki.clients.web.client.ui.Menu;
+import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
+import org.qipki.clients.web.client.regions.EastSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.Footer;
+import org.qipki.clients.web.client.ui.MainLayout;
+import org.qipki.clients.web.client.ui.Ribbon;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 /**
@@ -37,56 +39,52 @@ public class qipkiweb
         implements EntryPoint
 {
 
+    private final Messages messages = GWT.create( Messages.class );
     private final Place defaultPlace = new WelcomePlace();
-    // Panels
-    private final SimplePanel mainPanel = new SimplePanel();
-    private final SimplePanel leftSidebarPanel = new SimplePanel( new HTML( "Left Sidebar" ) );
-    private final SimplePanel rightSidebarPanel = new SimplePanel( new HTML( "Right Sidebar" ) );
-    private final SimplePanel topSidebarPanel = new SimplePanel( new HTML( "Top Sidebar" ) );
-    private final SimplePanel bottomSidebarPanel = new SimplePanel( new HTML( "Bottom Sidebar" ) );
-    private final SimplePanel ribbonPanel = new SimplePanel( new HTML( "Ribbon" ) );
-    private final SimplePanel footerPanel = new SimplePanel( new HTML( "Footer" ) );
-    // Layout
-    private final DockLayoutPanel globalLayout = new DockLayoutPanel( Unit.PX );
-    private final SplitLayoutPanel mainLayout = new SplitLayoutPanel();
-    //
-    private final ClientFactory clientFactory = new ClientFactoryImpl();
-    // Widgets
-    private final Menu menu = new Menu( clientFactory );
 
     public void onModuleLoad()
     {
-        setupGlobalLayout();
-        setupPlacesAndActivities();
+        try {
+
+            ClientFactory clientFactory = new ClientFactoryImpl();
+            MainLayout mainLayout = new MainLayout();
+
+            // WestSidebar region
+            ActivityMapper westSidebarActivityMapper = new WestSidebarActivityMapper( clientFactory );
+            ActivityManager westSidebarActivityManager = new ActivityManager( westSidebarActivityMapper, clientFactory.getEventBus() );
+            westSidebarActivityManager.setDisplay( mainLayout.getWestSidebarPanel() );
+
+            // EastSidebar region
+            ActivityMapper eastSidebarActivityMapper = new EastSidebarActivityMapper( clientFactory );
+            ActivityManager eastSidebarActivityManager = new ActivityManager( eastSidebarActivityMapper, clientFactory.getEventBus() );
+            eastSidebarActivityManager.setDisplay( mainLayout.getEastSidebarPanel() );
+
+            // Main region
+            ActivityMapper activityMapper = new MainActivityMapper( clientFactory );
+            ActivityManager activityManager = new ActivityManager( activityMapper, clientFactory.getEventBus() );
+            activityManager.setDisplay( mainLayout.getMainPanel() );
+
+            // History handling
+            PlaceHistoryMapper historyMapper = GWT.create( PlaceHistoryMapperImpl.class );
+            PlaceHistoryHandler historyHandler = new PlaceHistoryHandler( historyMapper );
+            historyHandler.register( clientFactory.getPlaceController(), clientFactory.getEventBus(), defaultPlace );
+
+            // Go!
+            mainLayout.getRibbonPanel().setWidget( new Ribbon() );
+            mainLayout.getMenuPanel().setWidget( new Menu( clientFactory ) );
+            mainLayout.getFooterPanel().setWidget( new Footer() );
+            RootLayoutPanel.get().add( mainLayout.getRootLayout() );
+            historyHandler.handleCurrentHistory();
+
+        } finally {
+            hideLoading();
+        }
     }
 
-    private void setupGlobalLayout()
-    {
-        mainLayout.addWest( leftSidebarPanel, 192 );
-        mainLayout.addEast( rightSidebarPanel, 192 );
-        mainLayout.addNorth( topSidebarPanel, 128 );
-        mainLayout.addSouth( bottomSidebarPanel, 128 );
-        mainLayout.add( mainPanel );
-
-        globalLayout.addNorth( ribbonPanel, 24 );
-        globalLayout.addNorth( menu, 42 );
-        globalLayout.addSouth( footerPanel, 24 );
-        globalLayout.add( mainLayout );
-    }
-
-    private void setupPlacesAndActivities()
-    {
-        ActivityMapper activityMapper = new MainActivityMapper( clientFactory );
-        ActivityManager activityManager = new ActivityManager( activityMapper, clientFactory.getEventBus() );
-        activityManager.setDisplay( mainPanel );
-
-        MainPlaceHistoryMapper historyMapper = GWT.create( MainPlaceHistoryMapper.class );
-        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler( historyMapper );
-        historyHandler.register( clientFactory.getPlaceController(), clientFactory.getEventBus(), defaultPlace );
-
-        RootLayoutPanel.get().add( globalLayout );
-
-        historyHandler.handleCurrentHistory();
-    }
+    private native void hideLoading()/*-{
+    
+    $wnd.loading_hide();
+    
+    }-*/;
 
 }

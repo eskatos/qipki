@@ -22,6 +22,7 @@
     <entry-point class='org.qipki.clients.web.client.qipkiweb'/>
 
     <!-- Properties -->
+    <set-configuration-property name="UiBinder.usesafeHtmlTemplates" value="true" /> 
     <set-property name="user.agent" value="gecko1_8" />
 
 </module>

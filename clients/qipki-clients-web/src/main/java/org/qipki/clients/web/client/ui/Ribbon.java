@@ -11,17 +11,29 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client;
+package org.qipki.clients.web.client.ui;
 
-import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.gwt.place.shared.WithTokenizers;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Panel;
 
-import org.qipki.clients.web.client.configuration.ConfigurationPlace;
-import org.qipki.clients.web.client.welcome.WelcomePlace;
-
-@WithTokenizers( { WelcomePlace.Tokenizer.class,
-                   ConfigurationPlace.Tokenizer.class } )
-public interface MainPlaceHistoryMapper
-        extends PlaceHistoryMapper
+public class Ribbon
+        extends Composite
 {
+
+    private static final RibbonUiBinder binder = GWT.create( RibbonUiBinder.class );
+
+    @UiTemplate( "Ribbon.ui.xml" )
+    interface RibbonUiBinder
+            extends UiBinder<Panel, Ribbon>
+    {
+    }
+
+    public Ribbon()
+    {
+        initWidget( binder.createAndBindUi( this ) );
+    }
+
 }

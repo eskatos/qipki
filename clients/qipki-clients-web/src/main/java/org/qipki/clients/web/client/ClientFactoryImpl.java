@@ -29,7 +29,7 @@ public class ClientFactoryImpl
     private final EventBus eventBus = new SimpleEventBus();
     private final PlaceController placeController = new PlaceController( eventBus );
     private final WelcomeView welcomeView = new WelcomeViewImpl();
-    private final ConfigurationView goodbyeView = new ConfigurationViewImpl();
+    private final ConfigurationView configurationView = new ConfigurationViewImpl();
 
     public EventBus getEventBus()
     {
@@ -43,12 +43,14 @@ public class ClientFactoryImpl
 
     public WelcomeView getWelcomeView()
     {
-        return welcomeView;
+        //return welcomeView;
+        return new WelcomeViewImpl();
     }
 
     public ConfigurationView getConfigurationView()
     {
-        return goodbyeView;
+        // return goodbyeView;
+        return new ConfigurationViewImpl();
     }
 
 }

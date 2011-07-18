@@ -13,30 +13,15 @@
  */
 package org.qipki.clients.web.client;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.place.shared.PlaceHistoryMapper;
+import com.google.gwt.place.shared.WithTokenizers;
 
-public class MainController
+import org.qipki.clients.web.client.configuration.ConfigurationPlace;
+import org.qipki.clients.web.client.welcome.WelcomePlace;
+
+@WithTokenizers( { WelcomePlace.Tokenizer.class,
+                   ConfigurationPlace.Tokenizer.class } )
+public interface PlaceHistoryMapperImpl
+        extends PlaceHistoryMapper
 {
-
-    private final EventBus eventBus;
-    private HasWidgets container;
-
-    public MainController( EventBus eventBus )
-    {
-        this.eventBus = eventBus;
-    }
-
-    public void go( final HasWidgets container )
-    {
-        this.container = container;
-        if ( "".equals( History.getToken() ) ) {
-            History.newItem( "welcome" );
-        } else {
-            History.fireCurrentHistoryState();
-        }
-    }
-
 }
