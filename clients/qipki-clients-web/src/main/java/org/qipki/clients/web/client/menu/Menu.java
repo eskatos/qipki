@@ -18,13 +18,18 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
+
+import org.qipki.clients.web.client.ClientFactory;
+import org.qipki.clients.web.client.configuration.ConfigurationPlace;
+import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 public class Menu
         extends Composite
 {
+
+    private static final MenuUiBinder binder = GWT.create( MenuUiBinder.class );
 
     @UiTemplate( "Menu.ui.xml" )
     interface MenuUiBinder
@@ -32,29 +37,49 @@ public class Menu
     {
     }
 
-    private static final MenuUiBinder binder = GWT.create( MenuUiBinder.class );
+    private final ClientFactory factory;
 
-    public Menu()
+    public Menu( ClientFactory factory )
     {
+        this.factory = factory;
         initWidget( binder.createAndBindUi( this ) );
     }
 
     @UiHandler( "buttonWelcome" )
     public void doClickWelcome( ClickEvent click )
     {
-        Window.alert( "Welcome" );
+        factory.getPlaceController().goTo( new WelcomePlace() );
+    }
+
+    @UiHandler( "buttonX509VA" )
+    public void doX509VA( ClickEvent click )
+    {
+    }
+
+    @UiHandler( "buttonX509RA" )
+    public void doX509RA( ClickEvent click )
+    {
+    }
+
+    @UiHandler( "buttonX509CA" )
+    public void doX509CA( ClickEvent click )
+    {
+    }
+
+    @UiHandler( "buttonTasks" )
+    public void doTasks( ClickEvent click )
+    {
     }
 
     @UiHandler( "buttonConfiguration" )
     public void doClickConfiguration( ClickEvent click )
     {
-        Window.alert( "Configuration" );
+        factory.getPlaceController().goTo( new ConfigurationPlace() );
     }
 
     @UiHandler( "buttonTools" )
     public void doClickTools( ClickEvent click )
     {
-        Window.alert( "Tools" );
     }
 
 }

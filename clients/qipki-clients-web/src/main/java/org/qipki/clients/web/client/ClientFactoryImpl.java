@@ -16,6 +16,7 @@ package org.qipki.clients.web.client;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+
 import org.qipki.clients.web.client.configuration.ConfigurationView;
 import org.qipki.clients.web.client.configuration.ConfigurationViewImpl;
 import org.qipki.clients.web.client.welcome.WelcomeView;

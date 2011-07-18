@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import org.qipki.clients.web.client.menu.Menu;
 
+import org.qipki.clients.web.client.menu.Menu;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 /**
@@ -38,8 +38,21 @@ public class qipkiweb
 {
 
     private final Place defaultPlace = new WelcomePlace();
+    // Panels
     private final SimplePanel mainPanel = new SimplePanel();
-    private DockLayoutPanel globalLayout;
+    private final SimplePanel leftSidebarPanel = new SimplePanel( new HTML( "Left Sidebar" ) );
+    private final SimplePanel rightSidebarPanel = new SimplePanel( new HTML( "Right Sidebar" ) );
+    private final SimplePanel topSidebarPanel = new SimplePanel( new HTML( "Top Sidebar" ) );
+    private final SimplePanel bottomSidebarPanel = new SimplePanel( new HTML( "Bottom Sidebar" ) );
+    private final SimplePanel ribbonPanel = new SimplePanel( new HTML( "Ribbon" ) );
+    private final SimplePanel footerPanel = new SimplePanel( new HTML( "Footer" ) );
+    // Layout
+    private final DockLayoutPanel globalLayout = new DockLayoutPanel( Unit.PX );
+    private final SplitLayoutPanel mainLayout = new SplitLayoutPanel();
+    //
+    private final ClientFactory clientFactory = new ClientFactoryImpl();
+    // Widgets
+    private final Menu menu = new Menu( clientFactory );
 
     public void onModuleLoad()
     {
@@ -49,23 +62,20 @@ public class qipkiweb
 
     private void setupGlobalLayout()
     {
-        SplitLayoutPanel mainLayout = new SplitLayoutPanel();
-        mainLayout.addWest( new HTML( "Vertical Master" ), 192 );
-        mainLayout.addEast( new HTML( "Sidebar" ), 192 );
-        mainLayout.addNorth( new HTML( "Horizontal Master" ), 192 );
+        mainLayout.addWest( leftSidebarPanel, 192 );
+        mainLayout.addEast( rightSidebarPanel, 192 );
+        mainLayout.addNorth( topSidebarPanel, 128 );
+        mainLayout.addSouth( bottomSidebarPanel, 128 );
         mainLayout.add( mainPanel );
 
-        globalLayout = new DockLayoutPanel( Unit.PX );
-        globalLayout.addNorth( new HTML( "Ribbon" ), 20 );
-        globalLayout.addNorth( new Menu(), 80 );
-        globalLayout.addSouth( new HTML( "Footer" ), 40 );
+        globalLayout.addNorth( ribbonPanel, 24 );
+        globalLayout.addNorth( menu, 42 );
+        globalLayout.addSouth( footerPanel, 24 );
         globalLayout.add( mainLayout );
     }
 
     private void setupPlacesAndActivities()
     {
-        ClientFactory clientFactory = new ClientFactoryImpl();
-
         ActivityMapper activityMapper = new MainActivityMapper( clientFactory );
         ActivityManager activityManager = new ActivityManager( activityMapper, clientFactory.getEventBus() );
         activityManager.setDisplay( mainPanel );

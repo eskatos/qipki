@@ -3,6 +3,10 @@
              xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
     <gwt:HorizontalPanel>
         <gwt:Button ui:field="buttonWelcome" text="Welcome" />
+        <gwt:Button ui:field="buttonX509VA" text="X509 VA" />
+        <gwt:Button ui:field="buttonX509RA" text="X509 RA" />
+        <gwt:Button ui:field="buttonX509CA" text="X509 CA" />
+        <gwt:Button ui:field="buttonTasks" text="Tasks" />
         <gwt:Button ui:field="buttonConfiguration" text="Configuration" />
         <gwt:Button ui:field="buttonTools" text="Tools" />
     </gwt:HorizontalPanel>
