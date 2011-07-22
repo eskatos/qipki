@@ -13,19 +13,18 @@
  */
 package org.qipki.clients.web.client;
 
-import org.qipki.clients.web.client.regions.MainActivityMapper;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import org.qipki.clients.web.client.ui.Menu;
-import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
 import org.qipki.clients.web.client.regions.EastSidebarActivityMapper;
+import org.qipki.clients.web.client.regions.MainActivityMapper;
+import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
 import org.qipki.clients.web.client.ui.Footer;
 import org.qipki.clients.web.client.ui.MainLayout;
 import org.qipki.clients.web.client.ui.Ribbon;
@@ -40,7 +39,6 @@ public class qipkiweb
 {
 
     private final Messages messages = GWT.create( Messages.class );
-    private final Place defaultPlace = new WelcomePlace();
 
     public void onModuleLoad()
     {
@@ -67,7 +65,7 @@ public class qipkiweb
             // History handling
             PlaceHistoryMapper historyMapper = GWT.create( PlaceHistoryMapperImpl.class );
             PlaceHistoryHandler historyHandler = new PlaceHistoryHandler( historyMapper );
-            historyHandler.register( clientFactory.getPlaceController(), clientFactory.getEventBus(), defaultPlace );
+            historyHandler.register( clientFactory.getPlaceController(), clientFactory.getEventBus(), new WelcomePlace() );
 
             // Go!
             mainLayout.getRibbonPanel().setWidget( new Ribbon() );
