@@ -38,8 +38,6 @@ public class qipkiweb
         implements EntryPoint
 {
 
-    private final Messages messages = GWT.create( Messages.class );
-
     public void onModuleLoad()
     {
         try {
