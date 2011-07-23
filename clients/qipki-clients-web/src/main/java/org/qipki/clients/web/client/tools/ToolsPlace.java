@@ -11,17 +11,33 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client;
+package org.qipki.clients.web.client.tools;
 
-import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.gwt.place.shared.WithTokenizers;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.place.shared.Prefix;
 
-import org.qipki.clients.web.client.config.ConfigPlace;
-import org.qipki.clients.web.client.welcome.WelcomePlace;
-
-@WithTokenizers( { WelcomePlace.Tokenizer.class,
-                   ConfigPlace.Tokenizer.class } )
-public interface PlaceHistoryMapperImpl
-        extends PlaceHistoryMapper
+public class ToolsPlace
+        extends Place
 {
+
+    @Prefix( "config" )
+    public static class Tokenizer
+            implements PlaceTokenizer<ToolsPlace>
+    {
+
+        @Override
+        public String getToken( ToolsPlace place )
+        {
+            return null;
+        }
+
+        @Override
+        public ToolsPlace getPlace( String token )
+        {
+            return new ToolsPlace();
+        }
+
+    }
+
 }

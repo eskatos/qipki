@@ -11,17 +11,11 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client;
+package org.qipki.clients.web.client.welcome;
 
-import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.gwt.place.shared.WithTokenizers;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import org.qipki.clients.web.client.config.ConfigPlace;
-import org.qipki.clients.web.client.welcome.WelcomePlace;
-
-@WithTokenizers( { WelcomePlace.Tokenizer.class,
-                   ConfigPlace.Tokenizer.class } )
-public interface PlaceHistoryMapperImpl
-        extends PlaceHistoryMapper
+public interface WelcomeMainView
+        extends IsWidget
 {
 }

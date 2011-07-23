@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.configuration;
+package org.qipki.clients.web.client.config;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -19,22 +19,23 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import org.qipki.clients.web.client.ClientFactory;
 
-public class ConfigurationActivity
+public class ConfigWestSidebarActivity
         extends AbstractActivity
 {
 
-    private final ConfigurationPlace place;
+    private final ConfigPlace place;
     private final ClientFactory clientFactory;
 
-    public ConfigurationActivity( ConfigurationPlace place, ClientFactory clientFactory )
+    public ConfigWestSidebarActivity( ConfigPlace place, ClientFactory clientFactory )
     {
         this.place = place;
         this.clientFactory = clientFactory;
     }
 
+    @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        panel.setWidget( clientFactory.getConfigurationView().asWidget() );
+        panel.setWidget( clientFactory.getConfigWestSidebarView().asWidget() );
     }
 
 }

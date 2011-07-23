@@ -11,29 +11,31 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.regions;
+package org.qipki.clients.web.client.config;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import org.qipki.clients.web.client.ClientFactory;
 
-public class EastSidebarActivityMapper
-        implements ActivityMapper
+public class ConfigMainActivity
+        extends AbstractActivity
 {
 
+    private final ConfigPlace place;
     private final ClientFactory clientFactory;
 
-    public EastSidebarActivityMapper( ClientFactory clientFactory )
+    public ConfigMainActivity( ConfigPlace place, ClientFactory clientFactory )
     {
+        this.place = place;
         this.clientFactory = clientFactory;
     }
 
     @Override
-    public Activity getActivity( Place place )
+    public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        return null;
+        panel.setWidget( clientFactory.getConfigMainView().asWidget() );
     }
 
 }

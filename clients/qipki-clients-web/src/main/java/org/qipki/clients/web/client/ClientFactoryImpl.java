@@ -17,10 +17,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 
-import org.qipki.clients.web.client.configuration.ConfigurationView;
-import org.qipki.clients.web.client.configuration.ConfigurationViewImpl;
-import org.qipki.clients.web.client.welcome.WelcomeView;
-import org.qipki.clients.web.client.welcome.WelcomeViewImpl;
+import org.qipki.clients.web.client.config.ConfigWestSidebarView;
+import org.qipki.clients.web.client.config.ConfigWestSidebarViewImpl;
+import org.qipki.clients.web.client.config.ConfigMainView;
+import org.qipki.clients.web.client.config.ConfigMainViewImpl;
+import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
+import org.qipki.clients.web.client.tools.ToolsWestSidebarViewImpl;
+import org.qipki.clients.web.client.welcome.WelcomeMainView;
+import org.qipki.clients.web.client.welcome.WelcomeMainViewImpl;
 
 public class ClientFactoryImpl
         implements ClientFactory
@@ -28,29 +32,41 @@ public class ClientFactoryImpl
 
     private final EventBus eventBus = new SimpleEventBus();
     private final PlaceController placeController = new PlaceController( eventBus );
-    private final WelcomeView welcomeView = new WelcomeViewImpl();
-    private final ConfigurationView configurationView = new ConfigurationViewImpl();
 
+    @Override
     public EventBus getEventBus()
     {
         return eventBus;
     }
 
+    @Override
     public PlaceController getPlaceController()
     {
         return placeController;
     }
 
-    public WelcomeView getWelcomeView()
+    @Override
+    public WelcomeMainView getWelcomeMainView()
     {
-        //return welcomeView;
-        return new WelcomeViewImpl();
+        return new WelcomeMainViewImpl();
     }
 
-    public ConfigurationView getConfigurationView()
+    @Override
+    public ConfigMainView getConfigMainView()
     {
-        // return goodbyeView;
-        return new ConfigurationViewImpl();
+        return new ConfigMainViewImpl();
+    }
+
+    @Override
+    public ConfigWestSidebarView getConfigWestSidebarView()
+    {
+        return new ConfigWestSidebarViewImpl();
+    }
+
+    @Override
+    public ToolsWestSidebarView getToolsWestSidebarView()
+    {
+        return new ToolsWestSidebarViewImpl();
     }
 
 }

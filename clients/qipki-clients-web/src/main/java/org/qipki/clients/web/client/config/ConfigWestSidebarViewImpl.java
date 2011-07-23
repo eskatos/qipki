@@ -11,19 +11,30 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.welcome;
+package org.qipki.clients.web.client.config;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 
-public class WelcomeViewImpl
+public class ConfigWestSidebarViewImpl
         extends Composite
-        implements WelcomeView
+        implements ConfigWestSidebarView
 {
 
-    public WelcomeViewImpl()
+    private static final ConfigWestSidebarUiBinder binder = GWT.create( ConfigWestSidebarUiBinder.class );
+
+    @UiTemplate( "ConfigWestSidebar.ui.xml" )
+    interface ConfigWestSidebarUiBinder
+            extends UiBinder<Panel, ConfigWestSidebarView>
     {
-        initWidget( new Label( "This is WelcomeView!" ) );
+    }
+
+    public ConfigWestSidebarViewImpl()
+    {
+        initWidget( binder.createAndBindUi( this ) );
     }
 
 }

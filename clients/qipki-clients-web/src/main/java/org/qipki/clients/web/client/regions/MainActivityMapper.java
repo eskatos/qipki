@@ -16,11 +16,11 @@ package org.qipki.clients.web.client.regions;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import org.qipki.clients.web.client.ClientFactory;
 
-import org.qipki.clients.web.client.configuration.ConfigurationActivity;
-import org.qipki.clients.web.client.configuration.ConfigurationPlace;
-import org.qipki.clients.web.client.welcome.WelcomeActivity;
+import org.qipki.clients.web.client.ClientFactory;
+import org.qipki.clients.web.client.config.ConfigMainActivity;
+import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 public class MainActivityMapper
@@ -35,12 +35,13 @@ public class MainActivityMapper
         this.clientFactory = clientFactory;
     }
 
+    @Override
     public Activity getActivity( Place place )
     {
         if ( place instanceof WelcomePlace ) {
-            return new WelcomeActivity( ( WelcomePlace ) place, clientFactory );
-        } else if ( place instanceof ConfigurationPlace ) {
-            return new ConfigurationActivity( ( ConfigurationPlace ) place, clientFactory );
+            return new WelcomeMainActivity( ( WelcomePlace ) place, clientFactory );
+        } else if ( place instanceof ConfigPlace ) {
+            return new ConfigMainActivity( ( ConfigPlace ) place, clientFactory );
         }
         return null;
     }

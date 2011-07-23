@@ -19,14 +19,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import org.qipki.clients.web.client.ClientFactory;
 
-public class WelcomeActivity
+public class WelcomeMainActivity
         extends AbstractActivity
 {
 
     private final WelcomePlace place;
     private final ClientFactory clientFactory;
 
-    public WelcomeActivity( WelcomePlace place, ClientFactory clientFactory )
+    public WelcomeMainActivity( WelcomePlace place, ClientFactory clientFactory )
     {
         this.place = place;
         this.clientFactory = clientFactory;
@@ -34,7 +34,7 @@ public class WelcomeActivity
 
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        panel.setWidget( clientFactory.getWelcomeView().asWidget() );
+        panel.setWidget( clientFactory.getWelcomeMainView().asWidget() );
     }
 
 }

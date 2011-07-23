@@ -44,16 +44,19 @@ public class SidebarPanel
             if ( oldWidget && newWidget ) {
                 // Replace
                 setWidget( widget );
+                mainLayout.setSidebarActivated( this, true, null );
             } else if ( oldWidget ) {
                 // Hide
                 mainLayout.setSidebarActivated( this, false, new AnimationCallback()
                 {
 
+                    @Override
                     public void onAnimationComplete()
                     {
                         setWidget( widget );
                     }
 
+                    @Override
                     public void onLayout( Layer layer, double progress )
                     {
                     }

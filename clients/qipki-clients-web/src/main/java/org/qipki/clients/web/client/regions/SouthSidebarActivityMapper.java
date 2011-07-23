@@ -11,19 +11,29 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.configuration;
+package org.qipki.clients.web.client.regions;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-public class ConfigurationViewImpl
-        extends Composite
-        implements ConfigurationView
+import org.qipki.clients.web.client.ClientFactory;
+
+public class SouthSidebarActivityMapper
+        implements ActivityMapper
 {
 
-    public ConfigurationViewImpl()
+    private final ClientFactory clientFactory;
+
+    public SouthSidebarActivityMapper( ClientFactory clientFactory )
     {
-        initWidget( new Label( "This is ConfigurationView!" ) );
+        this.clientFactory = clientFactory;
+    }
+
+    @Override
+    public Activity getActivity( Place place )
+    {
+        return null;
     }
 
 }

@@ -11,11 +11,33 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.configuration;
+package org.qipki.clients.web.client.config;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.place.shared.Prefix;
 
-public interface ConfigurationView
-        extends IsWidget
+public class ConfigPlace
+        extends Place
 {
+
+    @Prefix( "config" )
+    public static class Tokenizer
+            implements PlaceTokenizer<ConfigPlace>
+    {
+
+        @Override
+        public String getToken( ConfigPlace place )
+        {
+            return null;
+        }
+
+        @Override
+        public ConfigPlace getPlace( String token )
+        {
+            return new ConfigPlace();
+        }
+
+    }
+
 }

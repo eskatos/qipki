@@ -13,9 +13,17 @@
  */
 package org.qipki.clients.web.client.welcome;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 
-public interface WelcomeView
-        extends IsWidget
+public class WelcomeMainViewImpl
+        extends Composite
+        implements WelcomeMainView
 {
+
+    public WelcomeMainViewImpl()
+    {
+        initWidget( new Label( "This is WelcomeView!" ) );
+    }
+
 }

@@ -24,6 +24,8 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import org.qipki.clients.web.client.ui.Menu;
 import org.qipki.clients.web.client.regions.EastSidebarActivityMapper;
 import org.qipki.clients.web.client.regions.MainActivityMapper;
+import org.qipki.clients.web.client.regions.NorthSidebarActivityMapper;
+import org.qipki.clients.web.client.regions.SouthSidebarActivityMapper;
 import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
 import org.qipki.clients.web.client.ui.Footer;
 import org.qipki.clients.web.client.ui.MainLayout;
@@ -38,6 +40,7 @@ public class qipkiweb
         implements EntryPoint
 {
 
+    @Override
     public void onModuleLoad()
     {
         try {
@@ -54,6 +57,16 @@ public class qipkiweb
             ActivityMapper eastSidebarActivityMapper = new EastSidebarActivityMapper( clientFactory );
             ActivityManager eastSidebarActivityManager = new ActivityManager( eastSidebarActivityMapper, clientFactory.getEventBus() );
             eastSidebarActivityManager.setDisplay( mainLayout.getEastSidebarPanel() );
+
+            // NorthSidebar region
+            ActivityMapper northSidebarActivityMapper = new NorthSidebarActivityMapper( clientFactory );
+            ActivityManager northSidebarActivityManager = new ActivityManager( northSidebarActivityMapper, clientFactory.getEventBus() );
+            northSidebarActivityManager.setDisplay( mainLayout.getNorthSidebarPanel() );
+
+            // SouthSidebar region
+            ActivityMapper southSidebarActivityMapper = new SouthSidebarActivityMapper( clientFactory );
+            ActivityManager southSidebarActivityManager = new ActivityManager( southSidebarActivityMapper, clientFactory.getEventBus() );
+            southSidebarActivityManager.setDisplay( mainLayout.getSouthSidebarPanel() );
 
             // Main region
             ActivityMapper activityMapper = new MainActivityMapper( clientFactory );

@@ -18,8 +18,10 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.configuration.ConfigurationActivity;
-import org.qipki.clients.web.client.configuration.ConfigurationPlace;
+import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.config.ConfigWestSidebarActivity;
+import org.qipki.clients.web.client.tools.ToolsPlace;
+import org.qipki.clients.web.client.tools.ToolsWestSidebarActivity;
 
 public class WestSidebarActivityMapper
         implements ActivityMapper
@@ -32,10 +34,13 @@ public class WestSidebarActivityMapper
         this.clientFactory = clientFactory;
     }
 
+    @Override
     public Activity getActivity( Place place )
     {
-        if ( place instanceof ConfigurationPlace ) {
-            return new ConfigurationActivity( ( ConfigurationPlace ) place, clientFactory );
+        if ( place instanceof ConfigPlace ) {
+            return new ConfigWestSidebarActivity( ( ConfigPlace ) place, clientFactory );
+        } else if ( place instanceof ToolsPlace ) {
+            return new ToolsWestSidebarActivity( ( ToolsPlace ) place, clientFactory );
         }
         return null;
     }

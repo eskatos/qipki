@@ -22,7 +22,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
 
 import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.configuration.ConfigurationPlace;
+import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.tools.ToolsPlace;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 public class Menu
@@ -66,6 +67,11 @@ public class Menu
     {
     }
 
+    @UiHandler( "buttonLogs" )
+    public void doLogs( ClickEvent click )
+    {
+    }
+
     @UiHandler( "buttonTasks" )
     public void doTasks( ClickEvent click )
     {
@@ -74,12 +80,13 @@ public class Menu
     @UiHandler( "buttonConfiguration" )
     public void doClickConfiguration( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ConfigurationPlace() );
+        factory.getPlaceController().goTo( new ConfigPlace() );
     }
 
     @UiHandler( "buttonTools" )
     public void doClickTools( ClickEvent click )
     {
+        factory.getPlaceController().goTo( new ToolsPlace() );
     }
 
 }

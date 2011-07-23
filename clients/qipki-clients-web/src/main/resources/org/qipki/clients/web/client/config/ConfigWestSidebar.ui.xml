@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    
+    <ui:style>
+        .qipki-ConfigWestSidebarView { 
+            width: 100%;
+        }
+        .qipki-WestSidebarButton {
+            display: block;
+            margin: 10px 0 0 10px;
+            font-size: 11px;
+            line-height: 18px;
+            padding: 0 8px 0 24px;
+        }
+    </ui:style>
+    
+    <g:FlowPanel addStyleNames="{style.qipki-ConfigWestSidebarView}">
+        
+        <g:Button ui:field="buttonMessaging"          text="Messaging"          styleName="{style.qipki-WestSidebarButton}" />
+        <g:Button ui:field="buttonScheduler"          text="Scheduler"          styleName="{style.qipki-WestSidebarButton}" />
+        
+    </g:FlowPanel>
+    
+</ui:UiBinder>

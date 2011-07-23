@@ -16,8 +16,10 @@ package org.qipki.clients.web.client;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 
-import org.qipki.clients.web.client.configuration.ConfigurationView;
-import org.qipki.clients.web.client.welcome.WelcomeView;
+import org.qipki.clients.web.client.config.ConfigWestSidebarView;
+import org.qipki.clients.web.client.config.ConfigMainView;
+import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
+import org.qipki.clients.web.client.welcome.WelcomeMainView;
 
 public interface ClientFactory
 {
@@ -26,8 +28,12 @@ public interface ClientFactory
 
     PlaceController getPlaceController();
 
-    WelcomeView getWelcomeView();
+    WelcomeMainView getWelcomeMainView();
 
-    ConfigurationView getConfigurationView();
+    ConfigMainView getConfigMainView();
+
+    ConfigWestSidebarView getConfigWestSidebarView();
+
+    ToolsWestSidebarView getToolsWestSidebarView();
 
 }
