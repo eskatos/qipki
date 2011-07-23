@@ -21,6 +21,26 @@ public class ConfigPlace
         extends Place
 {
 
+    public static final String GENERAL = "general";
+    public static final String MESSAGING = "messaging";
+    public static final String SCHEDULER = "scheduler";
+    private String token;
+
+    public ConfigPlace()
+    {
+        this( GENERAL );
+    }
+
+    public ConfigPlace( String token )
+    {
+        this.token = token;
+    }
+
+    public String getToken()
+    {
+        return token;
+    }
+
     @Prefix( "config" )
     public static class Tokenizer
             implements PlaceTokenizer<ConfigPlace>
@@ -29,13 +49,13 @@ public class ConfigPlace
         @Override
         public String getToken( ConfigPlace place )
         {
-            return null;
+            return place.token;
         }
 
         @Override
         public ConfigPlace getPlace( String token )
         {
-            return new ConfigPlace();
+            return new ConfigPlace( token );
         }
 
     }

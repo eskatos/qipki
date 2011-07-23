@@ -83,12 +83,14 @@ public class MainLayout
         southSidebarPanel.addStyleName( "qipki-SouthSidebar" );
     }
 
-    /* package */ void setSidebarActivated( SidebarPanel sidebar, boolean activated, AnimationCallback animationCallback )
+    /* package */ void setSidebarActivated( SidebarPanel sidebar, boolean activated, boolean animate, AnimationCallback animationCallback )
     {
         if ( sidebar.isActive() != activated ) {
             sidebar.setHorizontalScrollPosition( 0 );
             sidebar.setVerticalScrollPosition( 0 );
-            splittedLayout.forceLayout();
+            if ( animate ) {
+                splittedLayout.forceLayout();
+            }
             if ( sidebar == westSidebarPanel ) {
                 splittedLayout.setWidgetLeftWidth( westSidebarPanel,
                                                    activated ? 0 : -HORIZ_SIDEBAR_WIDTH, Unit.PX,
@@ -114,7 +116,11 @@ public class MainLayout
                                                westSidebarPanel.isActive() ? HORIZ_SIDEBAR_WIDTH : 0, Unit.PX,
                                                eastSidebarPanel.isActive() ? HORIZ_SIDEBAR_WIDTH : 0, Unit.PX );
 
-            splittedLayout.animate( 150, animationCallback );
+            if ( animate ) {
+                splittedLayout.animate( 150, animationCallback );
+            } else {
+                splittedLayout.forceLayout();
+            }
         }
     }
 

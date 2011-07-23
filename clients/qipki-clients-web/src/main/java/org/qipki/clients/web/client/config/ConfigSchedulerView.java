@@ -16,14 +16,13 @@ package org.qipki.clients.web.client.config;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 
-public class ConfigMainViewImpl
+public class ConfigSchedulerView
         extends Composite
-        implements ConfigMainView
 {
 
-    public ConfigMainViewImpl()
+    public ConfigSchedulerView()
     {
-        initWidget( new Label( "This is ConfigurationView!" ) );
+        initWidget( new Label( "Config Scheduler View" ) );
     }
 
 }

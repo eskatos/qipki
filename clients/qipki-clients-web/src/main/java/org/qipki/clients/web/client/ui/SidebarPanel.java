@@ -44,10 +44,10 @@ public class SidebarPanel
             if ( oldWidget && newWidget ) {
                 // Replace
                 setWidget( widget );
-                mainLayout.setSidebarActivated( this, true, null );
+                mainLayout.setSidebarActivated( this, true, false, null );
             } else if ( oldWidget ) {
                 // Hide
-                mainLayout.setSidebarActivated( this, false, new AnimationCallback()
+                mainLayout.setSidebarActivated( this, false, true, new AnimationCallback()
                 {
 
                     @Override
@@ -65,7 +65,7 @@ public class SidebarPanel
             } else if ( newWidget ) {
                 // Show
                 setWidget( widget );
-                mainLayout.setSidebarActivated( this, true, null );
+                mainLayout.setSidebarActivated( this, true, true, null );
             } else {
                 // Should not happen
                 Window.alert( "SidebarPanel\n\n!oldWidget && !newWidget\nThis should not happen\n\nExpect bad layout behaviour!" );

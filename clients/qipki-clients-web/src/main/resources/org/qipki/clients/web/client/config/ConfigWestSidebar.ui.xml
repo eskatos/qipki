@@ -17,8 +17,9 @@
     
     <g:FlowPanel addStyleNames="{style.qipki-ConfigWestSidebarView}">
         
-        <g:Button ui:field="buttonMessaging"          text="Messaging"          styleName="{style.qipki-WestSidebarButton}" />
-        <g:Button ui:field="buttonScheduler"          text="Scheduler"          styleName="{style.qipki-WestSidebarButton}" />
+        <g:Button ui:field="buttonGeneral"      text="General"      styleName="{style.qipki-WestSidebarButton}" />
+        <g:Button ui:field="buttonMessaging"    text="Messaging"    styleName="{style.qipki-WestSidebarButton}" />
+        <g:Button ui:field="buttonScheduler"    text="Scheduler"    styleName="{style.qipki-WestSidebarButton}" />
         
     </g:FlowPanel>
     

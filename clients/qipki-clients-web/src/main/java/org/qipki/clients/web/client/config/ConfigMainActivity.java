@@ -35,7 +35,13 @@ public class ConfigMainActivity
     @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        panel.setWidget( clientFactory.getConfigMainView().asWidget() );
+        if ( ConfigPlace.MESSAGING.equals( place.getToken() ) ) {
+            panel.setWidget( clientFactory.getConfigMessagingView().asWidget() );
+        } else if ( ConfigPlace.SCHEDULER.equals( place.getToken() ) ) {
+            panel.setWidget( clientFactory.getConfigSchedulerView().asWidget() );
+        } else {
+            panel.setWidget( clientFactory.getConfigGeneralView().asWidget() );
+        }
     }
 
 }

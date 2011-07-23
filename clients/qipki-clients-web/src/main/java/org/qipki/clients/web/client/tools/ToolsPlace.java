@@ -21,7 +21,7 @@ public class ToolsPlace
         extends Place
 {
 
-    @Prefix( "config" )
+    @Prefix( "tools" )
     public static class Tokenizer
             implements PlaceTokenizer<ToolsPlace>
     {

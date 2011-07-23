@@ -13,9 +13,16 @@
  */
 package org.qipki.clients.web.client.config;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 
-public interface ConfigMainView
-        extends IsWidget
+public class ConfigMessagingView
+        extends Composite
 {
+
+    public ConfigMessagingView()
+    {
+        initWidget( new Label( "Config Messaging View" ) );
+    }
+
 }

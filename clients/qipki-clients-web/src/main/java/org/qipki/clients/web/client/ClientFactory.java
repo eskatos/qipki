@@ -17,7 +17,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 
 import org.qipki.clients.web.client.config.ConfigWestSidebarView;
-import org.qipki.clients.web.client.config.ConfigMainView;
+import org.qipki.clients.web.client.config.ConfigGeneralView;
+import org.qipki.clients.web.client.config.ConfigMessagingView;
+import org.qipki.clients.web.client.config.ConfigSchedulerView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
 import org.qipki.clients.web.client.welcome.WelcomeMainView;
 
@@ -30,9 +32,13 @@ public interface ClientFactory
 
     WelcomeMainView getWelcomeMainView();
 
-    ConfigMainView getConfigMainView();
-
     ConfigWestSidebarView getConfigWestSidebarView();
+
+    ConfigGeneralView getConfigGeneralView();
+
+    ConfigMessagingView getConfigMessagingView();
+
+    ConfigSchedulerView getConfigSchedulerView();
 
     ToolsWestSidebarView getToolsWestSidebarView();
 

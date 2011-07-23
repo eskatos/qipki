@@ -13,28 +13,16 @@
  */
 package org.qipki.clients.web.client.config;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Label;
 
-public class ConfigWestSidebarViewImpl
+public class ConfigGeneralView
         extends Composite
-        implements ConfigWestSidebarView
 {
 
-    private static final ConfigWestSidebarUiBinder binder = GWT.create( ConfigWestSidebarUiBinder.class );
-
-    @UiTemplate( "ConfigWestSidebar.ui.xml" )
-    interface ConfigWestSidebarUiBinder
-            extends UiBinder<Panel, ConfigWestSidebarView>
+    public ConfigGeneralView()
     {
-    }
-
-    public ConfigWestSidebarViewImpl()
-    {
-        initWidget( binder.createAndBindUi( this ) );
+        initWidget( new Label( "Config General View" ) );
     }
 
 }

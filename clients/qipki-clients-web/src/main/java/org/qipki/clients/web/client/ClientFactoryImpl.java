@@ -16,11 +16,11 @@ package org.qipki.clients.web.client;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+import org.qipki.clients.web.client.config.ConfigMessagingView;
+import org.qipki.clients.web.client.config.ConfigSchedulerView;
 
 import org.qipki.clients.web.client.config.ConfigWestSidebarView;
-import org.qipki.clients.web.client.config.ConfigWestSidebarViewImpl;
-import org.qipki.clients.web.client.config.ConfigMainView;
-import org.qipki.clients.web.client.config.ConfigMainViewImpl;
+import org.qipki.clients.web.client.config.ConfigGeneralView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarViewImpl;
 import org.qipki.clients.web.client.welcome.WelcomeMainView;
@@ -52,15 +52,27 @@ public class ClientFactoryImpl
     }
 
     @Override
-    public ConfigMainView getConfigMainView()
+    public ConfigWestSidebarView getConfigWestSidebarView()
     {
-        return new ConfigMainViewImpl();
+        return new ConfigWestSidebarView( this );
     }
 
     @Override
-    public ConfigWestSidebarView getConfigWestSidebarView()
+    public ConfigGeneralView getConfigGeneralView()
     {
-        return new ConfigWestSidebarViewImpl();
+        return new ConfigGeneralView();
+    }
+
+    @Override
+    public ConfigMessagingView getConfigMessagingView()
+    {
+        return new ConfigMessagingView();
+    }
+
+    @Override
+    public ConfigSchedulerView getConfigSchedulerView()
+    {
+        return new ConfigSchedulerView();
     }
 
     @Override
