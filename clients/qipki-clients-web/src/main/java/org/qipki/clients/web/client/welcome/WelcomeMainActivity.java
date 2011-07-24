@@ -16,25 +16,31 @@ package org.qipki.clients.web.client.welcome;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-
-import org.qipki.clients.web.client.ClientFactory;
+import com.google.inject.Inject;
 
 public class WelcomeMainActivity
         extends AbstractActivity
 {
 
-    private final WelcomePlace place;
-    private final ClientFactory clientFactory;
+    private final WelcomeMainView view;
+    private WelcomePlace place;
 
-    public WelcomeMainActivity( WelcomePlace place, ClientFactory clientFactory )
+    @Inject
+    public WelcomeMainActivity( WelcomeMainView view )
     {
-        this.place = place;
-        this.clientFactory = clientFactory;
+        this.view = view;
     }
 
+    public WelcomeMainActivity withPlace( WelcomePlace place )
+    {
+        this.place = place;
+        return this;
+    }
+
+    @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        panel.setWidget( clientFactory.getWelcomeMainView().asWidget() );
+        panel.setWidget( view.asWidget() );
     }
 
 }

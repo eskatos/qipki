@@ -40,6 +40,7 @@ import org.qipki.clients.web.client.regions.SouthSidebarActivityMapper;
 import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
 import org.qipki.clients.web.client.ui.MainLayout;
 import org.qipki.clients.web.client.ui.Menu;
+import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
 import org.qipki.clients.web.client.welcome.WelcomeMainView;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
@@ -55,6 +56,7 @@ public class AssemblyModule
     {
         bind( ClientFactory.class ).to( ClientFactoryImpl.class ).in( Singleton.class );
 
+        bind( Context.class ).to( ContextImpl.class ).in( Singleton.class );
         bind( EventBus.class ).to( SimpleEventBus.class ).in( Singleton.class );
 
         bind( ActivityMapper.class ).annotatedWith( Names.named( WEST ) ).to( WestSidebarActivityMapper.class ).in( Singleton.class );
@@ -65,12 +67,12 @@ public class AssemblyModule
         bind( PlaceHistoryMapper.class ).to( PlaceHistoryMapperImpl.class ).in( Singleton.class );
 
         bind( MainLayout.class ).in( Singleton.class );
-
-        bind( Context.class ).to( ContextImpl.class ).in( Singleton.class );
         bind( Menu.class ).in( Singleton.class );
 
         bind( ConfigWestSidebarView.class ).in( Singleton.class );
+
         bind( WelcomeMainView.class ).in( Singleton.class );
+        bind( WelcomeMainActivity.class );
     }
 
     @Provides

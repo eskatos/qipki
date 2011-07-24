@@ -13,17 +13,10 @@
  */
 package org.qipki.clients.web.client.assembly;
 
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.inject.name.Named;
 
-import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.regions.RegionNames;
 import org.qipki.clients.web.client.ui.MainLayout;
 
 @GinModules( AssemblyModule.class )
@@ -31,30 +24,7 @@ public interface Injector
         extends Ginjector
 {
 
-    ClientFactory getClientFactory();
-
-    EventBus getEventBus();
-
-    PlaceController getPlaceController();
-
-    @Named( RegionNames.WEST )
-    ActivityMapper getWestActivityMapper();
-
-    @Named( RegionNames.EAST )
-    ActivityMapper getEastActivityMapper();
-
-    @Named( RegionNames.NORTH )
-    ActivityMapper getNorthActivityMapper();
-
-    @Named( RegionNames.SOUTH )
-    ActivityMapper getSouthActivityMapper();
-
-    @Named( RegionNames.MAIN )
-    ActivityMapper getMainActivityMapper();
-
     PlaceHistoryHandler getPlaceHistoryHandler();
-
-    PlaceHistoryMapper getPlaceHistoryMapper();
 
     MainLayout getMainLayout();
 

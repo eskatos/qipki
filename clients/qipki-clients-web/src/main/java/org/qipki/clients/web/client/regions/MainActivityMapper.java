@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import org.qipki.clients.web.client.ClientFactory;
 import org.qipki.clients.web.client.config.ConfigMainActivity;
@@ -29,19 +30,21 @@ public class MainActivityMapper
 {
 
     private final ClientFactory clientFactory;
+    private final Provider<WelcomeMainActivity> mainActivityProvider;
 
     @Inject
-    public MainActivityMapper( ClientFactory clientFactory )
+    public MainActivityMapper( ClientFactory clientFactory, Provider<WelcomeMainActivity> mainActivityProvider )
     {
         super();
         this.clientFactory = clientFactory;
+        this.mainActivityProvider = mainActivityProvider;
     }
 
     @Override
     public Activity getActivity( Place place )
     {
         if ( place instanceof WelcomePlace ) {
-            return new WelcomeMainActivity( ( WelcomePlace ) place, clientFactory );
+            return mainActivityProvider.get().withPlace( ( WelcomePlace ) place );
         } else if ( place instanceof ConfigPlace ) {
             return new ConfigMainActivity( ( ConfigPlace ) place, clientFactory );
         }
