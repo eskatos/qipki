@@ -11,19 +11,23 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.welcome;
+package org.qipki.clients.web.client;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.i18n.client.Dictionary;
 
-public class WelcomeMainViewImpl
-        extends Composite
-        implements WelcomeMainView
+public class ContextImpl
+        implements Context
 {
 
-    public WelcomeMainViewImpl()
+    private Dictionary apis;
+
+    @Override
+    public String apiUrl( API api )
     {
-        initWidget( new Label( "This is WelcomeView!" ) );
+        if ( apis == null ) {
+            apis = Dictionary.getDictionary( "apis" );
+        }
+        return apis.get( api.dictionaryKey() );
     }
 
 }

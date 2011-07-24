@@ -16,15 +16,14 @@ package org.qipki.clients.web.client;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+
 import org.qipki.clients.web.client.config.ConfigMessagingView;
 import org.qipki.clients.web.client.config.ConfigSchedulerView;
-
 import org.qipki.clients.web.client.config.ConfigWestSidebarView;
 import org.qipki.clients.web.client.config.ConfigGeneralView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarViewImpl;
 import org.qipki.clients.web.client.welcome.WelcomeMainView;
-import org.qipki.clients.web.client.welcome.WelcomeMainViewImpl;
 
 public class ClientFactoryImpl
         implements ClientFactory
@@ -32,6 +31,7 @@ public class ClientFactoryImpl
 
     private final EventBus eventBus = new SimpleEventBus();
     private final PlaceController placeController = new PlaceController( eventBus );
+    private final Context context = new ContextImpl();
 
     @Override
     public EventBus getEventBus()
@@ -46,9 +46,15 @@ public class ClientFactoryImpl
     }
 
     @Override
+    public Context getContext()
+    {
+        return context;
+    }
+
+    @Override
     public WelcomeMainView getWelcomeMainView()
     {
-        return new WelcomeMainViewImpl();
+        return new WelcomeMainView( this );
     }
 
     @Override

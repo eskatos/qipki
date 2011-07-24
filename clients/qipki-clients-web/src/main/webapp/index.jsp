@@ -1,3 +1,4 @@
+<%@page import="java.net.URL"%>
 <!doctype html>
 <html>
     <head>
@@ -95,6 +96,12 @@
         <!-- Consider inlining CSS to reduce the number of requested files -->
         <link type="text/css" rel="stylesheet" href="qipkiweb.css">
         <script type="text/javascript" src="qipkiweb/qipkiweb.nocache.js"></script>
+        <script type="text/javascript">
+            <% URL requestURL = new URL( request.getRequestURL().toString() );%>
+                var apis = {
+                    'x509-ca': '<%= new URL( requestURL.getProtocol(), requestURL.getHost(), requestURL.getPort(), "/api" ).toString() %>'
+                };
+        </script>
     </head>
     <body onload="loading_show()">
         <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>

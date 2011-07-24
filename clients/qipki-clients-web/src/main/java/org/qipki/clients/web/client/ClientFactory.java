@@ -30,6 +30,8 @@ public interface ClientFactory
 
     PlaceController getPlaceController();
 
+    Context getContext();
+
     WelcomeMainView getWelcomeMainView();
 
     ConfigWestSidebarView getConfigWestSidebarView();

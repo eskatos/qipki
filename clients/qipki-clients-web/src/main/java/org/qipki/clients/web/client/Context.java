@@ -11,24 +11,29 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.welcome;
+package org.qipki.clients.web.client;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-
-import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.Context.API;
-
-public class WelcomeMainView
-        extends Composite
+public interface Context
 {
 
-    private final ClientFactory factory;
-
-    public WelcomeMainView( ClientFactory factory )
+    public static enum API
     {
-        this.factory = factory;
-        initWidget( new Label( "This is WelcomeView! " + factory.getContext().apiUrl( API.X509_CA ) ) );
+
+        X509_CA( "x509-ca" );
+        private String dictionaryKey;
+
+        private API( String dictionaryKey )
+        {
+            this.dictionaryKey = dictionaryKey;
+        }
+
+        public String dictionaryKey()
+        {
+            return dictionaryKey;
+        }
+
     }
+
+    String apiUrl( API api );
 
 }
