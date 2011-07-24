@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Inject;
 
 public class MainLayout
 {
@@ -41,13 +42,19 @@ public class MainLayout
     private final DockLayoutPanel rootLayout = new DockLayoutPanel( Unit.PX );
     private final LayoutPanel splittedLayout = new LayoutPanel();
 
-    public MainLayout()
+    @Inject
+    public MainLayout( Menu menu )
     {
         splittedLayout.add( mainPanel );
         splittedLayout.add( westSidebarPanel );
         splittedLayout.add( eastSidebarPanel );
         splittedLayout.add( northSidebarPanel );
         splittedLayout.add( southSidebarPanel );
+
+        ribbonPanel.setWidget( new Ribbon() );
+        menuPanel.setWidget( menu );
+        footerPanel.setWidget( new Footer() );
+
         firstLayout();
         firstStyle();
 

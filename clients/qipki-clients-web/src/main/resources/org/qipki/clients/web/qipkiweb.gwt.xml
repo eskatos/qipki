@@ -11,6 +11,7 @@
     <inherits name="com.google.gwt.uibinder.UiBinder" />
 
     <!-- Other module inherits -->
+    <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name='org.fusesource.restygwt.RestyGWT' />
 
     <!-- Theming -->

@@ -13,24 +13,11 @@
  */
 package org.qipki.clients.web.client;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
-import org.qipki.clients.web.client.ui.Menu;
-import org.qipki.clients.web.client.regions.EastSidebarActivityMapper;
-import org.qipki.clients.web.client.regions.MainActivityMapper;
-import org.qipki.clients.web.client.regions.NorthSidebarActivityMapper;
-import org.qipki.clients.web.client.regions.SouthSidebarActivityMapper;
-import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
-import org.qipki.clients.web.client.ui.Footer;
-import org.qipki.clients.web.client.ui.MainLayout;
-import org.qipki.clients.web.client.ui.Ribbon;
-import org.qipki.clients.web.client.welcome.WelcomePlace;
+import org.qipki.clients.web.client.assembly.Injector;
 
 /**
  * @see http://code.google.com/intl/fr/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
@@ -40,53 +27,20 @@ public class qipkiweb
         implements EntryPoint
 {
 
+    private final Injector injector = GWT.create( Injector.class );
+
     @Override
     public void onModuleLoad()
     {
         try {
 
-            ClientFactory clientFactory = new ClientFactoryImpl();
-            MainLayout mainLayout = new MainLayout();
-
-            // WestSidebar region
-            ActivityMapper westSidebarActivityMapper = new WestSidebarActivityMapper( clientFactory );
-            ActivityManager westSidebarActivityManager = new ActivityManager( westSidebarActivityMapper, clientFactory.getEventBus() );
-            westSidebarActivityManager.setDisplay( mainLayout.getWestSidebarPanel() );
-
-            // EastSidebar region
-            ActivityMapper eastSidebarActivityMapper = new EastSidebarActivityMapper( clientFactory );
-            ActivityManager eastSidebarActivityManager = new ActivityManager( eastSidebarActivityMapper, clientFactory.getEventBus() );
-            eastSidebarActivityManager.setDisplay( mainLayout.getEastSidebarPanel() );
-
-            // NorthSidebar region
-            ActivityMapper northSidebarActivityMapper = new NorthSidebarActivityMapper( clientFactory );
-            ActivityManager northSidebarActivityManager = new ActivityManager( northSidebarActivityMapper, clientFactory.getEventBus() );
-            northSidebarActivityManager.setDisplay( mainLayout.getNorthSidebarPanel() );
-
-            // SouthSidebar region
-            ActivityMapper southSidebarActivityMapper = new SouthSidebarActivityMapper( clientFactory );
-            ActivityManager southSidebarActivityManager = new ActivityManager( southSidebarActivityMapper, clientFactory.getEventBus() );
-            southSidebarActivityManager.setDisplay( mainLayout.getSouthSidebarPanel() );
-
-            // Main region
-            ActivityMapper activityMapper = new MainActivityMapper( clientFactory );
-            ActivityManager activityManager = new ActivityManager( activityMapper, clientFactory.getEventBus() );
-            activityManager.setDisplay( mainLayout.getMainPanel() );
-
-            // History handling
-            PlaceHistoryMapper historyMapper = GWT.create( PlaceHistoryMapperImpl.class );
-            PlaceHistoryHandler historyHandler = new PlaceHistoryHandler( historyMapper );
-            historyHandler.register( clientFactory.getPlaceController(), clientFactory.getEventBus(), new WelcomePlace() );
-
-            // Go!
-            mainLayout.getRibbonPanel().setWidget( new Ribbon() );
-            mainLayout.getMenuPanel().setWidget( new Menu( clientFactory ) );
-            mainLayout.getFooterPanel().setWidget( new Footer() );
-            RootLayoutPanel.get().add( mainLayout.getRootLayout() );
-            historyHandler.handleCurrentHistory();
+            RootLayoutPanel.get().add( injector.getMainLayout().getRootLayout() );
+            injector.getPlaceHistoryHandler().handleCurrentHistory();
 
         } finally {
+            
             hideLoading();
+            
         }
     }
 

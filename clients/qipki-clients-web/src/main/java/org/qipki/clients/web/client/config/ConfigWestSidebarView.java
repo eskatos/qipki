@@ -15,13 +15,13 @@ package org.qipki.clients.web.client.config;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
-
-import org.qipki.clients.web.client.ClientFactory;
+import com.google.inject.Inject;
 
 public class ConfigWestSidebarView
         extends Composite
@@ -35,30 +35,31 @@ public class ConfigWestSidebarView
     {
     }
 
-    private final ClientFactory factory;
+    private final PlaceController placeController;
 
-    public ConfigWestSidebarView( ClientFactory factory )
+    @Inject
+    public ConfigWestSidebarView( PlaceController placeController )
     {
-        this.factory = factory;
+        this.placeController = placeController;
         initWidget( binder.createAndBindUi( this ) );
     }
 
     @UiHandler( "buttonGeneral" )
     public void onGeneral( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ConfigPlace( ConfigPlace.GENERAL ) );
+        placeController.goTo( new ConfigPlace( ConfigPlace.GENERAL ) );
     }
 
     @UiHandler( "buttonMessaging" )
     public void onMessaging( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ConfigPlace( ConfigPlace.MESSAGING ) );
+        placeController.goTo( new ConfigPlace( ConfigPlace.MESSAGING ) );
     }
 
     @UiHandler( "buttonScheduler" )
     public void onScheduler( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ConfigPlace( ConfigPlace.SCHEDULER ) );
+        placeController.goTo( new ConfigPlace( ConfigPlace.SCHEDULER ) );
     }
 
 }

@@ -15,13 +15,14 @@ package org.qipki.clients.web.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.inject.Inject;
 
-import org.qipki.clients.web.client.ClientFactory;
 import org.qipki.clients.web.client.config.ConfigPlace;
 import org.qipki.clients.web.client.tools.ToolsPlace;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
@@ -38,18 +39,19 @@ public class Menu
     {
     }
 
-    private final ClientFactory factory;
+    private final PlaceController placeController;
 
-    public Menu( ClientFactory factory )
+    @Inject
+    public Menu( PlaceController placeController )
     {
-        this.factory = factory;
+        this.placeController = placeController;
         initWidget( binder.createAndBindUi( this ) );
     }
 
     @UiHandler( "buttonWelcome" )
     public void doClickWelcome( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new WelcomePlace() );
+        placeController.goTo( new WelcomePlace() );
     }
 
     @UiHandler( "buttonX509VA" )
@@ -80,13 +82,13 @@ public class Menu
     @UiHandler( "buttonConfiguration" )
     public void doClickConfiguration( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ConfigPlace() );
+        placeController.goTo( new ConfigPlace() );
     }
 
     @UiHandler( "buttonTools" )
     public void doClickTools( ClickEvent click )
     {
-        factory.getPlaceController().goTo( new ToolsPlace() );
+        placeController.goTo( new ToolsPlace() );
     }
 
 }

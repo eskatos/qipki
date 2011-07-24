@@ -11,26 +11,14 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.welcome;
+package org.qipki.clients.web.client.regions;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.inject.Inject;
-
-import org.qipki.clients.web.client.Context;
-import org.qipki.clients.web.client.Context.API;
-
-public class WelcomeMainView
-        extends Composite
+public interface RegionNames
 {
 
-    private final Context context;
-
-    @Inject
-    public WelcomeMainView( Context context )
-    {
-        this.context = context;
-        initWidget( new Label( "This is WelcomeView! " + context.apiUrl( API.X509_CA ) ) );
-    }
-
+    String WEST = "WestRegion";
+    String EAST = "EastRegion";
+    String NORTH = "NorthRegion";
+    String SOUTH = "SouthRegion";
+    String MAIN = "MainRegion";
 }

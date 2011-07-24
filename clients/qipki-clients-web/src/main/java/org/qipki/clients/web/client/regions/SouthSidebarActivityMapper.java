@@ -16,6 +16,7 @@ package org.qipki.clients.web.client.regions;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
 
 import org.qipki.clients.web.client.ClientFactory;
 
@@ -23,11 +24,9 @@ public class SouthSidebarActivityMapper
         implements ActivityMapper
 {
 
-    private final ClientFactory clientFactory;
-
-    public SouthSidebarActivityMapper( ClientFactory clientFactory )
+    @Inject
+    public SouthSidebarActivityMapper( ClientFactory factory )
     {
-        this.clientFactory = clientFactory;
     }
 
     @Override

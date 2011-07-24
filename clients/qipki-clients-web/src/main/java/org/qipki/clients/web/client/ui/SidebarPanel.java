@@ -43,17 +43,19 @@ public class SidebarPanel
             boolean newWidget = widget != null;
             if ( oldWidget && newWidget ) {
                 // Replace
+                //Window.alert( "replace" );
                 setWidget( widget );
                 mainLayout.setSidebarActivated( this, true, false, null );
             } else if ( oldWidget ) {
                 // Hide
+                //Window.alert( "hide" );
+                setWidget( widget ); // FIXME This statement should be in the animation complete callback
                 mainLayout.setSidebarActivated( this, false, true, new AnimationCallback()
                 {
 
                     @Override
                     public void onAnimationComplete()
                     {
-                        setWidget( widget );
                     }
 
                     @Override
@@ -64,6 +66,7 @@ public class SidebarPanel
                 } );
             } else if ( newWidget ) {
                 // Show
+                //Window.alert( "show" );
                 setWidget( widget );
                 mainLayout.setSidebarActivated( this, true, true, null );
             } else {
