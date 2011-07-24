@@ -18,12 +18,9 @@ import org.qipki.clients.web.client.config.ConfigGeneralView;
 import org.qipki.clients.web.client.config.ConfigMessagingView;
 import org.qipki.clients.web.client.config.ConfigSchedulerView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
-import org.qipki.clients.web.client.welcome.WelcomeMainView;
 
 public interface ClientFactory
 {
-
-    WelcomeMainView getWelcomeMainView();
 
     ConfigWestSidebarView getConfigWestSidebarView();
 

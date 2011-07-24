@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui;
+package org.qipki.clients.web.client.ui.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

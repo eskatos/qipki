@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.regions;
+package org.qipki.clients.web.client.ui.regions;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -19,19 +19,31 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
 import org.qipki.clients.web.client.ClientFactory;
+import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.config.ConfigWestSidebarActivity;
+import org.qipki.clients.web.client.tools.ToolsPlace;
+import org.qipki.clients.web.client.tools.ToolsWestSidebarActivity;
 
-public class SouthSidebarActivityMapper
+public class WestSidebarActivityMapper
         implements ActivityMapper
 {
 
+    private final ClientFactory clientFactory;
+
     @Inject
-    public SouthSidebarActivityMapper( ClientFactory factory )
+    public WestSidebarActivityMapper( ClientFactory clientFactory )
     {
+        this.clientFactory = clientFactory;
     }
 
     @Override
     public Activity getActivity( Place place )
     {
+        if ( place instanceof ConfigPlace ) {
+            return new ConfigWestSidebarActivity( ( ConfigPlace ) place, clientFactory );
+        } else if ( place instanceof ToolsPlace ) {
+            return new ToolsWestSidebarActivity( ( ToolsPlace ) place, clientFactory );
+        }
         return null;
     }
 

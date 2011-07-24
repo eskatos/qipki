@@ -11,38 +11,42 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.regions;
+package org.qipki.clients.web.client.ui.regions;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import org.qipki.clients.web.client.ClientFactory;
+import org.qipki.clients.web.client.config.ConfigMainActivity;
 import org.qipki.clients.web.client.config.ConfigPlace;
-import org.qipki.clients.web.client.config.ConfigWestSidebarActivity;
-import org.qipki.clients.web.client.tools.ToolsPlace;
-import org.qipki.clients.web.client.tools.ToolsWestSidebarActivity;
+import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
+import org.qipki.clients.web.client.welcome.WelcomePlace;
 
-public class WestSidebarActivityMapper
+public class MainActivityMapper
         implements ActivityMapper
 {
 
     private final ClientFactory clientFactory;
+    private final Provider<WelcomeMainActivity> mainActivityProvider;
 
     @Inject
-    public WestSidebarActivityMapper( ClientFactory clientFactory )
+    public MainActivityMapper( ClientFactory clientFactory, Provider<WelcomeMainActivity> mainActivityProvider )
     {
+        super();
         this.clientFactory = clientFactory;
+        this.mainActivityProvider = mainActivityProvider;
     }
 
     @Override
     public Activity getActivity( Place place )
     {
-        if ( place instanceof ConfigPlace ) {
-            return new ConfigWestSidebarActivity( ( ConfigPlace ) place, clientFactory );
-        } else if ( place instanceof ToolsPlace ) {
-            return new ToolsWestSidebarActivity( ( ToolsPlace ) place, clientFactory );
+        if ( place instanceof WelcomePlace ) {
+            return mainActivityProvider.get().withPlace( ( WelcomePlace ) place );
+        } else if ( place instanceof ConfigPlace ) {
+            return new ConfigMainActivity( ( ConfigPlace ) place, clientFactory );
         }
         return null;
     }

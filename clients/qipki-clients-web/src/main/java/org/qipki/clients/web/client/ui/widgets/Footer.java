@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui;
+package org.qipki.clients.web.client.ui.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -19,19 +19,19 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
 
-public class Ribbon
+public class Footer
         extends Composite
 {
 
-    private static final RibbonUiBinder binder = GWT.create( RibbonUiBinder.class );
+    private static final FooterUiBinder binder = GWT.create( FooterUiBinder.class );
 
-    @UiTemplate( "Ribbon.ui.xml" )
-    interface RibbonUiBinder
-            extends UiBinder<Panel, Ribbon>
+    @UiTemplate( "Footer.ui.xml" )
+    interface FooterUiBinder
+            extends UiBinder<Panel, Footer>
     {
     }
 
-    public Ribbon()
+    public Footer()
     {
         initWidget( binder.createAndBindUi( this ) );
     }

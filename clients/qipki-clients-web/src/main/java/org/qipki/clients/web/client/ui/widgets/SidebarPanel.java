@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui;
+package org.qipki.clients.web.client.ui.widgets;
 
 import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.layout.client.Layout.Layer;

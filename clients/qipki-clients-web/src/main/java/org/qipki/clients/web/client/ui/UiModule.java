@@ -11,13 +11,13 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.assembly;
+package org.qipki.clients.web.client.ui;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
@@ -26,53 +26,38 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
-import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.ClientFactoryImpl;
-import org.qipki.clients.web.client.Context;
-import org.qipki.clients.web.client.ContextImpl;
-import org.qipki.clients.web.client.PlaceHistoryMapperImpl;
-import org.qipki.clients.web.client.config.ConfigWestSidebarView;
-import org.qipki.clients.web.client.regions.EastSidebarActivityMapper;
-import org.qipki.clients.web.client.regions.MainActivityMapper;
-import org.qipki.clients.web.client.regions.NorthSidebarActivityMapper;
-import static org.qipki.clients.web.client.regions.RegionNames.*;
-import org.qipki.clients.web.client.regions.SouthSidebarActivityMapper;
-import org.qipki.clients.web.client.regions.WestSidebarActivityMapper;
-import org.qipki.clients.web.client.ui.MainLayout;
-import org.qipki.clients.web.client.ui.Menu;
-import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
-import org.qipki.clients.web.client.welcome.WelcomeMainView;
+import org.qipki.clients.web.client.ui.regions.EastSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.regions.MainActivityMapper;
+import org.qipki.clients.web.client.ui.regions.NorthSidebarActivityMapper;
+import static org.qipki.clients.web.client.ui.regions.RegionNames.*;
+import org.qipki.clients.web.client.ui.regions.SouthSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.regions.WestSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.widgets.MainLayout;
+import org.qipki.clients.web.client.ui.widgets.Menu;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
 /**
  * @see http://wanderingcanadian.posterous.com/hello-mvp-with-gin
  */
-public class AssemblyModule
+public class UiModule
         extends AbstractGinModule
 {
+
+    private static final String DEFAULT_PLACE = "DefaultPlace";
 
     @Override
     protected void configure()
     {
-        bind( ClientFactory.class ).to( ClientFactoryImpl.class ).in( Singleton.class );
-
-        bind( Context.class ).to( ContextImpl.class ).in( Singleton.class );
-        bind( EventBus.class ).to( SimpleEventBus.class ).in( Singleton.class );
-
         bind( ActivityMapper.class ).annotatedWith( Names.named( WEST ) ).to( WestSidebarActivityMapper.class ).in( Singleton.class );
         bind( ActivityMapper.class ).annotatedWith( Names.named( EAST ) ).to( EastSidebarActivityMapper.class ).in( Singleton.class );
         bind( ActivityMapper.class ).annotatedWith( Names.named( NORTH ) ).to( NorthSidebarActivityMapper.class ).in( Singleton.class );
         bind( ActivityMapper.class ).annotatedWith( Names.named( SOUTH ) ).to( SouthSidebarActivityMapper.class ).in( Singleton.class );
         bind( ActivityMapper.class ).annotatedWith( Names.named( MAIN ) ).to( MainActivityMapper.class ).in( Singleton.class );
         bind( PlaceHistoryMapper.class ).to( PlaceHistoryMapperImpl.class ).in( Singleton.class );
+        bind( Place.class ).annotatedWith( Names.named( DEFAULT_PLACE ) ).to( WelcomePlace.class ).in( Singleton.class );
 
         bind( MainLayout.class ).in( Singleton.class );
         bind( Menu.class ).in( Singleton.class );
-
-        bind( ConfigWestSidebarView.class ).in( Singleton.class );
-
-        bind( WelcomeMainView.class ).in( Singleton.class );
-        bind( WelcomeMainActivity.class );
     }
 
     @Provides
@@ -135,10 +120,11 @@ public class AssemblyModule
                                                        @Named( EAST ) ActivityManager eastActivityManager,
                                                        @Named( NORTH ) ActivityManager northActivityManager,
                                                        @Named( SOUTH ) ActivityManager southActivityManager,
-                                                       @Named( MAIN ) ActivityManager mainActivityManager )
+                                                       @Named( MAIN ) ActivityManager mainActivityManager,
+                                                       @Named( DEFAULT_PLACE ) Place defaultPlace )
     {
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler( placeHistoryMapper );
-        historyHandler.register( placeController, eventBus, new WelcomePlace() );
+        historyHandler.register( placeController, eventBus, defaultPlace );
         return historyHandler;
     }
 

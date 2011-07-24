@@ -21,26 +21,17 @@ import org.qipki.clients.web.client.config.ConfigWestSidebarView;
 import org.qipki.clients.web.client.config.ConfigGeneralView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarView;
 import org.qipki.clients.web.client.tools.ToolsWestSidebarViewImpl;
-import org.qipki.clients.web.client.welcome.WelcomeMainView;
 
 public class ClientFactoryImpl
         implements ClientFactory
 {
 
-    private final Context context;
     private final ConfigWestSidebarView configWestSidebarView;
 
     @Inject
-    public ClientFactoryImpl( Context context, ConfigWestSidebarView configWestSidebarView )
+    public ClientFactoryImpl( ConfigWestSidebarView configWestSidebarView )
     {
-        this.context = context;
         this.configWestSidebarView = configWestSidebarView;
-    }
-
-    @Override
-    public WelcomeMainView getWelcomeMainView()
-    {
-        return new WelcomeMainView( context );
     }
 
     @Override

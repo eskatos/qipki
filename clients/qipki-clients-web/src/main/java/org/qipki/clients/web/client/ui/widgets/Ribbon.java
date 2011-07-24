@@ -11,28 +11,29 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.regions;
+package org.qipki.clients.web.client.ui.widgets;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Panel;
 
-import org.qipki.clients.web.client.ClientFactory;
-
-public class NorthSidebarActivityMapper
-        implements ActivityMapper
+public class Ribbon
+        extends Composite
 {
 
-    @Inject
-    public NorthSidebarActivityMapper( ClientFactory factory )
+    private static final RibbonUiBinder binder = GWT.create( RibbonUiBinder.class );
+
+    @UiTemplate( "Ribbon.ui.xml" )
+    interface RibbonUiBinder
+            extends UiBinder<Panel, Ribbon>
     {
     }
 
-    @Override
-    public Activity getActivity( Place place )
+    public Ribbon()
     {
-        return null;
+        initWidget( binder.createAndBindUi( this ) );
     }
 
 }

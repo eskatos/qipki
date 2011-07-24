@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client;
+package org.qipki.clients.web.client.ui;
 
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
