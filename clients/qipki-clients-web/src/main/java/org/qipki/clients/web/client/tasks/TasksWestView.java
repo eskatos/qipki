@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,43 +23,31 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.inject.Inject;
 
-public class ConfigWestView
+public class TasksWestView
         extends Composite
 {
 
-    private static final ConfigWestUiBinder binder = GWT.create( ConfigWestUiBinder.class );
+    private static final TasksWestUiBinder binder = GWT.create( TasksWestUiBinder.class );
 
-    @UiTemplate( "ConfigWest.ui.xml" )
-    interface ConfigWestUiBinder
-            extends UiBinder<Panel, ConfigWestView>
+    @UiTemplate( "TasksWest.ui.xml" )
+    interface TasksWestUiBinder
+            extends UiBinder<Panel, TasksWestView>
     {
     }
 
     private final PlaceController placeController;
 
     @Inject
-    public ConfigWestView( PlaceController placeController )
+    public TasksWestView( PlaceController placeController )
     {
         this.placeController = placeController;
         initWidget( binder.createAndBindUi( this ) );
     }
 
-    @UiHandler( "buttonGeneral" )
-    public void onGeneral( ClickEvent click )
+    @UiHandler( "buttonTimeline" )
+    public void onTimeline( ClickEvent click )
     {
-        placeController.goTo( new ConfigPlace( ConfigPlace.GENERAL ) );
-    }
-
-    @UiHandler( "buttonMessaging" )
-    public void onMessaging( ClickEvent click )
-    {
-        placeController.goTo( new ConfigPlace( ConfigPlace.MESSAGING ) );
-    }
-
-    @UiHandler( "buttonScheduler" )
-    public void onScheduler( ClickEvent click )
-    {
-        placeController.goTo( new ConfigPlace( ConfigPlace.SCHEDULER ) );
+        placeController.goTo( new TasksPlace( TasksPlace.TIMELINE ) );
     }
 
 }

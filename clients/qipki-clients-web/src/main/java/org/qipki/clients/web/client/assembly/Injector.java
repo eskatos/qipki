@@ -18,6 +18,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 
 import org.qipki.clients.web.client.config.ConfigModule;
+import org.qipki.clients.web.client.tasks.TasksModule;
 import org.qipki.clients.web.client.tools.ToolsModule;
 import org.qipki.clients.web.client.ui.UiModule;
 import org.qipki.clients.web.client.ui.widgets.MainLayout;
@@ -29,6 +30,7 @@ import org.qipki.clients.web.client.welcome.WelcomeModule;
 @GinModules( { InfrastructureModule.class,
                UiModule.class,
                WelcomeModule.class,
+               TasksModule.class,
                ConfigModule.class,
                ToolsModule.class } )
 public interface Injector

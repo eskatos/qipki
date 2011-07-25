@@ -11,44 +11,42 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
 import org.qipki.clients.web.client.ui.place.StringTokenPlace;
 
-public class ConfigPlace
+public class TasksPlace
         extends StringTokenPlace
 {
 
-    public static final String GENERAL = "general";
-    public static final String MESSAGING = "messaging";
-    public static final String SCHEDULER = "scheduler";
+    public static final String TIMELINE = "timeline";
 
-    public ConfigPlace()
+    public TasksPlace()
     {
-        this( GENERAL );
+        super( TIMELINE );
     }
 
-    ConfigPlace( String token )
+    TasksPlace( String token )
     {
         super( token );
     }
 
-    @Prefix( "config" )
+    @Prefix( "tasks" )
     public static class Tokenizer
-            implements PlaceTokenizer<ConfigPlace>
+            implements PlaceTokenizer<TasksPlace>
     {
 
         @Override
-        public ConfigPlace getPlace( String token )
+        public TasksPlace getPlace( String token )
         {
-            return new ConfigPlace( token );
+            return new TasksPlace( token );
         }
 
         @Override
-        public String getToken( ConfigPlace place )
+        public String getToken( TasksPlace place )
         {
             return place.getToken();
         }

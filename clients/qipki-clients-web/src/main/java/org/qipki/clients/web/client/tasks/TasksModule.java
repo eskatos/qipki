@@ -11,20 +11,23 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.inject.Inject;
+import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Singleton;
 
-public class ConfigMessagingView
-        extends Composite
+public class TasksModule
+        extends AbstractGinModule
 {
 
-    @Inject
-    public ConfigMessagingView()
+    @Override
+    protected void configure()
     {
-        initWidget( new Label( "Config Messaging View" ) );
+        bind( TasksWestView.class ).in( Singleton.class );
+        bind( TasksWestActivity.class );
+
+        bind( TasksMainTimelineView.class ).in( Singleton.class );
+        bind( TasksMainActivity.class );
     }
 
 }

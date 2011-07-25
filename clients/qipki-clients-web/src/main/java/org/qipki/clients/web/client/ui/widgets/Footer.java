@@ -31,6 +31,7 @@ public class Footer
 {
 
     private static final FooterUiBinder binder = GWT.create( FooterUiBinder.class );
+    private AboutBox aboutBox;
 
     @UiTemplate( "Footer.ui.xml" )
     interface FooterUiBinder
@@ -46,7 +47,10 @@ public class Footer
     @UiHandler( "aboutLabel" )
     public void onAbout( ClickEvent click )
     {
-        new AboutBox().show();
+        if ( aboutBox == null ) {
+            aboutBox = new AboutBox();
+        }
+        aboutBox.show();
     }
 
     private static class AboutBox
@@ -54,6 +58,7 @@ public class Footer
     {
 
         private final ExternalResourcePanel about;
+        private boolean loaded;
 
         public AboutBox()
         {
@@ -92,7 +97,10 @@ public class Footer
         @Override
         public void show()
         {
-            about.reload();
+            if ( !loaded ) {
+                about.reload();
+                loaded = true;
+            }
             super.show();
         }
 

@@ -11,31 +11,27 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-public class ConfigMainActivity
+public class TasksMainActivity
         extends AbstractActivity
 {
 
-    private final ConfigMainGeneralView generalView;
-    private final ConfigMainMessagingView messagingView;
-    private final ConfigMainSchedulerView schedulerView;
-    private ConfigPlace place;
+    private final TasksMainTimelineView timelineView;
+    private TasksPlace place;
 
     @Inject
-    public ConfigMainActivity( ConfigMainGeneralView generalView, ConfigMainMessagingView messagingView, ConfigMainSchedulerView schedulerView )
+    public TasksMainActivity( TasksMainTimelineView timelineView )
     {
-        this.generalView = generalView;
-        this.messagingView = messagingView;
-        this.schedulerView = schedulerView;
+        this.timelineView = timelineView;
     }
 
-    public ConfigMainActivity withPlace( ConfigPlace place )
+    public TasksMainActivity withPlace( TasksPlace place )
     {
         this.place = place;
         return this;
@@ -44,13 +40,7 @@ public class ConfigMainActivity
     @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        if ( ConfigPlace.MESSAGING.equals( place.getToken() ) ) {
-            panel.setWidget( messagingView.asWidget() );
-        } else if ( ConfigPlace.SCHEDULER.equals( place.getToken() ) ) {
-            panel.setWidget( schedulerView.asWidget() );
-        } else {
-            panel.setWidget( generalView.asWidget() );
-        }
+        panel.setWidget( timelineView.asWidget() );
     }
 
 }

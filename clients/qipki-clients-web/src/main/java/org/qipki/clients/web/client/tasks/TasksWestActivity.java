@@ -11,20 +11,36 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-public class ConfigSchedulerView
-        extends Composite
+public class TasksWestActivity
+        extends AbstractActivity
 {
 
+    private final TasksWestView view;
+    private TasksPlace place;
+
     @Inject
-    public ConfigSchedulerView()
+    public TasksWestActivity( TasksWestView view )
     {
-        initWidget( new Label( "Config Scheduler View" ) );
+        this.view = view;
+    }
+
+    public TasksWestActivity withPlace( TasksPlace place )
+    {
+        this.place = place;
+        return this;
+    }
+
+    @Override
+    public void start( AcceptsOneWidget panel, EventBus eventBus )
+    {
+        panel.setWidget( view.asWidget() );
     }
 
 }

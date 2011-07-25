@@ -13,23 +13,18 @@
  */
 package org.qipki.clients.web.client.config;
 
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Singleton;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.inject.Inject;
 
-public class ConfigModule
-        extends AbstractGinModule
+public class ConfigMainMessagingView
+        extends Composite
 {
 
-    @Override
-    protected void configure()
+    @Inject
+    public ConfigMainMessagingView()
     {
-        bind( ConfigWestView.class ).in( Singleton.class );
-        bind( ConfigWestActivity.class );
-
-        bind( ConfigMainGeneralView.class ).in( Singleton.class );
-        bind( ConfigMainMessagingView.class ).in( Singleton.class );
-        bind( ConfigMainSchedulerView.class ).in( Singleton.class );
-        bind( ConfigMainActivity.class );
+        initWidget( new Label( "Config Messaging View" ) );
     }
 
 }

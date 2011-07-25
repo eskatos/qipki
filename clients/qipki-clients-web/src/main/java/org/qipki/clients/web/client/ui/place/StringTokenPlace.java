@@ -11,20 +11,24 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.ui.place;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.inject.Inject;
+import com.google.gwt.place.shared.Place;
 
-public class ConfigGeneralView
-        extends Composite
+public class StringTokenPlace
+        extends Place
 {
 
-    @Inject
-    public ConfigGeneralView()
+    private String token;
+
+    public StringTokenPlace( String token )
     {
-        initWidget( new Label( "Config General View" ) );
+        this.token = token;
+    }
+
+    public String getToken()
+    {
+        return token;
     }
 
 }

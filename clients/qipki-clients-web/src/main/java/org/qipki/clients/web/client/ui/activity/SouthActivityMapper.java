@@ -11,25 +11,26 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.ui.activity;
 
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Singleton;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
 
-public class ConfigModule
-        extends AbstractGinModule
+public class SouthActivityMapper
+        implements ActivityMapper
 {
 
-    @Override
-    protected void configure()
+    @Inject
+    public SouthActivityMapper()
     {
-        bind( ConfigWestView.class ).in( Singleton.class );
-        bind( ConfigWestActivity.class );
+    }
 
-        bind( ConfigMainGeneralView.class ).in( Singleton.class );
-        bind( ConfigMainMessagingView.class ).in( Singleton.class );
-        bind( ConfigMainSchedulerView.class ).in( Singleton.class );
-        bind( ConfigMainActivity.class );
+    @Override
+    public Activity getActivity( Place place )
+    {
+        return null;
     }
 
 }

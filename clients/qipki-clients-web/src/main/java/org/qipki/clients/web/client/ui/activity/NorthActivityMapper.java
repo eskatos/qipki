@@ -11,19 +11,19 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui.regions;
+package org.qipki.clients.web.client.ui.activity;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
-public class EastActivityMapper
+public class NorthActivityMapper
         implements ActivityMapper
 {
 
     @Inject
-    public EastActivityMapper()
+    public NorthActivityMapper()
     {
     }
 

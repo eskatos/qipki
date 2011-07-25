@@ -11,14 +11,20 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui.regions;
+package org.qipki.clients.web.client.config;
 
-public interface RegionNames
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.inject.Inject;
+
+public class ConfigMainGeneralView
+        extends Composite
 {
 
-    String WEST = "WestRegion";
-    String EAST = "EastRegion";
-    String NORTH = "NorthRegion";
-    String SOUTH = "SouthRegion";
-    String MAIN = "MainRegion";
+    @Inject
+    public ConfigMainGeneralView()
+    {
+        initWidget( new Label( "Config General View" ) );
+    }
+
 }

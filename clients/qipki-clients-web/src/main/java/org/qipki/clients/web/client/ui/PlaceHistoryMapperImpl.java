@@ -17,10 +17,18 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
 
 import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.logs.LogsPlace;
+import org.qipki.clients.web.client.tasks.TasksPlace;
+import org.qipki.clients.web.client.tools.ToolsPlace;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
-@WithTokenizers( { WelcomePlace.Tokenizer.class,
-                   ConfigPlace.Tokenizer.class } )
+@WithTokenizers( {
+    WelcomePlace.Tokenizer.class,
+    LogsPlace.Tokenizer.class,
+    TasksPlace.Tokenizer.class,
+    ConfigPlace.Tokenizer.class,
+    ToolsPlace.Tokenizer.class
+} )
 public interface PlaceHistoryMapperImpl
         extends PlaceHistoryMapper
 {

@@ -11,25 +11,24 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.tasks;
 
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Singleton;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.inject.Inject;
 
-public class ConfigModule
-        extends AbstractGinModule
+// MOCKUP
+public class TasksMainTimelineView
+        extends Composite
 {
 
-    @Override
-    protected void configure()
+    @Inject
+    public TasksMainTimelineView()
     {
-        bind( ConfigWestView.class ).in( Singleton.class );
-        bind( ConfigWestActivity.class );
-
-        bind( ConfigMainGeneralView.class ).in( Singleton.class );
-        bind( ConfigMainMessagingView.class ).in( Singleton.class );
-        bind( ConfigMainSchedulerView.class ).in( Singleton.class );
-        bind( ConfigMainActivity.class );
+        Frame frame = new Frame( "timeline.html" );
+        frame.setWidth( "99%" );
+        frame.setHeight( "500px" );
+        initWidget( frame );
     }
 
 }

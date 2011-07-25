@@ -26,12 +26,12 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
-import org.qipki.clients.web.client.ui.regions.EastActivityMapper;
-import org.qipki.clients.web.client.ui.regions.MainActivityMapper;
-import org.qipki.clients.web.client.ui.regions.NorthActivityMapper;
-import static org.qipki.clients.web.client.ui.regions.RegionNames.*;
-import org.qipki.clients.web.client.ui.regions.SouthActivityMapper;
-import org.qipki.clients.web.client.ui.regions.WestActivityMapper;
+import org.qipki.clients.web.client.ui.activity.EastActivityMapper;
+import org.qipki.clients.web.client.ui.activity.MainActivityMapper;
+import org.qipki.clients.web.client.ui.activity.NorthActivityMapper;
+import static org.qipki.clients.web.client.ui.activity.RegionNames.*;
+import org.qipki.clients.web.client.ui.activity.SouthActivityMapper;
+import org.qipki.clients.web.client.ui.activity.WestActivityMapper;
 import org.qipki.clients.web.client.ui.widgets.MainLayout;
 import org.qipki.clients.web.client.ui.widgets.Menu;
 import org.qipki.clients.web.client.welcome.WelcomePlace;

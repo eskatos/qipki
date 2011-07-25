@@ -11,26 +11,14 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui.regions;
+package org.qipki.clients.web.client.ui.activity;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
-
-public class SouthActivityMapper
-        implements ActivityMapper
+public interface RegionNames
 {
 
-    @Inject
-    public SouthActivityMapper()
-    {
-    }
-
-    @Override
-    public Activity getActivity( Place place )
-    {
-        return null;
-    }
-
+    String WEST = "WestRegion";
+    String EAST = "EastRegion";
+    String NORTH = "NorthRegion";
+    String SOUTH = "SouthRegion";
+    String MAIN = "MainRegion";
 }

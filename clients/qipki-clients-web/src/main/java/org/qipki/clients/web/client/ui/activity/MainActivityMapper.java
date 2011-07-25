@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui.regions;
+package org.qipki.clients.web.client.ui.activity;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -21,6 +21,8 @@ import com.google.inject.Provider;
 
 import org.qipki.clients.web.client.config.ConfigMainActivity;
 import org.qipki.clients.web.client.config.ConfigPlace;
+import org.qipki.clients.web.client.tasks.TasksMainActivity;
+import org.qipki.clients.web.client.tasks.TasksPlace;
 import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
 
@@ -29,14 +31,17 @@ public class MainActivityMapper
 {
 
     private final Provider<WelcomeMainActivity> welcomeMainActivityProvider;
+    private final Provider<TasksMainActivity> tasksActivity;
     private final Provider<ConfigMainActivity> configMainActivityProvider;
 
     @Inject
     public MainActivityMapper( Provider<WelcomeMainActivity> welcomeMainActivityProvider,
+                               Provider<TasksMainActivity> tasksActivity,
                                Provider<ConfigMainActivity> configMainActivityProvider )
     {
         super();
         this.welcomeMainActivityProvider = welcomeMainActivityProvider;
+        this.tasksActivity = tasksActivity;
         this.configMainActivityProvider = configMainActivityProvider;
     }
 
@@ -45,6 +50,8 @@ public class MainActivityMapper
     {
         if ( place instanceof WelcomePlace ) {
             return welcomeMainActivityProvider.get().withPlace( ( WelcomePlace ) place );
+        } else if ( place instanceof TasksPlace ) {
+            return tasksActivity.get().withPlace( ( TasksPlace ) place );
         } else if ( place instanceof ConfigPlace ) {
             return configMainActivityProvider.get().withPlace( ( ConfigPlace ) place );
         }

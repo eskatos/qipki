@@ -11,25 +11,18 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.config;
+package org.qipki.clients.web.client.ui.place;
 
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Singleton;
+import com.google.gwt.place.shared.PlaceTokenizer;
 
-public class ConfigModule
-        extends AbstractGinModule
+public abstract class StringTokenPlaceTokenizer<P extends StringTokenPlace>
+        implements PlaceTokenizer<P>
 {
 
     @Override
-    protected void configure()
+    public final String getToken( P place )
     {
-        bind( ConfigWestView.class ).in( Singleton.class );
-        bind( ConfigWestActivity.class );
-
-        bind( ConfigMainGeneralView.class ).in( Singleton.class );
-        bind( ConfigMainMessagingView.class ).in( Singleton.class );
-        bind( ConfigMainSchedulerView.class ).in( Singleton.class );
-        bind( ConfigMainActivity.class );
+        return place.getToken();
     }
 
 }

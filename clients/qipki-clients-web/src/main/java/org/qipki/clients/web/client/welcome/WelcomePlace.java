@@ -29,7 +29,7 @@ public class WelcomePlace
         @Override
         public String getToken( WelcomePlace place )
         {
-            return null;
+            return "home";
         }
 
         @Override
