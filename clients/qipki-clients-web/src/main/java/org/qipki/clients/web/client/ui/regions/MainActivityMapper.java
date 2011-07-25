@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import org.qipki.clients.web.client.ClientFactory;
 import org.qipki.clients.web.client.config.ConfigMainActivity;
 import org.qipki.clients.web.client.config.ConfigPlace;
 import org.qipki.clients.web.client.welcome.WelcomeMainActivity;
@@ -29,24 +28,25 @@ public class MainActivityMapper
         implements ActivityMapper
 {
 
-    private final ClientFactory clientFactory;
-    private final Provider<WelcomeMainActivity> mainActivityProvider;
+    private final Provider<WelcomeMainActivity> welcomeMainActivityProvider;
+    private final Provider<ConfigMainActivity> configMainActivityProvider;
 
     @Inject
-    public MainActivityMapper( ClientFactory clientFactory, Provider<WelcomeMainActivity> mainActivityProvider )
+    public MainActivityMapper( Provider<WelcomeMainActivity> welcomeMainActivityProvider,
+                               Provider<ConfigMainActivity> configMainActivityProvider )
     {
         super();
-        this.clientFactory = clientFactory;
-        this.mainActivityProvider = mainActivityProvider;
+        this.welcomeMainActivityProvider = welcomeMainActivityProvider;
+        this.configMainActivityProvider = configMainActivityProvider;
     }
 
     @Override
     public Activity getActivity( Place place )
     {
         if ( place instanceof WelcomePlace ) {
-            return mainActivityProvider.get().withPlace( ( WelcomePlace ) place );
+            return welcomeMainActivityProvider.get().withPlace( ( WelcomePlace ) place );
         } else if ( place instanceof ConfigPlace ) {
-            return new ConfigMainActivity( ( ConfigPlace ) place, clientFactory );
+            return configMainActivityProvider.get().withPlace( ( ConfigPlace ) place );
         }
         return null;
     }

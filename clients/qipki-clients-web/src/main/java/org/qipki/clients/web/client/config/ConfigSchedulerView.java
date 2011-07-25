@@ -15,11 +15,13 @@ package org.qipki.clients.web.client.config;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.inject.Inject;
 
 public class ConfigSchedulerView
         extends Composite
 {
 
+    @Inject
     public ConfigSchedulerView()
     {
         initWidget( new Label( "Config Scheduler View" ) );

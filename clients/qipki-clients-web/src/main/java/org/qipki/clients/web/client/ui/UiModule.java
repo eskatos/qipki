@@ -26,12 +26,12 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
-import org.qipki.clients.web.client.ui.regions.EastSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.regions.EastActivityMapper;
 import org.qipki.clients.web.client.ui.regions.MainActivityMapper;
-import org.qipki.clients.web.client.ui.regions.NorthSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.regions.NorthActivityMapper;
 import static org.qipki.clients.web.client.ui.regions.RegionNames.*;
-import org.qipki.clients.web.client.ui.regions.SouthSidebarActivityMapper;
-import org.qipki.clients.web.client.ui.regions.WestSidebarActivityMapper;
+import org.qipki.clients.web.client.ui.regions.SouthActivityMapper;
+import org.qipki.clients.web.client.ui.regions.WestActivityMapper;
 import org.qipki.clients.web.client.ui.widgets.MainLayout;
 import org.qipki.clients.web.client.ui.widgets.Menu;
 import org.qipki.clients.web.client.welcome.WelcomePlace;
@@ -48,10 +48,10 @@ public class UiModule
     @Override
     protected void configure()
     {
-        bind( ActivityMapper.class ).annotatedWith( Names.named( WEST ) ).to( WestSidebarActivityMapper.class ).in( Singleton.class );
-        bind( ActivityMapper.class ).annotatedWith( Names.named( EAST ) ).to( EastSidebarActivityMapper.class ).in( Singleton.class );
-        bind( ActivityMapper.class ).annotatedWith( Names.named( NORTH ) ).to( NorthSidebarActivityMapper.class ).in( Singleton.class );
-        bind( ActivityMapper.class ).annotatedWith( Names.named( SOUTH ) ).to( SouthSidebarActivityMapper.class ).in( Singleton.class );
+        bind( ActivityMapper.class ).annotatedWith( Names.named( WEST ) ).to( WestActivityMapper.class ).in( Singleton.class );
+        bind( ActivityMapper.class ).annotatedWith( Names.named( EAST ) ).to( EastActivityMapper.class ).in( Singleton.class );
+        bind( ActivityMapper.class ).annotatedWith( Names.named( NORTH ) ).to( NorthActivityMapper.class ).in( Singleton.class );
+        bind( ActivityMapper.class ).annotatedWith( Names.named( SOUTH ) ).to( SouthActivityMapper.class ).in( Singleton.class );
         bind( ActivityMapper.class ).annotatedWith( Names.named( MAIN ) ).to( MainActivityMapper.class ).in( Singleton.class );
         bind( PlaceHistoryMapper.class ).to( PlaceHistoryMapperImpl.class ).in( Singleton.class );
         bind( Place.class ).annotatedWith( Names.named( DEFAULT_PLACE ) ).to( WelcomePlace.class ).in( Singleton.class );

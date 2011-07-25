@@ -11,31 +11,36 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.tools;
+package org.qipki.clients.web.client.config;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
 
-import org.qipki.clients.web.client.ClientFactory;
-
-public class ToolsWestSidebarActivity
+public class ConfigWestActivity
         extends AbstractActivity
 {
 
-    private final ToolsPlace place;
-    private final ClientFactory clientFactory;
+    private final ConfigWestView view;
+    private ConfigPlace place;
 
-    public ToolsWestSidebarActivity( ToolsPlace place, ClientFactory clientFactory )
+    @Inject
+    public ConfigWestActivity( ConfigWestView view )
+    {
+        this.view = view;
+    }
+
+    public ConfigWestActivity withPlace( ConfigPlace place )
     {
         this.place = place;
-        this.clientFactory = clientFactory;
+        return this;
     }
 
     @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
-        panel.setWidget( clientFactory.getToolsWestSidebarView().asWidget() );
+        panel.setWidget( view.asWidget() );
     }
 
 }

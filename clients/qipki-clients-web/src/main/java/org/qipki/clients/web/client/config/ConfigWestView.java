@@ -23,22 +23,22 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.inject.Inject;
 
-public class ConfigWestSidebarView
+public class ConfigWestView
         extends Composite
 {
 
     private static final ConfigWestSidebarUiBinder binder = GWT.create( ConfigWestSidebarUiBinder.class );
 
-    @UiTemplate( "ConfigWestSidebar.ui.xml" )
+    @UiTemplate( "ConfigWest.ui.xml" )
     interface ConfigWestSidebarUiBinder
-            extends UiBinder<Panel, ConfigWestSidebarView>
+            extends UiBinder<Panel, ConfigWestView>
     {
     }
 
     private final PlaceController placeController;
 
     @Inject
-    public ConfigWestSidebarView( PlaceController placeController )
+    public ConfigWestView( PlaceController placeController )
     {
         this.placeController = placeController;
         initWidget( binder.createAndBindUi( this ) );

@@ -18,8 +18,6 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 
-import org.qipki.clients.web.client.ClientFactory;
-import org.qipki.clients.web.client.ClientFactoryImpl;
 import org.qipki.clients.web.client.Context;
 import org.qipki.clients.web.client.ContextImpl;
 
@@ -30,7 +28,6 @@ public class InfrastructureModule
     @Override
     protected void configure()
     {
-        bind( ClientFactory.class ).to( ClientFactoryImpl.class ).in( Singleton.class );
         bind( Context.class ).to( ContextImpl.class ).in( Singleton.class );
         bind( EventBus.class ).to( SimpleEventBus.class ).in( Singleton.class );
     }

@@ -23,7 +23,13 @@ public class ConfigModule
     @Override
     protected void configure()
     {
-        bind( ConfigWestSidebarView.class ).in( Singleton.class );
+        bind( ConfigWestView.class ).in( Singleton.class );
+        bind( ConfigWestActivity.class );
+
+        bind( ConfigGeneralView.class ).in( Singleton.class );
+        bind( ConfigMessagingView.class ).in( Singleton.class );
+        bind( ConfigSchedulerView.class ).in( Singleton.class );
+        bind( ConfigMainActivity.class );
     }
 
 }

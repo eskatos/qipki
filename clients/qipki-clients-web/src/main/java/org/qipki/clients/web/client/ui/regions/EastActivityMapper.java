@@ -11,11 +11,26 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.tools;
+package org.qipki.clients.web.client.ui.regions;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
 
-public interface ToolsWestSidebarView
-        extends IsWidget
+public class EastActivityMapper
+        implements ActivityMapper
 {
+
+    @Inject
+    public EastActivityMapper()
+    {
+    }
+
+    @Override
+    public Activity getActivity( Place place )
+    {
+        return null;
+    }
+
 }

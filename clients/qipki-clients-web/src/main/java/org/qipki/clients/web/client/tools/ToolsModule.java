@@ -11,28 +11,20 @@
  * limitations under the License.
  *
  */
-package org.qipki.clients.web.client.ui.regions;
+package org.qipki.clients.web.client.tools;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
-import com.google.inject.Inject;
+import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Singleton;
 
-import org.qipki.clients.web.client.ClientFactory;
-
-public class EastSidebarActivityMapper
-        implements ActivityMapper
+public class ToolsModule
+        extends AbstractGinModule
 {
 
-    @Inject
-    public EastSidebarActivityMapper( ClientFactory factory )
-    {
-    }
-
     @Override
-    public Activity getActivity( Place place )
+    protected void configure()
     {
-        return null;
+        bind( ToolsWestView.class ).in( Singleton.class );
+        bind( ToolsWestActivity.class );
     }
 
 }

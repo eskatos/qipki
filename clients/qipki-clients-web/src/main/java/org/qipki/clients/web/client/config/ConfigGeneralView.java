@@ -15,11 +15,13 @@ package org.qipki.clients.web.client.config;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.inject.Inject;
 
 public class ConfigGeneralView
         extends Composite
 {
 
+    @Inject
     public ConfigGeneralView()
     {
         initWidget( new Label( "Config General View" ) );

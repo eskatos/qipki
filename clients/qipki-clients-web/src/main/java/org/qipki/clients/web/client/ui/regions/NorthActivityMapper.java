@@ -18,14 +18,12 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 
-import org.qipki.clients.web.client.ClientFactory;
-
-public class SouthSidebarActivityMapper
+public class NorthActivityMapper
         implements ActivityMapper
 {
 
     @Inject
-    public SouthSidebarActivityMapper( ClientFactory factory )
+    public NorthActivityMapper()
     {
     }
 

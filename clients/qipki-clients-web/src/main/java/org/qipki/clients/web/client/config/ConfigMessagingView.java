@@ -15,11 +15,13 @@ package org.qipki.clients.web.client.config;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.inject.Inject;
 
 public class ConfigMessagingView
         extends Composite
 {
 
+    @Inject
     public ConfigMessagingView()
     {
         initWidget( new Label( "Config Messaging View" ) );

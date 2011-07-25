@@ -18,21 +18,22 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.inject.Inject;
 
-public class ToolsWestSidebarViewImpl
+public class ToolsWestView
         extends Composite
-        implements ToolsWestSidebarView
 {
 
     private static final ToolsWestSidebarUiBinder binder = GWT.create( ToolsWestSidebarUiBinder.class );
 
-    @UiTemplate( "ToolsWestSidebar.ui.xml" )
+    @UiTemplate( "ToolsWest.ui.xml" )
     interface ToolsWestSidebarUiBinder
-            extends UiBinder<Panel, ToolsWestSidebarView>
+            extends UiBinder<Panel, ToolsWestView>
     {
     }
 
-    public ToolsWestSidebarViewImpl()
+    @Inject
+    public ToolsWestView()
     {
         initWidget( binder.createAndBindUi( this ) );
     }

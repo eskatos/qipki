@@ -16,31 +16,40 @@ package org.qipki.clients.web.client.config;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-
-import org.qipki.clients.web.client.ClientFactory;
+import com.google.inject.Inject;
 
 public class ConfigMainActivity
         extends AbstractActivity
 {
 
-    private final ConfigPlace place;
-    private final ClientFactory clientFactory;
+    private final ConfigGeneralView generalView;
+    private final ConfigMessagingView messagingView;
+    private final ConfigSchedulerView schedulerView;
+    private ConfigPlace place;
 
-    public ConfigMainActivity( ConfigPlace place, ClientFactory clientFactory )
+    @Inject
+    public ConfigMainActivity( ConfigGeneralView generalView, ConfigMessagingView messagingView, ConfigSchedulerView schedulerView )
+    {
+        this.generalView = generalView;
+        this.messagingView = messagingView;
+        this.schedulerView = schedulerView;
+    }
+
+    public ConfigMainActivity withPlace( ConfigPlace place )
     {
         this.place = place;
-        this.clientFactory = clientFactory;
+        return this;
     }
 
     @Override
     public void start( AcceptsOneWidget panel, EventBus eventBus )
     {
         if ( ConfigPlace.MESSAGING.equals( place.getToken() ) ) {
-            panel.setWidget( clientFactory.getConfigMessagingView().asWidget() );
+            panel.setWidget( messagingView.asWidget() );
         } else if ( ConfigPlace.SCHEDULER.equals( place.getToken() ) ) {
-            panel.setWidget( clientFactory.getConfigSchedulerView().asWidget() );
+            panel.setWidget( schedulerView.asWidget() );
         } else {
-            panel.setWidget( clientFactory.getConfigGeneralView().asWidget() );
+            panel.setWidget( generalView.asWidget() );
         }
     }
 

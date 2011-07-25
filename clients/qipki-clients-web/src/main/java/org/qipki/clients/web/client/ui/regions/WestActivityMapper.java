@@ -17,32 +17,35 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-import org.qipki.clients.web.client.ClientFactory;
 import org.qipki.clients.web.client.config.ConfigPlace;
-import org.qipki.clients.web.client.config.ConfigWestSidebarActivity;
+import org.qipki.clients.web.client.config.ConfigWestActivity;
 import org.qipki.clients.web.client.tools.ToolsPlace;
-import org.qipki.clients.web.client.tools.ToolsWestSidebarActivity;
+import org.qipki.clients.web.client.tools.ToolsWestActivity;
 
-public class WestSidebarActivityMapper
+public class WestActivityMapper
         implements ActivityMapper
 {
 
-    private final ClientFactory clientFactory;
+    private final Provider<ConfigWestActivity> configActivityProvider;
+    private final Provider<ToolsWestActivity> toolsActivityProvider;
 
     @Inject
-    public WestSidebarActivityMapper( ClientFactory clientFactory )
+    public WestActivityMapper( Provider<ConfigWestActivity> configActivityProvider,
+                               Provider<ToolsWestActivity> toolsActivityProvider )
     {
-        this.clientFactory = clientFactory;
+        this.configActivityProvider = configActivityProvider;
+        this.toolsActivityProvider = toolsActivityProvider;
     }
 
     @Override
     public Activity getActivity( Place place )
     {
         if ( place instanceof ConfigPlace ) {
-            return new ConfigWestSidebarActivity( ( ConfigPlace ) place, clientFactory );
+            return configActivityProvider.get().withPlace( ( ConfigPlace ) place );
         } else if ( place instanceof ToolsPlace ) {
-            return new ToolsWestSidebarActivity( ( ToolsPlace ) place, clientFactory );
+            return toolsActivityProvider.get().withPlace( ( ToolsPlace ) place );
         }
         return null;
     }

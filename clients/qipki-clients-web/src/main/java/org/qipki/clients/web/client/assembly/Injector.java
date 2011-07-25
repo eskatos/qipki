@@ -18,14 +18,19 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 
 import org.qipki.clients.web.client.config.ConfigModule;
+import org.qipki.clients.web.client.tools.ToolsModule;
 import org.qipki.clients.web.client.ui.UiModule;
 import org.qipki.clients.web.client.ui.widgets.MainLayout;
 import org.qipki.clients.web.client.welcome.WelcomeModule;
 
+/**
+ * TODO Apply PrivateModules once Gin 2.0? is out
+ */
 @GinModules( { InfrastructureModule.class,
                UiModule.class,
                WelcomeModule.class,
-               ConfigModule.class } )
+               ConfigModule.class,
+               ToolsModule.class } )
 public interface Injector
         extends Ginjector
 {

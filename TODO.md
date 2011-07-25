@@ -1,17 +1,21 @@
 
-# Quid ?
+# Quid?
 
 * Add @Aggregated in EscrowedKeyPair
-  * On ManyAssociation<X509> x509s() ?
+  * On ManyAssociation<X509> x509s()?
   * This would mean that when a EKP is deleted every associated X509 are deleted too
-* Replace indexing-rdf by indexing-solr ?
+* Replace indexing-rdf by indexing-solr?
+* Make each resource output html views/forms supporting crud operations?
 
 
 # Work in progress
 
+
+* (#---) WebUI
+  * Generate Javascript Overlay Types for all json resources at build time
 * (#---) Reduce LOC in ReST Resources
 * (#---) Follow state refactoring with the Qi4j data migration system
-  * Move code to qipki-main-core ?
+  * Move code to qipki-main-core?
   * Write integration tests for migrations
 * (----) Support CRLs
   * Store CRLs on the filesystem
@@ -28,15 +32,13 @@
 
 # Next steps
 
+* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable serialization
+* Write a JamonStructureReflector in tools/reflect using http://www.jamon.org/
 * Add basic profiles creation in Qi4j-test-support
 * Use @Concerns to factorize http Resources (error handling, logging etc..)
   * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
 * See if it's possible to hook in the http/java serialization and make it as generic as possible
-* WebUI
-  * Http resources produces their autonomous views with their html/js code
-  * The css must be as global as possible
-  * Provide a generic host page (html/js) that use an event bus for views collaboration
 
 
 # After that
@@ -50,8 +52,8 @@
   * UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries
 * Monitoring BoundedContext
   * See how it would be possible to reuse the JMX world in a web UI
-  * JMX client in web, in an applet, as a webstart ?
-  * JMX over websockets ?
+  * JMX client in web, in an applet, as a webstart?
+  * JMX over websockets?
 * (#---) Add some generated documentation to the build process
 * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Enhance X509Profile with domain rules and certificate template creation
