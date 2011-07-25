@@ -15,9 +15,9 @@
     <inherits name='org.fusesource.restygwt.RestyGWT' />
 
     <!-- Theming -->
-    <inherits name='com.google.gwt.user.theme.standard.Standard' />
-    <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-    <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+    <!--inherits name='com.google.gwt.user.theme.standard.Standard' /-->
+    <!--inherits name='com.google.gwt.user.theme.chrome.Chrome'/-->
+    <!--inherits name='com.google.gwt.user.theme.dark.Dark'/-->
 
     <!-- App entry point class. -->
     <entry-point class='org.qipki.clients.web.client.qipkiweb'/>

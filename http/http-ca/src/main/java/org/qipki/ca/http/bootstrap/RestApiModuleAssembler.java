@@ -84,11 +84,10 @@ public class RestApiModuleAssembler
         module.services( RestApiService.class, RestletValuesFactory.class ).
                 visibleIn( Visibility.module );
 
-        addServlets( serve( "/api/*" ).with( RestletServletServerService.class ) ).
+        addServlets( serve( "/api/*" ).
+                with( RestletServletServerService.class ) ).
                 to( module );
 
-        // Not needed, see RestletApplication
-        // addFilters( filter( "/api/*" ).through( UnitOfWorkFilterService.class ).on( REQUEST ) ).to( module );
     }
 
 }

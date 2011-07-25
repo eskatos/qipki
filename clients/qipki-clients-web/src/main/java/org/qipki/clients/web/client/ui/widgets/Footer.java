@@ -78,12 +78,12 @@ public class Footer
             } );
 
             ScrollPanel scroll = new ScrollPanel();
-            scroll.setHeight( "490px" );
+            scroll.setHeight( "364px" );
             scroll.add( about );
 
             FlowPanel panel = new FlowPanel();
             panel.setWidth( "480px" );
-            panel.setHeight( "512px" );
+            panel.setHeight( "384px" );
             panel.add( scroll );
             panel.add( close );
 

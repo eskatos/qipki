@@ -22,6 +22,7 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
+import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.AssemblyVisitorAdapter;
 import org.qi4j.bootstrap.LayerAssembly;
@@ -41,11 +42,18 @@ public class QiPkiHttpCaAssembler
 {
 
     private final Integer jmxPort;
+    private Assembler webClientAssembler;
 
     public QiPkiHttpCaAssembler( String appName, Mode appMode, String connectionString, Integer jmxPort )
     {
         super( appName, appMode, connectionString );
         this.jmxPort = jmxPort;
+    }
+
+    public QiPkiHttpCaAssembler withWebClientAssembler( Assembler assembler )
+    {
+        this.webClientAssembler = assembler;
+        return this;
     }
 
     @Override
@@ -65,11 +73,15 @@ public class QiPkiHttpCaAssembler
 
         LayerAssembly presentation = app.layer( HttpCaAssemblyNames.LAYER_PRESENTATION );
         {
-            assembleDevTestModule( presentation.module( HttpCaAssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
+            new HttpModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_HTTP ) );
 
             new RestApiModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_REST_API ) );
 
-            new HttpModuleAssembler().assemble( presentation.module( HttpCaAssemblyNames.MODULE_HTTP ) );
+            if ( webClientAssembler != null ) {
+                webClientAssembler.assemble( presentation.module( HttpCaAssemblyNames.MODULE_WEB_CLIENT ) );
+            }
+
+            assembleDevTestModule( presentation.module( HttpCaAssemblyNames.MODULE_TESTS_IN_PRESENTATION ) );
         }
 
         // Add Configuration entities to the configuration module

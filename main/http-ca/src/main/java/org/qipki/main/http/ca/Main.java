@@ -61,10 +61,12 @@ public class Main
     protected QiPkiApplication<RootContext> buildApplication( QiPkiApplicationArguments args )
     {
         FileConfigurationOverride fileConfigOverride = args.buildFileConfigOverride();
+
         QiPkiHttpCaAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, args.getMode(),
                                                                       "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true",
                                                                       args.getJmxPort() );
         appAssembler.withFileConfigurationOverride( fileConfigOverride );
+        appAssembler.withWebClientAssembler( new WebClientAssembler() );
 
         return new QiPkiHttpCa( appAssembler )
         {

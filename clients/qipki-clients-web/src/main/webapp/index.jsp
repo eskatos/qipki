@@ -4,6 +4,8 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <title>qipki:web</title>
+
+        <!-- Loading -->
         <style type="text/css">
             body {
                 overflow: hidden;
@@ -106,15 +108,80 @@
                 setTimeout("loading_remove()", 1500);
             }
         </script>
-        <!-- Consider inlining CSS to reduce the number of requested files -->
-        <link type="text/css" rel="stylesheet" href="qipkiweb.css">
-        <script type="text/javascript" src="qipkiweb/qipkiweb.nocache.js"></script>
+
+        <!-- qipki:web -->
+        <style type="text/css">
+            body {
+                font-family: sans-serif;
+                font-size: 0.7em;
+            }
+            .gwt-PopupPanelGlass {
+                background-color: rgba(0,0,0,0.2);
+            }
+            .gwt-DialogBox {
+                border: 2px solid #559;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                background-color: rgba(255,255,255,0.85);
+            }
+            .gwt-DialogBox .dialogTop {
+                -webkit-border-top-left-radius: 4px;
+                -webkit-border-top-right-radius: 4px;
+                -moz-border-radius-topleft: 4px;
+                -moz-border-radius-topright: 4px;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                background-color: #eeeefe;
+                cursor: move;
+            }
+            .gwt-DialogBox .Caption {
+                padding: 0.5em 1em;
+                border-bottom: 1px solid #559;
+            }
+            .gwt-DialogBox .dialogContent {
+                padding: 1em;
+                text-align: center;
+            }
+            .gwt-DialogBox .dialogContent div div {
+                text-align: justify;
+            }
+            .qipki-Root {
+                background-color: #dedeee;
+            }
+            .qipki-Ribbon {
+                border-bottom: 1px solid #000;
+            }
+            .qipki-Splitted {
+                border-top: 1px solid #559;
+                background-color: #eeeefe;
+            }
+            .qipki-Main {
+                background-color: #fefeff;
+            }
+            .qipki-WestSidebar {
+                border-right: 1px solid #559;
+            }
+            .qipki-EastSidebar {
+                border-left: 1px solid #559;
+            }
+            .qipki-NorthSidebar {
+                border-bottom: 1px solid #559;
+            }
+            .qipki-SouthSidebar {
+                border-top: 1px solid #559;
+            }
+            .qipki-Footer {
+                border-top: 1px solid #559;
+            }
+        </style>
         <script type="text/javascript">
             <% URL requestURL = new URL( request.getRequestURL().toString() );%>
                 var apis = {
                     'x509-ca': '<%= new URL( requestURL.getProtocol(), requestURL.getHost(), requestURL.getPort(), "/api" ).toString() %>'
                 };
         </script>
+        <script type="text/javascript" src="qipkiweb/qipkiweb.nocache.js"></script>
     </head>
     <body onload="loading_show()">
         <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>

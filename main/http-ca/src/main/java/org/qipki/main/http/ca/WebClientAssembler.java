@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,39 +11,27 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http.bootstrap;
+package org.qipki.main.http.ca;
 
-import org.qipki.ca.http.presentation.http.HttpService;
 import org.qipki.ca.http.presentation.http.RootServletService;
 
-import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import static org.qi4j.library.http.Servlets.*;
 
-public class HttpModuleAssembler
+public class WebClientAssembler
         implements Assembler
 {
 
-    /**
-     * Servlets are added with layer visibility.
-     * 
-     * @param module                the Module to assemble
-     * @throws AssemblyException    thrown if the assembler tries to do something illegal
-     */
     @Override
-    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( HttpService.class ).
-                visibleIn( Visibility.module ).
-                instantiateOnStartup();
-
-        //addServlets( serve( "/" ).
-        //        with( RootServletService.class ) ).
-        //        to( module );
+        // TODO
+        addServlets( serve( "/web" ).
+                with( RootServletService.class ) ).
+                to( module );
     }
 
 }
