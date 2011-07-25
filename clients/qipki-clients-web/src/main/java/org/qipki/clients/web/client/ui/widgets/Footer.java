@@ -14,10 +14,17 @@
 package org.qipki.clients.web.client.ui.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Footer
         extends Composite
@@ -34,6 +41,61 @@ public class Footer
     public Footer()
     {
         initWidget( binder.createAndBindUi( this ) );
+    }
+
+    @UiHandler( "aboutLabel" )
+    public void onAbout( ClickEvent click )
+    {
+        new AboutBox().show();
+    }
+
+    private static class AboutBox
+            extends DialogBox
+    {
+
+        private final ExternalResourcePanel about;
+
+        public AboutBox()
+        {
+
+            about = new ExternalResourcePanel( "about.html" );
+
+            Button close = new Button( "Close" );
+            close.addClickHandler( new ClickHandler()
+            {
+
+                @Override
+                public void onClick( ClickEvent event )
+                {
+                    AboutBox.this.hide();
+                }
+
+            } );
+
+            ScrollPanel scroll = new ScrollPanel();
+            scroll.setHeight( "490px" );
+            scroll.add( about );
+
+            FlowPanel panel = new FlowPanel();
+            panel.setWidth( "480px" );
+            panel.setHeight( "512px" );
+            panel.add( scroll );
+            panel.add( close );
+
+            setText( "About" );
+            setAnimationEnabled( true );
+            setGlassEnabled( true );
+            setWidget( panel );
+            center();
+        }
+
+        @Override
+        public void show()
+        {
+            about.reload();
+            super.show();
+        }
+
     }
 
 }

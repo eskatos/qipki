@@ -66,7 +66,7 @@ public class MainLayout
 
     private void firstLayout()
     {
-        mainPanel.setAlwaysShowScrollBars( true );
+        // mainPanel.setAlwaysShowScrollBars( true );
         splittedLayout.setWidgetHorizontalPosition( mainPanel, Alignment.STRETCH );
         splittedLayout.setWidgetVerticalPosition( mainPanel, Alignment.STRETCH );
         splittedLayout.setWidgetLeftWidth( westSidebarPanel, -HORIZ_SIDEBAR_WIDTH, Unit.PX, HORIZ_SIDEBAR_WIDTH, Unit.PX );

@@ -14,23 +14,22 @@
 package org.qipki.clients.web.client.welcome;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
 
-import org.qipki.clients.web.client.Context;
-import org.qipki.clients.web.client.Context.API;
+import org.qipki.clients.web.client.ui.widgets.ExternalResourcePanel;
 
 public class WelcomeMainView
         extends Composite
 {
 
-    private final Context context;
+    private final ExternalResourcePanel welcome;
 
     @Inject
-    public WelcomeMainView( Context context )
+    public WelcomeMainView()
     {
-        this.context = context;
-        initWidget( new Label( "This is WelcomeView! " + context.apiUrl( API.X509_CA ) ) );
+        welcome = new ExternalResourcePanel( "welcome.html" );
+        initWidget( welcome );
+        welcome.reload();
     }
 
 }

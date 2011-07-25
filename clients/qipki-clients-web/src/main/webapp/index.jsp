@@ -56,6 +56,42 @@
                     }
                 }, opts.delay || 10)
             }
+            function loading_remove() {
+                var loading_top = document.getElementById('loading_top');
+                if (loading_top != null) {
+                    var loading_bottom = document.getElementById('loading_bottom');
+                    if (loading_top.parentNode!=null)
+                        loading_top.parentNode.removeChild(loading_top); 
+                    if (loading_bottom.parentNode!=null)
+                        loading_bottom.parentNode.removeChild(loading_bottom); 
+                }
+            }
+            function loading_hide() {
+                var loading_top = document.getElementById('loading_top');
+                if (loading_top != null) {
+                    var loading_bottom = document.getElementById('loading_bottom');
+                    if (loading_top.parentNode != null && loading_bottom.parentNode != null) {
+                        var delta_func = function( progress ) { 
+                            return Math.pow( progress, 4 ) 
+                        };
+                        var step_func = function( delta ) {
+                            if (loading_top.parentNode != null ) {
+                                loading_top.style.top = "-"+(window.innerHeight/2)*delta + "px";
+                            }
+                            if (loading_bottom.parentNode != null) {
+                                loading_bottom.style.bottom = "-"+(window.innerHeight/2)*delta + "px";
+                            }
+                        };
+                        animate({
+                            delay: 10,
+                            duration: 500,
+                            delta: delta_func,
+                            step: step_func,
+                            hide: loading_remove
+                        })
+                    }
+                }
+            }
             function loading_show() {
                 var body = document.getElementsByTagName( 'body' )[0];
                 var top = document.createElement('div');
@@ -67,30 +103,7 @@
                 top.appendChild(logo);
                 body.appendChild(top);
                 body.appendChild(bottom);
-            }
-            function loading_hide() {
-                var loading_top = document.getElementById('loading_top');
-                if (loading_top != null) {
-                    var loading_bottom = document.getElementById('loading_bottom');
-                    var delta_func = function( progress ) { 
-                        return Math.pow( progress, 4 ) 
-                    };
-                    var step_func = function( delta ) {
-                        loading_top.style.top = "-"+(window.innerHeight/2)*delta + "px";
-                        loading_bottom.style.bottom = "-"+(window.innerHeight/2)*delta + "px";
-                    };
-                    var hide_func = function() { 
-                        loading_top.parentNode.removeChild(loading_top); 
-                        loading_bottom.parentNode.removeChild(loading_bottom); 
-                    };
-                    animate({
-                        delay: 10,
-                        duration: 500,
-                        delta: delta_func,
-                        step: step_func,
-                        hide: hide_func
-                    })
-                }
+                setTimeout("loading_remove()", 1500);
             }
         </script>
         <!-- Consider inlining CSS to reduce the number of requested files -->

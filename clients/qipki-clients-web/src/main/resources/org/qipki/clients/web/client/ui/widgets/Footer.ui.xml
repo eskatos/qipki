@@ -15,7 +15,7 @@
     </ui:style>
     
     <g:FlowPanel addStyleNames="{style.qipki-FooterView}">
-        <g:Label text="qipki:web" addStyleNames="{style.qipki-FooterViewContent}" />
+        <g:Button ui:field="aboutLabel" text="qipki:web" styleName="{style.qipki-FooterViewContent}" />
     </g:FlowPanel>
     
 </ui:UiBinder>
