@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>org.codeartisans.qipki</groupId>
-    <artifactId>qipki</artifactId>
+    <artifactId>qipki-parent</artifactId>
     <version>1.0-alpha8-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
@@ -56,28 +56,28 @@
     <modules>
 
         <!-- Tools -->
-        <module>tools</module>
+        <module>tools-reflect</module>
 
         <!-- Common building blocks -->
         <module>crypto</module>
         <module>core</module>
         <module>commons</module>
 
-        <!-- Testing support -->
+        <!-- Support -->
         <module>testsupport</module>
+        <module>mainsupport</module>
 
-        <!-- Domain -->
+        <!-- CA -->
         <module>ca</module>
+        <module>ca-http</module>
+        <module>ca-http-main</module>
+        <module>ca-http-client</module>
+        
+        <!-- RA -->
         <!--module>ra</module-->
 
-        <!-- HTTP Presentation -->
-        <module>http</module>
-
         <!-- Clients -->
-        <module>clients</module>
-
-	<!-- Mains -->
-        <module>main</module>
+        <module>web-client</module>
 
     </modules>
 

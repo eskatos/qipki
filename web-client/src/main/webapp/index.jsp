@@ -115,6 +115,36 @@
                 font-family: sans-serif;
                 font-size: 0.7em;
             }
+            .qipki-Root {
+                background-color: #dedeee;
+            }
+            .qipki-Ribbon {
+                border-bottom: 1px solid #000;
+            }
+            .qipki-Splitted {
+                border-top: 1px solid #559;
+                background-color: #eeeefe;
+            }
+            .qipki-Main {
+                background-color: #fefeff;
+            }
+            .qipki-WestSidebar {
+                border-right: 1px solid #559;
+            }
+            .qipki-EastSidebar {
+                border-left: 1px solid #559;
+            }
+            .qipki-NorthSidebar {
+                border-bottom: 1px solid #559;
+            }
+            .qipki-SouthSidebar {
+                border-top: 1px solid #559;
+            }
+            .qipki-Footer {
+                border-top: 1px solid #559;
+            }
+            /* ################ DIALOG BOX BEGIN ################ */
+            /* TODO Create a UiBinder widget for the DialogBox */
             .gwt-PopupPanelGlass {
                 background-color: rgba(0,0,0,0.2);
             }
@@ -146,34 +176,7 @@
             .gwt-DialogBox .dialogContent div div {
                 text-align: justify;
             }
-            .qipki-Root {
-                background-color: #dedeee;
-            }
-            .qipki-Ribbon {
-                border-bottom: 1px solid #000;
-            }
-            .qipki-Splitted {
-                border-top: 1px solid #559;
-                background-color: #eeeefe;
-            }
-            .qipki-Main {
-                background-color: #fefeff;
-            }
-            .qipki-WestSidebar {
-                border-right: 1px solid #559;
-            }
-            .qipki-EastSidebar {
-                border-left: 1px solid #559;
-            }
-            .qipki-NorthSidebar {
-                border-bottom: 1px solid #559;
-            }
-            .qipki-SouthSidebar {
-                border-top: 1px solid #559;
-            }
-            .qipki-Footer {
-                border-top: 1px solid #559;
-            }
+            /* ################ DIALOG BOX END ################ */
         </style>
         <script type="text/javascript">
             <% URL requestURL = new URL( request.getRequestURL().toString() );%>

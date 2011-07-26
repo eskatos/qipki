@@ -3,18 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeartisans.qipki.qipki-http</groupId>
-        <artifactId>qipki-http-parent</artifactId>
+        <groupId>org.codeartisans.qipki</groupId>
+        <artifactId>qipki-parent</artifactId>
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-http-ca</artifactId>
+    <artifactId>qipki-ca-http</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
 
+        <!-- Project Dependencies -->
         <dependency>
             <groupId>org.codeartisans.qipki</groupId>
             <artifactId>qipki-ca</artifactId>
@@ -68,7 +69,7 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- test -->
+        <!-- Tests -->
         <dependency>
             <groupId>org.codeartisans.qipki</groupId>
             <artifactId>qipki-testsupport</artifactId>
@@ -76,15 +77,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codeartisans.qipki.qipki-clients</groupId>
-            <artifactId>qipki-clients-http-ca</artifactId>
+            <groupId>org.codeartisans.qipki</groupId>
+            <artifactId>qipki-ca-http-client</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.java-sql-generator.implementation</groupId>
-            <artifactId>java-sql-generator-implementation</artifactId>
-            <version>0.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

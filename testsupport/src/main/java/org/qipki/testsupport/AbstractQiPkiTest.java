@@ -17,7 +17,7 @@ import org.junit.Before;
 
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.AbstractQi4jTest;
+import org.qi4j.core.testsupport.AbstractQi4jTest;
 
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.commons.bootstrap.RestValuesModuleAssembler;

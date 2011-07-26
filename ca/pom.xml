@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>org.codeartisans.qipki</groupId>
-        <artifactId>qipki</artifactId>
+        <artifactId>qipki-parent</artifactId>
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
@@ -15,6 +15,7 @@
 
     <dependencies>
 
+        <!-- Project Dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>qipki-core</artifactId>
@@ -26,6 +27,7 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- Libraries -->
         <dependency>
             <groupId>org.qi4j.library</groupId>
             <artifactId>org.qi4j.library.fileconfig</artifactId>
@@ -36,11 +38,18 @@
             <artifactId>org.qi4j.library.scheduler</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
-
         <dependency>
             <groupId>org.qi4j.extension</groupId>
             <artifactId>org.qi4j.extension.migration</artifactId>
             <version>${version.qi4j}</version>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.codeartisans.qipki</groupId>
+            <artifactId>qipki-testsupport</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeartisans.qipki.qipki-main</groupId>
-        <artifactId>qipki-main-parent</artifactId>
+        <groupId>org.codeartisans.qipki</groupId>
+        <artifactId>qipki-parent</artifactId>
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-main-http-ca</artifactId>
+    <artifactId>qipki-ca-http-main</artifactId>
 
     <name>${project.artifactId}</name>
     <url>http://qipki.org</url>
@@ -18,7 +18,7 @@
     <properties>
         <main.class>org.qipki.main.http.ca.Main</main.class>
         <wrapped.main.class>org.qipki.main.http.ca.WrappedMain</wrapped.main.class>
-        <dist.name>qipki-http-ca</dist.name>
+        <dist.name>qipki-ca-http</dist.name>
     </properties>
 
     <build>
@@ -54,25 +54,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Prepare /var/www -->
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <id>unpack-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/generated-sources/war</outputDirectory>
-                            <includeTypes>war</includeTypes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Application assembly -->
             <plugin>
                 <groupId>org.codeartisans</groupId>
@@ -106,7 +87,7 @@
                 <version>2.2.1</version>
                 <executions>
                     <execution>
-                        <id>qipki-http-ca-assemblies</id>
+                        <id>qipki-ca-http-assemblies</id>
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -128,7 +109,7 @@
                 <version>1.2</version>
                 <executions>
                     <execution>
-                        <id>exec-qipki-http-ca</id>
+                        <id>exec-qipki-ca-http</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -153,24 +134,16 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-main-core</artifactId>
+            <artifactId>qipki-mainsupport</artifactId>
             <version>${project.version}</version>
         </dependency>
     
         <dependency>
-            <groupId>org.codeartisans.qipki.qipki-http</groupId>
-            <artifactId>qipki-http-ca</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-ca-http</artifactId>
             <version>${project.version}</version>
         </dependency>
         
-        <dependency>
-            <groupId>org.codeartisans.qipki.qipki-clients</groupId>
-            <artifactId>qipki-clients-web</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
 </project>

@@ -3,11 +3,11 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>qipki-clients-parent</artifactId>
-        <groupId>org.codeartisans.qipki.qipki-clients</groupId>
+        <artifactId>qipki-parent</artifactId>
+        <groupId>org.codeartisans.qipki</groupId>
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
-    <artifactId>qipki-clients-web</artifactId>
+    <artifactId>qipki-web-client</artifactId>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
 
@@ -98,7 +98,7 @@
         
         <!-- For GwtJso plugin -->
         <dependency>
-            <groupId>org.codeartisans.qipki</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>qipki-commons</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>

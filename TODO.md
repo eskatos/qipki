@@ -4,49 +4,56 @@
 * Add @Aggregated in EscrowedKeyPair
   * On ManyAssociation<X509> x509s()?
   * This would mean that when a EKP is deleted every associated X509 are deleted too
+  * Check state in the delete interaction method instead?
 * Replace indexing-rdf by indexing-solr?
-* Make each resource output html views/forms supporting crud operations?
 
 
 # Work in progress
 
 
-* (#---) WebUI
-  * Generate Javascript Overlay Types for all json resources at build time
-* (#---) Reduce LOC in ReST Resources
-* (#---) Follow state refactoring with the Qi4j data migration system
+* (----) Follow state refactoring with the Qi4j data migration system
+  * Add basic profiles creation in Qi4j-test-support
+  * Write a complete test scenario from the embedder point of view
   * Move code to qipki-main-core?
   * Write integration tests for migrations
+* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
+  * Store EntityStore on the filesystem
+  * Store KeyStores on the filesystem
 * (----) Support CRLs
   * Store CRLs on the filesystem
-  * Use the task scheudler to generate CRLs so this is not done in request threads
-  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
-    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
+  * Use the task scheduler to generate CRLs so this is not done in request threads
   * Add CRL Endpoint in issued X509Certificates
     * Full url given by X509Profile
     * If no url on profile creation, create it with a sensible defaut, allow edition too
-    * Clients could use the uri builder to easily create the default one 
-* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Store EntityStore on the Filesystem
-  * Store KeyStores on the Filesystem
+    * Http presentation layer could provide the default one easily
+  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
+    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
 
-# Next steps
 
-* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable serialization
-* Write a JamonStructureReflector in tools/reflect using http://www.jamon.org/
-* Add basic profiles creation in Qi4j-test-support
-* Use @Concerns to factorize http Resources (error handling, logging etc..)
-  * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
-  * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
-* See if it's possible to hook in the http/java serialization and make it as generic as possible
+# Next steps - That would lead to a tiny 1.0
 
+* (----) Simplify assembly
+  * Factor out infrastructure runtimes and assembly in a dedicated module
+  * Depend on that module for tests and distribution packaging
+  * QUID Make assembly scenarii modules?
+* (----) Add shiro for handling roles/permissions
+  * Model with one root Role and Permissions, other Roles will emerge themselves later
+  * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
+  * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
+* (#---) WebUI
+  * Generate Javascript Overlay Types for all json resources at build time
+* (----) Enhance Netscape extensions handling
+  * In X509DetailValue : all of them
+  * Automatically filled by CAs : Netscape CA Revocation URL
 
 # After that
 
-* Add shiro for handling roles/permissions
-  * Model with one root Role and Permissions, other Roles will emerge themselves later
-  * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
-  * See if the security can be applied to domain layer and it's behavior configured in representation layer
+* Reduce LOC in ReST Resources
+  * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
+  * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
+  * Use @Concerns to factorize http Resources (error handling, logging etc..)
+* Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using http://www.jamon.org/
+* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable serialization
 * Implement http cache handling
   * @Cacheable Concern using a payload store
   * UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries
@@ -54,6 +61,8 @@
   * See how it would be possible to reuse the JMX world in a web UI
   * JMX client in web, in an applet, as a webstart?
   * JMX over websockets?
+  * http://www.oracle.com/technetwork/java/javase/jnlp-136707.html
+* Domain auditing bounded context filled by @SideEffects
 * (#---) Add some generated documentation to the build process
 * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Enhance X509Profile with domain rules and certificate template creation
@@ -66,9 +75,6 @@
   * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
 * Add tool http resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
   * With this we can write unit tests for certificate parsing using a bunch of external certificates
-* Enhance Netscape extensions handling
-  * In X509DetailValue : all of them
-  * Automatically filled by CAs : Netscape CA Revocation URL
 * Change the way key pairs are protected
   * Add PKCS#11 KeyStore support
   * Add encipered filesystem based storage
@@ -77,5 +83,4 @@
     * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
   * A CAProfile allows, or not, certificate issuance for known escrowed keypairs
   * Add a warning if a CA signs a PKCS#10 
-* Add a domain auditing bounded context filled by @SideEffects
 * Wrap client api as a small Qi4j Application usable without Qi4j imports
