@@ -69,6 +69,7 @@
 
         <!-- CA -->
         <module>ca</module>
+        <module>ca-testsupport</module>
         <module>ca-http</module>
         <module>ca-http-main</module>
         <module>ca-http-client</module>
