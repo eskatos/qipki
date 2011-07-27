@@ -13,15 +13,13 @@
  */
 package org.qipki.ca.http.utils;
 
-import java.io.File;
-
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
+import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationHttpCa
         extends AbstractQiPkiApplication
@@ -40,11 +38,7 @@ public class QiPkiTestApplicationHttpCa
                 devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        }.withFileConfigurationOverride( new FileConfigurationOverride().withConfiguration( new File( "target/" + testCodeName + "-qi4j-configuration" ) ).
-                withData( new File( "target/" + testCodeName + "-qi4j-data" ) ).
-                withCache( new File( "target/" + testCodeName + "-qi4j-cache" ) ).
-                withTemporary( new File( "target/" + testCodeName + "-qi4j-temporary" ) ).
-                withLog( new File( "target/" + testCodeName + "-qi4j-log" ) ) ) );
+        }.withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ) );
     }
 
 }

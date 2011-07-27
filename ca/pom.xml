@@ -46,8 +46,8 @@
 
         <!-- Tests -->
         <dependency>
-            <groupId>org.codeartisans.qipki</groupId>
-            <artifactId>qipki-testsupport</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-ca-testsupport</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

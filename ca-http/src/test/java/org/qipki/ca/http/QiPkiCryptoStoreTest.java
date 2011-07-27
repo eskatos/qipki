@@ -78,8 +78,8 @@ public class QiPkiCryptoStoreTest
         addAcceptJsonHeader( post );
         String ksName = "Another KeyStore";
         CryptoStoreFactoryParamsValue params = paramsFactory.createCryptoStoreFactoryParams( ksName,
-                                                                                          KeyStoreType.JKS,
-                                                                                          "changeit".toCharArray() );
+                                                                                             KeyStoreType.JKS,
+                                                                                             "changeit".toCharArray() );
         post.setEntity( new StringEntity( params.toJSON() ) );
         String ksJson = httpClient.execute( post, strResponseHandler );
         LOGGER.info( "testCreateKeyStore JSON: " + ksJson );

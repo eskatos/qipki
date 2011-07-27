@@ -10,9 +10,10 @@
 
 # Work in progress
 
-
 * (----) Follow state refactoring with the Qi4j data migration system
-  * Add basic profiles creation in Qi4j-test-support
+  * Simplify build to get more agility
+  * Factor ca test code out in ca-testsupport
+  * Add basic profiles creation in ca-testsupport
   * Write a complete test scenario from the embedder point of view
   * Move code to qipki-main-core?
   * Write integration tests for migrations
