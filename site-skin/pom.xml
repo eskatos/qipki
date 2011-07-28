@@ -8,20 +8,14 @@
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-ca-testsupport</artifactId>
+    <artifactId>qipki-site-skin</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- Tests -->
-        <dependency>
-            <groupId>org.codeartisans.qipki</groupId>
-            <artifactId>qipki-testsupport</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
+        
     </dependencies>
 
 </project>

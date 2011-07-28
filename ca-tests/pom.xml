@@ -8,7 +8,7 @@
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-ca-testsupport</artifactId>
+    <artifactId>qipki-ca-tests</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
@@ -20,6 +20,7 @@
             <groupId>org.codeartisans.qipki</groupId>
             <artifactId>qipki-testsupport</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

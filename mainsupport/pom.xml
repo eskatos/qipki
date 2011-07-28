@@ -6,7 +6,7 @@
 
   <parent>
     <groupId>org.codeartisans.qipki</groupId>
-    <artifactId>qipki-parent</artifactId>
+    <artifactId>qipki</artifactId>
     <version>1.0-alpha8-SNAPSHOT</version>
   </parent>
 

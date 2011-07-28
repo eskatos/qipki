@@ -43,12 +43,22 @@
   * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
 * (#---) WebUI
   * Generate Javascript Overlay Types for all json resources at build time
+  * Find a way to write an eventbus bridge crossing iframes
+  * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
 * (----) Enhance Netscape extensions handling
   * In X509DetailValue : all of them
   * Automatically filled by CAs : Netscape CA Revocation URL
+* (----) Generate development site and deploy it to github pages
+  * Write a working basic site template
+  * What about aggregated reports?
+  * Add gwt compiler report, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/compiler-report.html
+  * Style the site
+  * Write some pages
+  * Deploy to GH Pages
 
 # After that
 
+* Write a build script for common development tasks
 * Reduce LOC in ReST Resources
   * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
@@ -59,6 +69,8 @@
   * @Cacheable Concern using a payload store
   * UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries
 * Monitoring BoundedContext
+  * Integrate JavaMelody with Qi4j using a @Concern http://code.google.com/p/javamelody/
+  * What about integrating GwtMeasure with JavaMelody? http://code.google.com/p/gwt-measure/
   * See how it would be possible to reuse the JMX world in a web UI
   * JMX client in web, in an applet, as a webstart?
   * JMX over websockets?

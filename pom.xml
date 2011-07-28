@@ -9,13 +9,13 @@
     </parent>
 
     <groupId>org.codeartisans.qipki</groupId>
-    <artifactId>qipki-parent</artifactId>
+    <artifactId>qipki</artifactId>
     <version>1.0-alpha8-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
     <description>${project.artifactId}</description>
     <packaging>pom</packaging>
-    <url>http://qipki.org</url>
+    <url>http://eskatos.github.com/qipki</url>
     <inceptionYear>2010</inceptionYear>
 
     <licenses>
@@ -25,6 +25,11 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/eskatos/qipki/issues/</url>
+    </issueManagement>   
 
     <developers>
         <developer>
@@ -35,8 +40,8 @@
     </developers>
 
     <scm>
-        <url>scm:git:git@github.com:eskatos/qipki.git</url>
-        <connection>scm:git:git@github.com:eskatos/qipki.git</connection>
+        <url>https://github.com/eskatos/qipki</url>
+        <connection>scm:git:git://github.com/eskatos/qipki.git</connection>
         <developerConnection>scm:git:git@github.com:eskatos/qipki.git</developerConnection>
     </scm>
 
@@ -56,6 +61,7 @@
     <modules>
 
         <!-- Tools -->
+        <module>site-skin</module>
         <module>tools-reflect</module>
 
         <!-- Common building blocks -->
@@ -69,10 +75,11 @@
 
         <!-- CA -->
         <module>ca</module>
-        <module>ca-testsupport</module>
         <module>ca-http</module>
         <module>ca-http-main</module>
         <module>ca-http-client</module>
+        <module>ca-testsupport</module>
+        <module>ca-tests</module>
         
         <!-- RA -->
         <!--module>ra</module-->
@@ -83,17 +90,81 @@
     </modules>
 
     <build>
-
         <pluginManagement>
             <plugins>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>2.9</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.0-beta-3</version>
+                    <configuration>
+                        <!-- Root and Child Modules Site Configuration -->
+                        <siteDirectory>${project.parent.basedir}/src/site</siteDirectory>
+                        <templateDirectory>${project.parent.basedir}/src/site</templateDirectory>
+                        <template>site.vm</template>
+                        <locales>en</locales>
+                        <reportPlugins>
+                            <plugin>
+                                <artifactId>maven-project-info-reports-plugin</artifactId>
+                                <configuration>
+                                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                                </configuration>
+                                <reports>
+                                    <report>dependencies</report>
+                                </reports>
+                            </plugin>
+                        </reportPlugins>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
-
+        <plugins>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <!-- Root Module Site Configuration -->
+                    <siteDirectory>${project.basedir}/src/site</siteDirectory>
+                    <templateDirectory>${project.basedir}/src/site</templateDirectory>
+                    <reportPlugins>
+                        <plugin>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <reports>
+                                <report>scm</report>
+                                <report>issue-tracking</report>
+                                <report>license</report>
+                                    <!--report>project-team</report>
+                                    <report>mailing-list</report>
+                                    <report>cim</report-->
+                            </reports>
+                        </plugin>                        
+                    </reportPlugins>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attach-descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
+    
+    <distributionManagement>
+        <site>
+            <id>${project.artifactId}-site-dist</id>
+            <name>${project.artifactId}-site-dist</name>
+            <url>file:///tmp/${project.artifactId}-site-dist/</url>
+        </site>
+    </distributionManagement>
 
     <repositories>
 
@@ -110,7 +181,7 @@
             <url>http://maven.restlet.org</url>
         </repository>
 
-        <!-- RDF -->
+        <!-- RDF Indexing -->
         <repository>
             <id>openrdf-repository</id>
             <name>Public online OpenRDF repository</name>

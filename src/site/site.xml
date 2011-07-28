@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.1.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.1.0 http://maven.apache.org/xsd/decoration-1.1.0.xsd"
+         name="QiPki">
+    <skin>
+        <!--groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-default-skin</artifactId>
+        <version>1.0</version-->
+        <groupId>${project.groupId}</groupId>
+        <artifactId>qipki-site-skin</artifactId>
+        <version>${project.version}</version>
+    </skin>
+    <body>
+        <links>
+            <item name="Github Project" href="https://github.com/eskatos/qipki/"/>
+            <item name="Qi4j" href="http://qi4j.org"/>
+        </links>
+        <menu name="QiPki" inherit="top">
+            <item name="Overview" href="index.html" />
+            <item name="Learn More" href="learn.html" />
+            <item name="Download" href="download.html" />
+            <item name="Get Started" href="get_started.html" />
+            <item name="Under The Hood" href="dev/index.html" collapse="true">
+                <item name="Source Code" href="dev/source.html" />
+                <item name="Big Picture" href="dev/big_picture.html"/>
+                <item name="Embedder's Guide" href="dev/embedding.html"/>
+            </item>
+        </menu>
+        <menu name="Generated Reports" ref="reports" inherit="bottom" />
+        <menu name="Parent Module" ref="parent" inherit="bottom" />
+        <menu name="Sub Modules" ref="modules" inherit="bottom" />
+    </body>
+</project>
