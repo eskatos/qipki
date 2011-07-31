@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http;
+package org.qipki.ca.tests.http;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -23,7 +23,6 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.EntityTestAssembler;
 
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
 import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
 import org.qipki.client.ca.api.QiPkiHttpCaClient;
@@ -48,6 +47,7 @@ public class QiPkiHttpCaClientTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
+        super.assemble( module );
         new QiPkiCaClientAssembler().assemble( module );
         ModuleAssembly config = module.layer().module( "config" );
         new EntityTestAssembler( Visibility.layer ).assemble( config );

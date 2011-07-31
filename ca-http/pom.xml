@@ -72,26 +72,8 @@
         <!-- Tests -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-ca-testsupport</artifactId>
+            <artifactId>qipki-testsupport</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codeartisans.qipki</groupId>
-            <artifactId>qipki-ca-http-client</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>${version.derby}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>${version.derby}</version>
             <scope>test</scope>
         </dependency>
 

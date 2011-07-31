@@ -11,13 +11,14 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http.utils;
+package org.qipki.ca.tests.http;
 
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
+import org.qipki.ca.tests.QiPkiCaFixtures;
 import org.qipki.core.AbstractQiPkiApplication;
 import org.qipki.testsupport.QiPkiTestSupport;
 

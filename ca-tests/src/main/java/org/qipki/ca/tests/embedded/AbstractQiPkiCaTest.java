@@ -11,11 +11,11 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.testsupport;
+package org.qipki.ca.tests.embedded;
 
-import org.qipki.testsupport.QiPkiTestSupport;
+import org.qipki.testsupport.AbstractQiPkiTest;
 
-public class QiPkiCaTestSupport
-        extends QiPkiTestSupport
+public abstract class AbstractQiPkiCaTest
+        extends AbstractQiPkiTest
 {
 }

@@ -15,11 +15,33 @@
 
     <dependencies>
 
-        <!-- Tests -->
         <dependency>
-            <groupId>org.codeartisans.qipki</groupId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-ca-http</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>qipki-ca-http-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>qipki-testsupport</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${version.derby}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${version.derby}</version>
             <scope>test</scope>
         </dependency>
 

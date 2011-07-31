@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http;
+package org.qipki.ca.tests.http;
 
 import java.io.IOException;
 
@@ -23,7 +23,6 @@ import org.junit.Before;
 
 import org.qipki.commons.rest.values.CaApiURIsValue;
 import org.qipki.core.QiPkiApplication;
-import org.qipki.crypto.io.CryptIO;
 import org.qipki.testsupport.AbstractQiPkiHttpTest;
 
 @SuppressWarnings( "ProtectedField" )
@@ -47,7 +46,6 @@ public abstract class AbstractQiPkiHttpCaTest
     public void before()
             throws IOException
     {
-        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
         HttpGet get = new HttpGet( "/api" );
         addAcceptJsonHeader( get );
         String jsonApi = httpClient.execute( new HttpHost( LOCALHOST, DEFAULT_PORT ), get, strResponseHandler );

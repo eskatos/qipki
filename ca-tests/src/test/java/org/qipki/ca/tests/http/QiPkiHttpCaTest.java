@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http;
+package org.qipki.ca.tests.http;
 
 import info.aduna.io.FileUtil;
 
@@ -39,7 +39,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import org.qi4j.api.value.ValueBuilder;
 
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.commons.rest.values.params.CAFactoryParamsValue;

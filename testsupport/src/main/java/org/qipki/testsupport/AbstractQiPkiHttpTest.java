@@ -32,6 +32,19 @@ import org.apache.http.util.EntityUtils;
 
 import org.junit.Before;
 
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+
+import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
+import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
+import org.qipki.commons.crypto.services.CryptoValuesFactory;
+import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
+import org.qipki.commons.rest.values.params.ParamsFactory;
+import org.qipki.crypto.asymetric.AsymetricGenerator;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+import org.qipki.crypto.io.CryptIO;
+import org.qipki.crypto.x509.X509Generator;
+
 import org.restlet.data.MediaType;
 
 /**
@@ -46,14 +59,35 @@ public abstract class AbstractQiPkiHttpTest
 
     protected static final String LOCALHOST = "localhost";
     protected static final int DEFAULT_PORT = 8443;
+    protected CryptIO cryptio;
+    protected X509Generator x509Generator;
+    protected AsymetricGenerator asymGenerator;
+    protected CryptoValuesFactory cryptoValuesFactory;
+    protected ParamsFactory paramsFactory;
+    protected X509ExtensionsValueFactory x509ExtValuesFactory;
     protected ResponseHandler<String> strResponseHandler;
     protected ResponseHandler<byte[]> bytesResponseHandler;
     protected DefaultHttpClient httpClient;
+
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        new CryptoEngineModuleAssembler().assemble( module );
+        new CryptoValuesModuleAssembler().assemble( module );
+        new RestValuesModuleAssembler().assemble( module );
+    }
 
     @Before
     public void qiPkiHttpBefore()
             throws Exception
     {
+        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
+        x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
+        asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
+        paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
+        cryptoValuesFactory = serviceLocator.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
+        x509ExtValuesFactory = serviceLocator.<X509ExtensionsValueFactory>findService( X509ExtensionsValueFactory.class ).get();
         strResponseHandler = new BasicResponseHandler();
         bytesResponseHandler = new ResponseHandler<byte[]>()
         {
@@ -71,7 +105,6 @@ public abstract class AbstractQiPkiHttpTest
         registry.register( new Scheme( "http", PlainSocketFactory.getSocketFactory(), DEFAULT_PORT ) );
         ClientConnectionManager cm = new ThreadSafeClientConnManager( params, registry );
         httpClient = new DefaultHttpClient( cm, params );
-
     }
 
     protected final void addAcceptJsonHeader( HttpMessage httpMessage )

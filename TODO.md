@@ -10,10 +10,8 @@
 
 # Work in progress
 
-* (----) Follow state refactoring with the Qi4j data migration system
-  * Simplify build to get more agility
-  * Factor ca test code out in ca-testsupport
-  * Add basic profiles creation in ca-testsupport
+* (#---) Follow state refactoring with the Qi4j data migration system
+  * Add basic profiles creation in ca-tests
   * Write a complete test scenario from the embedder point of view
   * Move code to qipki-main-core?
   * Write integration tests for migrations
@@ -33,6 +31,7 @@
 
 # Next steps - That would lead to a tiny 1.0
 
+* (----) Fix http service configuration handling up to qipki-ca-http-main
 * (----) Simplify assembly
   * Factor out infrastructure runtimes and assembly in a dedicated module
   * Depend on that module for tests and distribution packaging

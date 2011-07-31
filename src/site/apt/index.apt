@@ -1,14 +1,30 @@
 QiPki
 
-  Welcome to the Index Project, we hope you enjoy your time
-  on this project site.  We've tried to assemble some 
-  great user documentation and developer information, and 
-  we're really excited that you've taken the time to visit
-  this site.
+-----------------------------------------------------------------------------------------
 
-What is Index Project
+    An engineer, a chemist, and a standards designer are stranded on a desert
+    island with absolutely nothing on it.  One of them finds a can of spam washed
+    up by the waves.
 
-  Well, it's easy enough to explain.   This sample project is 
-  a sample of a project with a Maven-generated site from
-  Maven: The Definitive	Guide.   A dedicated team of volunteers
-  help maintain this sample site, and so on and so forth.
+    The engineer says "Taking the strength of the seams into account, we can 
+    calculate that bashing it against a rock with a given force will open it up
+    without destroying the contents".
+
+    The chemist says "Taking the type of metal the can is made of into account,
+    we can calculate that further immersion in salt water will corrode it enough
+    to allow it to be easily opened after a day".
+
+    The standards designer gives the other two a condescending look, gazes into
+    the middle distance, and begins "Assuming we have an electric can opener...".
+
+                                                         X.509 Style Guide - October 2000
+                                                 Peter Gutmann, pgut001@cs.auckland.ac.nz
+                                 http://www.cs.auckland.ac.nz/~pgut001/pubs/x509guide.txt
+
+-----------------------------------------------------------------------------------------
+
+    QiPKI is a simple X.509 PKI implemented in Java using Qi4j.
+
+    Each component is built as a library and has a http service as restfull as possible using json format for representations.
+
+    This is Work In Progress, don't expect something with easy setup and comprehensive documentation for now.

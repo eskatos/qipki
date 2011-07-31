@@ -11,8 +11,9 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http;
+package org.qipki.ca.tests.http;
 
+import org.qipki.ca.tests.QiPkiCaFixtures;
 import java.io.IOException;
 
 import org.apache.http.client.methods.HttpGet;
@@ -23,8 +24,6 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.qipki.ca.http.utils.QiPkiCaFixtures;
-import org.qipki.ca.http.utils.QiPkiTestApplicationHttpCa;
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;

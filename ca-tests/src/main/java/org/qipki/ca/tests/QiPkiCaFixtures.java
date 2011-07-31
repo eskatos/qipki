@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.http.utils;
+package org.qipki.ca.tests;
 
 import java.security.KeyStore;
 
