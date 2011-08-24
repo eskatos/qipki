@@ -43,10 +43,13 @@ you're already using the embedded API or want to show your support, use the widg
 ### master
 
 * Distribution packaged as a unix daemon in qipki-main-http-ca
+* Added X509Context.renew( PKCS10CertificationRequest pkcs10 ) interaction
+* Added basic profiles creation scenarii in X509ProfileFactory and X509ProfileListContext
 * QiPkiHttpCa can now be told what base url to use to generate links in representations
 ** Usefull when accessed through a reverse proxy for example
 * Management layer in QiPkiHttpCa exposing the Qi4j application structure through JMX
 * Simplified bootstrap supporting both embedded and standalone ways
+* Build layout review: more straightforward, more simple
 * No more OSGi support
 * Upstream update: Qi4j 1.4-SNAPSHOT
 
