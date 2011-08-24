@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.junit.AfterClass;
 import org.junit.Before;
 
+import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.commons.rest.values.CaApiURIsValue;
 import org.qipki.core.QiPkiApplication;
 import org.qipki.testsupport.AbstractQiPkiHttpTest;
@@ -30,13 +31,13 @@ public abstract class AbstractQiPkiHttpCaTest
         extends AbstractQiPkiHttpTest
 {
 
-    protected static QiPkiApplication qipkiServer;
+    protected static QiPkiApplication<RootContext> qipkiApplication;
 
     @AfterClass
-    public static void stopQiPkiHttpCa()
+    public static void stopQiPkiApplication()
     {
-        if ( qipkiServer != null ) {
-            qipkiServer.stop();
+        if ( qipkiApplication != null ) {
+            qipkiApplication.stop();
         }
     }
 

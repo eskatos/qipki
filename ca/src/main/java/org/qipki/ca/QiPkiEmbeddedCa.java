@@ -13,47 +13,17 @@
  */
 package org.qipki.ca;
 
-import java.io.File;
-import javax.sql.DataSource;
-
-import org.qi4j.api.structure.Application.Mode;
-
 import org.qipki.ca.application.contexts.RootContext;
-import org.qipki.ca.bootstrap.CaAssemblyNames;
-import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
-import org.qipki.ca.bootstrap.QiPkiVolatileEmbeddedCaAssembler;
+import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
 import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiEmbeddedCa
         extends AbstractQiPkiApplication<RootContext>
 {
 
-    /**
-     * Instanciate an embedded QiPki CA application using in-memory storage.
-     */
-    public QiPkiEmbeddedCa( Mode appMode )
+    public QiPkiEmbeddedCa( QiPkiEmbeddedCaAssembler appAssembler )
     {
-        super( new QiPkiVolatileEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode ) );
-    }
-
-    /**
-     * Instanciate an embedded QiPki CA application using Apache Derby storage and Sesame RDF index.
-     *
-     * @param storePath     Path of the Apache Derby database
-     */
-    public QiPkiEmbeddedCa( Mode appMode, File storePath )
-    {
-        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, "jdbc:derby:" + storePath.getAbsolutePath() + ";create=true" ) );
-    }
-
-    /**
-     * Instanciate an embedded QiPki CA application using Apache Derby from a DataSource and Sesame RDF index.
-     * 
-     * @param dataSource    DataSource to use
-     */
-    public QiPkiEmbeddedCa( Mode appMode, DataSource dataSource )
-    {
-        super( new QiPkiPersistentEmbeddedCaAssembler( CaAssemblyNames.APPLICATION_NAME, appMode, dataSource ) );
+        super( appAssembler );
     }
 
 }

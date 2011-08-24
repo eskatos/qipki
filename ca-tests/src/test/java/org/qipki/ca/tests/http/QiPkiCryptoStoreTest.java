@@ -42,8 +42,8 @@ public class QiPkiCryptoStoreTest
     @BeforeClass
     public static void startQiPkiHttpCa()
     {
-        qipkiServer = new QiPkiTestApplicationHttpCa( QiPkiCryptoStoreTest.class.getSimpleName() );
-        qipkiServer.run();
+        qipkiApplication = new QiPkiTestApplicationHttpCa( QiPkiCryptoStoreTest.class.getSimpleName() );
+        qipkiApplication.run();
     }
 
     @Test

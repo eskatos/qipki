@@ -13,10 +13,6 @@
  */
 package org.qipki.ca.bootstrap;
 
-import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
-import org.qipki.core.reindex.AutomaticReindexerConfiguration;
-import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
-
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembler;
@@ -28,10 +24,13 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
-import org.qi4j.library.scheduler.SchedulerConfiguration;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
 
-public abstract class QiPkiEmbeddedCaAssembler
+import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
+import org.qipki.core.reindex.AutomaticReindexerConfiguration;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+
+public class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
 

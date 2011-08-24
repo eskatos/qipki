@@ -37,8 +37,8 @@ public class QiPkiHttpCaClientTest
     @BeforeClass
     public static void startQiPkiHttpCa()
     {
-        qipkiServer = new QiPkiTestApplicationHttpCa( QiPkiHttpCaClientTest.class.getSimpleName() );
-        qipkiServer.run();
+        qipkiApplication = new QiPkiTestApplicationHttpCa( QiPkiHttpCaClientTest.class.getSimpleName() );
+        qipkiApplication.run();
     }
 
     private QiPkiHttpCaClient caClient;

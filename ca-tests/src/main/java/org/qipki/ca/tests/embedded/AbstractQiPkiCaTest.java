@@ -13,9 +13,33 @@
  */
 package org.qipki.ca.tests.embedded;
 
+import org.junit.AfterClass;
+
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+
+import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.core.QiPkiApplication;
 import org.qipki.testsupport.AbstractQiPkiTest;
 
 public abstract class AbstractQiPkiCaTest
         extends AbstractQiPkiTest
 {
+
+    protected static QiPkiApplication<RootContext> qipkiApplication;
+
+    @AfterClass
+    public static void stopQiPkiApplication()
+    {
+        if ( qipkiApplication != null ) {
+            qipkiApplication.stop();
+        }
+    }
+
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+    }
+
 }

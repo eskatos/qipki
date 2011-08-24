@@ -81,10 +81,10 @@ public class QiPkiHttpCaTest
     private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiHttpCaTest.class );
 
     @BeforeClass
-    public static void startQiPkiHttpCa()
+    public static void startQiPkiApplication()
     {
-        qipkiServer = new QiPkiTestApplicationHttpCa( QiPkiHttpCaTest.class.getSimpleName() );
-        qipkiServer.run();
+        qipkiApplication = new QiPkiTestApplicationHttpCa( QiPkiHttpCaTest.class.getSimpleName() );
+        qipkiApplication.run();
     }
 
     private String testCryptoStoreName = "MyCryptoStore";
@@ -102,13 +102,13 @@ public class QiPkiHttpCaTest
     public void testReindex()
             throws IOException, JSONException
     {
-        qipkiServer.stop();
+        qipkiApplication.stop();
 
         LOGGER.info( "WILL DELETE INDEX REPOSITORY" );
         FileUtil.deltree( new File( "target/qi4j-index" ) );
         LOGGER.info( "INDEX REPOSITORY DELETED" );
 
-        qipkiServer.run();
+        qipkiApplication.run();
 
         LOGGER.info( "HAS INDEX REPOSITORY BEEN REFILLED?" );
         // Get CA list

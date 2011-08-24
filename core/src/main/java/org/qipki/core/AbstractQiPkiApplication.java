@@ -47,6 +47,11 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
         this.appAssembler = appAssembler;
     }
 
+    public ApplicationAssembler applicationAssembler()
+    {
+        return appAssembler;
+    }
+
     @Override
     public final void run()
     {
