@@ -17,14 +17,13 @@ import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
-import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.AbstractQiPkiCa;
 import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
 import org.qipki.ca.tests.QiPkiCaFixtures;
-import org.qipki.core.AbstractQiPkiApplication;
 import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationEmbeddedCa
-        extends AbstractQiPkiApplication<RootContext>
+        extends AbstractQiPkiCa
 {
 
     public QiPkiTestApplicationEmbeddedCa( String testCodeName )
