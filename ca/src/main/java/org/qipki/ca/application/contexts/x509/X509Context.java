@@ -13,10 +13,17 @@
  */
 package org.qipki.ca.application.contexts.x509;
 
+import java.security.cert.X509Certificate;
+
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+
+import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.qipki.ca.domain.revocation.Revocation;
 import org.qipki.ca.domain.x509.X509;
+import org.qipki.ca.domain.x509.X509Factory;
+import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.core.dci.Context;
 import org.qipki.crypto.x509.RevocationReason;
 
@@ -39,6 +46,16 @@ public class X509Context
     {
         X509 x509 = context.role( X509.class );
         return context.role( EscrowedKeyPairRepository.class ).findByX509Identity( x509.identity().get() );
+    }
+
+    public X509 renew( PKCS10CertificationRequest pkcs10 )
+    {
+        X509 oldX509 = context.role( X509.class );
+        CA ca = oldX509.issuer().get();
+        X509Profile profile = oldX509.profile().get();
+        ca.revoke( oldX509, RevocationReason.superseded );
+        X509Certificate certificate = ca.sign( profile, pkcs10 );
+        return context.role( X509Factory.class ).create( certificate, ca, profile );
     }
 
 }
