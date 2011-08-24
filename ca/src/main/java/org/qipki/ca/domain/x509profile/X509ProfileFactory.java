@@ -13,33 +13,46 @@
  */
 package org.qipki.ca.domain.x509profile;
 
-import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
-import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
-import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
-import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
-import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
+import java.util.EnumSet;
 
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
 
+import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
+import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
+import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
+import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
+import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
+import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
+import org.qipki.crypto.x509.ExtendedKeyUsage;
+import org.qipki.crypto.x509.KeyUsage;
+import org.qipki.crypto.x509.NetscapeCertType;
+
 @Mixins( X509ProfileFactory.Mixin.class )
 public interface X509ProfileFactory
         extends ServiceComposite
 {
 
-    X509Profile create( String name,
-                        Integer validityDays,
-                        @Optional String comment,
+    X509Profile create( String name, Integer validityDays, @Optional String comment,
                         @Optional KeyUsagesValue keyUsages,
                         @Optional ExtendedKeyUsagesValue extendedKeyUsages,
                         @Optional NetscapeCertTypesValue netscapeCertTypes,
                         @Optional BasicConstraintsValue basicConstraints,
                         @Optional NameConstraintsValue nameConstraints );
+
+    X509Profile createForSSLServer( String name, Integer validityDays, @Optional String comment );
+
+    X509Profile createForSSLClient( String name, Integer validityDays, @Optional String comment );
+
+    X509Profile createForSignature( String name, Integer validityDays, @Optional String comment );
+
+    X509Profile createForEncipherment( String name, Integer validityDays, @Optional String comment );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
@@ -50,6 +63,8 @@ public interface X509ProfileFactory
         private UnitOfWorkFactory uowf;
         @Structure
         private ValueBuilderFactory vbf;
+        @Service
+        private X509ExtensionsValueFactory x509ExtFactory;
 
         @Override
         public X509Profile create( String name,
@@ -87,6 +102,50 @@ public interface X509ProfileFactory
                         withPrototype( nameConstraints ).newInstance() );
             }
             return builder.newInstance();
+        }
+
+        @Override
+        public X509Profile createForSSLServer( String name, Integer validityDays, String comment )
+        {
+            return create( name, validityDays, comment,
+                           x509ExtFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.keyEncipherment, KeyUsage.digitalSignature ) ),
+                           x509ExtFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.serverAuth ) ),
+                           x509ExtFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslServer ) ),
+                           x509ExtFactory.buildBasicConstraintsValue( true, false, 0L ),
+                           null );
+        }
+
+        @Override
+        public X509Profile createForSSLClient( String name, Integer validityDays, String comment )
+        {
+            return create( name, validityDays, comment,
+                           x509ExtFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.keyEncipherment, KeyUsage.digitalSignature ) ),
+                           x509ExtFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.clientAuth ) ),
+                           x509ExtFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslClient ) ),
+                           x509ExtFactory.buildBasicConstraintsValue( true, false, 0L ),
+                           null );
+        }
+
+        @Override
+        public X509Profile createForEncipherment( String name, Integer validityDays, String comment )
+        {
+            return create( name, validityDays, comment,
+                           x509ExtFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.keyEncipherment ) ),
+                           x509ExtFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.emailProtection ) ),
+                           x509ExtFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.smime ) ),
+                           x509ExtFactory.buildBasicConstraintsValue( true, false, 0L ),
+                           null );
+        }
+
+        @Override
+        public X509Profile createForSignature( String name, Integer validityDays, String comment )
+        {
+            return create( name, validityDays, comment,
+                           x509ExtFactory.buildKeyUsagesValue( true, EnumSet.of( KeyUsage.nonRepudiation, KeyUsage.digitalSignature ) ),
+                           x509ExtFactory.buildExtendedKeyUsagesValue( false, EnumSet.of( ExtendedKeyUsage.emailProtection ) ),
+                           x509ExtFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.objectSigning, NetscapeCertType.smime ) ),
+                           x509ExtFactory.buildBasicConstraintsValue( true, false, 0L ),
+                           null );
         }
 
     }

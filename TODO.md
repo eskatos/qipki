@@ -11,7 +11,6 @@
 # Work in progress
 
 * (#---) Follow state refactoring with the Qi4j data migration system
-  * Add basic profiles creation in ca-tests
   * Write a complete test scenario from the embedder point of view
   * Move code to qipki-main-core?
   * Write integration tests for migrations
@@ -35,7 +34,7 @@
 * (----) Simplify assembly
   * Factor out infrastructure runtimes and assembly in a dedicated module
   * Depend on that module for tests and distribution packaging
-  * QUID Make assembly scenarii modules?
+  * QUID Make assembly scenarii modules? --> bootstrap
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts

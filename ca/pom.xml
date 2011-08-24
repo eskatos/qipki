@@ -44,14 +44,6 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- Tests -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>qipki-testsupport</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 </project>

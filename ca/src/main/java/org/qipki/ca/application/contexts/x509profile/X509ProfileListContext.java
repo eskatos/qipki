@@ -13,6 +13,9 @@
  */
 package org.qipki.ca.application.contexts.x509profile;
 
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.query.Query;
+
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.qipki.ca.domain.x509profile.X509ProfileRepository;
@@ -23,9 +26,6 @@ import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.qipki.core.dci.Context;
-
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.query.Query;
 
 public class X509ProfileListContext
         extends Context
@@ -46,9 +46,7 @@ public class X509ProfileListContext
         return context.role( X509ExtensionsValueFactory.class );
     }
 
-    public X509Profile createX509Profile( String name,
-                                          Integer validityDays,
-                                          @Optional String comment,
+    public X509Profile createX509Profile( String name, Integer validityDays, @Optional String comment,
                                           @Optional KeyUsagesValue keyUsages,
                                           @Optional ExtendedKeyUsagesValue extendedKeyUsages,
                                           @Optional NetscapeCertTypesValue netscapeCertTypes,
@@ -58,6 +56,26 @@ public class X509ProfileListContext
         return context.role( X509ProfileFactory.class ).create( name, validityDays, comment,
                                                                 keyUsages, extendedKeyUsages, netscapeCertTypes,
                                                                 basicConstraints, nameConstraints );
+    }
+
+    public X509Profile createX509ProfileForSSLServer( String name, Integer validityDays, @Optional String comment )
+    {
+        return context.role( X509ProfileFactory.class ).createForSSLServer( name, validityDays, comment );
+    }
+
+    public X509Profile createX509ProfileForSSLClient( String name, Integer validityDays, @Optional String comment )
+    {
+        return context.role( X509ProfileFactory.class ).createForSSLClient( name, validityDays, comment );
+    }
+
+    public X509Profile createX509ProfileForEncipherment( String name, Integer validityDays, @Optional String comment )
+    {
+        return context.role( X509ProfileFactory.class ).createForEncipherment( name, validityDays, comment );
+    }
+
+    public X509Profile createX509ProfileForSignature( String name, Integer validityDays, @Optional String comment )
+    {
+        return context.role( X509ProfileFactory.class ).createForSignature( name, validityDays, comment );
     }
 
 }
