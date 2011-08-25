@@ -33,12 +33,12 @@ import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
 
 import org.qipki.ca.bootstrap.CaAssemblyNames;
-import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
+import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
 import org.qipki.ca.http.presentation.rest.api.RestApiConfiguration;
-import org.qipki.core.bootstrap.AssemblyUtil;
+import org.qipki.core.bootstrap.persistence.DerbySesamePersistenceAssembler;
 
 public class QiPkiHttpCaAssembler
-        extends QiPkiPersistentEmbeddedCaAssembler
+        extends QiPkiEmbeddedCaAssembler
 {
 
     private final Integer jmxPort;
@@ -46,7 +46,8 @@ public class QiPkiHttpCaAssembler
 
     public QiPkiHttpCaAssembler( String appName, Mode appMode, String connectionString, Integer jmxPort )
     {
-        super( appName, appMode, connectionString );
+        super( appName, appMode );
+        withPersistenceAssembler( new DerbySesamePersistenceAssembler( connectionString ) );
         this.jmxPort = jmxPort;
     }
 
@@ -85,7 +86,7 @@ public class QiPkiHttpCaAssembler
         }
 
         // Add Configuration entities to the configuration module
-        ModuleAssembly config = AssemblyUtil.getModuleAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION, CaAssemblyNames.MODULE_CONFIGURATION );
+        ModuleAssembly config = app.layer( CaAssemblyNames.LAYER_CONFIGURATION ).module( CaAssemblyNames.MODULE_CONFIGURATION );
         {
             config.entities( RestApiConfiguration.class,
                              JettyConfiguration.class,
@@ -120,9 +121,9 @@ public class QiPkiHttpCaAssembler
 
         } );
 
-        presentation.uses( AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_APPLICATION ),
-                           AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CRYPTO ),
-                           AssemblyUtil.getLayerAssembly( app, CaAssemblyNames.LAYER_CONFIGURATION ) );
+        presentation.uses( app.layer( CaAssemblyNames.LAYER_APPLICATION ),
+                           app.layer( CaAssemblyNames.LAYER_CRYPTO ),
+                           app.layer( CaAssemblyNames.LAYER_CONFIGURATION ) );
 
         return app;
     }

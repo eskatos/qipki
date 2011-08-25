@@ -18,8 +18,9 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.AbstractQiPkiCa;
-import org.qipki.ca.bootstrap.QiPkiPersistentEmbeddedCaAssembler;
+import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
 import org.qipki.ca.tests.QiPkiCaFixtures;
+import org.qipki.core.bootstrap.persistence.DerbySesamePersistenceAssembler;
 import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationEmbeddedCa
@@ -28,7 +29,7 @@ public class QiPkiTestApplicationEmbeddedCa
 
     public QiPkiTestApplicationEmbeddedCa( String testCodeName )
     {
-        super( new QiPkiPersistentEmbeddedCaAssembler( testCodeName, Mode.test, "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" )
+        super( new QiPkiEmbeddedCaAssembler( testCodeName, Mode.test )
         {
 
             @Override
@@ -39,7 +40,8 @@ public class QiPkiTestApplicationEmbeddedCa
                 devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        }.withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ) );
+        }.withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ).
+                withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ) );
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,39 +11,32 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.bootstrap;
+package org.qipki.core.bootstrap.persistence;
 
 import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.index.rdf.assembly.RdfMemoryStoreAssembler;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
-public class InMemoryStoreAndIndexModuleAssembler
-        implements Assembler
+public class InMemoryPersistenceAssembler
+        implements PersistenceAssembler
 {
 
-    private final Visibility visibility;
-
-    public InMemoryStoreAndIndexModuleAssembler()
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
     {
-        this( Visibility.application );
-    }
-
-    public InMemoryStoreAndIndexModuleAssembler( Visibility visibility )
-    {
-        this.visibility = visibility;
+        module.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
+        new RdfMemoryStoreAssembler( null, Visibility.application, Visibility.application ).assemble( module );
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public void assemble( ModuleAssembly ma )
+    public void assembleConfigModule( ModuleAssembly config )
             throws AssemblyException
     {
-        ma.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( visibility );
-        new RdfMemoryStoreAssembler( null, visibility, visibility ).assemble( ma );
+        // No configuration
     }
 
 }

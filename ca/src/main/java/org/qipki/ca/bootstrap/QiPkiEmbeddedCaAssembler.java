@@ -14,6 +14,7 @@
 package org.qipki.ca.bootstrap;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
@@ -25,8 +26,11 @@ import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
+import org.qi4j.spi.entitystore.EntityStore;
 
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
+import org.qipki.core.bootstrap.persistence.InMemoryPersistenceAssembler;
+import org.qipki.core.bootstrap.persistence.PersistenceAssembler;
 import org.qipki.core.reindex.AutomaticReindexerConfiguration;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 
@@ -37,6 +41,8 @@ public class QiPkiEmbeddedCaAssembler
     private String appName = CaAssemblyNames.APPLICATION_NAME;
     private final Mode appMode;
     private FileConfigurationOverride fileConfigOverride;
+    private Class<? extends ServiceComposite> configEntityStoreServiceClass = MemoryEntityStoreService.class;
+    private PersistenceAssembler persistenceAssembler;
 
     public QiPkiEmbeddedCaAssembler( Mode appMode )
     {
@@ -52,6 +58,22 @@ public class QiPkiEmbeddedCaAssembler
     public ApplicationAssembler withFileConfigurationOverride( FileConfigurationOverride fileConfigOverride )
     {
         this.fileConfigOverride = fileConfigOverride;
+        return this;
+    }
+
+    public QiPkiEmbeddedCaAssembler withConfigEntityStoreService( Class<? extends EntityStore> entityStoreServiceClass )
+    {
+        try {
+            this.configEntityStoreServiceClass = ( Class<? extends ServiceComposite> ) entityStoreServiceClass;
+        } catch ( ClassCastException ex ) {
+            throw new IllegalArgumentException( "Given EntityStore class is not a ServiceComposite. You must be using the wrong type.", ex );
+        }
+        return this;
+    }
+
+    public QiPkiEmbeddedCaAssembler withPersistenceAssembler( PersistenceAssembler persistenceAssembler )
+    {
+        this.persistenceAssembler = persistenceAssembler;
         return this;
     }
 
@@ -72,7 +94,9 @@ public class QiPkiEmbeddedCaAssembler
             if ( fileConfigOverride != null ) {
                 config.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
             }
-            config.addServices( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
+            if ( configEntityStoreServiceClass != null ) {
+                config.addServices( configEntityStoreServiceClass ).visibleIn( Visibility.module );
+            }
             config.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
@@ -98,8 +122,16 @@ public class QiPkiEmbeddedCaAssembler
 
         LayerAssembly infrastructure = app.layer( CaAssemblyNames.LAYER_INFRASTRUCTURE );
         {
-            ModuleAssembly scheduler = infrastructure.module( CaAssemblyNames.MODULE_SCHEDULER );
             ModuleAssembly config = configuration.module( CaAssemblyNames.MODULE_CONFIGURATION );
+
+            PersistenceAssembler persistAss = this.persistenceAssembler;
+            if ( persistAss == null ) {
+                persistAss = new InMemoryPersistenceAssembler();
+            }
+            persistAss.assemble( infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE ) );
+            persistAss.assembleConfigModule( config );
+
+            ModuleAssembly scheduler = infrastructure.module( CaAssemblyNames.MODULE_SCHEDULER );
             new SchedulerAssembler().withConfigAssembly( config ).
                     withConfigVisibility( Visibility.application ).
                     withTimeline().

@@ -32,6 +32,7 @@
   * Write unit tests for migrations
 * (----) Fix http service configuration handling up to qipki-ca-http-main
 * (----) Simplify assembly
+  * Refactor ApplicationAssemblers in IoC style
   * Factor out infrastructure runtimes and assembly in a dedicated module
   * Depend on that module for tests and distribution packaging
   * QUID Make assembly scenarii modules? --> bootstrap
