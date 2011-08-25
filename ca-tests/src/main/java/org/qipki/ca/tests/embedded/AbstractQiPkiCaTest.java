@@ -15,11 +15,16 @@ package org.qipki.ca.tests.embedded;
 
 import org.junit.AfterClass;
 
+import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.core.QiPkiApplication;
+import org.qipki.crypto.asymetric.AsymetricGenerator;
+import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+import org.qipki.crypto.io.CryptIO;
+import org.qipki.crypto.x509.X509Generator;
 import org.qipki.testsupport.AbstractQiPkiTest;
 
 public abstract class AbstractQiPkiCaTest
@@ -36,10 +41,24 @@ public abstract class AbstractQiPkiCaTest
         }
     }
 
+    protected CryptIO cryptio;
+    protected X509Generator x509Generator;
+    protected AsymetricGenerator asymGenerator;
+
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
+        new CryptoEngineModuleAssembler().assemble( module );
+    }
+
+    @Before
+    public void beforeEachAbstractQiPkiCaTest()
+    {
+        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
+        x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
+        asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
+
     }
 
 }

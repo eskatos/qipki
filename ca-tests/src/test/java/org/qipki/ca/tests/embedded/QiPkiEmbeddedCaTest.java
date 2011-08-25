@@ -13,13 +13,21 @@
  */
 package org.qipki.ca.tests.embedded;
 
+import java.security.KeyPair;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.codeartisans.java.toolbox.CollectionUtils;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
@@ -28,16 +36,23 @@ import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
 import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
+import org.qipki.ca.application.contexts.x509.X509ListContext;
 import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
+import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.ca.root.RootCA;
 import org.qipki.ca.domain.ca.sub.SubCA;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
+import org.qipki.ca.domain.revocation.Revocation;
+import org.qipki.ca.domain.x509.X509;
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.qipki.crypto.storage.KeyStoreType;
+import org.qipki.crypto.x509.DistinguishedName;
+import org.qipki.crypto.x509.RevocationReason;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +64,7 @@ public class QiPkiEmbeddedCaTest
     private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiEmbeddedCaTest.class );
     private static final String CRYPTOSTORE_NAME = "Crypto Store";
     private static final String SERVER_CA_NAME = "Server CA";
+    private static final String SERVER_PROFILE_NAME = "Server Profile";
     private static final String CLIENT_CA_NAME = "Client CA";
     private static final char[] PASSWORD = "changeit".toCharArray();
     private static UnitOfWorkFactory uowf;
@@ -62,11 +78,13 @@ public class QiPkiEmbeddedCaTest
     }
 
     private RootContext rootCtx;
+    private KeyPair keyPair;
 
     @Before
     public void beforeEachTest()
     {
         rootCtx = qipkiApplication.newRootContext();
+        keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
     }
 
     @Test
@@ -90,17 +108,17 @@ public class QiPkiEmbeddedCaTest
         LOGGER.info( "CryptoStore created" );
 
         RootCA rootCa = calCtx.createRootCA( cryptoStore.identity().get(), "Root CA", 1,
-                                             "CN=RootCa,O=QiPki,OU=QiPkiCa,OU=UnitTests", keyPairSpec );
+                                             buildDN( "RootCa" ), keyPairSpec );
         SubCA serverCa = calCtx.createSubCA( cryptoStore.identity().get(), SERVER_CA_NAME, 1,
-                                             "CN=ServerCa,O=QiPki,OU=QiPkiCa,OU=UnitTests", keyPairSpec,
+                                             buildDN( "ServerCa" ), keyPairSpec,
                                              rootCa.identity().get() );
         SubCA clientCa = calCtx.createSubCA( cryptoStore.identity().get(), CLIENT_CA_NAME, 1,
-                                             "CN=ClientCa,O=QiPki,OU=QiPkiCa,OU=UnitTests", keyPairSpec,
+                                             buildDN( "ClientCa" ), keyPairSpec,
                                              rootCa.identity().get() );
 
         LOGGER.info( "CAs created" );
 
-        X509Profile serverProfile = xplCtx.createX509ProfileForSSLServer( "Server Profile", 1, null );
+        X509Profile serverProfile = xplCtx.createX509ProfileForSSLServer( SERVER_PROFILE_NAME, 1, null );
         X509Profile clientProfile = xplCtx.createX509ProfileForSSLClient( "Client Profile", 1, null );
 
         LOGGER.info( "X509Profiles created" );
@@ -122,59 +140,98 @@ public class QiPkiEmbeddedCaTest
     }
 
     @Test
-    public void testCreateBaseCertificates()
-    {
-        System.out.println( "##################################################" );
-        System.out.println( "             CreateBaseCertificates" );
-        System.out.println( "##################################################" );
-    }
-
-    @Test
     public void testRenewX509()
+            throws UnitOfWorkCompletionException, CertificateEncodingException
     {
         System.out.println( "##################################################" );
-        System.out.println( "                     RenewX509" );
+        System.out.println( "                   RenewX509" );
         System.out.println( "##################################################" );
+
+        X509Certificate x509Certificate = issueX509();
+        PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new DistinguishedName( buildDN( "RenewX509" ) ), keyPair );
+
+        UnitOfWork uow = uowf.newUnitOfWork();
+
+        X509 x509 = findX509ByHexSha256Hash( rootCtx.x509ListContext(), x509Certificate );
+        x509 = rootCtx.x509Context( x509.identity().get() ).renew( pkcs10 );
+
+        x509Certificate = x509.x509Certificate();
+        assertNotNull( x509Certificate );
+
+        uow.complete();
     }
 
     @Test
     public void testRevokeX509()
+            throws UnitOfWorkCompletionException, CertificateEncodingException
     {
         System.out.println( "##################################################" );
-        System.out.println( "                     RevokeX509" );
+        System.out.println( "                   RevokeX509" );
         System.out.println( "##################################################" );
+
+        X509Certificate x509Certificate = issueX509();
+
+        UnitOfWork uow = uowf.newUnitOfWork();
+
+        X509 x509 = findX509ByHexSha256Hash( rootCtx.x509ListContext(), x509Certificate );
+        Revocation revocation = rootCtx.x509Context( x509.identity().get() ).revoke( RevocationReason.cessationOfOperation );
+
+        assertNotNull( revocation );
+
+        uow.complete();
     }
 
-    @Test
-    public void testIssueEscrowedCertifiedKeyPair()
+    private X509Certificate issueX509()
+            throws UnitOfWorkCompletionException
     {
-        System.out.println( "##################################################" );
-        System.out.println( "          IssueEscrowedCertifiedKeyPair" );
-        System.out.println( "##################################################" );
+        PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new DistinguishedName( buildDN( "IssueX509" ) ), keyPair );
+
+        UnitOfWork uow = uowf.newUnitOfWork();
+
+        CA ca = findCAByName( rootCtx.caListContext(), SERVER_CA_NAME );
+        X509Profile profile = findX509ProfileByName( rootCtx.x509ProfileListContext(), SERVER_PROFILE_NAME );
+        X509 x509 = rootCtx.x509ListContext().createX509( ca.identity().get(), profile.identity().get(), pkcs10 );
+
+        X509Certificate x509Certificate = x509.x509Certificate();
+        assertNotNull( x509Certificate );
+
+        uow.complete();
+
+        return x509Certificate;
     }
 
-    @Test
-    public void testRecoverEscrowedCertifiedKeyPair()
+    private String buildDN( String cn )
     {
-        System.out.println( "##################################################" );
-        System.out.println( "         RecoverEscrowedCertifiedKeyPair" );
-        System.out.println( "##################################################" );
+        return "CN=" + cn + ",O=QiPki,OU=QiPkiCa,OU=UnitTests";
     }
 
-    @Test
-    public void testRenewEscrowedCertifiedKeyPair()
+    private CA findCAByName( CAListContext caListContext, String caName )
     {
-        System.out.println( "##################################################" );
-        System.out.println( "         RenewEscrowedCertifiedKeyPair" );
-        System.out.println( "##################################################" );
+        Query<CA> findCA = caListContext.findByName( caName, 0 );
+        long caCount = findCA.count();
+        if ( caCount <= 0 || caCount > 1 ) {
+            throw new IllegalStateException( "No or more than one (" + caCount + ") " + caName + " CA found, cannot continue" );
+        }
+        return CollectionUtils.firstElementOrNull( findCA );
     }
 
-    @Test
-    public void testBatchEnroll()
+    private X509Profile findX509ProfileByName( X509ProfileListContext x509ProfileListContext, String profileName )
     {
-        System.out.println( "##################################################" );
-        System.out.println( "                 BatchEnroll" );
-        System.out.println( "##################################################" );
+        Query<X509Profile> findProfile = x509ProfileListContext.findByName( profileName, 0 );
+        long profileCount = findProfile.count();
+        if ( profileCount <= 0 || profileCount > 1 ) {
+            throw new IllegalStateException( "No or more than one (" + profileCount + ") " + profileName + " X509Profile found, cannot continue" );
+        }
+        return CollectionUtils.firstElementOrNull( findProfile );
+    }
+
+    private X509 findX509ByHexSha256Hash( X509ListContext x509ListContext, X509Certificate cert )
+            throws CertificateEncodingException
+    {
+        String hexSha256 = new Sha256Hash( cert.getEncoded() ).toHex();
+        X509 x509 = x509ListContext.findByHexSha256( hexSha256 );
+        LOGGER.debug( "Tried to find a X509 by its hexSha256 {} and found {}", hexSha256, x509 );
+        return x509;
     }
 
 }
