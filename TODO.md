@@ -10,10 +10,6 @@
 
 # Work in progress
 
-* (#---) Follow state refactoring with the Qi4j data migration system
-  * Write a complete test scenario from the embedder point of view
-  * Move code to qipki-main-core?
-  * Write integration tests for migrations
 * (##--) Apply Qi4j FileConfiguration API to all filesystem storage
   * Store EntityStore on the filesystem
   * Store KeyStores on the filesystem
@@ -30,6 +26,10 @@
 
 # Next steps - That would lead to a tiny 1.0
 
+* (----) Follow state refactoring with the Qi4j data migration system
+  * Get a documented database sample for 1.0-alpha6 and use it as a test resource
+  * Write a complete test scenario from the embedder point of view around the sample database
+  * Write unit tests for migrations
 * (----) Fix http service configuration handling up to qipki-ca-http-main
 * (----) Simplify assembly
   * Factor out infrastructure runtimes and assembly in a dedicated module
