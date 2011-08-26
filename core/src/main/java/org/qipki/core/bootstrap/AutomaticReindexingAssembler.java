@@ -31,9 +31,9 @@ public class AutomaticReindexingAssembler
     public void assemble( ModuleAssembly ma )
             throws AssemblyException
     {
-        ma.addServices( ReindexerService.class ).visibleIn( Visibility.module );
-        ma.addEntities( ReindexerConfiguration.class ).visibleIn( Visibility.module );
-        ma.addServices( AutomaticReindexerService.class ).visibleIn( Visibility.module ).instantiateOnStartup();
+        ma.services( ReindexerService.class ).visibleIn( Visibility.module );
+        ma.entities( ReindexerConfiguration.class ).visibleIn( Visibility.module );
+        ma.services( AutomaticReindexerService.class ).visibleIn( Visibility.module ).instantiateOnStartup();
     }
 
 }

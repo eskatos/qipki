@@ -13,21 +13,31 @@
  */
 package org.qipki.ca.bootstrap;
 
+import java.io.IOException;
+
+import org.codeartisans.java.toolbox.StringUtils;
+import org.codeartisans.java.toolbox.network.FreePortFinder;
+
+import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.common.Visibility;
-import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.ApplicationAssemblyFactory;
+import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.AssemblyVisitorAdapter;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
+import org.qi4j.library.jmx.JMXAssembler;
+import org.qi4j.library.jmx.JMXConnectorConfiguration;
+import org.qi4j.library.jmx.JMXConnectorService;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
-import org.qi4j.spi.entitystore.EntityStore;
 
+import static org.qipki.ca.bootstrap.CaAssemblyNames.*;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.core.bootstrap.persistence.InMemoryPersistenceAssembler;
 import org.qipki.core.bootstrap.persistence.PersistenceAssembler;
@@ -38,100 +48,144 @@ public class QiPkiEmbeddedCaAssembler
         implements ApplicationAssembler
 {
 
-    private String appName = CaAssemblyNames.APPLICATION_NAME;
+    private final String appName;
+    private final String appVersion;
     private final Mode appMode;
     private FileConfigurationOverride fileConfigOverride;
-    private Class<? extends ServiceComposite> configEntityStoreServiceClass = MemoryEntityStoreService.class;
     private PersistenceAssembler persistenceAssembler;
+    private boolean jmxManagement;
+    private Integer jmxPort;
+    private Assembler presentationTestsAssembler;
 
-    public QiPkiEmbeddedCaAssembler( Mode appMode )
+    public QiPkiEmbeddedCaAssembler( String appName, String appVersion, Mode appMode )
     {
-        this.appMode = appMode;
-    }
-
-    public QiPkiEmbeddedCaAssembler( String appName, Mode appMode )
-    {
-        this( appMode );
         this.appName = appName;
+        this.appVersion = appVersion;
+        if ( appMode == null ) {
+            this.appMode = Mode.development;
+        } else {
+            this.appMode = appMode;
+        }
     }
 
-    public ApplicationAssembler withFileConfigurationOverride( FileConfigurationOverride fileConfigOverride )
+    public final QiPkiEmbeddedCaAssembler withFileConfigurationOverride( FileConfigurationOverride fileConfigOverride )
     {
         this.fileConfigOverride = fileConfigOverride;
         return this;
     }
 
-    public QiPkiEmbeddedCaAssembler withConfigEntityStoreService( Class<? extends EntityStore> entityStoreServiceClass )
-    {
-        try {
-            this.configEntityStoreServiceClass = ( Class<? extends ServiceComposite> ) entityStoreServiceClass;
-        } catch ( ClassCastException ex ) {
-            throw new IllegalArgumentException( "Given EntityStore class is not a ServiceComposite. You must be using the wrong type.", ex );
-        }
-        return this;
-    }
-
-    public QiPkiEmbeddedCaAssembler withPersistenceAssembler( PersistenceAssembler persistenceAssembler )
+    public final QiPkiEmbeddedCaAssembler withPersistenceAssembler( PersistenceAssembler persistenceAssembler )
     {
         this.persistenceAssembler = persistenceAssembler;
         return this;
     }
 
+    public final QiPkiEmbeddedCaAssembler withJMXManagement()
+    {
+        this.jmxManagement = true;
+        return this;
+    }
+
+    public final QiPkiEmbeddedCaAssembler withJMXPort( Integer jmxPort )
+    {
+        this.jmxManagement = true;
+        this.jmxPort = jmxPort;
+        return this;
+    }
+
+    public final QiPkiEmbeddedCaAssembler withPresentationTestsAssembler( Assembler assembler )
+    {
+        this.presentationTestsAssembler = assembler;
+        return this;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
-    public ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
+    public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
             throws AssemblyException
     {
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
-        app.setName( appName );
+        if ( !StringUtils.isEmpty( appName ) ) {
+            app.setName( appName );
+        }
         app.setMode( appMode );
-        app.setVersion( CaAssemblyNames.APPLICATION_VERSION );
+        if ( !StringUtils.isEmpty( appVersion ) ) {
+            app.setVersion( appVersion );
+        }
 
-        LayerAssembly configuration = app.layer( CaAssemblyNames.LAYER_CONFIGURATION );
+        LayerAssembly presentation = app.layer( LAYER_PRESENTATION );
+        if ( presentationTestsAssembler != null ) {
+            presentationTestsAssembler.assemble( presentation.module( MODULE_TESTS_IN_PRESENTATION ) );
+        }
+
+        LayerAssembly configuration = app.layer( LAYER_CONFIGURATION );
         {
-            ModuleAssembly config = configuration.module( CaAssemblyNames.MODULE_CONFIGURATION );
-            config.addServices( FileConfiguration.class ).visibleIn( Visibility.application );
+            ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
+            config.services( FileConfiguration.class ).visibleIn( Visibility.application );
             if ( fileConfigOverride != null ) {
                 config.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
             }
-            if ( configEntityStoreServiceClass != null ) {
-                config.addServices( configEntityStoreServiceClass ).visibleIn( Visibility.module );
-            }
+            config.services( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             config.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
-        LayerAssembly application = app.layer( CaAssemblyNames.LAYER_APPLICATION );
+        if ( jmxManagement ) {
+            final LayerAssembly management = app.layer( LAYER_MANAGEMENT );
+            {
+                ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
+
+                ModuleAssembly jmx = management.module( MODULE_JMX );
+                new JMXAssembler().assemble( jmx );
+                jmx.services( JMXConnectorService.class ).instantiateOnStartup();
+                config.entities( JMXConnectorConfiguration.class ).visibleIn( Visibility.application );
+                JMXConnectorConfiguration jmxConfigDefaults = config.forMixin( JMXConnectorConfiguration.class ).declareDefaults();
+                jmxConfigDefaults.enabled().set( Boolean.TRUE );
+                if ( jmxPort != null && jmxPort != -1 ) {
+                    jmxConfigDefaults.port().set( jmxPort );
+                } else {
+                    try {
+                        jmxConfigDefaults.port().set( FreePortFinder.findRandom() );
+                    } catch ( IOException ex ) {
+                        throw new AssemblyException( "No default JMX port provided and unable to dynamicaly find a free one", ex );
+                    }
+                }
+            }
+        }
+
+        LayerAssembly application = app.layer( LAYER_APPLICATION );
         {
             new CaDCIModuleAssembler().assemble(
-                    application.module( CaAssemblyNames.MODULE_CA_DCI ) );
+                    application.module( MODULE_CA_DCI ) );
         }
 
-        LayerAssembly domain = app.layer( CaAssemblyNames.LAYER_DOMAIN );
+        LayerAssembly domain = app.layer( LAYER_DOMAIN );
         {
             new CaDomainModuleAssembler().assemble(
-                    domain.module( CaAssemblyNames.MODULE_CA_DOMAIN ) );
+                    domain.module( MODULE_CA_DOMAIN ) );
         }
 
-        LayerAssembly crypto = app.layer( CaAssemblyNames.LAYER_CRYPTO );
+        LayerAssembly crypto = app.layer( LAYER_CRYPTO );
         {
             new CryptoEngineModuleAssembler( Visibility.application ).assemble(
-                    crypto.module( CaAssemblyNames.MODULE_CRYPTO_ENGINE ) );
+                    crypto.module( MODULE_CRYPTO_ENGINE ) );
             new CryptoValuesModuleAssembler( Visibility.application ).assemble(
-                    crypto.module( CaAssemblyNames.MODULE_CRYPTO_VALUES ) );
+                    crypto.module( MODULE_CRYPTO_VALUES ) );
         }
 
-        LayerAssembly infrastructure = app.layer( CaAssemblyNames.LAYER_INFRASTRUCTURE );
+        LayerAssembly infrastructure = app.layer( LAYER_INFRASTRUCTURE );
         {
-            ModuleAssembly config = configuration.module( CaAssemblyNames.MODULE_CONFIGURATION );
+            ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
 
+            // Persistence
             PersistenceAssembler persistAss = this.persistenceAssembler;
             if ( persistAss == null ) {
                 persistAss = new InMemoryPersistenceAssembler();
             }
-            persistAss.assemble( infrastructure.module( CaAssemblyNames.MODULE_PERSISTENCE ) );
+            persistAss.assemble( infrastructure.module( MODULE_PERSISTENCE ) );
             persistAss.assembleConfigModule( config );
 
-            ModuleAssembly scheduler = infrastructure.module( CaAssemblyNames.MODULE_SCHEDULER );
+            // Job Scheduler
+            ModuleAssembly scheduler = infrastructure.module( MODULE_SCHEDULER );
             new SchedulerAssembler().withConfigAssembly( config ).
                     withConfigVisibility( Visibility.application ).
                     withTimeline().
@@ -139,15 +193,42 @@ public class QiPkiEmbeddedCaAssembler
                     assemble( scheduler );
         }
 
+        onAssemble( app );
+
+        presentation.uses( application, crypto, configuration );
         application.uses( domain, crypto, configuration );
         domain.uses( crypto, configuration, infrastructure );
         infrastructure.uses( configuration );
 
+        onLayerUses( app );
+
+        // Management Layer uses all application layers
+        if ( jmxManagement ) {
+            final LayerAssembly management = app.layer( LAYER_MANAGEMENT );
+            app.visit( new AssemblyVisitorAdapter<InvalidApplicationException>()
+            {
+
+                @Override
+                public void visitLayer( LayerAssembly eachLayer )
+                        throws InvalidApplicationException
+                {
+                    if ( !management.name().equals( eachLayer.name() ) ) {
+                        management.uses( eachLayer );
+                    }
+                }
+
+            } );
+        }
+
         return app;
     }
 
-    protected void assembleDevTestModule( ModuleAssembly devTestModule )
+    protected void onAssemble( ApplicationAssembly applicationAssembly )
             throws AssemblyException
+    {
+    }
+
+    protected void onLayerUses( ApplicationAssembly app )
     {
     }
 

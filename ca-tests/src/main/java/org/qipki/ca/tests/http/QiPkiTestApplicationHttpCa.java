@@ -14,12 +14,14 @@
 package org.qipki.ca.tests.http;
 
 import org.qi4j.api.structure.Application.Mode;
+import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.ca.tests.QiPkiCaFixtures;
 import org.qipki.core.AbstractQiPkiApplication;
+import org.qipki.core.bootstrap.persistence.DerbySesamePersistenceAssembler;
 import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationHttpCa
@@ -28,18 +30,19 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa( String testCodeName )
     {
-        super( new QiPkiHttpCaAssembler( testCodeName, Mode.test, "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true", null )
+        super( new QiPkiHttpCaAssembler( testCodeName, null, Mode.test ).withPresentationTestsAssembler( new Assembler()
         {
 
             @Override
-            @SuppressWarnings( "unchecked" )
-            protected void assembleDevTestModule( ModuleAssembly devTestModule )
+            public void assemble( ModuleAssembly module )
                     throws AssemblyException
             {
-                devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
+                module.services( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        }.withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ) );
+        } ).
+                withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ).
+                withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ) );
     }
 
 }

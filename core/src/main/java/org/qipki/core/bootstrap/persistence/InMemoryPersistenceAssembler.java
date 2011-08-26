@@ -28,7 +28,7 @@ public class InMemoryPersistenceAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
+        module.services( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
         new RdfMemoryStoreAssembler( null, Visibility.application, Visibility.application ).assemble( module );
     }
 

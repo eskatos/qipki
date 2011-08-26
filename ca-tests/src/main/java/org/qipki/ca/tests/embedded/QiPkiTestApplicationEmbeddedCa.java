@@ -14,6 +14,7 @@
 package org.qipki.ca.tests.embedded;
 
 import org.qi4j.api.structure.Application.Mode;
+import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
@@ -29,19 +30,18 @@ public class QiPkiTestApplicationEmbeddedCa
 
     public QiPkiTestApplicationEmbeddedCa( String testCodeName )
     {
-        super( new QiPkiEmbeddedCaAssembler( testCodeName, Mode.test )
+        super( new QiPkiEmbeddedCaAssembler( testCodeName, null, Mode.test ).withPresentationTestsAssembler( new Assembler()
         {
 
             @Override
-            @SuppressWarnings( "unchecked" )
-            protected void assembleDevTestModule( ModuleAssembly devTestModule )
+            public void assemble( ModuleAssembly module )
                     throws AssemblyException
             {
-                devTestModule.addServices( QiPkiCaFixtures.class ).instantiateOnStartup();
+                module.services( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        }.withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ).
-                withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ) );
+        } ).withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ).
+                withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ) );
     }
 
 }

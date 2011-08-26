@@ -27,6 +27,7 @@ import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.qipki.ca.http.QiPkiHttpCa;
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.core.QiPkiApplication;
+import org.qipki.core.bootstrap.persistence.DerbySesamePersistenceAssembler;
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.main.core.QiPkiMain;
 import org.qipki.main.core.QiPkiApplicationArguments;
@@ -62,10 +63,10 @@ public class Main
     {
         FileConfigurationOverride fileConfigOverride = args.buildFileConfigOverride();
 
-        QiPkiHttpCaAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, args.getMode(),
-                                                                      "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true",
-                                                                      args.getJmxPort() );
+        QiPkiHttpCaAssembler appAssembler = new QiPkiHttpCaAssembler( QiPkiHttpCaArtifactInfo.NAME, QiPkiHttpCaArtifactInfo.VERSION, args.getMode() );
         appAssembler.withFileConfigurationOverride( fileConfigOverride );
+        appAssembler.withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true" ) );
+        appAssembler.withJMXPort( args.getJmxPort() );
         appAssembler.withWebClientAssembler( new WebClientAssembler() );
 
         return new QiPkiHttpCa( appAssembler )

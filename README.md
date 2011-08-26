@@ -51,7 +51,7 @@ you're already using the embedded API or want to show your support, use the widg
 * Simplified bootstrap supporting both embedded and standalone ways
 * Build layout review: more straightforward, more simple
 * No more OSGi support
-* Upstream update: Qi4j 1.4-SNAPSHOT
+* Upstream update: Qi4j 1.4
 
 ### 1.0-alpha7 - 2011/06/02
 

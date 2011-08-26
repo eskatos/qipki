@@ -16,11 +16,15 @@ package org.qipki.ca.bootstrap;
 public interface CaAssemblyNames
 {
 
-    String APPLICATION_NAME = "QiPkiCa";
-    String APPLICATION_VERSION = "1.0-m1";
+    // Presentation Layer
+    String LAYER_PRESENTATION = "presentation";
+    String MODULE_TESTS_IN_PRESENTATION = "tests-presentation";
     // Configuration Layer
     String LAYER_CONFIGURATION = "config";
     String MODULE_CONFIGURATION = "config";
+    // Management Layer
+    String LAYER_MANAGEMENT = "management";
+    String MODULE_JMX = "jmx";
     // Application Layer
     String LAYER_APPLICATION = "application";
     String MODULE_CA_DCI = "ca-dci";

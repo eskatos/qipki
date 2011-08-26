@@ -13,13 +13,13 @@
  */
 package org.qipki.ca.http.bootstrap;
 
+import org.qipki.ca.bootstrap.CaAssemblyNames;
+
 public interface HttpCaAssemblyNames
+        extends CaAssemblyNames
 {
 
-    String LAYER_MANAGEMENT = "management";
-    String MODULE_JMX = "jmx";
-    String LAYER_PRESENTATION = "presentation";
-    String MODULE_TESTS_IN_PRESENTATION = "tests-presentation";
+    // Presentation Layer
     String MODULE_REST_API = "rest-api";
     String MODULE_WEB_CLIENT = "web-client";
     String MODULE_HTTP = "http";

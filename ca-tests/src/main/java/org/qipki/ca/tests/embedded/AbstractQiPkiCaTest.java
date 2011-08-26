@@ -14,12 +14,13 @@
 package org.qipki.ca.tests.embedded;
 
 import org.junit.AfterClass;
-
 import org.junit.Before;
+
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.core.QiPkiApplication;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
@@ -50,6 +51,7 @@ public abstract class AbstractQiPkiCaTest
             throws AssemblyException
     {
         new CryptoEngineModuleAssembler().assemble( module );
+        new CryptoValuesModuleAssembler().assemble( module );
     }
 
     @Before
