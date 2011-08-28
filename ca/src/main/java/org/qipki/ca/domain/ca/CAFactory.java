@@ -16,11 +16,9 @@ package org.qipki.ca.domain.ca;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.cert.Certificate;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -36,6 +34,17 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
+import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.sideeffect.SideEffects;
+import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 import org.qipki.ca.domain.ca.root.RootCA;
 import org.qipki.ca.domain.ca.sub.SubCA;
@@ -54,17 +63,6 @@ import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.KeyUsage;
 import org.qipki.crypto.x509.X509ExtensionHolder;
 import org.qipki.crypto.x509.X509ExtensionsBuilder;
-
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-
-import org.qi4j.api.entity.EntityBuilder;
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.sideeffect.SideEffects;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 /**
  * TODO Handle CRL nextUpdate
@@ -160,13 +158,7 @@ public interface CAFactory
             ca.cryptoStore().set( cryptoStore );
 
             // Store in associated CryptoStore
-            {
-                KeyStore ks = cryptoStore.loadKeyStore();
-                ks.setEntry( ca.identity().get(),
-                             new KeyStore.PrivateKeyEntry( keyPair.getPrivate(), new Certificate[]{ cert } ),
-                             new KeyStore.PasswordProtection( cryptoStore.password().get() ) );
-                cryptoStore.payload().set( cryptIO.base64Encode( ks, cryptoStore.password().get() ) );
-            }
+            cryptoStore.storeCertifiedKeyPair( ca.identity().get(), keyPair.getPrivate(), cert );
 
             // Generate initial CRL
             {

@@ -13,8 +13,6 @@
  */
 package org.qipki.ca.tests;
 
-import java.security.KeyStore;
-
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
 import org.qipki.ca.domain.ca.CA;
@@ -81,7 +79,6 @@ public interface QiPkiCaFixtures
 
                 // Create a test keystore
                 CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
-                KeyStore keystore = cryptoStore.loadKeyStore(); // This call is here only to test CryptoStoreBehavior
 
                 // Create some test CAs
                 CAListContext caListCtx = rootCtx.caListContext();
@@ -89,6 +86,8 @@ public interface QiPkiCaFixtures
                 CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec );
                 CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec );
                 CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec );
+
+                cryptoStore.getX509Certificate( rootCa.identity().get() ); // This call is here only to test CryptoStoreBehavior
 
                 String cryptoStoreId = cryptoStore.identity().get();
                 String rootId = rootCa.identity().get();

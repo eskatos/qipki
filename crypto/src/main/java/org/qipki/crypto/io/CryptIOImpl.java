@@ -15,6 +15,9 @@ package org.qipki.crypto.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -58,17 +61,65 @@ public class CryptIOImpl
             keystore.load( null, null );
             return keystore;
         } catch ( IOException ex ) {
-            throw new CryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            throw new CryptoFailure( "Unable to create empty " + storeType + " KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
-            throw new CryptoFailure( "Unable to create empty" + storeType + " KeyStore", ex );
+            throw new CryptoFailure( "Unable to create empty " + storeType + " KeyStore", ex );
+        }
+    }
+
+    @Override
+    public void writeKeyStore( KeyStore keystore, char[] password, File file )
+    {
+        FileOutputStream output = null;
+        try {
+            output = new FileOutputStream( file );
+            keystore.store( output, password );
+            output.flush();
+        } catch ( IOException ex ) {
+            throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
+        } finally {
+            if ( output != null ) {
+                try {
+                    output.close();
+                } catch ( IOException ex ) {
+                    throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
+                }
+            }
+        }
+    }
+
+    @Override
+    public KeyStore readKeyStore( File file, KeyStoreType storeType, char[] password )
+    {
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream( file );
+            KeyStore keystore = getKeyStoreInstance( storeType );
+            keystore.load( input, password );
+            return keystore;
+        } catch ( IOException ex ) {
+            throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
+        } finally {
+            if ( input != null ) {
+                try {
+                    input.close();
+                } catch ( IOException ex ) {
+                    throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
+                }
+            }
         }
     }
 
     @Override
     public String base64Encode( KeyStore keystore, char[] password )
     {
+        ByteArrayOutputStream baos = null;
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            baos = new ByteArrayOutputStream();
             keystore.store( baos, password );
             baos.flush();
             return new String( Base64.encode( baos.toByteArray() ), IOConstants.UTF_8 );
@@ -76,6 +127,14 @@ public class CryptIOImpl
             throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
+        } finally {
+            if ( baos != null ) {
+                try {
+                    baos.close();
+                } catch ( IOException ex ) {
+                    // Ignored
+                }
+            }
         }
     }
 

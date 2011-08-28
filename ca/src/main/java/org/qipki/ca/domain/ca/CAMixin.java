@@ -16,7 +16,6 @@ package org.qipki.ca.domain.ca;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509CRL;
@@ -105,21 +104,13 @@ public abstract class CAMixin
     @Override
     public X509Certificate certificate()
     {
-        try {
-            return ( X509Certificate ) state.cryptoStore().get().loadKeyStore().getCertificate( state.identity().get() );
-        } catch ( KeyStoreException ex ) {
-            throw new QiPkiFailure( "Unable to load " + state.name().get() + " X509Certificate", ex );
-        }
+        return state.cryptoStore().get().getX509Certificate( state.identity().get() );
     }
 
     @Override
     public PrivateKey privateKey()
     {
-        try {
-            return ( PrivateKey ) state.cryptoStore().get().loadKeyStore().getKey( state.identity().get(), state.cryptoStore().get().password().get() );
-        } catch ( GeneralSecurityException ex ) {
-            throw new QiPkiFailure( "Unable to load " + state.name().get() + " PrivateKey", ex );
-        }
+        return state.cryptoStore().get().getPrivateKey( state.identity().get() );
     }
 
     @Override

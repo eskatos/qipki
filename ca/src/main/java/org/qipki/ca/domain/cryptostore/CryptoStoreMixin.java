@@ -13,14 +13,18 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
-import java.security.KeyPair;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-
-import org.qipki.crypto.io.CryptIO;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
+
+import org.qipki.crypto.CryptoFailure;
+import org.qipki.crypto.io.CryptIO;
 
 public class CryptoStoreMixin
         implements CryptoStoreBehavior
@@ -28,39 +32,52 @@ public class CryptoStoreMixin
 
     @Service
     private CryptIO cryptIO;
+    @Service
+    private CryptoStoreFileService fileService;
     @This
-    private CryptoStoreEntity state;
+    private CryptoStoreEntity me;
 
     @Override
-    public KeyStore loadKeyStore()
+    public X509Certificate getX509Certificate( String slotId )
     {
-        return cryptIO.base64DecodeKeyStore( state.payload().get(),
-                                             state.storeType().get(),
-                                             state.password().get() );
+        try {
+            KeyStore ks = loadKeyStore();
+            return ( X509Certificate ) ks.getCertificate( slotId );
+        } catch ( KeyStoreException ex ) {
+            throw new CryptoFailure( "Unable to load X509 certificate from " + me.name().get() + "/" + slotId, ex );
+        }
     }
 
     @Override
-    public String storeCertificate( X509Certificate certificate )
+    public PrivateKey getPrivateKey( String slotId )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        try {
+            KeyStore ks = loadKeyStore();
+            return ( PrivateKey ) ks.getKey( slotId, me.password().get() );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( "Unable to load private key from " + me.name().get() + "/" + slotId, ex );
+        }
     }
 
     @Override
-    public void storeCertificate( String slotId, X509Certificate certificate )
+    public void storeCertifiedKeyPair( String slotId, PrivateKey privateKey, Certificate... certChain )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        try {
+            KeyStore ks = loadKeyStore();
+            ks.setEntry( slotId,
+                         new KeyStore.PrivateKeyEntry( privateKey, certChain ),
+                         new KeyStore.PasswordProtection( me.password().get() ) );
+            cryptIO.writeKeyStore( ks, me.password().get(), fileService.getKeyStoreFile( me ) );
+        } catch ( KeyStoreException ex ) {
+            throw new CryptoFailure( "Unable to store certified keypair in " + me.name().get() + "/" + slotId, ex );
+        }
     }
 
-    @Override
-    public String storeKeyPair( KeyPair keyPair )
+    private KeyStore loadKeyStore()
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    @Override
-    public void storeKeyPair( String slotId, KeyPair keyPair )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        return cryptIO.readKeyStore( fileService.getKeyStoreFile( me ),
+                                     me.storeType().get(),
+                                     me.password().get() );
     }
 
 }

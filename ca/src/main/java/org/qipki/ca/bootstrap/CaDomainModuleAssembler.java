@@ -44,6 +44,7 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qipki.ca.domain.cryptostore.CryptoStoreFileService;
 
 public class CaDomainModuleAssembler
         implements Assembler
@@ -70,22 +71,24 @@ public class CaDomainModuleAssembler
                 visibleIn( Visibility.application );
 
         // Services
-        ma.addServices( CryptoStoreRepository.class,
-                        CryptoStoreFactory.class,
-                        CARepository.class,
-                        CAFactory.class,
-                        CRLFactory.class,
-                        X509ProfileAssignmentFactory.class,
-                        X509ProfileRepository.class,
-                        X509ProfileFactory.class,
-                        X509Repository.class,
-                        X509Factory.class,
-                        RevocationFactory.class,
-                        CryptoValuesFactory.class,
-                        EscrowedKeyPairFactory.class,
-                        EscrowedKeyPairRepository.class ).
+        ma.services( CryptoStoreRepository.class,
+                     CryptoStoreFactory.class,
+                     CARepository.class,
+                     CAFactory.class,
+                     CRLFactory.class,
+                     X509ProfileAssignmentFactory.class,
+                     X509ProfileRepository.class,
+                     X509ProfileFactory.class,
+                     X509Repository.class,
+                     X509Factory.class,
+                     RevocationFactory.class,
+                     CryptoValuesFactory.class,
+                     EscrowedKeyPairFactory.class,
+                     EscrowedKeyPairRepository.class ).
                 visibleIn( Visibility.application ).
                 withSideEffects( TracingSideEffect.class );
+        ma.services( CryptoStoreFileService.class ).
+                visibleIn( Visibility.module );
 
         // Automatic reindex
         new AutomaticReindexingAssembler().assemble( ma );

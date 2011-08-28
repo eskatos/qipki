@@ -30,7 +30,7 @@ public class QiPkiTestApplicationEmbeddedCa
 
     public QiPkiTestApplicationEmbeddedCa( String testCodeName )
     {
-        super( new QiPkiEmbeddedCaAssembler( testCodeName, null, Mode.test ).withPresentationTestsAssembler( new Assembler()
+        super( new QiPkiEmbeddedCaAssembler( testCodeName, null, Mode.staging ).withPresentationTestsAssembler( new Assembler()
         {
 
             @Override

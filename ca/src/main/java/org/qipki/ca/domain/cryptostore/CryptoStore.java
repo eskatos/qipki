@@ -26,7 +26,4 @@ public interface CryptoStore
     @Queryable( false )
     Property<char[]> password();
 
-    @Queryable( false )
-    Property<String> payload();
-
 }

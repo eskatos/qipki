@@ -18,23 +18,22 @@ import org.codeartisans.java.toolbox.exceptions.NullArgumentException;
 public enum KeyStoreType
 {
 
-    JCEKS( StringValues.JCEKS ),
+    JCEKS( StringValue.JCEKS, FileExtension.JCEKS ),
     /**
      * @see http://en.wikipedia.org/wiki/Jks
      */
-    JKS( StringValues.JKS ),
+    JKS( StringValue.JKS, FileExtension.JKS ),
     /**
      * @see http://en.wikipedia.org/wiki/PKCS12
      */
-    PKCS12( StringValues.PKCS12 ),
+    PKCS12( StringValue.PKCS12, FileExtension.PKCS12 ),
     /**
      * @see http://en.wikipedia.org/wiki/PKCS11
      */
-    PKCS11( StringValues.PKCS11 );
+    PKCS11( StringValue.PKCS11, null );
 
-    // Needed ?
     @SuppressWarnings( "PublicInnerClass" )
-    public interface StringValues
+    public interface StringValue
     {
 
         String JCEKS = "JCEKS";
@@ -43,11 +42,22 @@ public enum KeyStoreType
         String PKCS11 = "PKCS11";
     }
 
-    private String string;
+    @SuppressWarnings( "PublicInnerClass" )
+    public interface FileExtension
+    {
 
-    private KeyStoreType( String string )
+        String JCEKS = "jceks";
+        String JKS = "jks";
+        String PKCS12 = "p12";
+    }
+
+    private String string;
+    private String fileExtension;
+
+    private KeyStoreType( String string, String fileExtension )
     {
         this.string = string;
+        this.fileExtension = fileExtension;
     }
 
     /**
@@ -59,19 +69,24 @@ public enum KeyStoreType
         return string;
     }
 
+    public String fileExtension()
+    {
+        return fileExtension;
+    }
+
     public static KeyStoreType valueOfTypeString( String typeString )
     {
         NullArgumentException.ensureNotEmpty( "Type String", typeString );
-        if ( StringValues.JCEKS.equalsIgnoreCase( typeString ) ) {
+        if ( StringValue.JCEKS.equalsIgnoreCase( typeString ) ) {
             return JCEKS;
         }
-        if ( StringValues.JKS.equalsIgnoreCase( typeString ) ) {
+        if ( StringValue.JKS.equalsIgnoreCase( typeString ) ) {
             return JKS;
         }
-        if ( StringValues.PKCS12.equalsIgnoreCase( typeString ) ) {
+        if ( StringValue.PKCS12.equalsIgnoreCase( typeString ) ) {
             return PKCS12;
         }
-        if ( StringValues.PKCS11.equalsIgnoreCase( typeString ) ) {
+        if ( StringValue.PKCS11.equalsIgnoreCase( typeString ) ) {
             return PKCS11;
         }
         throw new IllegalArgumentException( "Unsupported KeyStoreType: " + typeString );

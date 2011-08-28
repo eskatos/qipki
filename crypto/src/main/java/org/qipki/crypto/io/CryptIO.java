@@ -13,6 +13,8 @@
  */
 package org.qipki.crypto.io;
 
+import java.io.File;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.security.KeyPair;
 import java.security.KeyStore;
@@ -47,10 +49,14 @@ public interface CryptIO
 
     KeyPair readKeyPairPEM( Reader reader );
 
+    KeyStore createEmptyKeyStore( KeyStoreType storeType );
+
+    void writeKeyStore( KeyStore keystore, char[] password, File file );
+
+    KeyStore readKeyStore( File file, KeyStoreType storeType, char[] password );
+
     KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password );
 
     String base64Encode( KeyStore keystore, char[] password );
-
-    KeyStore createEmptyKeyStore( KeyStoreType storeType );
 
 }

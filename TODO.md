@@ -10,9 +10,8 @@
 
 # Work in progress
 
-* (##--) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Store EntityStore on the filesystem
-  * Store KeyStores on the filesystem
+* (###-) Apply Qi4j FileConfiguration API to all filesystem storage
+  * Find a way to harden UnitOfWork involving KeyStore file changes (file move on UoW completion?)
 * (----) Support CRLs
   * Store CRLs on the filesystem
   * Use the task scheduler to generate CRLs so this is not done in request threads
@@ -26,16 +25,14 @@
 
 # Next steps - That would lead to a tiny 1.0
 
+* (----) Review Qi4j SQL Support
+  * Merge my and Rickard support for DataSources
+  * Find a clever way to use FileConfiguration API to store databases in ~/data
 * (----) Follow state refactoring with the Qi4j data migration system
   * Get a documented database sample for 1.0-alpha6 and use it as a test resource
   * Write a complete test scenario from the embedder point of view around the sample database
   * Write unit tests for migrations
 * (----) Fix http service configuration handling up to qipki-ca-http-main
-* (----) Simplify assembly
-  * Refactor ApplicationAssemblers in IoC style
-  * Factor out infrastructure runtimes and assembly in a dedicated module
-  * Depend on that module for tests and distribution packaging
-  * QUID Make assembly scenarii modules? --> bootstrap
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts

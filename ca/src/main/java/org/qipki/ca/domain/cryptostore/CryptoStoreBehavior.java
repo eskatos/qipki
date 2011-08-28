@@ -13,21 +13,17 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
-import java.security.KeyPair;
-import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
 public interface CryptoStoreBehavior
 {
 
-    KeyStore loadKeyStore();
+    X509Certificate getX509Certificate( String slotId );
 
-    String storeCertificate( X509Certificate certificate );
+    PrivateKey getPrivateKey( String slotId );
 
-    void storeCertificate( String slotId, X509Certificate certificate );
-
-    String storeKeyPair( KeyPair keyPair );
-
-    void storeKeyPair( String slotId, KeyPair keyPair );
+    void storeCertifiedKeyPair( String slotId, PrivateKey privateKey, Certificate... certChain );
 
 }

@@ -30,7 +30,7 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa( String testCodeName )
     {
-        super( new QiPkiHttpCaAssembler( testCodeName, null, Mode.test ).withPresentationTestsAssembler( new Assembler()
+        super( new QiPkiHttpCaAssembler( testCodeName, null, Mode.staging ).withPresentationTestsAssembler( new Assembler()
         {
 
             @Override
