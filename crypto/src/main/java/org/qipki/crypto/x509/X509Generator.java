@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
@@ -41,5 +42,11 @@ public interface X509Generator
                                              PublicKey publicKey,
                                              Duration validity,
                                              List<X509ExtensionHolder> x509Extensions );
+
+    X509CRL generateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey );
+
+    X509CRL updateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey,
+                           X509Certificate revokedCertificate, RevocationReason reason,
+                           X509CRL previousCRL, BigInteger lastCRLNumber );
 
 }

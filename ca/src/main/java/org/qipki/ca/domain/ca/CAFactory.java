@@ -16,7 +16,6 @@ package org.qipki.ca.domain.ca;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.cert.X509CRL;
@@ -27,15 +26,10 @@ import java.util.List;
 
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
-import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.x509.X509V2CRLGenerator;
-import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 
-import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import org.qi4j.api.entity.EntityBuilder;
@@ -53,12 +47,9 @@ import org.qipki.ca.domain.crl.CRLFactory;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.core.QiPkiFailure;
-import org.qipki.crypto.constants.Time;
-import org.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.qipki.crypto.x509.X509Generator;
-import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.KeyUsage;
 import org.qipki.crypto.x509.X509ExtensionHolder;
@@ -90,8 +81,6 @@ public interface CAFactory
         private X509ExtensionsBuilder x509ExtBuilder;
         @Service
         private AsymetricGenerator asymGenerator;
-        @Service
-        private CryptIO cryptIO;
         @Service
         private CRLFactory crlFactory;
 
@@ -162,8 +151,8 @@ public interface CAFactory
 
             // Generate initial CRL
             {
-                X509CRL x509CRL = createInitialCRL( cert, keyPair.getPrivate() );
-                CRL crl = crlFactory.create( cryptIO.asPEM( x509CRL ).toString() );
+                X509CRL x509CRL = x509Generator.generateX509CRL( cert, keyPair.getPrivate() );
+                CRL crl = crlFactory.create( x509CRL );
                 ca.crl().set( crl );
             }
         }
@@ -179,22 +168,7 @@ public interface CAFactory
             extensions.add( new X509ExtensionHolder( X509Extensions.BasicConstraints, true, bc ) );
             org.bouncycastle.asn1.x509.KeyUsage keyUsages = x509ExtBuilder.buildKeyUsages( EnumSet.of( KeyUsage.cRLSign, KeyUsage.keyCertSign ) );
             extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, true, keyUsages ) );
-
             return extensions;
-        }
-
-        // TODO move CRL creation crypto code into a crypto service
-        private X509CRL createInitialCRL( X509Certificate caCert, PrivateKey caPrivKey )
-                throws GeneralSecurityException
-        {
-            X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
-            crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
-            crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
-            crlGen.setNextUpdate( new DateTime().minus( Time.CLOCK_SKEW ).plusHours( 12 ).toDate() );
-            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
-            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
-            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
-            return crlGen.generate( caPrivKey, BouncyCastleProvider.PROVIDER_NAME );
         }
 
     }

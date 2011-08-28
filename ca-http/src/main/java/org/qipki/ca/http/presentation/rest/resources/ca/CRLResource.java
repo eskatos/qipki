@@ -14,8 +14,8 @@
 package org.qipki.ca.http.presentation.rest.resources.ca;
 
 import java.util.Collections;
-import org.qi4j.api.injection.scope.Service;
 
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.ObjectBuilderFactory;
 
@@ -28,19 +28,14 @@ import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CRLResource
         extends AbstractDCIResource
 {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger( CRLResource.class );
 
     public CRLResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
     {
@@ -65,8 +60,7 @@ public class CRLResource
         CRL crl = caCtx.ca().crl().get();
 
         // Representation
-        return new StringRepresentation( crl.pem().get(), MediaType.TEXT_PLAIN );
-
+        return new FileRepresentation( crl.pemFile(), MediaType.TEXT_PLAIN );
     }
 
 }

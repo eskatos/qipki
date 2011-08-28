@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.domain.cryptostore;
+package org.qipki.ca.domain.crl;
 
 import java.io.File;
 
@@ -22,20 +22,20 @@ import org.qi4j.library.fileconfig.FileConfiguration;
 
 import org.qipki.core.file.AbstractEntityFileService;
 
-@Mixins( CryptoStoreFileService.Mixin.class )
-public interface CryptoStoreFileService
+@Mixins( CRLFileService.Mixin.class )
+public interface CRLFileService
         extends ServiceComposite
 {
 
-    File getKeyStoreFile( CryptoStore cryptoStore );
+    File getCRLFile( CRL crl );
 
     abstract class Mixin
             extends AbstractEntityFileService
-            implements CryptoStoreFileService
+            implements CRLFileService
     {
 
-        private static final String DATA_DIRNAME = "cryptostores";
-        private static final String FILE_SUFFIX = "keystore";
+        private static final String DATA_DIRNAME = "crl";
+        private static final String FILE_SUFFIX = "crl";
 
         public Mixin( @Service FileConfiguration fileConfig )
         {
@@ -43,11 +43,10 @@ public interface CryptoStoreFileService
         }
 
         @Override
-        public File getKeyStoreFile( CryptoStore cryptoStore )
+        public File getCRLFile( CRL crl )
         {
-            String keyStoreFileName = new StringBuilder( cryptoStore.identity().get() ).append( "-" ).
-                    append( FILE_SUFFIX ).append( "." ).
-                    append( cryptoStore.storeType().get().fileExtension() ).toString();
+            String keyStoreFileName = new StringBuilder( crl.identity().get() ).append( "-" ).
+                    append( FILE_SUFFIX ).append( ".crl" ).toString();
             return new File( ensureDataDir( DATA_DIRNAME ), keyStoreFileName );
         }
 

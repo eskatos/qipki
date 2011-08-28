@@ -13,7 +13,10 @@
  */
 package org.qipki.ca.domain.ca;
 
-import java.io.StringReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
@@ -28,17 +31,12 @@ import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.misc.NetscapeCertType;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
-import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.x509.X509V2CRLGenerator;
-import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 
-import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import org.qi4j.api.injection.scope.Service;
@@ -52,8 +50,6 @@ import org.qipki.ca.domain.revocation.RevocationFactory;
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.core.QiPkiFailure;
-import org.qipki.crypto.algorithms.SignatureAlgorithm;
-import org.qipki.crypto.constants.Time;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.RevocationReason;
@@ -191,45 +187,50 @@ public abstract class CAMixin
     @Override
     public Revocation revoke( X509 x509, RevocationReason reason )
     {
-        try {
-            Revocation revocation = revocationFactory.create( x509, reason );
-            X509CRL x509CRL = cryptIO.readCRLPEM( new StringReader( state.crl().get().pem().get() ) );
-            if ( false ) {
-                x509CRL = updateCRL( x509CRL, x509.x509Certificate(), reason );
-                state.crl().get().pem().set( cryptIO.asPEM( x509CRL ).toString() );
-            }
-            return revocation;
-        } catch ( GeneralSecurityException ex ) {
-            throw new QiPkiFailure( "Unable to update CRL", ex );
-        }
-    }
-
-    // TODO move CRL updating crypto code into a crypto service
-    /**
-     * @param previousCRL   Previous CRL, can be null
-     * @param cert          Revoked certificate
-     * @param reason        Revocation reason
-     * 
-     * @return              New CRL
-     * 
-     * @throws GeneralSecurityException if something goes wrong
-     */
-    private X509CRL updateCRL( X509CRL previousCRL, X509Certificate cert, RevocationReason reason )
-            throws GeneralSecurityException
-    {
-        X509Certificate caCert = certificate();
-        X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
-        crlGen.setIssuerDN( caCert.getSubjectX500Principal() );
-        DateTime skewedNow = new DateTime().minus( Time.CLOCK_SKEW );
-        crlGen.setThisUpdate( skewedNow.toDate() );
-        crlGen.setNextUpdate( skewedNow.plusHours( 12 ).toDate() );
-        crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
-        crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCert ) );
+        Revocation revocation = revocationFactory.create( x509, reason );
+        File pemFile = state.crl().get().pemFile();
         state.crl().get().lastCRLNumber().set( state.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
-        crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( state.crl().get().lastCRLNumber().get() ) );
-        crlGen.addCRL( previousCRL );
-        crlGen.addCRLEntry( cert.getSerialNumber(), skewedNow.toDate(), reason.reason() );
-        return crlGen.generate( privateKey(), BouncyCastleProvider.PROVIDER_NAME );
+        X509CRL x509CRL;
+
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader( pemFile );
+            x509CRL = cryptIO.readCRLPEM( fileReader );
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to revoke X509", ex );
+        } finally {
+            try {
+                if ( fileReader != null ) {
+                    fileReader.close();
+                }
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to revoke X509", ex );
+            }
+        }
+
+        x509CRL = x509Generator.updateX509CRL( certificate(), privateKey(),
+                                               x509.x509Certificate(), reason,
+                                               x509CRL, state.crl().get().lastCRLNumber().get() );
+
+        FileWriter fileWriter = null;
+        try {
+
+            fileWriter = new FileWriter( pemFile );
+            fileWriter.write( cryptIO.asPEM( x509CRL ).toString() );
+            fileWriter.flush();
+
+            return revocation;
+        } catch ( IOException ex ) {
+            throw new QiPkiFailure( "Unable to revoke X509", ex );
+        } finally {
+            try {
+                if ( fileWriter != null ) {
+                    fileWriter.close();
+                }
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to revoke X509", ex );
+            }
+        }
     }
 
 }

@@ -13,13 +13,20 @@
  */
 package org.qipki.ca.domain.crl;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.security.cert.X509CRL;
 
 import org.qi4j.api.entity.EntityBuilder;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+
+import org.qipki.core.QiPkiFailure;
+import org.qipki.crypto.io.CryptIO;
 
 @Mixins( CRLFactory.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
@@ -27,7 +34,7 @@ public interface CRLFactory
         extends ServiceComposite
 {
 
-    CRL create( String pem );
+    CRL create( X509CRL x509crl );
 
     abstract class Mixin
             implements CRLFactory
@@ -35,15 +42,38 @@ public interface CRLFactory
 
         @Structure
         private UnitOfWorkFactory uowf;
+        @Service
+        private CryptIO cryptIO;
 
         @Override
-        public CRL create( String payload )
+        public CRL create( X509CRL x509crl )
         {
             EntityBuilder<CRL> crlBuilder = uowf.currentUnitOfWork().newEntityBuilder( CRL.class );
             CRL crl = crlBuilder.instance();
-            crl.pem().set( payload );
+
             crl.lastCRLNumber().set( BigInteger.ZERO );
-            return crlBuilder.newInstance();
+            crl = crlBuilder.newInstance();
+
+            FileWriter fileWriter = null;
+            try {
+
+                fileWriter = new FileWriter( crl.pemFile() );
+                fileWriter.write( cryptIO.asPEM( x509crl ).toString() );
+                fileWriter.flush();
+
+                return crl;
+
+            } catch ( IOException ex ) {
+                throw new QiPkiFailure( "Unable to revoke X509", ex );
+            } finally {
+                try {
+                    if ( fileWriter != null ) {
+                        fileWriter.close();
+                    }
+                } catch ( IOException ex ) {
+                    throw new QiPkiFailure( "Unable to revoke X509", ex );
+                }
+            }
         }
 
     }

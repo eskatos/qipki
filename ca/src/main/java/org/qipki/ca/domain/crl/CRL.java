@@ -13,12 +13,15 @@
  */
 package org.qipki.ca.domain.crl;
 
+import java.io.File;
 import java.math.BigInteger;
 
+import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.Queryable;
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.This;
+import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
-
-import org.qipki.ca.domain.fragments.HasPEM;
 
 /**
  *
@@ -49,11 +52,31 @@ import org.qipki.ca.domain.fragments.HasPEM;
  *
  *      NextUpdate = min(Current Time + (CRLDeltaPeriodUnits * CRLDeltaPeriod) + OverlapPeriod + ClockSkewMinutes, NotAfter_date_from_the_CA_certificate)
  */
+@Mixins( CRL.Mixin.class )
 public interface CRL
-        extends HasPEM
+        extends Identity
 {
 
     @Queryable( false )
     Property<BigInteger> lastCRLNumber();
+
+    File pemFile();
+
+    abstract class Mixin
+            implements CRL
+    {
+
+        @Service
+        private CRLFileService crlFileService;
+        @This
+        private CRL me;
+
+        @Override
+        public File pemFile()
+        {
+            return crlFileService.getCRLFile( me );
+        }
+
+    }
 
 }

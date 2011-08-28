@@ -11,9 +11,8 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Find a way to harden UnitOfWork involving KeyStore file changes (file move on UoW completion?)
-* (----) Support CRLs
-  * Store CRLs on the filesystem
+  * Find a way to harden UnitOfWork involving KeyStore file changes (file move on UoW completion? see UnitOfWorkCallback)
+* (#---) Support CRLs
   * Use the task scheduler to generate CRLs so this is not done in request threads
   * Add CRL Endpoint in issued X509Certificates
     * Full url given by X509Profile

@@ -18,6 +18,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Vector;
@@ -26,11 +27,15 @@ import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Attribute;
+import org.bouncycastle.asn1.x509.CRLNumber;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 
 import org.qi4j.api.injection.scope.Service;
 
@@ -114,6 +119,43 @@ public class X509GeneratorImpl
             throw new CryptoFailure( "Unable to generate X509Certificate", ex );
         } catch ( IllegalStateException ex ) {
             throw new CryptoFailure( "Unable to generate X509Certificate", ex );
+        }
+    }
+
+    @Override
+    public X509CRL generateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey )
+    {
+        try {
+            X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+            crlGen.setIssuerDN( caCertificate.getSubjectX500Principal() );
+            crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
+            crlGen.setNextUpdate( new DateTime().minus( Time.CLOCK_SKEW ).plusHours( 12 ).toDate() );
+            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
+            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
+            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
+            return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( "Unable to generate CRL", ex );
+        }
+    }
+
+    @Override
+    public X509CRL updateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey, X509Certificate revokedCertificate, RevocationReason reason, X509CRL previousCRL, BigInteger lastCRLNumber )
+    {
+        try {
+            X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+            crlGen.setIssuerDN( caCertificate.getSubjectX500Principal() );
+            DateTime skewedNow = new DateTime().minus( Time.CLOCK_SKEW );
+            crlGen.setThisUpdate( skewedNow.toDate() );
+            crlGen.setNextUpdate( skewedNow.plusHours( 12 ).toDate() );
+            crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
+            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
+            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( lastCRLNumber ) );
+            crlGen.addCRL( previousCRL );
+            crlGen.addCRLEntry( revokedCertificate.getSerialNumber(), skewedNow.toDate(), reason.reason() );
+            return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( "Unable to update CRL", ex );
         }
     }
 
