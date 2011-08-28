@@ -45,7 +45,6 @@ import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.ca.domain.revocation.Revocation;
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.ca.domain.x509profile.X509Profile;
-import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
@@ -100,21 +99,22 @@ public class QiPkiEmbeddedCaTest
         CryptoStoreListContext cslCtx = rootCtx.cryptoStoreListContext();
         CAListContext calCtx = rootCtx.caListContext();
         X509ProfileListContext xplCtx = rootCtx.x509ProfileListContext();
-        X509ExtensionsValueFactory x509ExtFactory = xplCtx.x509ExtensionsValueFactory();
         KeyPairSpecValue keyPairSpec = calCtx.createKeyPairSpecValue( AsymetricAlgorithm.RSA, 512 );
 
         CryptoStore cryptoStore = cslCtx.createCryptoStore( CRYPTOSTORE_NAME, KeyStoreType.PKCS12, PASSWORD );
 
         LOGGER.info( "CryptoStore created" );
 
-        RootCA rootCa = calCtx.createRootCA( cryptoStore.identity().get(), "Root CA", 1,
-                                             buildDN( "RootCa" ), keyPairSpec );
-        SubCA serverCa = calCtx.createSubCA( cryptoStore.identity().get(), SERVER_CA_NAME, 1,
-                                             buildDN( "ServerCa" ), keyPairSpec,
-                                             rootCa.identity().get() );
-        SubCA clientCa = calCtx.createSubCA( cryptoStore.identity().get(), CLIENT_CA_NAME, 1,
-                                             buildDN( "ClientCa" ), keyPairSpec,
-                                             rootCa.identity().get() );
+        RootCA rootCa = calCtx.createRootCA( cryptoStore.identity().get(),
+                                             "Root CA", 1, buildDN( "RootCa" ),
+                                             keyPairSpec, null );
+        SubCA serverCa = calCtx.createSubCA( cryptoStore.identity().get(), rootCa.identity().get(),
+                                             SERVER_CA_NAME, 1, buildDN( "ServerCa" ),
+                                             keyPairSpec, null );
+        SubCA clientCa = calCtx.createSubCA( cryptoStore.identity().get(), rootCa.identity().get(),
+                                             CLIENT_CA_NAME, 1, buildDN( "ClientCa" ),
+                                             keyPairSpec,
+                                             null );
 
         LOGGER.info( "CAs created" );
 

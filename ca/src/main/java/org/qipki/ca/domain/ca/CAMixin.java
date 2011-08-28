@@ -23,6 +23,7 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,7 @@ import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.misc.NetscapeCertType;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
@@ -45,6 +47,7 @@ import org.qi4j.api.injection.scope.This;
 import org.qipki.ca.application.WrongParametersBuilder;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.qipki.ca.domain.ca.root.RootCAMixin;
+import org.qipki.ca.domain.ca.sub.SubCA;
 import org.qipki.ca.domain.revocation.Revocation;
 import org.qipki.ca.domain.revocation.RevocationFactory;
 import org.qipki.ca.domain.x509.X509;
@@ -83,7 +86,7 @@ public abstract class CAMixin
     @Service
     private RevocationFactory revocationFactory;
     @This
-    private CAState state;
+    private CA me;
 
     @Override
     public DistinguishedName distinguishedName()
@@ -100,13 +103,13 @@ public abstract class CAMixin
     @Override
     public X509Certificate certificate()
     {
-        return state.cryptoStore().get().getX509Certificate( state.identity().get() );
+        return me.cryptoStore().get().getX509Certificate( me.identity().get() );
     }
 
     @Override
     public PrivateKey privateKey()
     {
-        return state.cryptoStore().get().getPrivateKey( state.identity().get() );
+        return me.cryptoStore().get().getPrivateKey( me.identity().get() );
     }
 
     @Override
@@ -143,9 +146,11 @@ public abstract class CAMixin
             NetscapeCertType netscapeCertType = x509ExtBuilder.buildNetscapeCertTypes( x509profile.netscapeCertTypes().get().netscapeCertTypes().get() );
             extensions.add( new X509ExtensionHolder( MiscObjectIdentifiers.netscapeCertType, x509profile.netscapeCertTypes().get().critical().get(), netscapeCertType ) );
 
-            // TODO Climb up the CA hierarchy to add inherited CRL distpoints
-            // CRLDistPoint crlDistPoints = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), "http://qipki.org/crl" );
-            // extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPoints ) );
+            String[] crlDistPoints = gatherCRLDistributionPoints();
+            if ( crlDistPoints.length > 0 ) {
+                CRLDistPoint crlDistPointsExt = x509ExtBuilder.buildCRLDistributionPoints( certificate().getSubjectX500Principal(), crlDistPoints );
+                extensions.add( new X509ExtensionHolder( X509Extensions.CRLDistributionPoints, false, crlDistPointsExt ) );
+            }
 
             DistinguishedName issuerDN = new DistinguishedName( certificate().getSubjectX500Principal() );
             DistinguishedName subjectDN = new DistinguishedName( pkcs10.getCertificationRequestInfo().getSubject() );
@@ -165,14 +170,31 @@ public abstract class CAMixin
         }
     }
 
+    /**
+     * Climb up the CA hierarchy to find CRL Distribution Points.
+     * 
+     * Stops at the first CA defining distribution points.
+     */
+    private String[] gatherCRLDistributionPoints()
+    {
+        List<String> distPoints = new ArrayList<String>();
+        distPoints.addAll( me.crlDistPoints().get() );
+        CA currentCa = me;
+        while ( distPoints.isEmpty() && currentCa instanceof SubCA ) {
+            currentCa = ( ( SubCA ) currentCa ).issuer().get();
+            distPoints.addAll( currentCa.crlDistPoints().get() );
+        }
+        return distPoints.toArray( new String[ distPoints.size() ] );
+    }
+
     private void ensureX509ProfileIsAllowed( X509Profile x509profile )
     {
-        for ( X509ProfileAssignment eachAssignment : state.allowedX509Profiles() ) {
+        for ( X509ProfileAssignment eachAssignment : me.allowedX509Profiles() ) {
             if ( eachAssignment.x509Profile().get().equals( x509profile ) ) {
                 return;
             }
         }
-        throw new WrongParametersBuilder().illegals( "X509Profile " + x509profile.name().get() + " is not allowed on CA " + state.name().get() ).build();
+        throw new WrongParametersBuilder().illegals( "X509Profile " + x509profile.name().get() + " is not allowed on CA " + me.name().get() ).build();
     }
 
     private void ensureNoIllegalRequestedExtensions( List<X509ExtensionHolder> requestedExtensions )
@@ -188,8 +210,8 @@ public abstract class CAMixin
     public Revocation revoke( X509 x509, RevocationReason reason )
     {
         Revocation revocation = revocationFactory.create( x509, reason );
-        File pemFile = state.crl().get().pemFile();
-        state.crl().get().lastCRLNumber().set( state.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
+        File pemFile = me.crl().get().pemFile();
+        me.crl().get().lastCRLNumber().set( me.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
         X509CRL x509CRL;
 
         FileReader fileReader = null;
@@ -210,7 +232,7 @@ public abstract class CAMixin
 
         x509CRL = x509Generator.updateX509CRL( certificate(), privateKey(),
                                                x509.x509Certificate(), reason,
-                                               x509CRL, state.crl().get().lastCRLNumber().get() );
+                                               x509CRL, me.crl().get().lastCRLNumber().get() );
 
         FileWriter fileWriter = null;
         try {

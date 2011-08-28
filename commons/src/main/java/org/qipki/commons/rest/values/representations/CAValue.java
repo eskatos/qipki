@@ -13,6 +13,7 @@
  */
 package org.qipki.commons.rest.values.representations;
 
+import java.util.List;
 import java.util.Set;
 
 import org.qi4j.api.common.UseDefaults;
@@ -30,6 +31,9 @@ public interface CAValue
     Property<String> exportUri();
 
     Property<String> crlUri();
+
+    @UseDefaults
+    Property<List<String>> crlDistPoints();
 
     @UseDefaults
     Property<Set<X509ProfileAssignmentValue>> allowedX509Profiles();

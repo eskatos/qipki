@@ -152,6 +152,8 @@ public interface RestletValuesFactory
             caValue.crlUri().set( caUriBuilder.ca().withIdentity( ca.identity().get() ).crl().build() );
             caValue.cryptoStoreUri().set( caUriBuilder.cryptoStore().withIdentity( ca.cryptoStore().get().identity().get() ).build() );
 
+            caValue.crlDistPoints().set( ca.crlDistPoints().get() );
+
             for ( X509ProfileAssignment eachAllowedProfile : ca.allowedX509Profiles().toSet() ) {
                 ValueBuilder<X509ProfileAssignmentValue> profileBuilder = vbf.newValueBuilder( X509ProfileAssignmentValue.class );
 

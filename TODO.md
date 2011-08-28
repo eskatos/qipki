@@ -11,15 +11,11 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Find a way to harden UnitOfWork involving KeyStore file changes (file move on UoW completion? see UnitOfWorkCallback)
-* (#---) Support CRLs
-  * Use the task scheduler to generate CRLs so this is not done in request threads
-  * Add CRL Endpoint in issued X509Certificates
-    * Full url given by X509Profile
-    * If no url on profile creation, create it with a sensible defaut, allow edition too
-    * Http presentation layer could provide the default one easily
-  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
-    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
+  * Find a way to harden UnitOfWork involving file changes (file move on UoW completion? see UnitOfWorkCallback)
+* (----) Fix http service configuration handling up to qipki-ca-http-main
+* (----) Enhance Netscape extensions handling
+  * In X509DetailValue : all of them
+  * Automatically filled by CAs : Netscape CA Revocation URL
 
 
 # Next steps - That would lead to a tiny 1.0
@@ -31,7 +27,6 @@
   * Get a documented database sample for 1.0-alpha6 and use it as a test resource
   * Write a complete test scenario from the embedder point of view around the sample database
   * Write unit tests for migrations
-* (----) Fix http service configuration handling up to qipki-ca-http-main
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
@@ -40,9 +35,6 @@
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
-* (----) Enhance Netscape extensions handling
-  * In X509DetailValue : all of them
-  * Automatically filled by CAs : Netscape CA Revocation URL
 * (----) Generate development site and deploy it to github pages
   * Write a working basic site template
   * What about aggregated reports?
@@ -53,6 +45,11 @@
 
 # After that
 
+* (----) Enhance CRL support
+  * Use the task scheduler to generate CRLs so this is not done in request threads
+  * Add a command to force CRL regeneration
+  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
+    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
 * Write a build script for common development tasks
 * Reduce LOC in ReST Resources
   * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects

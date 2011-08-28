@@ -28,6 +28,7 @@ import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.AbstractListResource;
+import org.qipki.ca.http.presentation.rest.uribuilder.CaUriBuilder;
 import org.qipki.ca.http.presentation.rest.uribuilder.CaUriResolver;
 import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CAValue;
@@ -88,12 +89,19 @@ public class CAListResource
             if ( StringUtils.isEmpty( params.parentCaUri().get() ) ) {
                 ca = caListCtx.createRootCA( cryptoStoreResolver.identity(),
                                              params.name().get(), params.validityDays().get(),
-                                             params.distinguishedName().get(), params.keySpec().get() );
+                                             params.distinguishedName().get(), params.keySpec().get(),
+                                             params.crlDistPoints().get() );
             } else {
                 CaUriResolver parentCaResolver = new CaUriResolver( getRootRef(), params.parentCaUri().get() );
-                ca = caListCtx.createSubCA( cryptoStoreResolver.identity(),
+                ca = caListCtx.createSubCA( cryptoStoreResolver.identity(), parentCaResolver.identity(),
                                             params.name().get(), params.validityDays().get(),
-                                            params.distinguishedName().get(), params.keySpec().get(), parentCaResolver.identity() );
+                                            params.distinguishedName().get(), params.keySpec().get(),
+                                            params.crlDistPoints().get() );
+            }
+
+            // Set default CRL Distribution Point if empty
+            if ( ca.crlDistPoints().get().isEmpty() ) {
+                ca.crlDistPoints().get().add( new CaUriBuilder( getRootRef() ).ca().withIdentity( ca.identity().get() ).crl().build() );
             }
 
             // Redirect to created resource

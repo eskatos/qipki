@@ -32,12 +32,12 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 import org.joda.time.Duration;
 
+import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.sideeffect.SideEffects;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 import org.qipki.ca.domain.ca.root.RootCA;
@@ -55,18 +55,19 @@ import org.qipki.crypto.x509.KeyUsage;
 import org.qipki.crypto.x509.X509ExtensionHolder;
 import org.qipki.crypto.x509.X509ExtensionsBuilder;
 
-/**
- * TODO Handle CRL nextUpdate
- */
 @Mixins( CAFactory.Mixin.class )
-@SideEffects( CAFactorySideEffect.class )
 public interface CAFactory
         extends ServiceComposite
 {
 
-    RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName,
+                         KeyPairSpecValue keySpec, CryptoStore cryptoStore,
+                         @Optional String... crlDistPoints );
 
-    SubCA createSubCA( CA parentCA, String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore );
+    SubCA createSubCA( CA parentCA,
+                       String name, Integer validityDays, DistinguishedName distinguishedName,
+                       KeyPairSpecValue keySpec, CryptoStore cryptoStore,
+                       @Optional String... crlDistPoints );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
@@ -85,7 +86,9 @@ public interface CAFactory
         private CRLFactory crlFactory;
 
         @Override
-        public RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName,
+                                    KeyPairSpecValue keySpec, CryptoStore cryptoStore,
+                                    String... crlDistPoints )
         {
             try {
                 // Self signed CA
@@ -113,7 +116,10 @@ public interface CAFactory
         }
 
         @Override
-        public SubCA createSubCA( CA parentCA, String name, Integer validityDays, DistinguishedName distinguishedName, KeyPairSpecValue keySpec, CryptoStore cryptoStore )
+        public SubCA createSubCA( CA parentCA,
+                                  String name, Integer validityDays, DistinguishedName distinguishedName,
+                                  KeyPairSpecValue keySpec, CryptoStore cryptoStore,
+                                  String... crlDistPoints )
         {
             try {
                 // Sub CA

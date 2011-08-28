@@ -13,6 +13,8 @@
  */
 package org.qipki.commons.rest.values.params;
 
+import java.util.Collections;
+import java.util.List;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -42,6 +44,12 @@ public interface ParamsFactory
     CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
                                                 String name, Integer validityDays,
                                                 String distinguishedName, KeyPairSpecValue keySpec,
+                                                @Optional String parentCaUri );
+
+    CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
+                                                String name, Integer validityDays,
+                                                String distinguishedName, KeyPairSpecValue keySpec,
+                                                List<String> crlDistPoints,
                                                 @Optional String parentCaUri );
 
     X509ProfileFactoryParamsValue createX509ProfileFactoryParams( String name,
@@ -83,7 +91,19 @@ public interface ParamsFactory
         }
 
         @Override
-        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri, String name, Integer validityDays, String distinguishedName, KeyPairSpecValue keySpec, String parentCaUri )
+        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
+                                                           String name, Integer validityDays, String distinguishedName,
+                                                           KeyPairSpecValue keySpec,
+                                                           String parentCaUri )
+        {
+            return createCAFactoryParams( keyStoreUri, name, validityDays, distinguishedName, keySpec, Collections.<String>emptyList(), parentCaUri );
+        }
+
+        @Override
+        public CAFactoryParamsValue createCAFactoryParams( String keyStoreUri,
+                                                           String name, Integer validityDays, String distinguishedName,
+                                                           KeyPairSpecValue keySpec, List<String> crlDistPoints,
+                                                           String parentCaUri )
         {
             ValueBuilder<CAFactoryParamsValue> paramsBuilder = vbf.newValueBuilder( CAFactoryParamsValue.class );
             CAFactoryParamsValue params = paramsBuilder.prototype();
@@ -92,6 +112,7 @@ public interface ParamsFactory
             params.validityDays().set( validityDays );
             params.distinguishedName().set( distinguishedName );
             params.keySpec().set( keySpec );
+            params.crlDistPoints().get().addAll( crlDistPoints );
             params.parentCaUri().set( parentCaUri );
             return paramsBuilder.newInstance();
         }

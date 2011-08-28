@@ -13,6 +13,9 @@
  */
 package org.qipki.ca.application.contexts.ca;
 
+import java.util.Collections;
+import java.util.List;
+import org.qi4j.api.common.Optional;
 import org.qipki.ca.application.WrongParametersBuilder;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.ca.CAFactory;
@@ -50,17 +53,23 @@ public class CAListContext
         return context.role( CryptoValuesFactory.class ).createKeySpec( algorithm, length );
     }
 
-    public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec )
+    public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, @Optional List<String> crlDistPoints )
     {
+        if ( crlDistPoints == null ) {
+            crlDistPoints = Collections.emptyList();
+        }
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
-        return context.role( CAFactory.class ).createRootCA( name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createRootCA( name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore, crlDistPoints.toArray( new String[]{} ) );
     }
 
-    public SubCA createSubCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, String parentCaIdentity )
+    public SubCA createSubCA( String cryptoStoreIdentity, String parentCaIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, @Optional List<String> crlDistPoints )
     {
+        if ( crlDistPoints == null ) {
+            crlDistPoints = Collections.emptyList();
+        }
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
         CA parentCA = fetchParentCA( parentCaIdentity );
-        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore );
+        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore, crlDistPoints.toArray( new String[]{} ) );
     }
 
     private CA fetchParentCA( String identity )

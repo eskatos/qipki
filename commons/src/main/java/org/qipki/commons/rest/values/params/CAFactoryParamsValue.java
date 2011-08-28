@@ -13,13 +13,16 @@
  */
 package org.qipki.commons.rest.values.params;
 
+import java.util.List;
+
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.common.UseDefaults;
+import org.qi4j.api.property.Property;
+import org.qi4j.api.value.ValueComposite;
+
 import org.qipki.crypto.constraints.X500Name;
 import org.qipki.commons.fragments.HasName;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
-
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.value.ValueComposite;
 
 public interface CAFactoryParamsValue
         extends HasName, ValueComposite
@@ -28,6 +31,9 @@ public interface CAFactoryParamsValue
     Property<String> cryptoStoreUri();
 
     Property<Integer> validityDays();
+
+    @UseDefaults
+    Property<List<String>> crlDistPoints();
 
     @X500Name
     Property<String> distinguishedName();

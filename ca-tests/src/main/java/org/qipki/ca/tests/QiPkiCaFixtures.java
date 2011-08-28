@@ -83,9 +83,9 @@ public interface QiPkiCaFixtures
                 // Create some test CAs
                 CAListContext caListCtx = rootCtx.caListContext();
                 KeyPairSpecValue keySpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
-                CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec );
-                CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec );
-                CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec );
+                CA rootCa = caListCtx.createRootCA( cryptoStore.identity().get(), ROOT_CA_NAME, 1, ROOT_CA_DN, keySpec, null );
+                CA usersCa = caListCtx.createRootCA( cryptoStore.identity().get(), USERS_CA_NAME, 1, USERS_CA_DN, keySpec, null );
+                CA servicesCa = caListCtx.createRootCA( cryptoStore.identity().get(), SERVICES_CA_NAME, 1, SERVICES_CA_DN, keySpec, null );
 
                 cryptoStore.getX509Certificate( rootCa.identity().get() ); // This call is here only to test CryptoStoreBehavior
 
