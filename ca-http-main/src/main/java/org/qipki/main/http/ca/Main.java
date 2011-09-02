@@ -67,6 +67,9 @@ public class Main
         appAssembler.withFileConfigurationOverride( fileConfigOverride );
         appAssembler.withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:" + new File( fileConfigOverride.data(), "ca-store" ).getAbsolutePath() + ";create=true" ) );
         appAssembler.withJMXPort( args.getJmxPort() );
+        appAssembler.withHttpConfiguration( args.getHost(),
+                                            args.getPort(),
+                                            new File( fileConfigOverride.data(), "docroot" ).getAbsolutePath() );
         appAssembler.withWebClientAssembler( new WebClientAssembler() );
 
         return new QiPkiHttpCa( appAssembler )

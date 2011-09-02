@@ -20,7 +20,7 @@ import org.qi4j.library.fileconfig.FileConfigurationOverride;
 public class QiPkiTestSupport
 {
 
-    public static FileConfigurationOverride buildFileConfigTestOverride( String testCodeName )
+    public static FileConfigurationOverride fileConfigTestOverride( String testCodeName )
     {
         return new FileConfigurationOverride().withConfiguration( new File( "target/" + testCodeName + "-qi4j-configuration" ) ).
                 withData( new File( "target/" + testCodeName + "-qi4j-data" ) ).

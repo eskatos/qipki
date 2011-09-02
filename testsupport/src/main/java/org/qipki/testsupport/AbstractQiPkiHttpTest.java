@@ -57,8 +57,8 @@ public abstract class AbstractQiPkiHttpTest
         extends AbstractQiPkiTest
 {
 
-    protected static final String LOCALHOST = "localhost";
-    protected static final int DEFAULT_PORT = 8443;
+    public static final int DEFAULT_PORT = 8443;
+    public static final String LOCALHOST = "localhost";
     protected CryptIO cryptio;
     protected X509Generator x509Generator;
     protected AsymetricGenerator asymGenerator;

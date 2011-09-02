@@ -13,28 +13,41 @@
  */
 package org.qipki.ca.http.bootstrap;
 
-import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.ApplicationAssembly;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.LayerAssembly;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.library.http.JettyConfiguration;
 
 import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
 import static org.qipki.ca.http.bootstrap.HttpCaAssemblyNames.*;
-import org.qipki.ca.http.presentation.rest.api.RestApiConfiguration;
 
 public class QiPkiHttpCaAssembler
         extends QiPkiEmbeddedCaAssembler
 {
 
+    private static final int DEFAULT_PORT = 8443;
+    private String iface;
+    private Integer port;
+    private String docRoot;
     private Assembler webClientAssembler;
 
     public QiPkiHttpCaAssembler( String appName, String appVersion, Mode appMode )
     {
         super( appName, appVersion, appMode );
+    }
+
+    public final QiPkiHttpCaAssembler withHttpConfiguration( String iface, Integer port, String docRoot )
+    {
+        this.iface = iface;
+        if ( port != null ) {
+            this.port = port;
+        } else {
+            port = DEFAULT_PORT;
+        }
+        this.docRoot = docRoot;
+        return this;
     }
 
     public final QiPkiHttpCaAssembler withWebClientAssembler( Assembler assembler )
@@ -48,16 +61,21 @@ public class QiPkiHttpCaAssembler
     protected final void onAssemble( ApplicationAssembly app )
             throws AssemblyException
     {
+        ModuleAssembly config = app.layer( LAYER_CONFIGURATION ).module( MODULE_CONFIGURATION );
+
         LayerAssembly presentation = app.layer( LAYER_PRESENTATION );
 
-        new HttpModuleAssembler().assemble( presentation.module( MODULE_HTTP ) );
-        new RestApiModuleAssembler().assemble( presentation.module( MODULE_REST_API ) );
+        HttpModuleAssembler httpAssembler = new HttpModuleAssembler().withInterface( iface ).withPort( port ).withDocRoot( docRoot );
+        httpAssembler.assemble( presentation.module( MODULE_HTTP ) );
+        httpAssembler.assembleConfigModule( config );
+
+        RestApiModuleAssembler restApiAssembler = new RestApiModuleAssembler();
+        restApiAssembler.assemble( presentation.module( MODULE_REST_API ) );
+        restApiAssembler.assembleConfigModule( config );
+
         if ( webClientAssembler != null ) {
             webClientAssembler.assemble( presentation.module( MODULE_WEB_CLIENT ) );
         }
-
-        ModuleAssembly config = app.layer( LAYER_CONFIGURATION ).module( MODULE_CONFIGURATION );
-        config.entities( RestApiConfiguration.class, JettyConfiguration.class ).visibleIn( Visibility.application );
     }
 
 }

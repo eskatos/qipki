@@ -40,7 +40,7 @@ public class QiPkiTestApplicationEmbeddedCa
                 module.services( QiPkiCaFixtures.class ).instantiateOnStartup();
             }
 
-        } ).withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ).
+        } ).withFileConfigurationOverride( QiPkiTestSupport.fileConfigTestOverride( testCodeName ) ).
                 withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ) );
     }
 

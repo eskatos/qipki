@@ -14,7 +14,6 @@
 package org.qipki.ca.http.bootstrap;
 
 import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import static org.qi4j.library.http.Servlets.*;
@@ -24,6 +23,7 @@ import org.qipki.ca.http.presentation.rest.RestletApplication;
 import org.qipki.ca.http.presentation.rest.ObjectResourceFinder;
 import org.qipki.ca.http.presentation.rest.RestletServletServerService;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
+import org.qipki.ca.http.presentation.rest.api.RestApiConfiguration;
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.CaApiRootResource;
 import org.qipki.ca.http.presentation.rest.resources.ca.CAExportResource;
@@ -44,9 +44,10 @@ import org.qipki.ca.http.presentation.rest.resources.x509.X509RevocationResource
 import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileListResource;
 import org.qipki.ca.http.presentation.rest.resources.x509profile.X509ProfileResource;
 import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
+import org.qipki.core.bootstrap.AssemblerWithConfig;
 
 public class RestApiModuleAssembler
-        implements Assembler
+        implements AssemblerWithConfig
 {
 
     @Override
@@ -88,6 +89,13 @@ public class RestApiModuleAssembler
                 with( RestletServletServerService.class ) ).
                 to( module );
 
+    }
+
+    @Override
+    public void assembleConfigModule( ModuleAssembly config )
+            throws AssemblyException
+    {
+        config.entities( RestApiConfiguration.class ).visibleIn( Visibility.application );
     }
 
 }

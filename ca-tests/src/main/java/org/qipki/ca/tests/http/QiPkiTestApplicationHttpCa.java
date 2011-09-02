@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.tests.http;
 
+import java.io.File;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
@@ -22,6 +23,7 @@ import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.ca.tests.QiPkiCaFixtures;
 import org.qipki.core.AbstractQiPkiApplication;
 import org.qipki.core.bootstrap.persistence.DerbySesamePersistenceAssembler;
+import org.qipki.testsupport.AbstractQiPkiHttpTest;
 import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationHttpCa
@@ -30,7 +32,11 @@ public class QiPkiTestApplicationHttpCa
 
     public QiPkiTestApplicationHttpCa( String testCodeName )
     {
-        super( new QiPkiHttpCaAssembler( testCodeName, null, Mode.staging ).withPresentationTestsAssembler( new Assembler()
+        super( new QiPkiHttpCaAssembler( testCodeName, null, Mode.staging ). //
+                withHttpConfiguration( AbstractQiPkiHttpTest.LOCALHOST,
+                                       AbstractQiPkiHttpTest.DEFAULT_PORT,
+                                       new File( QiPkiTestSupport.fileConfigTestOverride( testCodeName ).data(), "docroot" ).getAbsolutePath() ).
+                withPresentationTestsAssembler( new Assembler()
         {
 
             @Override
@@ -41,7 +47,7 @@ public class QiPkiTestApplicationHttpCa
             }
 
         } ).
-                withFileConfigurationOverride( QiPkiTestSupport.buildFileConfigTestOverride( testCodeName ) ).
+                withFileConfigurationOverride( QiPkiTestSupport.fileConfigTestOverride( testCodeName ) ).
                 withPersistenceAssembler( new DerbySesamePersistenceAssembler( "jdbc:derby:target/" + testCodeName + "-qi4j-entities;create=true" ) ) );
     }
 

@@ -8,15 +8,19 @@
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
   * Find a way to harden UnitOfWork involving file changes (file move on UoW completion? see UnitOfWorkCallback)
-* (----) Fix http service configuration handling up to qipki-ca-http-main
-* (----) Enhance Netscape extensions handling
-  * In X509DetailValue : all of them
-  * Automatically filled by CAs : Netscape CA Revocation URL
-  * In X509Profile : choose the good ones
+* (##--) Fix http service configuration handling up to qipki-ca-http-main
+  * Add configuration methods on assemblers
+  * Impact tests and main
+  * Fix ca-http-main, it do not run anymore ...
 
 
 # Next steps - That would lead to a tiny 1.0
 
+* Write a build script for common development tasks
+* (----) Review Qi4j HttpService configuration
+  * Add the ability to serve https
+  * Add the ability to do mutual SSL authentication
+  * Add the ability to serve on multiple interfaces/port
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
   * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
@@ -31,10 +35,14 @@
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
   * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
 * (#---) WebUI
+  * Choose and integrate a templating system for textual resources
+  * Make it work as a servlet so the gwt hosted mode still provide live redeploy
+  * Make the gwt host page dynamic with bootstrap configuration
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
 * (#---) Generate development site and deploy it to github pages
+  * Use Gollum/Smeagol for the development website?
   * Write a working basic site template
   * What about aggregated reports?
   * Add gwt compiler report, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/compiler-report.html
@@ -44,14 +52,20 @@
 
 # After that
 
+* (----) Enhance Netscape extensions handling
+  * In X509DetailValue : all of them
+  * Netscape CA Revocation URL
+  * Netscape Revocation URL
+  * Netscape Renewal URL
+  * Automatically filled by CAs : Netscape CA Revocation URL
+  * In X509Profile : choose the good ones
 * (----) Enhance CRL support
   * Use the task scheduler to generate CRLs so this is not done in request threads
   * Add a command to force CRL regeneration
   * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
     * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
-* Write a build script for common development tasks
 * Reduce LOC in ReST Resources
-  * Find a way to declare Resources as interfaces so we can use TransientComposites instead of injected Objects
+  * Qi4j 2.0 will provide constructs allowing to declare Resources as TransientComposites directly
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
   * Use @Concerns to factorize http Resources (error handling, logging etc..)
 * Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using http://www.jamon.org/

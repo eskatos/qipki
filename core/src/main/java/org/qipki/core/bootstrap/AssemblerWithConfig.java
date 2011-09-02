@@ -11,11 +11,17 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.bootstrap.persistence;
+package org.qipki.core.bootstrap;
 
-import org.qipki.core.bootstrap.AssemblerWithConfig;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
 
-public interface PersistenceAssembler
-        extends AssemblerWithConfig
+public interface AssemblerWithConfig
+        extends Assembler
 {
+
+    void assembleConfigModule( ModuleAssembly config )
+            throws AssemblyException;
+
 }

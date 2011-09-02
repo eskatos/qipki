@@ -13,25 +13,40 @@
  */
 package org.qipki.ca.http.bootstrap;
 
-import org.qipki.ca.http.presentation.http.HttpService;
-import org.qipki.ca.http.presentation.http.RootServletService;
-
 import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import static org.qi4j.library.http.Servlets.*;
+import org.qi4j.library.http.JettyConfiguration;
+
+import org.qipki.core.bootstrap.AssemblerWithConfig;
+import org.qipki.ca.http.presentation.http.HttpService;
 
 public class HttpModuleAssembler
-        implements Assembler
+        implements AssemblerWithConfig
 {
 
-    /**
-     * Servlets are added with layer visibility.
-     * 
-     * @param module                the Module to assemble
-     * @throws AssemblyException    thrown if the assembler tries to do something illegal
-     */
+    private String iface;
+    private Integer port;
+    private String docRoot;
+
+    public HttpModuleAssembler withInterface( String iface )
+    {
+        this.iface = iface;
+        return this;
+    }
+
+    public HttpModuleAssembler withPort( Integer port )
+    {
+        this.port = port;
+        return this;
+    }
+
+    public HttpModuleAssembler withDocRoot( String docRoot )
+    {
+        this.docRoot = docRoot;
+        return this;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
@@ -40,10 +55,17 @@ public class HttpModuleAssembler
         module.addServices( HttpService.class ).
                 visibleIn( Visibility.module ).
                 instantiateOnStartup();
+    }
 
-        //addServlets( serve( "/" ).
-        //        with( RootServletService.class ) ).
-        //        to( module );
+    @Override
+    public void assembleConfigModule( ModuleAssembly config )
+            throws AssemblyException
+    {
+        config.entities( JettyConfiguration.class ).visibleIn( Visibility.application );
+        JettyConfiguration jettyConfig = config.forMixin( JettyConfiguration.class ).declareDefaults();
+        jettyConfig.hostName().set( iface );
+        jettyConfig.port().set( port );
+        jettyConfig.resourcePath().set( docRoot );
     }
 
 }
