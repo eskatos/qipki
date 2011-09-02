@@ -1,10 +1,6 @@
 
 # Quid?
 
-* Add @Aggregated in EscrowedKeyPair
-  * On ManyAssociation<X509> x509s()?
-  * This would mean that when a EKP is deleted every associated X509 are deleted too
-  * Check state in the delete interaction method instead?
 * Replace indexing-rdf by indexing-solr?
 
 
@@ -16,14 +12,17 @@
 * (----) Enhance Netscape extensions handling
   * In X509DetailValue : all of them
   * Automatically filled by CAs : Netscape CA Revocation URL
+  * In X509Profile : choose the good ones
 
 
 # Next steps - That would lead to a tiny 1.0
 
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
-  * Find a clever way to use FileConfiguration API to store databases in ~/data
-* (----) Follow state refactoring with the Qi4j data migration system
+  * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
+  * Add HSQLDB support to have another embedded SGBD
+  * Use MySQL Java deployment facilities
+* (#---) Follow state refactoring with the Qi4j data migration system
   * Get a documented database sample for 1.0-alpha6 and use it as a test resource
   * Write a complete test scenario from the embedder point of view around the sample database
   * Write unit tests for migrations
@@ -35,7 +34,7 @@
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
-* (----) Generate development site and deploy it to github pages
+* (#---) Generate development site and deploy it to github pages
   * Write a working basic site template
   * What about aggregated reports?
   * Add gwt compiler report, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/compiler-report.html
