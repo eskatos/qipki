@@ -22,6 +22,8 @@ import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
+import org.qipki.core.file.HasUoWFile;
+import org.qipki.core.file.UoWFileFactory;
 
 /**
  *
@@ -54,13 +56,11 @@ import org.qi4j.api.property.Property;
  */
 @Mixins( CRL.Mixin.class )
 public interface CRL
-        extends Identity
+        extends HasUoWFile, Identity
 {
 
     @Queryable( false )
     Property<BigInteger> lastCRLNumber();
-
-    File pemFile();
 
     abstract class Mixin
             implements CRL
@@ -68,13 +68,21 @@ public interface CRL
 
         @Service
         private CRLFileService crlFileService;
+        @Service
+        private UoWFileFactory uowFileFactory;
         @This
         private CRL me;
 
         @Override
-        public File pemFile()
+        public File attachedFile()
         {
             return crlFileService.getCRLFile( me );
+        }
+
+        @Override
+        public File managedFile()
+        {
+            return uowFileFactory.createCurrentUoWFile( me.attachedFile() ).asFile();
         }
 
     }

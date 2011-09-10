@@ -57,7 +57,7 @@ public interface CRLFactory
             FileWriter fileWriter = null;
             try {
 
-                fileWriter = new FileWriter( crl.pemFile() );
+                fileWriter = new FileWriter( crl.managedFile() );
                 fileWriter.write( cryptIO.asPEM( x509crl ).toString() );
                 fileWriter.flush();
 

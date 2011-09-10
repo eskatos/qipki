@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,6 +24,7 @@ import java.security.cert.X509Certificate;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 
+import org.qipki.core.file.UoWFileFactory;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 
@@ -34,6 +36,8 @@ public class CryptoStoreMixin
     private CryptIO cryptIO;
     @Service
     private CryptoStoreFileService fileService;
+    @Service
+    private UoWFileFactory uowFileFactory;
     @This
     private CryptoStoreEntity me;
 
@@ -41,7 +45,7 @@ public class CryptoStoreMixin
     public X509Certificate getX509Certificate( String slotId )
     {
         try {
-            KeyStore ks = loadKeyStore();
+            KeyStore ks = loadReadOnlyKeyStore();
             return ( X509Certificate ) ks.getCertificate( slotId );
         } catch ( KeyStoreException ex ) {
             throw new CryptoFailure( "Unable to load X509 certificate from " + me.name().get() + "/" + slotId, ex );
@@ -52,7 +56,7 @@ public class CryptoStoreMixin
     public PrivateKey getPrivateKey( String slotId )
     {
         try {
-            KeyStore ks = loadKeyStore();
+            KeyStore ks = loadReadOnlyKeyStore();
             return ( PrivateKey ) ks.getKey( slotId, me.password().get() );
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to load private key from " + me.name().get() + "/" + slotId, ex );
@@ -75,9 +79,14 @@ public class CryptoStoreMixin
 
     private KeyStore loadKeyStore()
     {
-        return cryptIO.readKeyStore( fileService.getKeyStoreFile( me ),
-                                     me.storeType().get(),
-                                     me.password().get() );
+        File attachedKeyStoreFile = fileService.getKeyStoreFile( me );
+        return cryptIO.readKeyStore( attachedKeyStoreFile, me.storeType().get(), me.password().get() );
+    }
+
+    private KeyStore loadReadOnlyKeyStore()
+    {
+        File managedKeyStoreFile = uowFileFactory.createCurrentUoWFile( fileService.getKeyStoreFile( me ) ).asFile();
+        return cryptIO.readKeyStore( managedKeyStoreFile, me.storeType().get(), me.password().get() );
     }
 
 }

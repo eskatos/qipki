@@ -7,7 +7,9 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Find a way to harden UnitOfWork involving file changes (file move on UoW completion? see UnitOfWorkCallback)
+  * Apply filesystem handling to EscrowedKeyPair
+  * Hardened file management alongside UnitOfWorks
+  * Should it work using a @UoWFileConcern File fileGetter();
 
 
 # Next steps - That would lead to a tiny 1.0

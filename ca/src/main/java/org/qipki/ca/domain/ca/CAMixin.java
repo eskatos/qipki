@@ -210,7 +210,7 @@ public abstract class CAMixin
     public Revocation revoke( X509 x509, RevocationReason reason )
     {
         Revocation revocation = revocationFactory.create( x509, reason );
-        File pemFile = me.crl().get().pemFile();
+        File pemFile = me.crl().get().managedFile();
         me.crl().get().lastCRLNumber().set( me.crl().get().lastCRLNumber().get().add( BigInteger.ONE ) );
         X509CRL x509CRL;
 

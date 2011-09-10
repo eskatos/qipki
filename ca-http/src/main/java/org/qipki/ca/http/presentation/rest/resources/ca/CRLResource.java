@@ -60,7 +60,7 @@ public class CRLResource
         CRL crl = caCtx.ca().crl().get();
 
         // Representation
-        return new FileRepresentation( crl.pemFile(), MediaType.TEXT_PLAIN );
+        return new FileRepresentation( crl.attachedFile(), MediaType.TEXT_PLAIN );
     }
 
 }

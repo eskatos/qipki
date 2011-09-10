@@ -46,6 +46,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qipki.ca.domain.crl.CRLFileService;
 import org.qipki.ca.domain.cryptostore.CryptoStoreFileService;
+import org.qipki.core.file.UoWFileFactory;
 
 public class CaDomainModuleAssembler
         implements Assembler
@@ -88,8 +89,10 @@ public class CaDomainModuleAssembler
                      EscrowedKeyPairRepository.class ).
                 visibleIn( Visibility.application ).
                 withSideEffects( TracingSideEffect.class );
+
         ma.services( CryptoStoreFileService.class,
-                     CRLFileService.class ).
+                     CRLFileService.class,
+                     UoWFileFactory.class ).
                 visibleIn( Visibility.module );
 
         // Automatic reindex
