@@ -8,19 +8,18 @@
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
   * Find a way to harden UnitOfWork involving file changes (file move on UoW completion? see UnitOfWorkCallback)
-* (##--) Fix http service configuration handling up to qipki-ca-http-main
-  * Add configuration methods on assemblers
-  * Impact tests and main
-  * Fix ca-http-main, it do not run anymore ...
 
 
 # Next steps - That would lead to a tiny 1.0
 
 * Write a build script for common development tasks
+* Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime
 * (----) Review Qi4j HttpService configuration
+  * Rewrite a HttpService based on latest Jetty?
   * Add the ability to serve https
   * Add the ability to do mutual SSL authentication
   * Add the ability to serve on multiple interfaces/port
+  * See how to restrict requests on a specific host (Host http header)
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
   * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)

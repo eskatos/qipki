@@ -13,12 +13,11 @@
  */
 package org.qipki.ca.http;
 
-import org.qipki.ca.application.contexts.RootContext;
+import org.qipki.ca.AbstractQiPkiCa;
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
-import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiHttpCa
-        extends AbstractQiPkiApplication<RootContext>
+        extends AbstractQiPkiCa
 {
 
     public QiPkiHttpCa( QiPkiHttpCaAssembler appAssembler )
