@@ -24,8 +24,8 @@ import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 
 public class X509RecoveryResource
@@ -52,7 +52,7 @@ public class X509RecoveryResource
         EscrowedKeyPair ekp = x509Context.recover();
 
         // Representation
-        return new StringRepresentation( ekp.pem().get(), MediaType.TEXT_PLAIN );
+        return new FileRepresentation( ekp.keyPairFile(), MediaType.TEXT_PLAIN );
     }
 
 }

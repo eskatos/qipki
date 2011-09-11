@@ -13,12 +13,13 @@
  */
 package org.qipki.ca.domain.escrowedkeypair;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.security.KeyPair;
-
-import org.qipki.crypto.algorithms.AsymetricAlgorithm;
-import org.qipki.crypto.asymetric.AsymetricGenerator;
-import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
-import org.qipki.crypto.io.CryptIO;
 
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
@@ -26,6 +27,11 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+
+import org.qipki.crypto.algorithms.AsymetricAlgorithm;
+import org.qipki.crypto.asymetric.AsymetricGenerator;
+import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
+import org.qipki.crypto.io.CryptIO;
 
 @Mixins( EscrowedKeyPairFactory.Mixin.class )
 public interface EscrowedKeyPairFactory
@@ -42,6 +48,8 @@ public interface EscrowedKeyPairFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
+        private EscrowedKeyPairFileService fileService;
+        @Service
         private AsymetricGenerator asymGenerator;
         @Service
         private CryptIO cryptIO;
@@ -49,13 +57,41 @@ public interface EscrowedKeyPairFactory
         @Override
         public EscrowedKeyPair create( AsymetricAlgorithm algorithm, Integer length )
         {
-            KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( algorithm, length ) );
             EntityBuilder<EscrowedKeyPair> builder = uowf.currentUnitOfWork().newEntityBuilder( EscrowedKeyPair.class );
+
             EscrowedKeyPair ekp = builder.instance();
-            ekp.pem().set( cryptIO.asPEM( keyPair ).toString() );
+
             ekp.algorithm().set( algorithm );
             ekp.length().set( length );
-            return builder.newInstance();
+
+            ekp = builder.newInstance();
+
+            KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( algorithm, length ) );
+            writeToFile( cryptIO.asPEM( keyPair ), fileService.getEscrowedKeyPairFile( ekp ) );
+
+            return ekp;
+        }
+
+        // TODO move this in qi4j-io
+        private static void writeToFile( CharSequence chars, File dest )
+        {
+            OutputStream out = null;
+            try {
+                out = new FileOutputStream( dest );
+                PrintWriter printWriter = new PrintWriter( new OutputStreamWriter( out, "UTF-8" ) );
+                printWriter.println( chars );
+                printWriter.flush();
+                out.flush();
+            } catch ( IOException e ) {
+                throw new RuntimeException( e.getMessage(), e );
+            } finally {
+                try {
+                    if ( out != null ) {
+                        out.close();
+                    }
+                } catch ( Exception ignored ) {
+                }
+            }
         }
 
     }

@@ -13,27 +13,41 @@
  */
 package org.qipki.ca.domain.escrowedkeypair;
 
-import java.io.StringReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.security.KeyPair;
-
-import org.qipki.crypto.io.CryptIO;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
+
+import org.qipki.crypto.io.CryptIO;
 
 public abstract class EscrowedKeyPairMixin
         implements EscrowedKeyPair
 {
 
     @This
-    private EscrowedKeyPair state;
+    private EscrowedKeyPair me;
+    @Service
+    private EscrowedKeyPairFileService fileService;
     @Service
     private CryptIO cryptio;
 
     @Override
+    public File keyPairFile()
+    {
+        return fileService.getEscrowedKeyPairFile( me );
+    }
+
+    @Override
     public KeyPair keyPair()
     {
-        return cryptio.readKeyPairPEM( new StringReader( state.pem().get() ) );
+        try {
+            return cryptio.readKeyPairPEM( new FileReader( fileService.getEscrowedKeyPairFile( me ) ) );
+        } catch ( FileNotFoundException ex ) {
+            throw new IllegalStateException( ex.getMessage(), ex );
+        }
     }
 
 }

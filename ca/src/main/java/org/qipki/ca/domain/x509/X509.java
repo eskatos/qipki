@@ -15,15 +15,19 @@ package org.qipki.ca.domain.x509;
 
 import org.qipki.commons.crypto.states.X509State;
 import org.qipki.ca.domain.ca.CA;
-import org.qipki.ca.domain.fragments.HasPEM;
 import org.qipki.ca.domain.x509profile.X509Profile;
 
 import org.qi4j.api.entity.Identity;
+import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.entity.association.Association;
+import org.qi4j.api.property.Property;
 
 public interface X509
-        extends X509State, Identity, HasPEM, X509Behavior
+        extends X509State, Identity, X509Behavior
 {
+
+    @Queryable( false )
+    Property<String> pem();
 
     Association<CA> issuer();
 

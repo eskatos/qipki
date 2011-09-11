@@ -14,7 +14,6 @@
 package org.qipki.crypto.io;
 
 import java.io.File;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.security.KeyPair;
 import java.security.KeyStore;

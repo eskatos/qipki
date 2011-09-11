@@ -16,15 +16,15 @@ package org.qipki.ca.domain.cryptostore;
 import java.io.File;
 import java.security.KeyStore;
 
-import org.qipki.crypto.io.CryptIO;
-import org.qipki.crypto.storage.KeyStoreType;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+
+import org.qipki.crypto.io.CryptIO;
+import org.qipki.crypto.storage.KeyStoreType;
 
 /**
  * TODO Handle PKCS11 KeyStores

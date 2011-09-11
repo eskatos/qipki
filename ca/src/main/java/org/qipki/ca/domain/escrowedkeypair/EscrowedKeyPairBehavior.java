@@ -13,10 +13,13 @@
  */
 package org.qipki.ca.domain.escrowedkeypair;
 
+import java.io.File;
 import java.security.KeyPair;
 
 public interface EscrowedKeyPairBehavior
 {
+
+    File keyPairFile();
 
     KeyPair keyPair();
 

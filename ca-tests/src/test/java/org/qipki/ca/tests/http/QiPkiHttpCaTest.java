@@ -218,9 +218,9 @@ public class QiPkiHttpCaTest
         get = new HttpGet( ca.crlUri().get() );
         String crl = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "First CA CRL:\n{}", crl );
-        X509CRL x509CRL = cryptio.readCRLPEM( new StringReader( crl) );
+        X509CRL x509CRL = cryptio.readCRLPEM( new StringReader( crl ) );
 
-        
+
         // Create a new CryptoStore
         HttpPost post = new HttpPost( caApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );

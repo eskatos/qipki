@@ -7,9 +7,9 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Apply filesystem handling to EscrowedKeyPair
   * Hardened file management alongside UnitOfWorks
-  * Should it work using a @UoWFileConcern File fileGetter();
+  * Should it work using a concern ? Something like @UoWFileConcern File fileGetter();
+  * Write unit tests for the thing!
 
 
 # Next steps - That would lead to a tiny 1.0

@@ -42,7 +42,7 @@ you're already using the embedded API or want to show your support, use the widg
 
 ### master
 
-* KeyStores and CRLs are now stored on the filesystem thanks to the FileConfiguration API
+* KeyStores, EscrowedKeyPairs and CRLs are now stored on the filesystem thanks to the FileConfiguration API
 * Distribution packaged as a unix daemon in qipki-main-http-ca
 * Added X509Context.renew( PKCS10CertificationRequest pkcs10 ) interaction
 * Added EscrowedKeyPairContext.delete() interaction
