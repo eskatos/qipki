@@ -11,36 +11,30 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.file;
+package org.qi4j.library.uowfile.internal;
 
 import java.io.File;
 
-import java.util.Collections;
-
-import org.qi4j.api.entity.EntityComposite;
-import org.qi4j.api.unitofwork.ConcurrentEntityModificationException;
-
-public class ConcurrentFileModificationException
-        extends ConcurrentEntityModificationException
+class ConcurrentFileStateModificationException
+        extends Exception
 {
 
-    private final Iterable<File> concurrentlyModifiedFiles;
+    private final File file;
 
-    ConcurrentFileModificationException( Iterable<File> concurrentlyModifiedFiles )
+    ConcurrentFileStateModificationException( File file )
     {
-        super( Collections.<EntityComposite>emptyList() );
-        this.concurrentlyModifiedFiles = concurrentlyModifiedFiles;
+        this.file = file;
     }
 
-    public Iterable<File> concurrentlyModifiedFiles()
+    File getFile()
     {
-        return concurrentlyModifiedFiles;
+        return file;
     }
 
     @Override
     public String getMessage()
     {
-        return "Files changed concurently: " + concurrentlyModifiedFiles;
+        return "File modified concurently: " + file;
     }
 
 }

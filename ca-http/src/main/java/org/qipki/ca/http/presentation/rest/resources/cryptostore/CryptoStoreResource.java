@@ -15,8 +15,8 @@ package org.qipki.ca.http.presentation.rest.resources.cryptostore;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-
 import org.qi4j.api.structure.Module;
+
 import org.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;

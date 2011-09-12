@@ -11,15 +11,17 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.file;
+package org.qi4j.library.uowfile.internal;
 
-import java.io.File;
+import java.io.IOException;
 
-public interface HasUoWFiles<T extends Enum<T>>
+class UoWFileException
+        extends RuntimeException
 {
 
-    File attachedFile( T key );
-
-    File managedFile( T key );
+    UoWFileException( IOException cause )
+    {
+        super( cause );
+    }
 
 }

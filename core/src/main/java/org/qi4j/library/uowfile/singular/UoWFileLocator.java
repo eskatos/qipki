@@ -11,15 +11,13 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.file;
+package org.qi4j.library.uowfile.singular;
 
 import java.io.File;
 
-public interface HasUoWFile
+public interface UoWFileLocator
 {
 
-    File attachedFile();
-
-    File managedFile();
+    File locateAttachedFile();
 
 }

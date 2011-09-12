@@ -11,30 +11,19 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.file;
+package org.qi4j.library.uowfile.plural;
 
 import java.io.File;
 
-class ConcurrentFileStateModificationException
-        extends Exception
+public interface HasUoWFiles<T extends Enum<T>>
 {
 
-    private final File file;
+    Iterable<File> attachedFiles();
 
-    ConcurrentFileStateModificationException( File file )
-    {
-        this.file = file;
-    }
+    File attachedFile( T key );
 
-    File getFile()
-    {
-        return file;
-    }
+    Iterable<File> managedFiles();
 
-    @Override
-    public String getMessage()
-    {
-        return "File modified concurently: " + file;
-    }
+    File managedFile( T key );
 
 }

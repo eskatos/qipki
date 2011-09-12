@@ -15,9 +15,10 @@ package org.qipki.ca.domain.cryptostore;
 
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 
 @Mixins( CryptoStoreMixin.class )
 public interface CryptoStoreEntity
-        extends CryptoStore, EntityComposite
+        extends CryptoStore, HasUoWFileLifecycle, EntityComposite
 {
 }

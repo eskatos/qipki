@@ -13,6 +13,12 @@
  */
 package org.qipki.ca.bootstrap;
 
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.library.uowfile.UoWFileAssembler;
+
 import org.qipki.ca.domain.ca.CAFactory;
 import org.qipki.ca.domain.ca.CARepository;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentEntity;
@@ -21,11 +27,14 @@ import org.qipki.ca.domain.ca.root.RootCAEntity;
 import org.qipki.ca.domain.ca.sub.SubCAEntity;
 import org.qipki.ca.domain.crl.CRLEntity;
 import org.qipki.ca.domain.crl.CRLFactory;
+import org.qipki.ca.domain.crl.CRLFileService;
 import org.qipki.ca.domain.cryptostore.CryptoStoreEntity;
 import org.qipki.ca.domain.cryptostore.CryptoStoreFactory;
+import org.qipki.ca.domain.cryptostore.CryptoStoreFileService;
 import org.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairEntity;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFactory;
+import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFileService;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.qipki.ca.domain.revocation.RevocationEntity;
 import org.qipki.ca.domain.revocation.RevocationFactory;
@@ -39,15 +48,6 @@ import org.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.qipki.commons.crypto.values.ValidityIntervalValue;
 import org.qipki.core.bootstrap.AutomaticReindexingAssembler;
 import org.qipki.core.sideeffects.TracingSideEffect;
-
-import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qipki.ca.domain.crl.CRLFileService;
-import org.qipki.ca.domain.cryptostore.CryptoStoreFileService;
-import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFileService;
-import org.qipki.core.file.UoWFileFactory;
 
 public class CaDomainModuleAssembler
         implements Assembler
@@ -93,9 +93,11 @@ public class CaDomainModuleAssembler
 
         ma.services( CryptoStoreFileService.class,
                      EscrowedKeyPairFileService.class,
-                     CRLFileService.class,
-                     UoWFileFactory.class ).
+                     CRLFileService.class ).
                 visibleIn( Visibility.module );
+
+        // UoWFile handling
+        new UoWFileAssembler().assemble( ma );
 
         // Automatic reindex
         new AutomaticReindexingAssembler().assemble( ma );

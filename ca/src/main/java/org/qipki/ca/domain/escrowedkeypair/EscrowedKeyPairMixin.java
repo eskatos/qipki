@@ -20,12 +20,12 @@ import java.security.KeyPair;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
+import org.qi4j.library.uowfile.singular.UoWFileLocator;
 
-import org.qipki.core.file.UoWFileFactory;
 import org.qipki.crypto.io.CryptIO;
 
 public abstract class EscrowedKeyPairMixin
-        implements EscrowedKeyPair
+        implements EscrowedKeyPairBehavior, UoWFileLocator
 {
 
     @This
@@ -33,27 +33,19 @@ public abstract class EscrowedKeyPairMixin
     @Service
     private EscrowedKeyPairFileService fileService;
     @Service
-    private UoWFileFactory uowFileFactory;
-    @Service
     private CryptIO cryptio;
 
     @Override
-    public File attachedFile()
+    public File locateAttachedFile()
     {
         return fileService.getEscrowedKeyPairFile( me );
-    }
-
-    @Override
-    public File managedFile()
-    {
-        return uowFileFactory.createCurrentUoWFile( fileService.getEscrowedKeyPairFile( me ) ).asFile();
     }
 
     @Override
     public KeyPair keyPair()
     {
         try {
-            return cryptio.readKeyPairPEM( new FileReader( fileService.getEscrowedKeyPairFile( me ) ) );
+            return cryptio.readKeyPairPEM( new FileReader( me.attachedFile() ) );
         } catch ( FileNotFoundException ex ) {
             throw new IllegalStateException( ex.getMessage(), ex );
         }

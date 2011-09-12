@@ -14,11 +14,35 @@
 package org.qipki.testsupport;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.codeartisans.java.toolbox.StringUtils;
 
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 public class QiPkiTestSupport
 {
+
+    public static File ensureTestDirectory( String subdir )
+            throws IOException
+    {
+        File testDir = new File( "target/" + System.getProperty( "test" ) );
+        if ( !StringUtils.isEmpty( subdir ) ) {
+            testDir = new File( testDir, subdir );
+        }
+        if ( !testDir.exists() ) {
+            if ( !testDir.mkdirs() ) {
+                throw new IOException( "Unable to create directory: " + testDir );
+            }
+        }
+        return testDir;
+    }
+
+    public static File ensureTestDirectory()
+            throws IOException
+    {
+        return ensureTestDirectory( null );
+    }
 
     public static FileConfigurationOverride fileConfigTestOverride( String testCodeName )
     {

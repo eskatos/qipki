@@ -41,7 +41,6 @@ public class EscrowedKeyPairContext
             // TODO Throw list of X509 identities and list text in exception so the UI could present it to the user
             throw new IllegalStateException( "EscrowedKeyPair cannot be deleted as it has associated X509s" );
         }
-        ekp.managedFile().delete();
         uowf.currentUnitOfWork().remove( ekp );
     }
 

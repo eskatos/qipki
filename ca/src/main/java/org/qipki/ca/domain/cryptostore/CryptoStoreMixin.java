@@ -23,23 +23,24 @@ import java.security.cert.X509Certificate;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
+import org.qi4j.library.uowfile.singular.HasUoWFile;
+import org.qi4j.library.uowfile.singular.UoWFileLocator;
 
-import org.qipki.core.file.UoWFileFactory;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 
-public class CryptoStoreMixin
-        implements CryptoStoreBehavior
+public abstract class CryptoStoreMixin
+        implements CryptoStoreBehavior, UoWFileLocator
 {
 
     @Service
     private CryptIO cryptIO;
     @Service
     private CryptoStoreFileService fileService;
-    @Service
-    private UoWFileFactory uowFileFactory;
     @This
-    private CryptoStoreEntity me;
+    private CryptoStore meAsCryptoStore;
+    @This
+    private HasUoWFile meAsHasUoWFile;
 
     @Override
     public X509Certificate getX509Certificate( String slotId )
@@ -48,7 +49,7 @@ public class CryptoStoreMixin
             KeyStore ks = loadReadOnlyKeyStore();
             return ( X509Certificate ) ks.getCertificate( slotId );
         } catch ( KeyStoreException ex ) {
-            throw new CryptoFailure( "Unable to load X509 certificate from " + me.name().get() + "/" + slotId, ex );
+            throw new CryptoFailure( "Unable to load X509 certificate from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
 
@@ -57,9 +58,9 @@ public class CryptoStoreMixin
     {
         try {
             KeyStore ks = loadReadOnlyKeyStore();
-            return ( PrivateKey ) ks.getKey( slotId, me.password().get() );
+            return ( PrivateKey ) ks.getKey( slotId, meAsCryptoStore.password().get() );
         } catch ( GeneralSecurityException ex ) {
-            throw new CryptoFailure( "Unable to load private key from " + me.name().get() + "/" + slotId, ex );
+            throw new CryptoFailure( "Unable to load private key from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
 
@@ -70,23 +71,27 @@ public class CryptoStoreMixin
             KeyStore ks = loadKeyStore();
             ks.setEntry( slotId,
                          new KeyStore.PrivateKeyEntry( privateKey, certChain ),
-                         new KeyStore.PasswordProtection( me.password().get() ) );
-            cryptIO.writeKeyStore( ks, me.password().get(), fileService.getKeyStoreFile( me ) );
+                         new KeyStore.PasswordProtection( meAsCryptoStore.password().get() ) );
+            cryptIO.writeKeyStore( ks, meAsCryptoStore.password().get(), meAsHasUoWFile.attachedFile() );
         } catch ( KeyStoreException ex ) {
-            throw new CryptoFailure( "Unable to store certified keypair in " + me.name().get() + "/" + slotId, ex );
+            throw new CryptoFailure( "Unable to store certified keypair in " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
 
     private KeyStore loadKeyStore()
     {
-        File attachedKeyStoreFile = fileService.getKeyStoreFile( me );
-        return cryptIO.readKeyStore( attachedKeyStoreFile, me.storeType().get(), me.password().get() );
+        return cryptIO.readKeyStore( meAsHasUoWFile.attachedFile(), meAsCryptoStore.storeType().get(), meAsCryptoStore.password().get() );
     }
 
     private KeyStore loadReadOnlyKeyStore()
     {
-        File managedKeyStoreFile = uowFileFactory.createCurrentUoWFile( fileService.getKeyStoreFile( me ) ).asFile();
-        return cryptIO.readKeyStore( managedKeyStoreFile, me.storeType().get(), me.password().get() );
+        return cryptIO.readKeyStore( meAsHasUoWFile.managedFile(), meAsCryptoStore.storeType().get(), meAsCryptoStore.password().get() );
+    }
+
+    @Override
+    public File locateAttachedFile()
+    {
+        return fileService.getKeyStoreFile( meAsCryptoStore );
     }
 
 }

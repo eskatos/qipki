@@ -7,8 +7,8 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Hardened file management alongside UnitOfWorks
-  * Write unit tests for the thing!
+  * Write concurrent unit tests in UoWFile
+  * Write plural handling in UoWFile
 
 
 # Next steps - That would lead to a tiny 1.0

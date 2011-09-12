@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qipki.core.file;
+package org.qi4j.library.uowfile.internal;
 
 import java.io.File;
 import java.io.IOException;
