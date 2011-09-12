@@ -17,8 +17,7 @@ import java.io.IOException;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.x509.X509Context;
@@ -42,14 +41,12 @@ public class X509RevocationResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509RevocationResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory valuesFactory;
 
-    public X509RevocationResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public X509RevocationResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         setNegotiated( false );
     }
 
@@ -61,7 +58,7 @@ public class X509RevocationResource
 
             // Data
             String x509Identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            X509RevocationParamsValue params = vbf.newValueFromJSON( X509RevocationParamsValue.class, entity.getText() );
+            X509RevocationParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509RevocationParamsValue.class, entity.getText() );
 
             // Context
             RootContext rootCtx = newRootContext();

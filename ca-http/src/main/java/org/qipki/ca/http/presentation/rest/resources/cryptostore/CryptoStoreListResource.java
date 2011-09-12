@@ -17,9 +17,8 @@ import java.io.IOException;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
@@ -43,14 +42,12 @@ public class CryptoStoreListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CryptoStoreListResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CryptoStoreListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CryptoStoreListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override
@@ -74,7 +71,7 @@ public class CryptoStoreListResource
         try {
 
             // Data
-            CryptoStoreFactoryParamsValue params = vbf.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
+            CryptoStoreFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
 
             // Context
             CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();

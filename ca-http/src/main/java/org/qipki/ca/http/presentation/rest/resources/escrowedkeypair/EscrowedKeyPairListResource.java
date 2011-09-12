@@ -17,9 +17,8 @@ import java.io.IOException;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
@@ -43,14 +42,12 @@ public class EscrowedKeyPairListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( EscrowedKeyPairListResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public EscrowedKeyPairListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public EscrowedKeyPairListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override
@@ -74,7 +71,7 @@ public class EscrowedKeyPairListResource
         try {
 
             // Data
-            EscrowedKeyPairFactoryParamsValue params = vbf.newValueFromJSON( EscrowedKeyPairFactoryParamsValue.class, entity.getText() );
+            EscrowedKeyPairFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( EscrowedKeyPairFactoryParamsValue.class, entity.getText() );
 
             // Context
             EscrowedKeyPairListContext escrowListContext = newRootContext().escrowedKeyPairListContext();

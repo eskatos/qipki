@@ -15,7 +15,7 @@ package org.qipki.ca.http.presentation.rest.resources.x509profile;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.x509profile.X509ProfileContext;
 import org.qipki.ca.domain.x509profile.X509Profile;
@@ -35,9 +35,9 @@ public class X509ProfileResource
     @Service
     private RestletValuesFactory valuesFactory;
 
-    public X509ProfileResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public X509ProfileResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override

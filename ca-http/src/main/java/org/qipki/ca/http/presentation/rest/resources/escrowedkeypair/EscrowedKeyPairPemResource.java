@@ -15,7 +15,7 @@ package org.qipki.ca.http.presentation.rest.resources.escrowedkeypair;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
@@ -32,9 +32,9 @@ public class EscrowedKeyPairPemResource
         extends AbstractDCIResource
 {
 
-    public EscrowedKeyPairPemResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public EscrowedKeyPairPemResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override

@@ -14,10 +14,10 @@
 package org.qipki.ca.http.presentation.rest.resources;
 
 import org.codeartisans.java.toolbox.StringUtils;
+
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
@@ -36,17 +36,17 @@ public class AbstractDCIResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractDCIResource.class );
     public static final String PARAM_IDENTITY = "identity";
-    protected final ObjectBuilderFactory obf;
+    protected final Module module;
 
-    public AbstractDCIResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public AbstractDCIResource( @Structure Module module, @Service RestApiService restApi )
     {
         super( restApi );
-        this.obf = obf;
+        this.module = module;
     }
 
     protected final RootContext newRootContext()
     {
-        return obf.newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
+        return module.objectBuilderFactory().newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
     }
 
     protected final <T> T ensureRequestAttribute( String key, Class<? extends T> type, Status ifAbsent )

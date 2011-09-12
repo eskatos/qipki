@@ -15,13 +15,13 @@ package org.qipki.ca.http.presentation.rest.resources;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
 import org.qi4j.api.injection.scope.Service;
-
-import org.qipki.commons.rest.values.representations.RestListValue;
-
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
+
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
+import org.qipki.commons.rest.values.representations.RestListValue;
 
 import org.restlet.data.Method;
 import org.restlet.representation.EmptyRepresentation;
@@ -34,9 +34,9 @@ public abstract class AbstractListResource
         extends AbstractEntityResource
 {
 
-    protected AbstractListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    protected AbstractListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         setAllowedMethods( new HashSet<Method>( Arrays.asList( new Method[]{ Method.GET, Method.POST } ) ) );
     }
 

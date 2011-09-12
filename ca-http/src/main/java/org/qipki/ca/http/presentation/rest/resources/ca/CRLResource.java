@@ -17,7 +17,7 @@ import java.util.Collections;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.RootContext;
@@ -37,9 +37,9 @@ public class CRLResource
         extends AbstractDCIResource
 {
 
-    public CRLResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CRLResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         setAllowedMethods( Collections.singleton( Method.GET ) );
         setNegotiated( false );
         getVariants().add( new Variant( MediaType.TEXT_PLAIN ) );

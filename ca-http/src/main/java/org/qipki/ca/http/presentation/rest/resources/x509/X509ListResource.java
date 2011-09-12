@@ -17,9 +17,8 @@ import java.io.IOException;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.x509.X509ListContext;
 import org.qipki.ca.domain.x509.X509;
@@ -44,14 +43,12 @@ public class X509ListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509ListResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public X509ListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public X509ListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override
@@ -75,7 +72,7 @@ public class X509ListResource
         try {
 
             // Data
-            X509FactoryParamsValue params = vbf.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
+            X509FactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
             Boolean escrowed = params.escrowedKeyPairUri().get() != null;
 
             // Context

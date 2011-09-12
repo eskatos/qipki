@@ -19,9 +19,8 @@ import org.codeartisans.java.toolbox.StringUtils;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.ca.CAListContext;
 import org.qipki.ca.domain.ca.CA;
@@ -47,14 +46,12 @@ public class CAListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CAListResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CAListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CAListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override
@@ -78,7 +75,7 @@ public class CAListResource
         try {
 
             // Data
-            CAFactoryParamsValue params = vbf.newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
+            CAFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
 
             // Context
             CAListContext caListCtx = newRootContext().caListContext();

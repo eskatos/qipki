@@ -18,9 +18,9 @@ import java.util.Arrays;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.qi4j.api.injection.scope.Service;
 
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
 
@@ -44,9 +44,9 @@ public abstract class AbstractEntityResource
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractEntityResource.class );
 
-    protected AbstractEntityResource( ObjectBuilderFactory obf, @Service RestApiService restApi )
+    protected AbstractEntityResource( Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         getVariants().addAll( Arrays.asList(
                 new Variant( MediaType.TEXT_HTML ),
                 new Variant( MediaType.APPLICATION_JSON ) ) );

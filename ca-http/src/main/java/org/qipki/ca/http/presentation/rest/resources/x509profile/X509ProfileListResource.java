@@ -17,9 +17,8 @@ import java.io.IOException;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.qipki.ca.domain.x509profile.X509Profile;
@@ -43,14 +42,12 @@ public class X509ProfileListResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( X509ProfileListResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public X509ProfileListResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public X509ProfileListResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override
@@ -74,7 +71,7 @@ public class X509ProfileListResource
         try {
 
             // Data
-            X509ProfileFactoryParamsValue params = vbf.newValueFromJSON( X509ProfileFactoryParamsValue.class, entity.getText() );
+            X509ProfileFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509ProfileFactoryParamsValue.class, entity.getText() );
 
             // Context
             X509ProfileListContext x509ProfileListCtx = newRootContext().x509ProfileListContext();

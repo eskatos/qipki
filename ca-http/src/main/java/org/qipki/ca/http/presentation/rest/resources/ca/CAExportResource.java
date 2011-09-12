@@ -17,11 +17,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+
 import org.qi4j.api.injection.scope.Service;
-
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 
+import org.qi4j.api.structure.Module;
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
@@ -43,9 +43,9 @@ public class CAExportResource
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_KEYSTORE_TYPE = "kstype";
 
-    public CAExportResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CAExportResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override

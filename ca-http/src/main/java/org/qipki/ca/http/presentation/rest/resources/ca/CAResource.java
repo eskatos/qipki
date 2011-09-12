@@ -21,8 +21,7 @@ import java.util.Map;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
-import org.qi4j.api.value.ValueBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.domain.ca.CA;
@@ -50,14 +49,12 @@ public class CAResource
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CAResource.class );
-    @Structure
-    private ValueBuilderFactory vbf;
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CAResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CAResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         setAllowedMethods( new HashSet<Method>( Arrays.asList( new Method[]{ Method.GET, Method.POST } ) ) );
     }
 
@@ -85,7 +82,7 @@ public class CAResource
         try {
             // Data
             String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            CAValue caValue = vbf.newValueFromJSON( CAValue.class, entity.getText() );
+            CAValue caValue = module.valueBuilderFactory().newValueFromJSON( CAValue.class, entity.getText() );
             Map<String, KeyEscrowPolicy> profileAssignments = new HashMap<String, KeyEscrowPolicy>();
             for ( X509ProfileAssignmentValue eachAssignment : caValue.allowedX509Profiles().get() ) {
                 profileAssignments.put( new CaUriResolver( getRootRef(), eachAssignment.x509ProfileUri().get() ).identity(),

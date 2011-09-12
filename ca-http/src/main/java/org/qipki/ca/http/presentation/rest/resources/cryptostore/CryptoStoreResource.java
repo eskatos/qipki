@@ -15,8 +15,8 @@ package org.qipki.ca.http.presentation.rest.resources.cryptostore;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
 
+import org.qi4j.api.structure.Module;
 import org.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
@@ -35,9 +35,9 @@ public class CryptoStoreResource
     @Service
     private RestletValuesFactory restValuesFactory;
 
-    public CryptoStoreResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public CryptoStoreResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
     }
 
     @Override

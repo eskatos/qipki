@@ -15,7 +15,7 @@ package org.qipki.ca.http.presentation.rest.resources.x509;
 
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 
 import org.qipki.ca.application.contexts.x509.X509Context;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
@@ -32,9 +32,9 @@ public class X509RecoveryResource
         extends AbstractDCIResource
 {
 
-    public X509RecoveryResource( @Structure ObjectBuilderFactory obf, @Service RestApiService restApi )
+    public X509RecoveryResource( @Structure Module module, @Service RestApiService restApi )
     {
-        super( obf, restApi );
+        super( module, restApi );
         setNegotiated( false );
     }
 
