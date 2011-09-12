@@ -51,7 +51,7 @@ public class EscrowedKeyPairPemResource
         EscrowedKeyPair ekp = ekpCtx.escrowedKeyPair();
 
         // Representation
-        return new FileRepresentation( ekp.keyPairFile(), MediaType.TEXT_PLAIN );
+        return new FileRepresentation( ekp.attachedFile(), MediaType.TEXT_PLAIN );
     }
 
 }

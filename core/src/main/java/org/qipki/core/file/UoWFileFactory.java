@@ -14,7 +14,9 @@
 package org.qipki.core.file;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
@@ -86,8 +88,16 @@ public interface UoWFileFactory
                     {
                         UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
                         if ( uowMeta != null && !uowMeta.isEmpty() ) {
+                            List<File> concurrentlyModified = new ArrayList<File>();
                             for ( UoWFile eachUoWFile : uowMeta.values() ) {
-                                eachUoWFile.apply();
+                                try {
+                                    eachUoWFile.apply();
+                                } catch ( ConcurrentFileStateModificationException ex ) {
+                                    concurrentlyModified.add( ex.getFile() );
+                                }
+                            }
+                            if ( !concurrentlyModified.isEmpty() ) {
+                                throw new ConcurrentFileModificationException( concurrentlyModified );
                             }
                         }
                     }

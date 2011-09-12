@@ -21,6 +21,7 @@ import java.security.KeyPair;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 
+import org.qipki.core.file.UoWFileFactory;
 import org.qipki.crypto.io.CryptIO;
 
 public abstract class EscrowedKeyPairMixin
@@ -32,12 +33,20 @@ public abstract class EscrowedKeyPairMixin
     @Service
     private EscrowedKeyPairFileService fileService;
     @Service
+    private UoWFileFactory uowFileFactory;
+    @Service
     private CryptIO cryptio;
 
     @Override
-    public File keyPairFile()
+    public File attachedFile()
     {
         return fileService.getEscrowedKeyPairFile( me );
+    }
+
+    @Override
+    public File managedFile()
+    {
+        return uowFileFactory.createCurrentUoWFile( fileService.getEscrowedKeyPairFile( me ) ).asFile();
     }
 
     @Override

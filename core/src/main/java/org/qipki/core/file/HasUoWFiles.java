@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Paul Merlin. All Rights Reserved.
+ * Copyright (c) 2011, Paul Merlin. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,16 +11,15 @@
  * limitations under the License.
  *
  */
-package org.qipki.ca.domain.escrowedkeypair;
+package org.qipki.core.file;
 
-import java.security.KeyPair;
+import java.io.File;
 
-import org.qipki.core.file.HasUoWFile;
-
-public interface EscrowedKeyPairBehavior
-        extends HasUoWFile
+public interface HasUoWFiles<T extends Enum<T>>
 {
 
-    KeyPair keyPair();
+    File attachedFile( T key );
+
+    File managedFile( T key );
 
 }

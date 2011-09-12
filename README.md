@@ -63,7 +63,7 @@ you're already using the embedded API or want to show your support, use the widg
 * Added @UnitOfWorkRetry concern on CAContext.updateCa
 * Added a configurable Random service
 * Added symetric ciphering capabilities to o.q.crypto
-* Added a JceDetector and a unit test that enforce that the JCE are installed
+* Added a JceDetector and a unit test that enforce that the JCE unlimited policies are installed
 * Added code documentation
 * Upstream update: Qi4j 1.3
 * Minor impact upstream update : restlet from 2.0-M? to stable 2.0.7
@@ -84,7 +84,7 @@ you're already using the embedded API or want to show your support, use the widg
 * Factor out osgi in the build system to make cleaner releases and global cleanup
 * Minor impact upstream update : o.c.j:java-toolbox:1.3
 
-### 1.0-alpha4 - 2011/11/15
+### 1.0-alpha4 - 2010/11/15
 
 * Inconditional index rebuild on startup
 

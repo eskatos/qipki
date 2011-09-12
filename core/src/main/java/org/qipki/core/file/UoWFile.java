@@ -56,11 +56,11 @@ public class UoWFile
     }
 
     void apply()
-            throws ConcurrentFileModificationException
+            throws ConcurrentFileStateModificationException
     {
         if ( fileTag( current ) != originalIdentity ) {
             if ( fileTag( original ) != originalIdentity ) {
-                throw new ConcurrentFileModificationException( original );
+                throw new ConcurrentFileStateModificationException( original );
             }
             if ( original.exists() ) {
                 move( original, backup );

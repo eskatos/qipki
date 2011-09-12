@@ -8,7 +8,6 @@
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
   * Hardened file management alongside UnitOfWorks
-  * Should it work using a concern ? Something like @UoWFileConcern File fileGetter();
   * Write unit tests for the thing!
 
 

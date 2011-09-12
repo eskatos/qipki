@@ -52,7 +52,7 @@ public class X509RecoveryResource
         EscrowedKeyPair ekp = x509Context.recover();
 
         // Representation
-        return new FileRepresentation( ekp.keyPairFile(), MediaType.TEXT_PLAIN );
+        return new FileRepresentation( ekp.attachedFile(), MediaType.TEXT_PLAIN );
     }
 
 }
