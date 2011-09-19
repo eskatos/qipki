@@ -67,10 +67,17 @@
                 </executions>
                 <!-- Plugin configuration. There are many available options, see gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
-                    <runTarget>index.jsp</runTarget>
+                    <runTarget>index.html</runTarget>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
                     <!--i18nMessagesBundle>org.qipki.clients.web.client.Messages</i18nMessagesBundle-->
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                        <version>${version.slf4j}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <!-- Copy static web files before executing gwt:run -->
@@ -95,6 +102,12 @@
     </build>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.codeartisans.spicyplates</groupId>
+            <artifactId>spicyplates-eruby</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         
         <!-- For GwtJso plugin -->
         <dependency>

@@ -5,22 +5,35 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>index.erb</welcome-file>
+    </welcome-file-list>
 
-  <servlet>
-    <servlet-name>ProxyServlet</servlet-name>
-    <servlet-class>com.woonoz.proxy.servlet.ProxyServlet</servlet-class>
-    <init-param>
-      <param-name>targetUrl</param-name>
-      <param-value>http://localhost:8443/api</param-value>
-      </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ProxyServlet</servlet-name>
-    <url-pattern>/api/*</url-pattern>
-  </servlet-mapping>
+    <filter>
+        <filter-name>SpicyPlatesFilter</filter-name>
+        <filter-class>org.qipki.clients.web.server.HostPageFilter</filter-class>
+        <init-param>
+            <param-name>web-resources</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SpicyPlatesFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>ProxyServlet</servlet-name>
+        <servlet-class>com.woonoz.proxy.servlet.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>targetUrl</param-name>
+            <param-value>http://localhost:8443/api</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProxyServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
 
 </web-app>
