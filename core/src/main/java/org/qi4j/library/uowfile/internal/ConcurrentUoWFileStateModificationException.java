@@ -13,20 +13,18 @@
  */
 package org.qi4j.library.uowfile.internal;
 
-import java.io.File;
-
-class ConcurrentFileStateModificationException
+class ConcurrentUoWFileStateModificationException
         extends Exception
 {
 
-    private final File file;
+    private final UoWFile file;
 
-    ConcurrentFileStateModificationException( File file )
+    ConcurrentUoWFileStateModificationException( UoWFile file )
     {
         this.file = file;
     }
 
-    File getFile()
+    UoWFile getUoWFile()
     {
         return file;
     }
@@ -34,7 +32,7 @@ class ConcurrentFileStateModificationException
     @Override
     public String getMessage()
     {
-        return "File modified concurently: " + file;
+        return "UoWFile modified concurently: " + file.toString();
     }
 
 }

@@ -33,6 +33,7 @@ public class UoWFile
     private final File original;
     private final File current;
     private final File backup;
+    private boolean copied = false;
 
     UoWFile( File original )
     {
@@ -48,6 +49,19 @@ public class UoWFile
         return current;
     }
 
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder().append( UoWFile.class.getSimpleName() );
+        // UoWFile{parent/( original(oid->id) | current(id) | backup(id) )}
+        sb.append( "{" ).append( original.getParentFile().getName() ).append( "/( " ).
+                append( original.getName() ).append( "(" ).append( originalIdentity ).append( "->" ).append( fileTag( original ) ).append( ") | " ).
+                append( current.getName() ).append( "(" ).append( fileTag( current ) ).append( ") | " ).
+                append( backup.getName() ).append( "(" ).append( fileTag( backup ) ).
+                append( ") )}" );
+        return sb.toString();
+    }
+
     void copyOriginalToCurrent()
     {
         try {
@@ -60,11 +74,13 @@ public class UoWFile
     }
 
     void apply()
-            throws ConcurrentFileStateModificationException
+            throws ConcurrentUoWFileStateModificationException
     {
+        LOGGER.trace( "Will apply changes to {}", this );
         if ( fileTag( current ) != originalIdentity ) {
             if ( fileTag( original ) != originalIdentity ) {
-                throw new ConcurrentFileStateModificationException( original );
+                LOGGER.info( "Concurrent modification, original creation identity is {} and original apply identity is {}", originalIdentity, fileTag( original ) );
+                throw new ConcurrentUoWFileStateModificationException( this );
             }
             if ( original.exists() ) {
                 move( original, backup );
@@ -72,18 +88,18 @@ public class UoWFile
             if ( current.exists() ) {
                 move( current, original );
             }
-            LOGGER.info( "Applied changes to {}", original );
+            LOGGER.debug( "Applied changes to {}", original );
         }
     }
 
-    void restoreOriginal()
+    void rollback()
     {
         if ( backup.exists() ) {
             if ( fileTag( original ) != originalIdentity ) {
                 delete( original );
                 move( backup, original );
             }
-            LOGGER.info( "Restored backup to {}", original );
+            LOGGER.debug( "Restored backup to {}", original );
         }
     }
 

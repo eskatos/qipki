@@ -35,6 +35,8 @@ import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
 
+import org.codeartisans.java.toolbox.io.IO;
+
 import org.qi4j.api.injection.scope.Service;
 
 import org.qipki.crypto.CryptoContext;
@@ -80,13 +82,7 @@ public class CryptIOImpl
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
         } finally {
-            if ( output != null ) {
-                try {
-                    output.close();
-                } catch ( IOException ex ) {
-                    throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
-                }
-            }
+            IO.closeSilently( output );
         }
     }
 
@@ -104,13 +100,7 @@ public class CryptIOImpl
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
         } finally {
-            if ( input != null ) {
-                try {
-                    input.close();
-                } catch ( IOException ex ) {
-                    throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
-                }
-            }
+            IO.closeSilently( input );
         }
     }
 
@@ -128,13 +118,7 @@ public class CryptIOImpl
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
         } finally {
-            if ( baos != null ) {
-                try {
-                    baos.close();
-                } catch ( IOException ex ) {
-                    // Ignored
-                }
-            }
+            IO.closeSilently( baos );
         }
     }
 

@@ -46,7 +46,7 @@ public abstract class CryptoStoreMixin
     public X509Certificate getX509Certificate( String slotId )
     {
         try {
-            KeyStore ks = loadReadOnlyKeyStore();
+            KeyStore ks = loadKeyStore();
             return ( X509Certificate ) ks.getCertificate( slotId );
         } catch ( KeyStoreException ex ) {
             throw new CryptoFailure( "Unable to load X509 certificate from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
@@ -57,7 +57,7 @@ public abstract class CryptoStoreMixin
     public PrivateKey getPrivateKey( String slotId )
     {
         try {
-            KeyStore ks = loadReadOnlyKeyStore();
+            KeyStore ks = loadKeyStore();
             return ( PrivateKey ) ks.getKey( slotId, meAsCryptoStore.password().get() );
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( "Unable to load private key from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
@@ -72,18 +72,13 @@ public abstract class CryptoStoreMixin
             ks.setEntry( slotId,
                          new KeyStore.PrivateKeyEntry( privateKey, certChain ),
                          new KeyStore.PasswordProtection( meAsCryptoStore.password().get() ) );
-            cryptIO.writeKeyStore( ks, meAsCryptoStore.password().get(), meAsHasUoWFile.attachedFile() );
+            cryptIO.writeKeyStore( ks, meAsCryptoStore.password().get(), meAsHasUoWFile.managedFile() );
         } catch ( KeyStoreException ex ) {
             throw new CryptoFailure( "Unable to store certified keypair in " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
 
     private KeyStore loadKeyStore()
-    {
-        return cryptIO.readKeyStore( meAsHasUoWFile.attachedFile(), meAsCryptoStore.storeType().get(), meAsCryptoStore.password().get() );
-    }
-
-    private KeyStore loadReadOnlyKeyStore()
     {
         return cryptIO.readKeyStore( meAsHasUoWFile.managedFile(), meAsCryptoStore.storeType().get(), meAsCryptoStore.password().get() );
     }

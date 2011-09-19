@@ -13,7 +13,6 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
-import java.io.File;
 import java.security.KeyStore;
 
 import org.qi4j.api.entity.EntityBuilder;
@@ -44,16 +43,14 @@ public interface CryptoStoreFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private CryptoStoreFileService fileService;
-        @Service
         private CryptIO cryptIO;
 
         @Override
         public CryptoStore create( String name, KeyStoreType storeType, char[] password )
         {
-            EntityBuilder<CryptoStore> csBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStore.class );
+            EntityBuilder<CryptoStoreEntity> csBuilder = uowf.currentUnitOfWork().newEntityBuilder( CryptoStoreEntity.class );
 
-            CryptoStore cryptoStore = csBuilder.instance();
+            CryptoStoreEntity cryptoStore = csBuilder.instance();
 
             cryptoStore.name().set( name );
             cryptoStore.storeType().set( storeType );
@@ -63,8 +60,7 @@ public interface CryptoStoreFactory
 
             // Create and save a new empty crypto store
             KeyStore keystore = cryptIO.createEmptyKeyStore( cryptoStore.storeType().get() );
-            File keystoreFile = fileService.getKeyStoreFile( cryptoStore );
-            cryptIO.writeKeyStore( keystore, password, keystoreFile );
+            cryptIO.writeKeyStore( keystore, password, cryptoStore.managedFile() );
 
             return cryptoStore;
         }

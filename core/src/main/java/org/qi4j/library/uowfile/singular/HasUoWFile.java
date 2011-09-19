@@ -18,12 +18,16 @@ import java.io.File;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.library.uowfile.internal.UoWFileFactory;
 
 @Mixins( HasUoWFile.Mixin.class )
 public interface HasUoWFile
 {
 
+    /**
+     * IMPORTANT Use this {@link File} only inside read-only {@link UnitOfWork}s
+     */
     File attachedFile();
 
     File managedFile();

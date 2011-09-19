@@ -7,7 +7,8 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Fix the UoW binding using @UnitOfWork retry concern
+  * How to reduce locking in UoWFileFactory?
+  * How can the @UnitOfWorkRetry Concern handle ConcurrentUoWFileModifications?
   * Write plural handling in UoWFile
 
 

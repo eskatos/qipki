@@ -13,26 +13,24 @@
  */
 package org.qi4j.library.uowfile.internal;
 
-import java.io.File;
-
 import java.util.Collections;
 
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.unitofwork.ConcurrentEntityModificationException;
 
-public class ConcurrentFileModificationException
+public class ConcurrentUoWFileModificationException
         extends ConcurrentEntityModificationException
 {
 
-    private final Iterable<File> concurrentlyModifiedFiles;
+    private final Iterable<UoWFile> concurrentlyModifiedFiles;
 
-    ConcurrentFileModificationException( Iterable<File> concurrentlyModifiedFiles )
+    ConcurrentUoWFileModificationException( Iterable<UoWFile> concurrentlyModifiedFiles )
     {
         super( Collections.<EntityComposite>emptyList() );
         this.concurrentlyModifiedFiles = concurrentlyModifiedFiles;
     }
 
-    public Iterable<File> concurrentlyModifiedFiles()
+    public Iterable<UoWFile> concurrentlyModifiedUoWFiles()
     {
         return concurrentlyModifiedFiles;
     }

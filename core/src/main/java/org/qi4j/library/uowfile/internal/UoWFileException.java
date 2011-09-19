@@ -21,7 +21,12 @@ class UoWFileException
 
     UoWFileException( IOException cause )
     {
-        super( cause );
+        super( cause.getMessage(), cause );
+    }
+
+    UoWFileException( String message, IOException cause )
+    {
+        super( message, cause );
     }
 
 }

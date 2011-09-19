@@ -35,12 +35,13 @@ public interface UoWFileFactory
         extends ServiceComposite
 {
 
-    // UoWFile createUoWFile( UnitOfWork uow, File file );
     UoWFile createCurrentUoWFile( File file );
 
     abstract class Mixin
             implements UoWFileFactory
     {
+
+        private static final Logger LOGGER = LoggerFactory.getLogger( "org.qi4j.library.uowfile" );
 
         private static class UoWFilesMetaInfo
                 extends HashMap<String, UoWFile>
@@ -56,7 +57,7 @@ public interface UoWFileFactory
             return createUoWFile( uowf.currentUnitOfWork(), file );
         }
 
-        private UoWFile createUoWFile( UnitOfWork uow, File file )
+        private static synchronized UoWFile createUoWFile( UnitOfWork uow, File file )
         {
             UoWFilesMetaInfo uowMeta = ensureUoWMeta( uow );
             String absolutePath = file.getAbsolutePath();
@@ -65,6 +66,7 @@ public interface UoWFileFactory
                 uowFile = new UoWFile( file );
                 uowFile.copyOriginalToCurrent();
                 uowMeta.put( absolutePath, uowFile );
+                LOGGER.trace( "Registered {} in UoW", uowFile );
             }
             return uowFile;
         }
@@ -91,16 +93,16 @@ public interface UoWFileFactory
                 {
                     UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
                     if ( uowMeta != null && !uowMeta.isEmpty() ) {
-                        List<File> concurrentlyModified = new ArrayList<File>();
+                        List<UoWFile> concurrentlyModified = new ArrayList<UoWFile>();
                         for ( UoWFile eachUoWFile : uowMeta.values() ) {
                             try {
                                 eachUoWFile.apply();
-                            } catch ( ConcurrentFileStateModificationException ex ) {
-                                concurrentlyModified.add( ex.getFile() );
+                            } catch ( ConcurrentUoWFileStateModificationException ex ) {
+                                concurrentlyModified.add( ex.getUoWFile() );
                             }
                         }
                         if ( !concurrentlyModified.isEmpty() ) {
-                            throw new ConcurrentFileModificationException( concurrentlyModified );
+                            throw new ConcurrentUoWFileModificationException( concurrentlyModified );
                         }
                     }
                 }
@@ -112,7 +114,7 @@ public interface UoWFileFactory
                     if ( uowMeta != null && !uowMeta.isEmpty() ) {
                         for ( UoWFile eachUoWFile : uowMeta.values() ) {
                             if ( status == UnitOfWorkStatus.DISCARDED ) {
-                                eachUoWFile.restoreOriginal();
+                                eachUoWFile.rollback();
                             }
                             eachUoWFile.cleanup();
                         }

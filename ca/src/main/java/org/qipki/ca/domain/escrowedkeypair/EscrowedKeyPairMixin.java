@@ -45,7 +45,7 @@ public abstract class EscrowedKeyPairMixin
     public KeyPair keyPair()
     {
         try {
-            return cryptio.readKeyPairPEM( new FileReader( me.attachedFile() ) );
+            return cryptio.readKeyPairPEM( new FileReader( me.managedFile() ) );
         } catch ( FileNotFoundException ex ) {
             throw new IllegalStateException( ex.getMessage(), ex );
         }

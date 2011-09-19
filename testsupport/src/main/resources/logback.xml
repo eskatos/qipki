@@ -11,7 +11,8 @@
     <appender-ref ref="stdout" />
   </root>
 
-  <logger name="org.codeartisans.qipki" level="trace"/>
+  <logger name="org.qipki" level="trace"/>
+  <logger name="org.qi4j.library.uowfile" level="trace"/>
   <logger name="org.qi4j.library.shiro" level="trace"/>
   <logger name="org.apache.shiro" level="trace"/>
   <logger name="org.apache.shiro.util.ThreadContext" level="info"/>

@@ -48,8 +48,6 @@ public interface EscrowedKeyPairFactory
         @Structure
         private UnitOfWorkFactory uowf;
         @Service
-        private EscrowedKeyPairFileService fileService;
-        @Service
         private AsymetricGenerator asymGenerator;
         @Service
         private CryptIO cryptIO;
@@ -67,7 +65,7 @@ public interface EscrowedKeyPairFactory
             ekp = builder.newInstance();
 
             KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( algorithm, length ) );
-            writeToFile( cryptIO.asPEM( keyPair ), fileService.getEscrowedKeyPairFile( ekp ) );
+            writeToFile( cryptIO.asPEM( keyPair ), ekp.managedFile() );
 
             return ekp;
         }
