@@ -25,7 +25,7 @@ public interface HasUoWFileLifecycle
         extends HasUoWFile, Lifecycle
 {
 
-    public class Mixin
+    class Mixin
             implements Lifecycle
     {
 
@@ -36,6 +36,7 @@ public interface HasUoWFileLifecycle
         public void create()
                 throws LifecycleException
         {
+            // NOOP
         }
 
         @Override
@@ -44,10 +45,8 @@ public interface HasUoWFileLifecycle
         {
             // We use the managed file so that if the UoW gets discarded the file will be restored
             File file = hasUoWFile.managedFile();
-            if ( file.exists() ) {
-                if ( !file.delete() ) {
-                    throw new LifecycleException( "Unable to delete existing file: " + file );
-                }
+            if ( file.exists() && !file.delete() ) {
+                throw new LifecycleException( "Unable to delete existing file: " + file );
             }
         }
 

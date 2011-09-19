@@ -27,6 +27,9 @@ import org.qi4j.api.unitofwork.UnitOfWorkCallback.UnitOfWorkStatus;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Mixins( UoWFileFactory.Mixin.class )
 public interface UoWFileFactory
         extends ServiceComposite
@@ -35,7 +38,7 @@ public interface UoWFileFactory
     // UoWFile createUoWFile( UnitOfWork uow, File file );
     UoWFile createCurrentUoWFile( File file );
 
-    static abstract class Mixin
+    abstract class Mixin
             implements UoWFileFactory
     {
 

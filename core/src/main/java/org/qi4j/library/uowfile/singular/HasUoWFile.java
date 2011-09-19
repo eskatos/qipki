@@ -28,7 +28,7 @@ public interface HasUoWFile
 
     File managedFile();
 
-    abstract class Mixin
+    class Mixin
             implements HasUoWFile
     {
 

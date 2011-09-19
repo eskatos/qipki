@@ -7,7 +7,7 @@
 # Work in progress
 
 * (###-) Apply Qi4j FileConfiguration API to all filesystem storage
-  * Write concurrent unit tests in UoWFile
+  * Fix the UoW binding using @UnitOfWork retry concern
   * Write plural handling in UoWFile
 
 
@@ -35,9 +35,6 @@
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
   * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
 * (#---) WebUI
-  * Choose and integrate a templating system for textual resources
-  * Make it work as a servlet so the gwt hosted mode still provide live redeploy
-  * Make the gwt host page dynamic with bootstrap configuration
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
