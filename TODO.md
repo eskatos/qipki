@@ -6,27 +6,35 @@
 
 # Work in progress
 
-* (###-) Apply Qi4j FileConfiguration API to all filesystem storage
+* (###-) Write a build script for common development tasks
+  * Find a way to print build output as it goes
+* (##--) Rework Qi4j HttpService
+  * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
+  * No more DefaultServlet
+    * Remove default servlet added by default
+    * Remove rootResourceBase from configuration
+    * Write a DefaultServletService & DefaultServletConfiguration
+    * Add assembly helpers to add DefaultServlet
+  * QUID?
+    * See how to restrict requests on a specific host (Host http header)
+    * What to expose on JMX? Jetty statistics?
+    * Add a pluggable SSLContextProviderService or something like that with assembly facilities
+    * SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present
+* (###-) Harden files handling regarding UnitOfWorks
   * How to reduce locking in UoWFileFactory?
-  * How can the @UnitOfWorkRetry Concern handle ConcurrentUoWFileModifications?
   * Write plural handling in UoWFile
 
 
 # Next steps - That would lead to a tiny 1.0
 
-* Write a build script for common development tasks
 * Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime
-* (----) Review Qi4j HttpService configuration
-  * Rewrite a HttpService based on latest Jetty?
-  * Add the ability to serve https
-  * Add the ability to do mutual SSL authentication
-  * Add the ability to serve on multiple interfaces/port
-  * See how to restrict requests on a specific host (Host http header)
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
   * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
   * Add HSQLDB support to have another embedded SGBD
   * Use MySQL Java deployment facilities
+* Enhance Crypto API
+  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Get a documented database sample for 1.0-alpha6 and use it as a test resource
   * Write a complete test scenario from the embedder point of view around the sample database
@@ -80,7 +88,6 @@
   * http://www.oracle.com/technetwork/java/javase/jnlp-136707.html
 * Domain auditing bounded context filled by @SideEffects
 * (#---) Add some generated documentation to the build process
-* Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * Enhance X509Profile with domain rules and certificate template creation
 * Create a CAProfile role
   * Needed to add rules to CAs that are use case driven and not standard driven
