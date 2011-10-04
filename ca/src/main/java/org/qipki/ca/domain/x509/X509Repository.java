@@ -13,18 +13,18 @@
  */
 package org.qipki.ca.domain.x509;
 
-import org.codeartisans.java.toolbox.CollectionUtils;
-import org.qipki.core.services.AbstractBoxedDomainRepository;
-import org.qipki.core.services.BoxedDomainRepository;
-
+import org.codeartisans.java.toolbox.Collections;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
-import static org.qi4j.api.query.QueryExpressions.*;
+import static org.qi4j.api.query.QueryExpressions.eq;
+import static org.qi4j.api.query.QueryExpressions.templateFor;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qipki.core.services.AbstractBoxedDomainRepository;
+import org.qipki.core.services.BoxedDomainRepository;
 
 @Mixins( X509Repository.Mixin.class )
 public interface X509Repository
@@ -51,7 +51,7 @@ public interface X509Repository
             builder = builder.where( eq( templateFor( X509.class ).sha256Fingerprint(), hexSha256 ) );
             Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() );
             assert query.count() <= 1;
-            return CollectionUtils.firstElementOrNull( query );
+            return Collections.firstElementOrNull( query );
         }
 
     }

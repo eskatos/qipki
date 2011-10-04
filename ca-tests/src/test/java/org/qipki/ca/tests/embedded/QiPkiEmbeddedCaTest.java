@@ -18,20 +18,17 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.codeartisans.java.toolbox.CollectionUtils;
-import static org.junit.Assert.*;
+import org.codeartisans.java.toolbox.Collections;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.qi4j.api.query.Query;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
@@ -52,7 +49,6 @@ import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
 import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.RevocationReason;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,7 +208,7 @@ public class QiPkiEmbeddedCaTest
         if ( caCount <= 0 || caCount > 1 ) {
             throw new IllegalStateException( "No or more than one (" + caCount + ") " + caName + " CA found, cannot continue" );
         }
-        return CollectionUtils.firstElementOrNull( findCA );
+        return Collections.firstElementOrNull( findCA );
     }
 
     private X509Profile findX509ProfileByName( X509ProfileListContext x509ProfileListContext, String profileName )
@@ -222,7 +218,7 @@ public class QiPkiEmbeddedCaTest
         if ( profileCount <= 0 || profileCount > 1 ) {
             throw new IllegalStateException( "No or more than one (" + profileCount + ") " + profileName + " X509Profile found, cannot continue" );
         }
-        return CollectionUtils.firstElementOrNull( findProfile );
+        return Collections.firstElementOrNull( findProfile );
     }
 
     private X509 findX509ByHexSha256Hash( X509ListContext x509ListContext, X509Certificate cert )

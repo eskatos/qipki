@@ -19,11 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.x509.X509Name;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import sun.security.pkcs.PKCS9Attribute;
 import sun.security.x509.AVA;
 import sun.security.x509.RDN;
@@ -139,7 +136,7 @@ public final class DistinguishedName
     {
         if ( rdn.size() > 0 ) {
             for ( AVA eachAVA : rdn.avas() ) {
-                if ( !StringUtils.isEmpty( eachAVA.getValueString() ) ) {
+                if ( !Strings.isEmpty( eachAVA.getValueString() ) ) {
                     return false;
                 }
             }

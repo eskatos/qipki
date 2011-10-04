@@ -17,8 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
-import org.codeartisans.java.toolbox.StringUtils;
+import org.codeartisans.java.toolbox.Strings;
 import org.codeartisans.spicyplates.SpicyContext;
 import org.codeartisans.spicyplates.eruby.ERubySpicyFilter;
 
@@ -29,7 +28,7 @@ public class HostPageFilter
     @Override
     protected String mapTemplateName( String originalTemplateName )
     {
-        if ( StringUtils.isEmpty( originalTemplateName ) ) {
+        if ( Strings.isEmpty( originalTemplateName ) ) {
             return "index.erb";
         }
         if ( originalTemplateName.endsWith( "/" ) ) {

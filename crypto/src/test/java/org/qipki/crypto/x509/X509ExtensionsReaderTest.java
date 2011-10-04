@@ -18,21 +18,17 @@ import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
 import java.util.Set;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import org.codeartisans.java.toolbox.CollectionUtils;
-
+import org.codeartisans.java.toolbox.Collections;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qipki.crypto.CryptoContext;
-
 import org.qipki.crypto.codec.CryptCodexImpl;
 import org.qipki.crypto.io.CryptIOImpl;
-import static org.qipki.crypto.x509.X509TestConstants.*;
-
+import static org.qipki.crypto.x509.X509TestConstants.RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM;
+import static org.qipki.crypto.x509.X509TestConstants.RSRC_NAME_CHAMBER_OF_COMMERCE_ROOT_PEM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +105,7 @@ public class X509ExtensionsReaderTest
         Set<ExtendedKeyUsage> extendedKeyUsages = x509ExtReader.getExtendedKeyUsages( baltimoreCyberTrustCodeSigningRoot );
         LOGGER.info( "Extended Key Usages: {}", extendedKeyUsages );
         assertEquals( 1, extendedKeyUsages.size() );
-        assertEquals( ExtendedKeyUsage.codeSigning, CollectionUtils.firstElementOrNull( extendedKeyUsages ) );
+        assertEquals( ExtendedKeyUsage.codeSigning, Collections.firstElementOrNull( extendedKeyUsages ) );
     }
 
     @Test

@@ -15,17 +15,13 @@ package org.qipki.crypto;
 
 import java.security.Provider;
 import java.security.Security;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,8 +136,8 @@ public interface QiCryptoEngine
             if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
                 return false;
             }
-            return !StringUtils.isEmpty( configuration.providerName().get() )
-                    && !StringUtils.isEmpty( configuration.providerClass().get() );
+            return !Strings.isEmpty( configuration.providerName().get() )
+                    && !Strings.isEmpty( configuration.providerClass().get() );
         }
 
         private boolean readRemoveProviderOnPassivate()

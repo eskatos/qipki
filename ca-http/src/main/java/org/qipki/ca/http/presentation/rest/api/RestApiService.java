@@ -13,14 +13,12 @@
  */
 package org.qipki.ca.http.presentation.rest.api;
 
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.configuration.Configuration;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
-
 import org.restlet.data.Reference;
 
 @Mixins( RestApiService.Mixin.class )
@@ -53,7 +51,7 @@ public interface RestApiService
                 }
             }
             String configured = config.configuration().clientBaseUrl().get();
-            if ( StringUtils.isEmpty( configured ) ) {
+            if ( Strings.isEmpty( configured ) ) {
                 // Configured clientBaseUrl was empty, will use detected
                 apiRootRef = detected;
                 return;

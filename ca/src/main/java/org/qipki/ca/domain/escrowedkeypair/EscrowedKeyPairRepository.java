@@ -13,20 +13,20 @@
  */
 package org.qipki.ca.domain.escrowedkeypair;
 
-import org.codeartisans.java.toolbox.CollectionUtils;
-import org.qipki.ca.domain.x509.X509Repository;
-import org.qipki.core.services.AbstractBoxedDomainRepository;
-import org.qipki.core.services.BoxedDomainRepository;
-
+import org.codeartisans.java.toolbox.Collections;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
-import static org.qi4j.api.query.QueryExpressions.*;
+import static org.qi4j.api.query.QueryExpressions.contains;
+import static org.qi4j.api.query.QueryExpressions.templateFor;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qipki.ca.domain.x509.X509Repository;
+import org.qipki.core.services.AbstractBoxedDomainRepository;
+import org.qipki.core.services.BoxedDomainRepository;
 
 @Mixins( EscrowedKeyPairRepository.Mixin.class )
 public interface EscrowedKeyPairRepository
@@ -57,7 +57,7 @@ public interface EscrowedKeyPairRepository
             builder = builder.where( contains( ekpTemplate.x509s(), x509Repository.findByIdentity( x509Identity ) ) );
             Query<EscrowedKeyPair> query = builder.newQuery( uowf.currentUnitOfWork() );
             assert query.count() <= 1;
-            return CollectionUtils.firstElementOrNull( query );
+            return Collections.firstElementOrNull( query );
         }
 
     }

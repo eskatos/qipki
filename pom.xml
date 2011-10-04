@@ -63,7 +63,6 @@
 
         <!-- Tools -->
         <module>site-skin</module>
-        <module>tools-reflect</module>
 
         <!-- Common building blocks -->
         <module>crypto</module>

@@ -15,8 +15,7 @@ package org.qipki.crypto.x509;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.codeartisans.java.toolbox.StringUtils;
+import org.codeartisans.java.toolbox.Strings;
 
 public final class DistinguishedNameTemplate
 {
@@ -39,7 +38,7 @@ public final class DistinguishedNameTemplate
         for ( Map.Entry<String, String> eachEntry : data.entrySet() ) {
             escapedData.put( eachEntry.getKey(), DistinguishedName.escapeRDNData( eachEntry.getValue() ) );
         }
-        StringBuffer rendered = StringUtils.renderTemplate( new StringBuffer( template ), escapedData, true );
+        StringBuffer rendered = Strings.renderTemplate( new StringBuffer( template ), escapedData, true );
         DistinguishedName dn = new DistinguishedName( rendered.toString() );
         dn.setRemoveEmptyRDNs( true );
         return dn;

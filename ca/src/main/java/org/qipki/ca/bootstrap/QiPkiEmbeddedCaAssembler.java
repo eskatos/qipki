@@ -14,21 +14,12 @@
 package org.qipki.ca.bootstrap;
 
 import java.io.IOException;
-
-import org.codeartisans.java.toolbox.StringUtils;
+import org.codeartisans.java.toolbox.Strings;
 import org.codeartisans.java.toolbox.network.FreePortFinder;
-
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
-import org.qi4j.bootstrap.ApplicationAssembler;
-import org.qi4j.bootstrap.ApplicationAssembly;
-import org.qi4j.bootstrap.ApplicationAssemblyFactory;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.AssemblyVisitorAdapter;
-import org.qi4j.bootstrap.LayerAssembly;
-import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.bootstrap.*;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
@@ -36,7 +27,6 @@ import org.qi4j.library.jmx.JMXAssembler;
 import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
-
 import static org.qipki.ca.bootstrap.CaAssemblyNames.*;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.core.bootstrap.persistence.InMemoryPersistenceAssembler;
@@ -105,11 +95,11 @@ public class QiPkiEmbeddedCaAssembler
             throws AssemblyException
     {
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
-        if ( !StringUtils.isEmpty( appName ) ) {
+        if ( !Strings.isEmpty( appName ) ) {
             app.setName( appName );
         }
         app.setMode( appMode );
-        if ( !StringUtils.isEmpty( appVersion ) ) {
+        if ( !Strings.isEmpty( appVersion ) ) {
             app.setVersion( appVersion );
         }
 

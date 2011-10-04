@@ -13,20 +13,16 @@
  */
 package org.qipki.ca.http.presentation.rest.resources;
 
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.structure.Module;
-
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.http.presentation.rest.api.RestApiService;
 import org.qipki.core.dci.InteractionContext;
-
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +63,7 @@ public class AbstractDCIResource
     protected final String ensureFormFirstValue( String key, Status ifAbsent )
     {
         String value = new Form( getRequest().getEntity() ).getFirstValue( key );
-        if ( StringUtils.isEmpty( value ) ) {
+        if ( Strings.isEmpty( value ) ) {
             LOGGER.trace( "{}: No form first value named {}", ifAbsent, key );
             throw new ResourceException( ifAbsent );
         }
@@ -77,7 +73,7 @@ public class AbstractDCIResource
     protected final String ensureQueryParamValue( String key, Status ifAbsent )
     {
         String value = getRequest().getResourceRef().getQueryAsForm().getFirstValue( key );
-        if ( StringUtils.isEmpty( value ) ) {
+        if ( Strings.isEmpty( value ) ) {
             LOGGER.trace( "{}: No query parameter named {}", ifAbsent, key );
             throw new ResourceException( ifAbsent );
         }
@@ -87,7 +83,7 @@ public class AbstractDCIResource
     protected final String getQueryParamValue( String key, String defaultValue )
     {
         String value = getRequest().getResourceRef().getQueryAsForm().getFirstValue( key );
-        if ( StringUtils.isEmpty( value ) ) {
+        if ( Strings.isEmpty( value ) ) {
             value = defaultValue;
         }
         return value;

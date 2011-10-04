@@ -15,9 +15,7 @@ package org.qipki.testsupport;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
 
 public class QiPkiTestSupport
@@ -27,7 +25,7 @@ public class QiPkiTestSupport
             throws IOException
     {
         File testDir = new File( "target/" + System.getProperty( "test" ) );
-        if ( !StringUtils.isEmpty( subdir ) ) {
+        if ( !Strings.isEmpty( subdir ) ) {
             testDir = new File( testDir, subdir );
         }
         if ( !testDir.exists() ) {

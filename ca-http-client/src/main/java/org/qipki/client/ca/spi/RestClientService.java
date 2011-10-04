@@ -14,7 +14,6 @@
 package org.qipki.client.ca.spi;
 
 import java.io.IOException;
-
 import org.apache.http.HttpMessage;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -23,16 +22,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilderFactory;
-
 import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
 import org.qipki.client.ca.QiPkiClientFailure;
 import org.qipki.commons.rest.values.CaApiURIsValue;
@@ -67,7 +63,7 @@ public interface RestClientService
         public CaApiURIsValue fetchApiURIs()
         {
             String apiUri = "http://localhost:8443/api";
-            if ( configuration != null && !StringUtils.isEmpty( configuration.apiUri().get() ) ) {
+            if ( configuration != null && !Strings.isEmpty( configuration.apiUri().get() ) ) {
                 apiUri = configuration.apiUri().get();
             }
             String jsonApi = getJSON( apiUri );

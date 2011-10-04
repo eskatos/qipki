@@ -1,6 +1,8 @@
 
 # Quid?
 
+* Use Cloudbees for continuous integration? (see http://www.cloudbees.com/foss/)
+* Move to Qi4j 2.0-SNAPSHOT?
 * Replace indexing-rdf by indexing-solr?
 
 
@@ -27,6 +29,9 @@
 
 # Next steps - That would lead to a tiny 1.0
 
+* (----) Documentation
+  * Build
+  * Embedded CA
 * Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
@@ -35,10 +40,6 @@
   * Use MySQL Java deployment facilities
 * Enhance Crypto API
   * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
-* (#---) Follow state refactoring with the Qi4j data migration system
-  * Get a documented database sample for 1.0-alpha6 and use it as a test resource
-  * Write a complete test scenario from the embedder point of view around the sample database
-  * Write unit tests for migrations
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
@@ -47,7 +48,7 @@
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
-* (#---) Generate development site and deploy it to github pages
+* (----) Generate development site and deploy it to github pages
   * Use Gollum/Smeagol for the development website?
   * Write a working basic site template
   * What about aggregated reports?
@@ -70,6 +71,10 @@
   * Add a command to force CRL regeneration
   * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
     * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
+* (#---) Follow state refactoring with the Qi4j data migration system
+  * Get a documented database sample for 1.0-alpha6 and use it as a test resource
+  * Write a complete test scenario from the embedder point of view around the sample database
+  * Write unit tests for migrations
 * Reduce LOC in ReST Resources
   * Qi4j 2.0 will provide constructs allowing to declare Resources as TransientComposites directly
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}

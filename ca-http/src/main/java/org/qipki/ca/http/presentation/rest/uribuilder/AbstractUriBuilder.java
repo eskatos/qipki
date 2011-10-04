@@ -13,8 +13,7 @@
  */
 package org.qipki.ca.http.presentation.rest.uribuilder;
 
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.restlet.data.Reference;
 
 public class AbstractUriBuilder
@@ -36,13 +35,13 @@ public class AbstractUriBuilder
         if ( "factory".equals( special ) ) {
             return baseRef.clone().addSegment( "factory" ).toString();
         }
-        if ( StringUtils.isEmpty( identity ) ) {
-            if ( !StringUtils.isEmpty( special ) ) {
+        if ( Strings.isEmpty( identity ) ) {
+            if ( !Strings.isEmpty( special ) ) {
                 return baseRef.clone().addSegment( special ).toString();
             }
             return baseRef.toString();
         }
-        if ( StringUtils.isEmpty( special ) ) {
+        if ( Strings.isEmpty( special ) ) {
             return baseRef.clone().addSegment( identity ).toString();
         }
         return baseRef.clone().addSegment( identity ).addSegment( special ).toString();

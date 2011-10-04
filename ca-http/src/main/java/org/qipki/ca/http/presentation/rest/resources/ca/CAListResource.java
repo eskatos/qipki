@@ -14,14 +14,11 @@
 package org.qipki.ca.http.presentation.rest.resources.ca;
 
 import java.io.IOException;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.structure.Module;
-
 import org.qipki.ca.application.contexts.ca.CAListContext;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.http.presentation.rest.RestletValuesFactory;
@@ -33,11 +30,9 @@ import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CAValue;
 import org.qipki.commons.rest.values.representations.RestListValue;
 import org.qipki.commons.rest.values.representations.RestValue;
-
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +78,7 @@ public class CAListResource
             // Interaction
             CA ca;
             CaUriResolver cryptoStoreResolver = new CaUriResolver( getRootRef(), params.cryptoStoreUri().get() );
-            if ( StringUtils.isEmpty( params.parentCaUri().get() ) ) {
+            if ( Strings.isEmpty( params.parentCaUri().get() ) ) {
                 ca = caListCtx.createRootCA( cryptoStoreResolver.identity(),
                                              params.name().get(), params.validityDays().get(),
                                              params.distinguishedName().get(), params.keySpec().get(),

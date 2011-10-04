@@ -14,9 +14,7 @@
 package org.qipki.crypto.random;
 
 import java.security.SecureRandom;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.service.Activatable;
@@ -49,7 +47,7 @@ public class RandomImpl
     {
         if ( configuration != null ) {
             String algorithm = configuration.algorithm().get();
-            if ( !StringUtils.isEmpty( algorithm ) ) {
+            if ( !Strings.isEmpty( algorithm ) ) {
                 return algorithm;
             }
         }

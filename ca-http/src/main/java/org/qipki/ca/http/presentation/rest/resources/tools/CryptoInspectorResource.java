@@ -13,11 +13,7 @@
  */
 package org.qipki.ca.http.presentation.rest.resources.tools;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -27,24 +23,15 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PasswordFinder;
-
-import org.codeartisans.java.toolbox.StringUtils;
-
+import org.codeartisans.java.toolbox.Strings;
 import org.qipki.crypto.storage.KeyStoreType;
-
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Method;
-import org.restlet.data.Parameter;
-import org.restlet.data.Status;
+import org.restlet.data.*;
 import org.restlet.engine.util.FormUtils;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.EmptyRepresentation;
@@ -52,7 +39,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,7 +108,7 @@ public class CryptoInspectorResource
         FormUtils.parse( form, entity );
         Parameter passwordParam = form.getFirst( "password" );
         if ( passwordParam != null ) {
-            if ( !StringUtils.isEmpty( passwordParam.getValue() ) ) {
+            if ( !Strings.isEmpty( passwordParam.getValue() ) ) {
                 password = passwordParam.getValue().toCharArray();
             }
         }
