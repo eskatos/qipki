@@ -12,7 +12,7 @@
     <name>${project.artifactId}</name>
 
     <properties>
-        <version.gwt>2.3.0</version.gwt>
+        <version.gwt>2.4.0</version.gwt>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
 
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>com.googlecode.gwt-proxy-servlet</groupId>
             <artifactId>proxy</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
         
