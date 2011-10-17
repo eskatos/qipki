@@ -44,6 +44,18 @@
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
   * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
+  * Permissions defines permissions on interactions
+  * Privileges defines permissions on resources: get & head / post & put
+  * How to deal with domain needs ?
+  * Roles can be built by the deployer
+  * One role is built in, immutable and can be enabled/disabled live : root
+  * Some roles are built in:
+    * ( chief security officer - ??? - maybe not needed )
+    * security officer
+    * certificate authority
+    * request authority officer
+    * end entity
+  * Permissions and Privileges needed for building roles are built in and mutables
 * (#---) WebUI
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
