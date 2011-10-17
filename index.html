@@ -11,8 +11,8 @@
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
 
-        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
-        <link href="css/prettify.css" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="css/prettify.css" type="text/css" />
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -112,6 +112,7 @@
                 });
             }
         </script>
+        <!-- Flattr -->
         <script type="text/javascript">
             /* <![CDATA[ */
             (function() {
@@ -123,11 +124,22 @@
             })();
             /* ]]> */
         </script>
+        <!-- Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-22729307-1']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
     </head>
 
     <body onload="prettyPrint()">
 
-        <div class="topbar" data-scrollspy="scrollspy">
+        <div class="topbar">
             <div class="fill">
                 <div class="container">
                     <a class="brand" href="">QiPki</a>
