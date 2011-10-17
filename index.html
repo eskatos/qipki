@@ -37,13 +37,15 @@
 
                     $link_about = $("#link_about")
                     $link_licence = $("#link_licence")
+                    $link_download = $("#link_download")
                     $link_crypto = $("#link_crypto")
                     $link_embedded = $("#link_embedded")
                     $link_roadmap = $("#link_roadmap")
                     $link_participate = $("#link_participate")
-                
+
                     $about = $("#about")
                     $licence = $("#licence")
+                    $download = $("#download")
                     $crypto = $("#crypto")
                     $embedded = $("#embedded")
                     $roadmap = $("#roadmap")
@@ -53,12 +55,14 @@
 
                         $link_about.removeClass('active')
                         $link_licence.removeClass('active')
+                        $link_download.removeClass('active')
                         $link_crypto.removeClass('active')
                         $link_embedded.removeClass('active')
                         $link_roadmap.removeClass('active')
                         $link_participate.removeClass('active')
                         $about.hide()
                         $licence.hide()
+                        $download.hide()
                         $crypto.hide()
                         $embedded.hide()
                         $roadmap.hide()
@@ -75,6 +79,10 @@
                                 case "licence":
                                     $link_licence.addClass('active')
                                     $licence.show()
+                                    break;
+                                case "download":
+                                    $link_download.addClass('active')
+                                    $download.show()
                                     break;
                                 case "crypto":
                                     $link_crypto.addClass('active')
@@ -100,7 +108,7 @@
                         }
                     },
                     { unescape: ",/" });
-                
+
                 });
             }
         </script>
@@ -126,6 +134,7 @@
                     <ul class="nav">
                         <li id="link_about"><a href="#about">About</a></li>
                         <li id="link_licence"><a href="#licence">Licence</a></li>
+                        <li id="link_download"><a href="#download">Download</a></li>
                         <li id="link_crypto"><a href="#crypto">Crypto API</a></li>
                         <li id="link_embedded"><a href="#embedded">Embedded CA</a></li>
                         <li id="link_roadmap"><a href="#roadmap">Roadmap</a></li>
@@ -148,7 +157,7 @@
                     <p>
                         This is indeed a technology project. Development tries to follow principles learned from
                         <a href="http://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>,
-                        <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>, 
+                        <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>,
                         <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">ReST</a> and more
                         using the <a href="http://www.qi4j.org">Qi4j</a> engine and framework.
                     </p>
@@ -210,6 +219,9 @@
 
         <section id="licence">
             <div class="container">
+                <div class="page-header">
+                    <h1>Licence <small>Apache Licence Version 2.0</small></h1>
+                </div>
                 <p>QiPki is licenced under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a></p>
                 <pre style="width: 50em">
 
@@ -394,11 +406,57 @@
             </div>
         </section> <!-- /licence -->
 
+        <section id="download">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Download QiPki</h1>
+                </div>
+                <p>
+                    Before choosing between the latest release or a development build, be sure to check out the
+                    <a href="#roadmap">status and roadmap</a> of the project.
+                </p>
+                <h3>Latest release</h3>
+                <h5>Artifacts</h5>
+                <p>
+                    QiPki artifacts are synced into maven central and can be easily found
+                    <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.codeartisans.qipki%22">there</a>.
+                </p>
+                <h5>Packaged release</h5>
+                <div class="alert-message warning">
+                    <p><strong>Latest release do not include the packaged UNIX daemon</strong>, see the development builds below for now.</p>
+                </div>
+                <div class="row">
+                    <div class="span10">
+                        <h3>Development builds</h3>
+                        <p>
+                            QiPki use the awesome DEV@cloud service gracefully provided by
+                            <a href="http://www.cloudbees.com/">Cloudbees</a> to FOSS projects.
+                        </p>
+                        <ul>
+                            <li><a href="https://qipki.ci.cloudbees.com/">Continuous Integration</a></li>
+                            <li><a href="http://repository-qipki.forge.cloudbees.com/snapshot/">Snapshot Maven
+                                    repository</a></li>
+                        </ul>
+                        <p>Here is a POM snippet to add the snapshot repository:</p>
+                        <pre class="pretty-print lang-xml"><code lang="xml">&lt;repository&gt;
+    &lt;id&gt;qipki-snapshots-repository&lt;/id&gt;
+    &lt;url&gt;http://repository-qipki.forge.cloudbees.com/snapshot/&lt;/url&gt;
+    &lt;snapshots&gt;
+        &lt;enabled&gt;true&lt;/enabled&gt;
+    &lt;/snapshots&gt;
+&lt;/repository&gt;</code></pre>
+                    </div>
+                    <div class="span6">
+                        <img src="http://web-static-cloudfront.s3.amazonaws.com/images/badges/BuiltOnDEV.png" style="float: right" />
+                    </div>
+                </div>
+            </div>
+        </section> <!-- /download -->
 
         <section id="crypto">
             <div class="container">
                 <div class="alert-message warning">
-                    <p><strong>This page is a work in progress!</strong> See the <a href="#roadmap">status and roadmap</a>.</p>
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
                 </div>
                 <div class="page-header">
                     <h1>Use the Crypto API <small>easily mockable, testable and DI ready</small></h1>
@@ -414,39 +472,104 @@
                     with nice, strongly typed APIs and being easily testable, mockable, usable with dependency
                     injection tools like Guice, CDI or Qi4j.
                 </p>
-                <h3>Dependency snippet & Download</h3>
-                <p>
-                    Here is a quick copy & paste dependency snippet for Maven users. Ant, Ivy, Gradle or other build
-                    system users, please adapt.
-                </p>
-                <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
-    &lt;artifactId&gt;qipki-crypto&lt;/artifactId&gt;
-    &lt;version&gt;1.0-alpha7&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
-                <p>
-                    If you need to manually download artifacts, go to
-                    <a href="http://search.maven.org/#search%7Cga%7C1%7Cqipki-crypto">search.maven.org</a>.
-                </p>
-                <h3>Digests</h3>
+                <h3>Hashs</h3>
+                <blockquote>
+                    <p>
+                        A cryptographic hash function is a deterministic procedure that takes an arbitrary block of data
+                        and returns a fixed-size bit string, the (cryptographic) hash value, such that an accidental or
+                        intentional change to the data will change the hash value. The data to be encoded is often
+                        called the "message," and the hash value is sometimes called the message digest or simply digest.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
                 <h3>Symetric cryptography</h3>
-                <h3>MACs</h3>
-                <h3>Symetric cryptography</h3>
-                <h3>X.509 & PKIX</h3>
+                <blockquote>
+                    <p>
+                        Symmetric-key algorithms are a class of algorithms for cryptography that use trivially related,
+                        often identical, cryptographic keys for both encryption of plaintext and decryption of
+                        ciphertext. The encryption key is trivially related to the decryption key, in that they may be
+                        identical or there is a simple transformation to go between the two keys. The keys, in practice,
+                        represent a shared secret between two or more parties that can be used to maintain a private
+                        information link.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>Message Authentication Code</h3>
+                <blockquote>
+                    <p>
+                        In cryptography, a message authentication code (often MAC) is a short piece of information used
+                        to authenticate a message.
+                    </p>
+                    <p>
+                        A MAC algorithm, sometimes called a keyed (cryptographic) hash function, accepts as input a
+                        secret key and an arbitrary-length message to be authenticated, and outputs a MAC (sometimes
+                        known as a tag). The MAC value protects both a message's data integrity as well as its
+                        authenticity, by allowing verifiers (who also possess the secret key) to detect any changes to
+                        the message content.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Message_authentication_code">Message authentication code</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>Asymetric-key cryptography</h3>
+                <blockquote>
+                    <p>
+                        Public-key cryptography refers to a cryptographic system requiring two separate keys, one to
+                        lock or encrypt the plaintext, and one to unlock or decrypt the cyphertext. Neither key will do
+                        both functions. One of these keys is published or public and the other is kept private. If the
+                        lock/encryption key is the one published then the system enables private communication from the
+                        public to the unlocking key's owner. If the unlock/decryption key is the one published then the
+                        system serves as a signature verifier of documents locked by the owner of the private key.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Asymmetric-key_cryptography">Asymmetric-key cryptography</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>X.509</h3>
+                <blockquote>
+                    <p>
+                        In cryptography, X.509 is an ITU-T standard for a public key infrastructure (PKI) and Privilege
+                        Management Infrastructure (PMI). X.509 specifies, amongst other things, standard formats for
+                        public key certificates, certificate revocation lists, attribute certificates, and a
+                        certification path validation algorithm.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/X.509">X.509</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>I/O</h3>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
             </div>
         </section> <!-- /crypto-->
 
         <section id="embedded">
             <div class="container">
                 <div class="alert-message warning">
-                    <p><strong>This page is a work in progress!</strong> See the <a href="#roadmap">status and roadmap</a>.</p>
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
                 </div>
                 <div class="page-header">
                     <h1>Embedd a CA <small>manage CAs, issue certificates and CRLs</small></h1>
                 </div>
                 <h3>Overview</h3>
+                <p><span class="label important">TODO</span> </p>
                 <h3>Plumbing</h3>
+                <p><span class="label important">TODO</span> </p>
                 <h5>Assemble and configure</h5>
+                <p><span class="label important">TODO</span> </p>
                 <h5>Embedd</h5>
                 <pre class="prettyprint lang-java"><code class="language-java">package org.qipki.examples.embeddedca;
 
@@ -484,16 +607,26 @@ public class EmbeddedCaExample
 
 }
 </code></pre>
+                <p><span class="label important">TODO</span> Explain this code snippet.</p>
                 <h3>CA context</h3>
+                <p><span class="label important">TODO</span> Explain QiPki <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a> implementation.</p>
                 <h5>Create a CA <small>self-signed and stored in a PKCS#12 file</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Issue a certificate <small>using a predefined profile</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Renew a certificate <small>using a new keypair</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Revoke a certificate <small>and consume the generated CRL</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h3>Going further</h3>
                 <h5>Manage certificate profiles <small>different types of certificates, assignment to CAs</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Use escrowed keypairs <small>eg. for digital signature</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Configure logging <small>using SLF4J</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Expose runtime data through JMX <small>runtime configuration changes, statistics</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
             </div>
         </section> <!-- /embedded-->
 
@@ -516,9 +649,9 @@ public class EmbeddedCaExample
                             resources for use over the network. The build already produce a UNIX daemon like packaging.
                         </p>
                         <p>
-                            The HEAD of the source is kept as stable as possible thanks to the tests, if you are curious
-                            you can build QiPki and take a look at the <em>ca-http-main</em> module output, you'll find
-                            a tarball there.
+                            The HEAD of the source is kept as stable as possible thanks to 
+                            <a href="https://qipki.ci.cloudbees.com/">continuous integration</a>, if you are curious
+                            you can take a look at the <em>ca-http-main</em> module output, you'll find a tarball there.
                         </p>
                     </div>
                     <div class="span6">
