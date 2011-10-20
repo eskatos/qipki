@@ -83,6 +83,9 @@
         <!-- Clients -->
         <module>web-client</module>
 
+        <!-- Site -->
+        <module>site</module>
+
     </modules>
 
     <build>
