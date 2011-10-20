@@ -15,7 +15,7 @@
     <name>${project.artifactId}</name>
     <description>${project.artifactId}</description>
     <packaging>pom</packaging>
-    <url>http://eskatos.github.com/qipki</url>
+    <url>http://qipki.org</url>
     <inceptionYear>2010</inceptionYear>
 
     <licenses>
@@ -166,6 +166,15 @@
     </distributionManagement>
 
     <repositories>
+
+        <!-- QiPki SNAPSHOTs -->
+        <repository>
+            <id>qipki-snapshots-repository</id>
+            <url>http://repository-qipki.forge.cloudbees.com/snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 
         <!-- Qi4j -->
         <repository>
