@@ -79,31 +79,38 @@
                                 case "licence":
                                     $link_licence.addClass('active')
                                     $licence.show()
+                                    _gaq.push(['_trackPageview', '#licence']);
                                     break;
                                 case "download":
                                     $link_download.addClass('active')
                                     $download.show()
+                                    _gaq.push(['_trackPageview', '#download']);
                                     break;
                                 case "crypto":
                                     $link_crypto.addClass('active')
                                     $crypto.show()
+                                    _gaq.push(['_trackPageview', '#crypto']);
                                     break;
                                 case "embedded":
                                     $link_embedded.addClass('active')
                                     $embedded.show()
+                                    _gaq.push(['_trackPageview', '#embedded']);
                                     break;
                                 case "roadmap":
                                     $link_roadmap.addClass('active')
                                     $roadmap.show()
+                                    _gaq.push(['_trackPageview', '#roadmap']);
                                     break;
                                 case "participate":
                                     $link_participate.addClass('active')
                                     $participate.show()
+                                    _gaq.push(['_trackPageview', '#participate']);
                                     break;
                                 case "about":
                                 default:
                                     $link_about.addClass('active')
                                     $about.show()
+                                    _gaq.push(['_trackPageview', '#about']);
                             }
                         }
                     },
@@ -126,9 +133,7 @@
         </script>
         <!-- Analytics -->
         <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-22729307-1']);
-            _gaq.push(['_trackPageview']);
+            var _gaq = _gaq || [['_setAccount', 'UA-22729307-1'],['_trackPageview']];
             (function() {
                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -202,7 +207,7 @@
                     <div class="span4">
                         <h3>Participate</h3>
                         <p>
-                            QiPki is published under the open-source Apache Licence
+                            QiPki is published under the open-source Apache Licence.
                         </p>
                         <p>
                             The project is quite ambitious and needs some help, see what you could do to help it grow.
