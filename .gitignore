@@ -13,3 +13,4 @@ core/target
 mainsupport/target
 web-client/target
 site/target
+/target/
