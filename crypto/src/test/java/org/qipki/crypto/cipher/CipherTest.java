@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
+import org.qipki.crypto.constants.IOConstants;
 
 public class CipherTest
         extends AbstractQi4jTest
@@ -76,7 +77,7 @@ public class CipherTest
 
                         for ( String eachSample : SAMPLES ) {
 
-                            byte[] data = eachSample.getBytes( "UTF-8" );
+                            byte[] data = eachSample.getBytes( IOConstants.UTF_8 );
                             System.out.println( ">> Ciphering: '" + eachSample + "'" );
                             byte[] ciphered = cipher.cipher( data, key );
                             System.out.println( ">> Unciphering" );
