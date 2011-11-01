@@ -136,4 +136,14 @@
 
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>qipki-snapshots-repository</id>
+            <url>http://repository-qipki.forge.cloudbees.com/snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    
 </project>
