@@ -50,8 +50,8 @@
         <version.restlet>2.0.7</version.restlet>
         <version.derby>10.7.1.1</version.derby>
         <version.bouncy>1.45</version.bouncy>
-        <version.slf4j>1.6.1</version.slf4j>
-        <version.logback>0.9.25</version.logback>
+        <version.slf4j>1.6.4</version.slf4j>
+        <version.logback>1.0.0</version.logback>
         <version.httpclient>4.0.3</version.httpclient>
         <version.java-toolbox>1.5-SNAPSHOT</version.java-toolbox>
         <version.spicyplates>1.0-SNAPSHOT</version.spicyplates>
@@ -60,6 +60,9 @@
     </properties>
 
     <modules>
+
+       <!-- Qi4j extensions & libraries -->
+       <module>qi4j-lib-uowfile</module>
 
         <!-- Common building blocks -->
         <module>crypto</module>

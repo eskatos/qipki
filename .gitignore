@@ -14,3 +14,4 @@ mainsupport/target
 web-client/target
 site/target
 /target/
+/qi4j-lib-uowfile/target/

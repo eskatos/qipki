@@ -11,7 +11,7 @@
  * limitations under the License.
  *
  */
-package org.qi4j.library.uowfile.singular;
+package org.qi4j.library.uowfile;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,8 +45,9 @@ import org.qi4j.api.unitofwork.UnitOfWorkRetry;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.core.testsupport.AbstractQi4jTest;
-import org.qi4j.library.uowfile.UoWFileAssembler;
 import org.qi4j.library.uowfile.internal.ConcurrentUoWFileModificationException;
+import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
+import org.qi4j.library.uowfile.singular.UoWFileLocator;
 import org.qi4j.test.EntityTestAssembler;
 
 import org.slf4j.Logger;
@@ -57,8 +58,8 @@ public class HasUoWFileTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( HasUoWFileTest.class );
-    private static final URL CREATION_CONTENT_URL = HasUoWFileTest.class.getResource( "../creation.txt" );
-    private static final URL MODIFICATION_CONTENT_URL = HasUoWFileTest.class.getResource( "../modification.txt" );
+    private static final URL CREATION_CONTENT_URL = HasUoWFileTest.class.getResource( "creation.txt" );
+    private static final URL MODIFICATION_CONTENT_URL = HasUoWFileTest.class.getResource( "modification.txt" );
     private static File baseTestDir;
 
     @BeforeClass

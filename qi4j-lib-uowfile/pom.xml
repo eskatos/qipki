@@ -8,7 +8,7 @@
         <version>1.0-alpha8-SNAPSHOT</version>
     </parent>
 
-    <artifactId>qipki-core</artifactId>
+    <artifactId>org.qi4j.library.uowfile</artifactId>
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
@@ -21,16 +21,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>${version.slf4j}</version>
         </dependency>
-        <dependency>
-            <groupId>org.codeartisans</groupId>
-            <artifactId>java-toolbox</artifactId>
-            <version>${version.java-toolbox}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>${version.bouncy}</version>
-        </dependency>
         
         <!-- Qi4j bootstrap -->
         <dependency>
@@ -39,42 +29,24 @@
             <version>${version.qi4j}</version>
         </dependency>
 
-        <!-- Qi4j persistence / query -->
-        <dependency>
-            <groupId>org.qi4j.extension</groupId>
-            <artifactId>org.qi4j.extension.entitystore-sql</artifactId>
-            <version>${version.qi4j}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.library</groupId>
-            <artifactId>org.qi4j.library.rdf</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.extension</groupId>
-            <artifactId>org.qi4j.extension.indexing-rdf</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.qi4j.extension</groupId>
-            <artifactId>org.qi4j.extension.reindexer</artifactId>
-            <version>${version.qi4j}</version>
-        </dependency>
-
         <!-- Tests -->
+        <dependency>
+            <groupId>org.qi4j.core</groupId>
+            <artifactId>org.qi4j.core.testsupport</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.qi4j.core</groupId>
+            <artifactId>org.qi4j.core.runtime</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${version.slf4j}</version>
