@@ -1,0 +1,105 @@
+<h1>QiPki Build</h1>
+
+<h2>Overview</h2>
+
+<p>QiPki use maven as its build system. The project structure is kept as simple as possible in order to prevent maven nightmares : one root pom and several direct submodules using the root pom as parent.</p>
+
+<h3>Modules</h3>
+
+<p>All QiPki modules use the <code>org.codeartisans.qipki</code> group ID.</p>
+
+<p> Folder name            | Artifact ID                | Purpose
+------------------------|----------------------------|-------------
+ <code>./site-maven-plugin/</code> | <code>qipki-site-maven-plugin</code>  | Maven plugin used to build http://qipki.org
+ <code>./site/</code>              | <code>qipki-site</code>               | http://qipki.org
+ <code>./mainsupport/</code>       | <code>qipki-mainsupport</code>        | <code>main</code> plumbing
+ <code>./testsupport/</code>       | <code>qipki-testsupport</code>        | Unit tests plumbing
+ <code>./qi4j-lib-uowfile/</code>  | <code>org.qi4j.library.uowfile</code> | Qi4j library to bind operations on files to a UnitOfWork
+ <code>./crypto/</code>            | <code>qipki-crypto</code>             | Crypto Engine
+ <code>./commons/</code>           | <code>qipki-commons</code>            | Common code like values and their factories.
+ <code>./core/</code>              | <code>qipki-core</code>               | QiPki Applications plumbing
+ <code>./ca/</code>                | <code>qipki-ca</code>                 | Embeddable CA
+ <code>./ca-http/</code>           | <code>qipki-http</code>               | HTTP based CA server
+ <code>./ca-http-main/</code>      | <code>qipki-http-main</code>          | HTTP based CA server packaged as a UNIX daemon
+ <code>./ca-http-client/</code>    | <code>qipki-http-client</code>        | Client library for the HTTP based CA server
+ <code>./ca-tests/</code>          | <code>qipki-ca-tests</code>           | CA automated tests
+ <code>./web-client/</code>        | <code>qipki-web-client</code>         | GWT based web UI</p>
+
+<h2>Getting started</h2>
+
+<p>Start by cloning the git repository:</p>
+
+<pre><code>git clone https://github.com/eskatos/qipki.git
+</code></pre>
+
+<p>As the build is maven based, we suggest to read about maven itself. We will only present build sequences used frequently during QiPki development. </p>
+
+<h3>Complete build</h3>
+
+<p>If, for example, you want to write code that use a version you build yourself, do:</p>
+
+<pre><code>mvn install
+</code></pre>
+
+<p>This would run a complete build. Once done, jar and other artifacts produced by the build system are installed in your local maven repository. It means you can depend on them easily from other projects, right from your IDE.</p>
+
+<h3>Quick `ca` installation in local maven repository</h3>
+
+<pre><code>mvn -am -pl ca install -DskipTests
+</code></pre>
+
+<p>This command will build and install the <code>ca</code> modules and all it's dependent QiPki modules, not doing <code>clean</code> and skipping the tests.</p>
+
+<h3>Run all the `ca-tests`</h3>
+
+<pre><code>mvn -am -pl ca-tests test
+</code></pre>
+
+<p>This command will build and test all the modules on which <code>ca-tests</code> depends and run all the tests presents in it.</p>
+
+<h3>Run the development instance of `ca-http`</h3>
+
+<p>TODO Take a look in the <code>ca-http-main</code> module if you're interested.</p>
+
+<h3>Run the development instance of `web-client`</h3>
+
+<pre><code>mvn -pl web-client gwt:run
+</code></pre>
+
+<h2>Profiles</h2>
+
+<p>Profiles described here are not activated by default and released versions of QiPki are of course not built using any of them.</p>
+
+<p>Here is an example to activate the <code>foo</code> and <code>bar</code> profiles:</p>
+
+<pre><code>mvn clean install -Pfoo -Pbar
+</code></pre>
+
+<h3>Speed up the build</h3>
+
+<p>The <code>quick</code> profile can be activated to shorten the build time.</p>
+
+<p>TODO Do nothing for now, need to work on the GWT profiles</p>
+
+<h3>Debug automated tests</h3>
+
+<p>If you activate the <code>test-debug</code> profile, all tests will produce diagnostic data, either output or files to help you working on them.</p>
+
+<p>For example unit tests involving persistence and query will delete their data after a successful test by default. With the <code>test-debug</code> profile activated this data won't be deleted so you can look at it.</p>
+
+<p>When using this profile, it is not guaranteed that the build is "no-clean proof". It means that after running the build once, you will have to run the maven <code>clean</code> phase before running <code>test</code> again.</p>
+
+<h2>Properties</h2>
+
+<p>To set a property, add <code>-DpropertyName=propertyValue</code> to your maven command line invocation. Flags properties can simply be activated with <code>-DpropertyName</code>.</p>
+
+<h3>Build properties</h3>
+
+<p>Property | Effect
+---------|-------</p>
+
+<h3>Usefull standard maven properties</h3>
+
+<p>Property | Effect
+---------|-------
+skipTests | Flag to skip all test related build steps. Unit tests are not compiled!</p>
