@@ -12,21 +12,28 @@
 
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
+    
+    <properties>
+        <qipki.site.src>${project.basedir}/src/main/www</qipki.site.src>
+        <qipki.site.target>${project.build.outputDirectory}/org/qipki/site/www</qipki.site.target>
+        <qipki.site.install>${project.basedir}/www</qipki.site.install>
+    </properties>
 
-    <!-- Copy content of the gh-pages branch and put it in the jar under org.qipki.site -->
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.6</version>
                 <executions>
+                    
+                    <!-- Generation -->
                     <execution>
+                        <id>qipki.site.generation</id>
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${project.build.outputDirectory}/org/qipki/site/www" />
-                                <copy todir="${project.build.outputDirectory}/org/qipki/site/www">
-                                    <fileset dir="${project.basedir}/www"/>
+                                <copy todir="${qipki.site.target}">
+                                    <fileset dir="${qipki.site.src}"/>
                                 </copy>
                             </target>
                         </configuration>
@@ -34,6 +41,23 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    <!-- Installation -->
+                    <execution>
+                        <id>qipki.site.installation</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${qipki.site.install}">
+                                    <fileset dir="${qipki.site.target}"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    
                 </executions>
             </plugin>
         </plugins>

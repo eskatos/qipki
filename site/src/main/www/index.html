@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>QiPki</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="css/prettify.css" type="text/css" />
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+            }
+            code {
+                background-color: #F5F5F5;
+            }
+        </style>
+
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+        <script type="text/javascript" src="js/prettify.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.history.js"></script>
+        <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
+        <script type="text/javascript">
+            if (true) {
+                $(document).ready(function($){
+
+                    $link_about = $("#link_about")
+                    $link_licence = $("#link_licence")
+                    $link_download = $("#link_download")
+                    $link_crypto = $("#link_crypto")
+                    $link_embedded = $("#link_embedded")
+                    $link_roadmap = $("#link_roadmap")
+                    $link_participate = $("#link_participate")
+
+                    $about = $("#about")
+                    $licence = $("#licence")
+                    $download = $("#download")
+                    $crypto = $("#crypto")
+                    $embedded = $("#embedded")
+                    $roadmap = $("#roadmap")
+                    $participate = $("#participate")
+
+                    clear = function() {
+
+                        $link_about.removeClass('active')
+                        $link_licence.removeClass('active')
+                        $link_download.removeClass('active')
+                        $link_crypto.removeClass('active')
+                        $link_embedded.removeClass('active')
+                        $link_roadmap.removeClass('active')
+                        $link_participate.removeClass('active')
+                        $about.hide()
+                        $licence.hide()
+                        $download.hide()
+                        $crypto.hide()
+                        $embedded.hide()
+                        $roadmap.hide()
+                        $participate.hide()
+                    }
+
+                    $.history.init(function(hash){
+                        //alert("hash is: "+hash);
+                        if(hash == "") {
+                            $.history.load("about");
+                        } else {
+                            clear()
+                            switch(hash) {
+                                case "licence":
+                                    $link_licence.addClass('active')
+                                    $licence.show()
+                                    _gaq.push(['_trackPageview', '#licence']);
+                                    break;
+                                case "download":
+                                    $link_download.addClass('active')
+                                    $download.show()
+                                    _gaq.push(['_trackPageview', '#download']);
+                                    break;
+                                case "crypto":
+                                    $link_crypto.addClass('active')
+                                    $crypto.show()
+                                    _gaq.push(['_trackPageview', '#crypto']);
+                                    break;
+                                case "embedded":
+                                    $link_embedded.addClass('active')
+                                    $embedded.show()
+                                    _gaq.push(['_trackPageview', '#embedded']);
+                                    break;
+                                case "roadmap":
+                                    $link_roadmap.addClass('active')
+                                    $roadmap.show()
+                                    _gaq.push(['_trackPageview', '#roadmap']);
+                                    break;
+                                case "participate":
+                                    $link_participate.addClass('active')
+                                    $participate.show()
+                                    _gaq.push(['_trackPageview', '#participate']);
+                                    break;
+                                case "about":
+                                default:
+                                    $link_about.addClass('active')
+                                    $about.show()
+                                    _gaq.push(['_trackPageview', '#about']);
+                            }
+                        }
+                    },
+                    { unescape: ",/" });
+
+                });
+            }
+        </script>
+        <!-- Flattr -->
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            (function() {
+                var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+                t.parentNode.insertBefore(s, t);
+            })();
+            /* ]]> */
+        </script>
+        <!-- Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [['_setAccount', 'UA-22729307-1'],['_trackPageview']];
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+
+    <body onload="prettyPrint()">
+
+        <div class="topbar">
+            <div class="fill">
+                <div class="container">
+                    <a class="brand" href="">QiPki</a>
+                    <ul class="nav">
+                        <li id="link_about"><a href="#about">About</a></li>
+                        <li id="link_licence"><a href="#licence">Licence</a></li>
+                        <li id="link_download"><a href="#download">Download</a></li>
+                        <li id="link_crypto"><a href="#crypto">Crypto API</a></li>
+                        <li id="link_embedded"><a href="#embedded">Embedded CA</a></li>
+                        <li id="link_roadmap"><a href="#roadmap">Roadmap</a></li>
+                        <li id="link_participate"><a href="#participate">Participate</a></li>
+                        <li ><a href="https://github.com/eskatos/qipki/issues">Bugs</a></li>
+                        <li ><a href="https://github.com/eskatos/qipki">Source</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div> <!-- /topbar -->
+
+        <section id="about">
+            <div class="container">
+                <div class="hero-unit" style="text-align: justify">
+                    <h1>QiPki</h1>
+                    <p>
+                        QiPki is an effort to create Java developper tools to build cryptography into applications and
+                        heading towards building a suite of packaged cryptography services.
+                    </p>
+                    <p>
+                        This is indeed a technology project. Development tries to follow principles learned from
+                        <a href="http://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>,
+                        <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>,
+                        <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">ReST</a> and more
+                        using the <a href="http://www.qi4j.org">Qi4j</a> engine and framework.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="span4">
+                        <h3>Use the Crypto API</h3>
+                        <p>
+                            The main goal of The Crypto API is to lower the developer pain by wrapping underlying tools
+                            with nice, strongly typed APIs, easing testability, mockability and usage with dependency
+                            injection tools like Guice, CDI or Qi4j.
+                        </p>
+                    </div>
+                    <div class="span4">
+                        <h3>Embedd a CA</h3>
+                        <p>
+                            Learn how to embedd a fully working CA inside your Java application. It's basically a matter
+                            of instanciating the good objects and using a simple API.
+                        </p>
+                    </div>
+                    <div class="span4">
+                        <h3>Status & Roadmap</h3>
+                        <p>
+                            Learn where the project is, where it comes from and where it's headed.
+                        </p>
+                        <p>
+                            See what is in the present feature set and what is coming.
+                        </p>
+                    </div>
+                    <div class="span4">
+                        <h3>Participate</h3>
+                        <p>
+                            QiPki is published under the open-source Apache Licence.
+                        </p>
+                        <p>
+                            The project is quite ambitious and needs some help, see what you could do to help it grow.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span4">
+                        <p><a class="btn primary" href="#crypto">Learn more &raquo;</a></p>
+                    </div>
+                    <div class="span4">
+                        <p><a class="btn primary" href="#embedded">Learn more &raquo;</a></p>
+                    </div>
+                    <div class="span4">
+                        <p><a class="btn primary" href="#roadmap">View roadmap &raquo;</a></p>
+                    </div>
+                    <div class="span4">
+                        <p><a class="btn primary" href="#participate">Participate &raquo;</a></p>
+                    </div>
+                </div>
+            </div>
+        </section> <!-- /about -->
+
+        <section id="licence">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Licence <small>Apache Licence Version 2.0</small></h1>
+                </div>
+                <p>QiPki is licenced under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a></p>
+                <pre style="width: 50em">
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+                </pre>
+            </div>
+        </section> <!-- /licence -->
+
+        <section id="download">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Download QiPki</h1>
+                </div>
+                <p>
+                    Before choosing between the latest release or a development build, be sure to check out the
+                    <a href="#roadmap">status and roadmap</a> of the project.
+                </p>
+                <h3>Latest release</h3>
+                <h5>Artifacts</h5>
+                <p>
+                    QiPki artifacts are synced into maven central and can be easily found
+                    <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.codeartisans.qipki%22">there</a>.
+                </p>
+                <h5>Packaged release</h5>
+                <div class="alert-message warning">
+                    <p><strong>Latest release do not include the packaged UNIX daemon</strong>, see the development builds below for now.</p>
+                </div>
+                <div class="row">
+                    <div class="span10">
+                        <h3>Development builds</h3>
+                        <p>
+                            QiPki use the awesome DEV@cloud service gracefully provided by
+                            <a href="http://www.cloudbees.com/">Cloudbees</a> to FOSS projects.
+                        </p>
+                        <ul>
+                            <li><a href="https://qipki.ci.cloudbees.com/">Continuous Integration</a></li>
+                            <li><a href="http://repository-qipki.forge.cloudbees.com/snapshot/">Snapshot Maven
+                                    repository</a></li>
+                        </ul>
+                        <p>Here is a POM snippet to add the snapshot repository:</p>
+                        <pre class="pretty-print lang-xml"><code lang="xml">&lt;repository&gt;
+    &lt;id&gt;qipki-snapshots-repository&lt;/id&gt;
+    &lt;url&gt;http://repository-qipki.forge.cloudbees.com/snapshot/&lt;/url&gt;
+    &lt;snapshots&gt;
+        &lt;enabled&gt;true&lt;/enabled&gt;
+    &lt;/snapshots&gt;
+&lt;/repository&gt;</code></pre>
+                    </div>
+                    <div class="span6">
+                        <img src="http://web-static-cloudfront.s3.amazonaws.com/images/badges/BuiltOnDEV.png" style="float: right" />
+                    </div>
+                </div>
+            </div>
+        </section> <!-- /download -->
+
+        <section id="crypto">
+            <div class="container">
+                <div class="alert-message warning">
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
+                </div>
+                <div class="page-header">
+                    <h1>Use the Crypto API <small>easily mockable, testable and DI ready</small></h1>
+                </div>
+                <p>
+                    During the QiPki development a comprehensive Crypto API was build and is still enhanced.
+                    This library does not try to reinvent the wheel where good wheels are found. It leverages the
+                    <a href="http://en.wikipedia.org/wiki/Java_Cryptography_Architecture">JCA</a>
+                    and <a href="http://www.bouncycastle.org/">BouncyCastle</a>.
+                </p>
+                <p>
+                    The main goal of the Crypto API is to ease the developer pain by wrapping underlying tools
+                    with nice, strongly typed APIs and being easily testable, mockable, usable with dependency
+                    injection tools like Guice, CDI or Qi4j.
+                </p>
+                <h3>Hashs</h3>
+                <blockquote>
+                    <p>
+                        A cryptographic hash function is a deterministic procedure that takes an arbitrary block of data
+                        and returns a fixed-size bit string, the (cryptographic) hash value, such that an accidental or
+                        intentional change to the data will change the hash value. The data to be encoded is often
+                        called the "message," and the hash value is sometimes called the message digest or simply digest.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>Symetric cryptography</h3>
+                <blockquote>
+                    <p>
+                        Symmetric-key algorithms are a class of algorithms for cryptography that use trivially related,
+                        often identical, cryptographic keys for both encryption of plaintext and decryption of
+                        ciphertext. The encryption key is trivially related to the decryption key, in that they may be
+                        identical or there is a simple transformation to go between the two keys. The keys, in practice,
+                        represent a shared secret between two or more parties that can be used to maintain a private
+                        information link.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>Message Authentication Code</h3>
+                <blockquote>
+                    <p>
+                        In cryptography, a message authentication code (often MAC) is a short piece of information used
+                        to authenticate a message.
+                    </p>
+                    <p>
+                        A MAC algorithm, sometimes called a keyed (cryptographic) hash function, accepts as input a
+                        secret key and an arbitrary-length message to be authenticated, and outputs a MAC (sometimes
+                        known as a tag). The MAC value protects both a message's data integrity as well as its
+                        authenticity, by allowing verifiers (who also possess the secret key) to detect any changes to
+                        the message content.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Message_authentication_code">Message authentication code</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>Asymetric-key cryptography</h3>
+                <blockquote>
+                    <p>
+                        Public-key cryptography refers to a cryptographic system requiring two separate keys, one to
+                        lock or encrypt the plaintext, and one to unlock or decrypt the cyphertext. Neither key will do
+                        both functions. One of these keys is published or public and the other is kept private. If the
+                        lock/encryption key is the one published then the system enables private communication from the
+                        public to the unlocking key's owner. If the unlock/decryption key is the one published then the
+                        system serves as a signature verifier of documents locked by the owner of the private key.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/Asymmetric-key_cryptography">Asymmetric-key cryptography</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>X.509</h3>
+                <blockquote>
+                    <p>
+                        In cryptography, X.509 is an ITU-T standard for a public key infrastructure (PKI) and Privilege
+                        Management Infrastructure (PMI). X.509 specifies, amongst other things, standard formats for
+                        public key certificates, certificate revocation lists, attribute certificates, and a
+                        certification path validation algorithm.
+                    </p>
+                    <small>
+                        <a href="http://en.wikipedia.org/wiki/X.509">X.509</a>
+                        From Wikipedia, the free encyclopedia
+                    </small>
+                </blockquote>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h3>I/O</h3>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+            </div>
+        </section> <!-- /crypto-->
+
+        <section id="embedded">
+            <div class="container">
+                <div class="alert-message warning">
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
+                </div>
+                <div class="page-header">
+                    <h1>Embedd a CA <small>manage CAs, issue certificates and CRLs</small></h1>
+                </div>
+                <h3>Overview</h3>
+                <p><span class="label important">TODO</span> </p>
+                <h3>Plumbing</h3>
+                <p><span class="label important">TODO</span> </p>
+                <h5>Assemble and configure</h5>
+                <p><span class="label important">TODO</span> </p>
+                <h5>Embedd</h5>
+                <pre class="prettyprint lang-java"><code class="language-java">package org.qipki.examples.embeddedca;
+
+import /* ... snip ... */;
+
+public class EmbeddedCaExample
+{
+
+    public static void main( String[] args )
+    {
+        // Instanciate and run the embedded CA application
+        QiPkiEmbeddedCa ca = new QiPkiEmbeddedCa( TODO );
+        ca.run();
+        UnitOfWorkFactory uowf = ca.unitOfWorkFactory();
+
+        // Create a new UnitOfWork
+        UnitOfWork uow = uowf.newUnitOfWork();
+
+        // Interract with the CA here using the RootContext
+        RootContext&lt;TODO&gt; caCtx = ca.newRootContext();
+        // Keep reading for example interactions
+
+        // Apply changes
+        try {
+            uow.complete();
+        } catch ( UnitOfWorkCompletionException ex ) {
+            throw new RuntimeException( "Something went wrong" );
+        } finally {
+            uow.discard(); // No changes are discarded if the UnitOfWork completed successfully
+        }
+
+        // Stop gracefully
+        ca.stop();
+    }
+
+}
+</code></pre>
+                <p><span class="label important">TODO</span> Explain this code snippet.</p>
+                <h3>CA context</h3>
+                <p><span class="label important">TODO</span> Explain QiPki <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a> implementation.</p>
+                <h5>Create a CA <small>self-signed and stored in a PKCS#12 file</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Issue a certificate <small>using a predefined profile</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Renew a certificate <small>using a new keypair</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Revoke a certificate <small>and consume the generated CRL</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h3>Going further</h3>
+                <h5>Manage certificate profiles <small>different types of certificates, assignment to CAs</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Use escrowed keypairs <small>eg. for digital signature</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Configure logging <small>using SLF4J</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+                <h5>Expose runtime data through JMX <small>runtime configuration changes, statistics</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+            </div>
+        </section> <!-- /embedded-->
+
+        <section id="roadmap">
+            <div class="container">
+                <h3>Status</h3>
+                <div class="row">
+                    <div class="span10">
+                        <p>
+                            Latest release, 1.0-alpha7, contains a usable embedded CA without CRL support. This version
+                            uses an embedded instance of Apache Derby to store all of its data, including keystores, and an
+                            embedded Sesame based RDF repository for indexing/querying.
+                        </p>
+                        <p>
+                            The following release, probably 1.0-alpha8, will have CRL support, allows you to choose more
+                            store/indexing/querying backend implementations and uses keystores from the filesystem.
+                        </p>
+                        <p>
+                            The current codebase is being worked on mainly to implement all the CA interactions as http
+                            resources for use over the network. The build already produces a UNIX daemon like packaging.
+                        </p>
+                        <p>
+                            The HEAD of the source is kept as stable as possible thanks to 
+                            <a href="https://qipki.ci.cloudbees.com/">continuous integration</a>, if you are curious
+                            you can take a look at the <em>ca-http-main</em> module output, you'll find a tarball there.
+                        </p>
+                    </div>
+                    <div class="span6">
+                        <script type="text/javascript" src="http://www.ohloh.net/p/583977/widgets/project_basic_stats.js"></script>
+                    </div>
+                </div>
+                <h3>Roadmap</h3>
+                <p>
+                    See the <a href="https://github.com/eskatos/qipki/blob/master/TODO.md">TODO.md</a> file at the git
+                    repository root for more information on what's going on.
+                </p>
+                <div class="alert-message warning">
+                    <p><strong>Attention</strong> This roadmap is subject to changes without notice as the project grow.</p>
+                </div>
+                <h5>QiPki 1.0</h5>
+                <p>
+                    Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA, a
+                    reasonable CA with HTTP interactions and will be based on Qi4j 1.4.
+                </p>
+                <h5>Next steps</h5>
+                <p>
+                    After the 1.0 the goals
+                </p>
+                <p>A reasonable Web GUI for the HTTP based CA</p>
+                <p>Validation Authority: CRLS, OCSP?</p>
+                <p>Request Authority?</p>
+                <p>Based on Qi4j 2.x</p>
+                <h5>After that</h5>
+                <p>Identity Based Cryptography</p>
+                <h3>Who use QiPki?</h3>
+                <p>
+                    The first user of QiPki is QiPki. As every component is built to be embeddable, QiPki use this
+                    facility to build a new open-source cryptography services suite.
+                </p>
+                <p>
+                    The CryptoAPI is used in several projects while for now the only project using the embeddable CA is the
+                    <a href="http://www.netheos.net/products/ekeynox/">eKeynox</a> suite from
+                    <a href="http://www.netheos.net/">Netheos</a>. It's already deployed and used in production in
+                    setups involving ten thousands of users/certificates.
+                </p>
+            </div>
+        </section> <!-- /roadmap -->
+
+        <section id="participate">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Participate</h1>
+                </div>
+                <div class="row">
+                    <div class="span13">
+                        <p>
+                            QiPki is a young project, till it already is 2 years old.
+                            You can read more about it's history, status and roadmap <a href="#roadmap">here</a>.
+                        </p>
+                        <p>
+                            Any kind of help would be useful, from suggestions, bug reports, patches to spotting a typo in this
+                            very page :-) We'll welcome any kind of comment, remark, critics about the project, feel free to
+                            create a <a href="https://github.com/eskatos/qipki/issues/new">github issue</a>.
+                        </p>
+                        <p>
+                            As you certainly already understood, this is Work In Progress, don't expect something with easy setup
+                            and comprehensive documentation for now but in case you're already using the embedded API or want to
+                            show your support, use the widgets on the right.
+                        </p>
+                    </div>
+                    <div class="span3">
+                        <script type="text/javascript" src="http://www.ohloh.net/p/583977/widgets/project_users.js"></script>
+                        <a class="FlattrButton" style="display:none;" href="http://qipki.org"></a>
+                        <noscript><a href="http://flattr.com/thing/294404/QiPki" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+                    </div>
+                </div>
+                <h3>Test</h3>
+                <p>
+                    You can follow the documentation about the <a href="#crypto">Crypto API usage</a> or on
+                    <a href="#embedded">how to embedd a CA</a>. If you want to try the HTTP based CA you'll have to read
+                    some code. We hope that the unit tests are readable enough to get you started. Take a look inside
+                    the <code>ca-tests</code> submodule, see below for details.
+                </p>
+                <h3>Develop</h3>
+                <h5>Build system</h5>
+                <p>
+                    QiPki is writen in Java, it's built by <a href="http://maven.apache.org/">Maven</a> and all
+                    dependencies are hosted in central. This means that you only need to clone the QiPki git repository
+                    and run <code>mvn clean install</code> to compile, run tests, package and install QiPki artifacts in
+                    your local maven repository.Any Maven capable IDE will be able to open the Maven modules as first
+                    class IDE projects.
+                </p>
+                <p>We tried the following list of IDEs:</p>
+                <ul>
+                    <li><a href="http://netbeans.org/">Netbeans</a></li>
+                    <li><a href="http://www.eclipse.org/">Eclipse</a></li>
+                    <li><a href="http://www.jetbrains.com/idea/">IDEA</a></li>
+                </ul>
+                <p>An example oneliner that clone the git repository and build the project:</p>
+                <pre><code>git clone https://github.com/eskatos/qipki.git && mvn -f qipki/pom.xml clean install</code></pre>
+                <h5>Project layout</h5>
+                <p>
+                    QiPki is split in modules. This split is done with one main goal in mind: allow developpers to
+                    choose what part of QiPki they want to use. A root POM declare submodules, so this is a one level
+                    deep multi-modules project. There won't never be two levels as it bloat the build system.
+                </p>
+                <p>
+                    All artifacts share the very same groupId: <code>org.codeartisans.qipki</code>.
+                </p>
+                <p>QiPki modules:</p>
+                <table class="zebra-striped">
+                    <thead>
+                        <tr>
+                            <th>POM path</th>
+                            <th>Module name</th>
+                            <th>Artifact ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>~/pom.xml</td>
+                            <td>N/A - This is the root POM</td>
+                            <td>qipki</td>
+                        </tr>
+                        <tr>
+                            <td>~/crypto/pom.xml</td>
+                            <td>crypto</td>
+                            <td>qipki-crypto</td>
+                        </tr>
+                        <tr>
+                            <td>~/commons/pom.xml</td>
+                            <td>commons</td>
+                            <td>qipki-commons</td>
+                        </tr>
+                        <tr>
+                            <td>~/core/pom.xml</td>
+                            <td>core</td>
+                            <td>qipki-core</td>
+                        </tr>
+                        <tr>
+                            <td>~/testsupport/pom.xml</td>
+                            <td>testsupport</td>
+                            <td>qipki-testsupport</td>
+                        </tr>
+                        <tr>
+                            <td>~/mainsupport/pom.xml</td>
+                            <td>mainsupport</td>
+                            <td>qipki-mainsupport</td>
+                        </tr>
+                        <tr>
+                            <td>~/ca/pom.xml</td>
+                            <td>ca</td>
+                            <td>qipki-ca</td>
+                        </tr>
+                        <tr>
+                            <td>~/ca-http/pom.xml</td>
+                            <td>ca-http</td>
+                            <td>qipki-ca-http</td>
+                        </tr>
+                        <tr>
+                            <td>~/ca-http-client/pom.xml</td>
+                            <td>ca-http-client</td>
+                            <td>qipki-ca-http-client</td>
+                        </tr>
+                        <tr>
+                            <td>~/ca-http-main/pom.xml</td>
+                            <td>ca-http-main</td>
+                            <td>qipki-ca-http-main</td>
+                        </tr>
+                        <tr>
+                            <td>~/ca-tests/pom.xml</td>
+                            <td>ca-tests</td>
+                            <td>qipki-ca-tests</td>
+                        </tr>
+                        <tr>
+                            <td>~/web-client/pom.xml</td>
+                            <td>web-client</td>
+                            <td>qipki-web-client</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section> <!-- /participate -->
+
+        <div class="container" id="footer">
+            <footer>
+                <p>&copy; QiPki Community 2011</p>
+            </footer>
+        </div> <!-- /footer -->
+    </body>
+</html>
