@@ -9,21 +9,22 @@ QiPki use maven as its build system. The project structure is kept as simple as 
 
 All QiPki modules use the `org.codeartisans.qipki` group ID.
 
- Folder name           | Artifact ID                | Purpose
------------------------|----------------------------|-------------
- `./site/`             | `qipki-site`               | http://qipki.org
- `./mainsupport/`      | `qipki-mainsupport`        | `main` plumbing
- `./testsupport/`      | `qipki-testsupport`        | Unit tests plumbing
- `./qi4j-lib-uowfile/` | `org.qi4j.library.uowfile` | Qi4j library to bind operations on files to a UnitOfWork
- `./crypto/`           | `qipki-crypto`             | Crypto Engine
- `./commons/`          | `qipki-commons`            | Common code like values and their factories.
- `./core/`             | `qipki-core`               | QiPki Applications plumbing
- `./ca/`               | `qipki-ca`                 | Embeddable CA
- `./ca-http/`          | `qipki-http`               | HTTP based CA server
- `./ca-http-main/`     | `qipki-http-main`          | HTTP based CA server packaged as a UNIX daemon
- `./ca-http-client/`   | `qipki-http-client`        | Client library for the HTTP based CA server
- `./ca-tests/`         | `qipki-ca-tests`           | CA automated tests
- `./web-client/`       | `qipki-web-client`         | GWT based web UI
+ Folder name            | Artifact ID                | Purpose
+------------------------|----------------------------|-------------
+ `./site-maven-plugin/` | `qipki-site-maven-plugin`  | Maven plugin used to build http://qipki.org
+ `./site/`              | `qipki-site`               | http://qipki.org
+ `./mainsupport/`       | `qipki-mainsupport`        | `main` plumbing
+ `./testsupport/`       | `qipki-testsupport`        | Unit tests plumbing
+ `./qi4j-lib-uowfile/`  | `org.qi4j.library.uowfile` | Qi4j library to bind operations on files to a UnitOfWork
+ `./crypto/`            | `qipki-crypto`             | Crypto Engine
+ `./commons/`           | `qipki-commons`            | Common code like values and their factories.
+ `./core/`              | `qipki-core`               | QiPki Applications plumbing
+ `./ca/`                | `qipki-ca`                 | Embeddable CA
+ `./ca-http/`           | `qipki-http`               | HTTP based CA server
+ `./ca-http-main/`      | `qipki-http-main`          | HTTP based CA server packaged as a UNIX daemon
+ `./ca-http-client/`    | `qipki-http-client`        | Client library for the HTTP based CA server
+ `./ca-tests/`          | `qipki-ca-tests`           | CA automated tests
+ `./web-client/`        | `qipki-web-client`         | GWT based web UI
 
 
 ## Getting started

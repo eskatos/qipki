@@ -1,3 +1,4 @@
+.DS_Store*
 derby.log
 ./target
 commons/target
@@ -15,3 +16,4 @@ web-client/target
 site/target
 /target/
 /qi4j-lib-uowfile/target/
+/site-maven-plugin/target/

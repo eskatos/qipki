@@ -13,43 +13,35 @@
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     
-    <properties>
-        <qipki.site.src>${project.basedir}/src/main/www</qipki.site.src>
-        <qipki.site.target>${project.build.outputDirectory}/org/qipki/site/www</qipki.site.target>
-        <qipki.site.install>${project.basedir}/www</qipki.site.install>
-    </properties>
-
     <build>
         <plugins>
+            
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>qipki-site-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>qipki.site.gen</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.6</version>
                 <executions>
-                    
-                    <!-- Generation -->
-                    <execution>
-                        <id>qipki.site.generation</id>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <target>
-                                <copy todir="${qipki.site.target}">
-                                    <fileset dir="${qipki.site.src}"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    
-                    <!-- Installation -->
                     <execution>
                         <id>qipki.site.installation</id>
                         <phase>install</phase>
                         <configuration>
                             <target>
-                                <copy todir="${qipki.site.install}">
-                                    <fileset dir="${qipki.site.target}"/>
+                                <copy todir="${project.basedir}/www">
+                                    <fileset dir="${project.build.directory}/website"/>
                                 </copy>
                             </target>
                         </configuration>
@@ -57,9 +49,9 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
-                    
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
 

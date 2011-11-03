@@ -13,6 +13,7 @@
 
         <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="css/prettify.css" type="text/css" />
+        <link rel="stylesheet" href="fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -31,10 +32,29 @@
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
         <script type="text/javascript" src="js/jquery.history.js"></script>
         <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
+        <script type="text/javascript" src="fancybox/jquery.fancybox-1.3.4.pack.js"></script>
         <script type="text/javascript">
             if (true) {
                 $(document).ready(function($){
-
+                    
+                    // Handle external links
+                    
+                    $("a.iframe").each(function(idx,elem) {
+                        $link = $(elem)
+                        href = $link.attr('href')
+                        title = $link.attr('title')
+                        if( title == undefined )
+                            title = href
+                        $link.fancybox({
+                            'title'                 : '<a style="color: lightgray; font-weight: normal" target="_blank" href="'+href+'" title="'+title+'">'+title+'</a>',
+                            'hideOnContentClick'    : false,
+                            'width'                 : '95%',
+                            'height'                : '95%',
+                            'autoScale'             : false,
+                            'type'                  : 'iframe'
+                        })
+                    })
+                    
                     $link_about = $("#link_about")
                     $link_licence = $("#link_licence")
                     $link_download = $("#link_download")
@@ -464,6 +484,13 @@
                         <img src="http://web-static-cloudfront.s3.amazonaws.com/images/badges/BuiltOnDEV.png" style="float: right" />
                     </div>
                 </div>
+                <h3>Build QiPki yourself</h3>
+                <p>
+                    If you want to go deeper, try to fix an issue you spotted or contribute a new feature, you can build QiPki yourself.
+                </p>
+                <p>
+                    The build system is documented in the <a class="iframe" href="build.html" title="How to build QiPki?">build</a> page.
+                </p>
             </div>
         </section> <!-- /download -->
 

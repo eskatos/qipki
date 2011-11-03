@@ -87,6 +87,7 @@
         <module>web-client</module>
 
         <!-- Site -->
+        <module>site-maven-plugin</module>
         <module>site</module>
 
     </modules>
