@@ -23,9 +23,10 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * How to reduce locking in UoWFileFactory?
   * Write plural handling in UoWFile
   * Make it as a first class module prepared to be reversed into Qi4j 2.0
-* (----) Documentation
+* (#---) Documentation
   * Build
   * Embedded CA
+  * Try to use jmd instead of markdownj to process markdown in the website
 
 
 ## Next steps - That would lead to a tiny 1.0
