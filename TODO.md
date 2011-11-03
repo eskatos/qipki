@@ -1,15 +1,37 @@
+# QiPki Roadmap
 
-# Quid?
+This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track progress. After that a true issue management system will be used, but not before.
 
-* Use Cloudbees for continuous integration? (see http://www.cloudbees.com/foss/)
+## Overview
+
+### QiPki 1.0
+
+
+### QiPki 1.1
+
+
+## Quid?
+
+Do we really want to do that? Is this even possible? Is it the right time?
+
 * Move to Qi4j 2.0-SNAPSHOT?
-* Replace indexing-rdf by indexing-solr?
 
 
-# Work in progress
+## Work in progress
 
-* (###-) Write a build script for common development tasks
-  * Find a way to print build output as it goes
+* (###-) Harden files handling regarding UnitOfWorks
+  * How to reduce locking in UoWFileFactory?
+  * Write plural handling in UoWFile
+  * Make it as a first class module prepared to be reversed into Qi4j 2.0
+* (----) Documentation
+  * Build
+  * Embedded CA
+
+
+## Next steps - That would lead to a tiny 1.0
+
+## After that
+
 * (##--) Rework Qi4j HttpService
   * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
   * No more DefaultServlet
@@ -22,16 +44,6 @@
     * What to expose on JMX? Jetty statistics?
     * Add a pluggable SSLContextProviderService or something like that with assembly facilities
     * SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present
-* (###-) Harden files handling regarding UnitOfWorks
-  * How to reduce locking in UoWFileFactory?
-  * Write plural handling in UoWFile
-
-
-# Next steps - That would lead to a tiny 1.0
-
-* (----) Documentation
-  * Build
-  * Embedded CA
 * Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
@@ -60,17 +72,6 @@
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
-* (----) Generate development site and deploy it to github pages
-  * Use Gollum/Smeagol for the development website?
-  * Write a working basic site template
-  * What about aggregated reports?
-  * Add gwt compiler report, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/compiler-report.html
-  * Style the site
-  * Write some pages
-  * Deploy to GH Pages
-
-# After that
-
 * (----) Enhance Netscape extensions handling
   * In X509DetailValue : all of them
   * Netscape CA Revocation URL
