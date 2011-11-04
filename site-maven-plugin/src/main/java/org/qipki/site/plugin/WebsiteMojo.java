@@ -43,6 +43,10 @@ public class WebsiteMojo
      */
     private File staticDirectory;
     /**
+     * @parameter default-value="${project.basedir}/src/main/website/layout"
+     */
+    private File layoutDirectory;
+    /**
      * @parameter default-value="${project.basedir}/src/main/website/markup"
      */
     private File markupDirectory;
@@ -59,7 +63,7 @@ public class WebsiteMojo
     public void execute()
             throws MojoExecutionException, MojoFailureException
     {
-        FileUtils.mkdir( outputDirectory.getAbsolutePath() );
+        prepareOutputDirectory();
         if ( staticLast ) {
             if ( validateSource( "markup", markupDirectory ) ) {
                 doMarkup();
@@ -75,6 +79,27 @@ public class WebsiteMojo
                 doMarkup();
             }
         }
+    }
+
+    private void prepareOutputDirectory()
+            throws MojoExecutionException
+    {
+        try {
+            if (false)
+            FileUtils.deleteDirectory( outputDirectory );
+            FileUtils.mkdir( outputDirectory.getAbsolutePath() );
+        } catch ( IOException ex ) {
+            throw new MojoExecutionException( "Unable to prepare output directory: " + ex.getMessage(), ex );
+        }
+    }
+
+    private boolean validateSource( String name, File directory )
+    {
+        if ( !directory.exists() || directoryIsEmpty( directory ) ) {
+            getLog().warn( name + "Directory does not exists or is empty" );
+            return false;
+        }
+        return true;
     }
 
     private void doStatic()
@@ -93,6 +118,7 @@ public class WebsiteMojo
     {
         getLog().info( ">>> Website Maven Plugin :: doMarkup( " + markupDirectory + ")" );
         try {
+            String layout = FileUtils.fileRead( new File( layoutDirectory, "main.layout.html" ), "UTF-8" );
             MarkdownProcessor md = new MarkdownProcessor();
             FileFilter fileFilter = new MarkdownFileFilter();
             Stack<File> stack = new Stack<File>();
@@ -111,6 +137,8 @@ public class WebsiteMojo
                 // Process Markdown
                 String input = FileUtils.fileRead( eachFile, "UTF-8" );
                 String output = md.markdown( input ).trim();
+                // Apply Theme
+                output = applyLayout( layout, output );
                 // Save to target path
                 FileUtils.fileWrite( target, "UTF-8", output );
             }
@@ -126,6 +154,12 @@ public class WebsiteMojo
         return new File( outputDirectory, targetRelativePath );
     }
 
+    private String applyLayout( String layout, String htmlContent )
+            throws IOException
+    {
+        return layout.replaceAll( "@@CONTENT@@", htmlContent );
+    }
+
     /**
      * Accept only directories or files with the .md extension.
      */
@@ -139,15 +173,6 @@ public class WebsiteMojo
             return file.isDirectory() || file.getName().endsWith( ".md" );
         }
 
-    }
-
-    private boolean validateSource( String name, File directory )
-    {
-        if ( !directory.exists() || directoryIsEmpty( directory ) ) {
-            getLog().warn( name + "Directory does not exists or is empty" );
-            return false;
-        }
-        return true;
     }
 
     private static boolean directoryIsEmpty( File directory )

@@ -5,26 +5,89 @@
 
 QiPki use maven as its build system. The project structure is kept as simple as possible in order to prevent maven nightmares : one root pom and several direct submodules using the root pom as parent.
 
+## What's needed?
+
+In order to build QiPki from the sources you will need <a target="_blank" href="http://help.github.com/set-up-git-redirect">git</a>, <a target="_blank" href="http://www.java.com/download/">java</a> and <a target="_blank"href="http://maven.apache.org/download.html">maven</a>.
+
 ### Modules
 
 All QiPki modules use the `org.codeartisans.qipki` group ID.
 
- Folder name            | Artifact ID                | Purpose
-------------------------|----------------------------|-------------
- `./site-maven-plugin/` | `qipki-site-maven-plugin`  | Maven plugin used to build http://qipki.org
- `./site/`              | `qipki-site`               | http://qipki.org
- `./mainsupport/`       | `qipki-mainsupport`        | `main` plumbing
- `./testsupport/`       | `qipki-testsupport`        | Unit tests plumbing
- `./qi4j-lib-uowfile/`  | `org.qi4j.library.uowfile` | Qi4j library to bind operations on files to a UnitOfWork
- `./crypto/`            | `qipki-crypto`             | Crypto Engine
- `./commons/`           | `qipki-commons`            | Common code like values and their factories.
- `./core/`              | `qipki-core`               | QiPki Applications plumbing
- `./ca/`                | `qipki-ca`                 | Embeddable CA
- `./ca-http/`           | `qipki-http`               | HTTP based CA server
- `./ca-http-main/`      | `qipki-http-main`          | HTTP based CA server packaged as a UNIX daemon
- `./ca-http-client/`    | `qipki-http-client`        | Client library for the HTTP based CA server
- `./ca-tests/`          | `qipki-ca-tests`           | CA automated tests
- `./web-client/`        | `qipki-web-client`         | GWT based web UI
+<table>
+    <thead><tr> <td>Folder name</td> <td>Artifact ID</td> <td>Purpose</td> </tr></thead>
+    <tbody>
+        <tr>
+            <td>./site-maven-plugin/</td>
+            <td>qipki-site-maven-plugin</td>
+            <td>Maven plugin used to build http://qipki.org</td>
+        </tr>
+        <tr>
+            <td>./site/</td>
+            <td>qipki-site</td>
+            <td>http://qipki.org</td>
+        </tr>
+        <tr>
+            <td>./mainsupport/</td>
+            <td>qipki-mainsupport</td>
+            <td>main plumbing</td>
+        </tr>
+        <tr>
+            <td>./testsupport/</td>
+            <td>qipki-testsupport</td>
+            <td>Unit tests plumbing</td>
+        </tr>
+        <tr>
+            <td>./qi4j-lib-uowfile/</td>
+            <td>org.qi4j.library.uowfile</td>
+            <td>Qi4j library to bind operations on files to a UnitOfWork</td>
+        </tr>
+        <tr>
+            <td>./crypto/</td>
+            <td>qipki-crypto</td>
+            <td>Crypto Engine</td>
+        </tr>
+        <tr>
+            <td>./commons/</td>
+            <td>qipki-commons</td>
+            <td>Common code like values and their factories.</td>
+        </tr>
+        <tr>
+            <td>./core/</td>
+            <td>qipki-core</td>
+            <td>QiPki Applications plumbing</td>
+        </tr>
+        <tr>
+            <td>./ca/</td>
+            <td>qipki-ca</td>
+            <td>Embeddable CA</td>
+        </tr>
+        <tr>
+            <td>./ca-http/</td>
+            <td>qipki-http</td>
+            <td>HTTP based CA server</td>
+        </tr>
+        <tr>
+            <td>./ca-http-main/</td>
+            <td>qipki-http-main</td>
+            <td>HTTP based CA server packaged as a UNIX daemon</td>
+        </tr>
+        <tr>
+            <td>./ca-http-client/</td>
+            <td>qipki-http-client</td>
+            <td>Client library for the HTTP based CA server</td>
+        </tr>
+        <tr>
+            <td>./ca-tests/</td>
+            <td>qipki-ca-tests</td>
+            <td>CA automated tests</td>
+        </tr>
+        <tr>
+            <td>./web-client/</td>
+            <td>qipki-web-client</td>
+            <td>GWT based web UI</td>
+        </tr>
+    </tbody>
+</table>
 
 
 ## Getting started
@@ -64,6 +127,12 @@ TODO Take a look in the `ca-http-main` module if you're interested.
 
     mvn -pl web-client gwt:run
 
+### Full rebuild and deployment of qipki.org
+
+    mvn -pl site-maven-plugin,site install
+
+TODO Document the site generation and deployment
+
 ## Profiles
 
 Profiles described here are not activated by default and released versions of QiPki are of course not built using any of them.
@@ -92,15 +161,35 @@ To set a property, add `-DpropertyName=propertyValue` to your maven command line
 
 ### Build properties
 
-Property | Effect
----------|-------
-
+<table>
+    <thead>
+        <tr>
+            <td>Property</td>
+            <td>Effect</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
 
 ### Usefull standard maven properties
 
-Property | Effect
----------|-------
-skipTests | Flag to skip all test related build steps. Unit tests are not compiled!
-
-
+<table>
+    <thead>
+        <tr>
+            <td>Property</td>
+            <td>Effect</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>skipTests</td>
+            <td>Flag to skip all test related build steps. Unit tests are not compiled!</td>
+        </tr>
+    </tbody>
+</table>
 
