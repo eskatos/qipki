@@ -569,9 +569,9 @@
                     <p>You can now start using the QiPki Crypto API.</p>
                 </div>
                 <p>
-                    Note that the examples shown below do not use any dependency injection framework but
-                    you'll see that every object is DI friendly. Plumbing code is provided for integration
-                    with Qi4j with some added value.
+                    Note that the examples shown below do not use any dependency injection framework and are all
+                    self sufficient. You'll see that every object is DI friendly. Plumbing code is provided for 
+                    integration with Qi4j with some added value.
                 </p>
                 <h3>Hashs</h3>
                 <blockquote>
@@ -615,7 +615,22 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <p>The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.</p>
+                <pre class="prettyprint lang-java"><code class="language-java">Security.addProvider( new BouncyCastleProvider() );
+Random random = new RandomImpl();
+( ( RandomImpl ) random ).activate(); // This is Work in Progress and won't be needed anymore soon.
+CryptoContext cryptoContext = new DefaultCryptoContext();
+
+SymetricGenerator symGen = new SymetricGeneratorImpl( cryptoContext );
+SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
+
+CipherFactory cipherFactory = new CipherFactoryImpl( random );
+BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
+byte[] ciphered = cipher.cipher( "CipherMe".getBytes( "UTF-8" ), key );
+byte[] deciphered = cipher.decipher( ciphered, key );
+System.out.println( new String( deciphered, "UTF-8" ) ); // Will output "CipherMe"
+
+Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                 <h3>Message Authentication Code</h3>
                 <blockquote>
                     <p>

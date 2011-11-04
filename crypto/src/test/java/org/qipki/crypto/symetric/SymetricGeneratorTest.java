@@ -13,6 +13,8 @@
  */
 package org.qipki.crypto.symetric;
 
+import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.security.Security;
 import javax.crypto.SecretKey;
 
@@ -21,28 +23,38 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 
 import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.DefaultCryptoContext;
+import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
+import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
+import org.qipki.crypto.cipher.BlockCipher;
+import org.qipki.crypto.cipher.CipherFactory;
+import org.qipki.crypto.cipher.CipherFactoryImpl;
+import org.qipki.crypto.random.Random;
+import org.qipki.crypto.random.RandomImpl;
 
 public class SymetricGeneratorTest
 {
 
     @Test
     public void test()
+            throws Exception
     {
         Security.addProvider( new BouncyCastleProvider() );
-        CryptoContext cryptoContext = new CryptoContext()
-        {
+        Random random = new RandomImpl();
+        ( ( RandomImpl ) random ).activate();
+        CryptoContext cryptoContext = new DefaultCryptoContext();
 
-            @Override
-            public String providerName()
-            {
-                return BouncyCastleProvider.PROVIDER_NAME;
-            }
-
-        };
         SymetricGenerator symGen = new SymetricGeneratorImpl( cryptoContext );
         SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 128 ) );
-        System.out.println( key.toString() );
+
+        CipherFactory cipherFactory = new CipherFactoryImpl( random );
+        BlockCipher cipher = cipherFactory.newBlockCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS5 );
+        byte[] ciphered = cipher.cipher( "CipherMe".getBytes( "UTF-8" ), key );
+        byte[] deciphered = cipher.decipher( ciphered, key );
+        System.out.println( new String( deciphered, "UTF-8" ) ); // Will output "CipherMe"
+
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
 
 }
