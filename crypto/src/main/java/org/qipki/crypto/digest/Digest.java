@@ -13,7 +13,9 @@
  */
 package org.qipki.crypto.digest;
 
+import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public interface Digest
 {
@@ -29,5 +31,26 @@ public interface Digest
     String hexDigest( byte[] data, DigestParameters params );
 
     String base64Digest( byte[] data, DigestParameters params );
+
+    byte[] digest( File data, DigestParameters params );
+
+    String hexDigest( File data, DigestParameters params );
+
+    String base64Digest( File data, DigestParameters params );
+
+    byte[] digest( String data, DigestParameters params );
+
+    String hexDigest( String data, DigestParameters params );
+
+    String base64Digest( String data, DigestParameters params );
+
+    byte[] digest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException;
+
+    String hexDigest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException;
+
+    String base64Digest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException;
 
 }

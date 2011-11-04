@@ -14,10 +14,16 @@
 package org.qipki.crypto.digest;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+
+import org.codeartisans.java.toolbox.io.IO;
 
 import org.qi4j.api.injection.scope.Service;
 
@@ -93,6 +99,75 @@ public class DigestImpl
     public String base64Digest( byte[] data, DigestParameters params )
     {
         return cryptCodex.toBase64String( digest( data, params ) );
+    }
+
+    @Override
+    public byte[] digest( File data, DigestParameters params )
+    {
+        InputStream input = null;
+        try {
+            input = new FileInputStream( data );
+            return digest( input, params );
+        } catch ( FileNotFoundException ex ) {
+            throw new CryptoFailure( "Unable to digest a file: " + ex.getMessage(), ex );
+        } finally {
+            IO.closeSilently( input );
+        }
+    }
+
+    @Override
+    public String hexDigest( File data, DigestParameters params )
+    {
+        return cryptCodex.toHexString( digest( data, params ) );
+    }
+
+    @Override
+    public String base64Digest( File data, DigestParameters params )
+    {
+        return cryptCodex.toBase64String( digest( data, params ) );
+    }
+
+    @Override
+    public byte[] digest( String data, DigestParameters params )
+    {
+        try {
+            return digest( data, "UTF-8", params );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF-8 not supported! o_O ", ex );
+        }
+    }
+
+    @Override
+    public String hexDigest( String data, DigestParameters params )
+    {
+        return cryptCodex.toHexString( digest( data, params ) );
+    }
+
+    @Override
+    public String base64Digest( String data, DigestParameters params )
+    {
+        return cryptCodex.toBase64String( digest( data, params ) );
+    }
+
+    @Override
+    public byte[] digest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException
+    {
+        return digest( data.getBytes( encoding ), params );
+    }
+
+    @Override
+    public String hexDigest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException
+    {
+        return cryptCodex.toHexString( digest( data, encoding, params ) );
+    }
+
+    @Override
+    public String base64Digest( String data, String encoding, DigestParameters params )
+            throws UnsupportedEncodingException
+    {
+        return cryptCodex.toBase64String( digest( data, encoding, params ) );
     }
 
 }

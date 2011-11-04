@@ -499,7 +499,7 @@
         <section id="crypto">
             <div class="container">
                 <div class="alert-message warning">
-                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#roadmap">Roadmap</a> page.</p>
                 </div>
                 <div class="page-header">
                     <h1>Use the Crypto API <small>easily mockable, testable and DI ready</small></h1>
@@ -515,6 +515,64 @@
                     with nice, strongly typed APIs and being easily testable, mockable, usable with dependency
                     injection tools like Guice, CDI or Qi4j.
                 </p>
+                <h3>Getting started</h3>
+                <p>
+                    You will need <a class="iframe" href="http://www.java.com/download/">java</a> and 
+                    <a class="iframe" href="http://maven.apache.org/download.html">maven</a> plus a source editor of your choice.
+                </p>
+                <h5>Create a new maven project</h5>
+                <p>
+                    Start by creating a new maven project with the following command:
+                </p>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-SNAPSHOT</code></pre>
+                <p>
+                    Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
+                </p>
+                <p>
+                    This should have created a <code>my-app</code> directory containing an empty java maven project.
+                    Now, open the <code>pom.xml</code> file and add this before the <code>&lt;dependencies&gt;</code> section:
+                </p>
+                <pre class="pretty-print lang-xml"><code lang="xml">&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+      &lt;configuration&gt;
+        &lt;source&gt;1.5&lt;/source&gt;
+        &lt;target&gt;1.5&lt;/target&gt;
+      &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+&lt;repositories&gt;
+  &lt;repository&gt;
+      &lt;id&gt;qipki-snapshots-repository&lt;/id&gt;
+      &lt;url&gt;http://repository-qipki.forge.cloudbees.com/snapshot/&lt;/url&gt;
+      &lt;snapshots&gt;
+          &lt;enabled&gt;true&lt;/enabled&gt;
+      &lt;/snapshots&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;</code></pre>
+                <h5>Depends on the <code>qipki-crypto</code> module</h5>
+                <p>
+                    Add <code>org.codeartisans.qipki:qipki-crypto</code> as dependency to your project inside the 
+                    <code>&lt;dependencies&gt;</code> section:
+                </p>
+                <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
+  &lt;artifactId&gt;qipki-crypto&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+                <p>
+                    Ensure that everything works by issueing a <code>mvn clean install</code> command.
+                </p>
+                <div class="alert-message success">
+                    <p>You can now start using the QiPki Crypto API.</p>
+                </div>
+                <p>
+                    Note that the examples shown below do not use any dependency injection framework but
+                    you'll see that every object is DI friendly. Plumbing code is provided for integration
+                    with Qi4j with some added value.
+                </p>
                 <h3>Hashs</h3>
                 <blockquote>
                     <p>
@@ -528,7 +586,20 @@
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <p>
+                    The following code makes SHA256 hashes out of several types of bytes sources. The <code>Digester</code> 
+                    can return the hashes as a <code>byte[]</code> or as a <code>String</code> encoded in either hexadecimal
+                    or Base64.
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">Security.addProvider( new BouncyCastleProvider() );
+
+Digest digester = new DigestImpl( new DefaultCryptoContext(), new CryptCodexImpl() );
+DigestParameters sha256Params = new DigestParameters( SHA_256 );
+
+String stringHash = digester.hexDigest( "A string to hash", sha256Params ) ); // Defaults to UTF-8 encoding
+String fileHash   = digester.hexDigest( new File( "/path/to/file.foo" ), sha256Params ) );
+
+Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                 <h3>Symetric cryptography</h3>
                 <blockquote>
                     <p>
@@ -602,17 +673,64 @@
         <section id="embedded">
             <div class="container">
                 <div class="alert-message warning">
-                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#download">Download</a> page to get development builds.</p>
+                    <p><strong>This documentation use unreleased features!</strong> See the <a href="#roadmal">Roadmap</a> page.</p>
                 </div>
                 <div class="page-header">
                     <h1>Embedd a CA <small>manage CAs, issue certificates and CRLs</small></h1>
                 </div>
-                <h3>Overview</h3>
-                <p><span class="label important">TODO</span> </p>
-                <h3>Plumbing</h3>
-                <p><span class="label important">TODO</span> </p>
-                <h5>Assemble and configure</h5>
-                <p><span class="label important">TODO</span> </p>
+                <h3>Getting started</h3>
+                <p>
+                    You will need <a class="iframe" href="http://www.java.com/download/">java</a> and 
+                    <a class="iframe" href="http://maven.apache.org/download.html">maven</a> plus a source editor of your choice.
+                </p>
+                <h5>Create a new maven project</h5>
+                <p>
+                    Start by creating a new maven project with the following command:
+                </p>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-SNAPSHOT</code></pre>
+                <p>
+                    Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
+                </p>
+                <p>
+                    This should have created a <code>my-app</code> directory containing an empty java maven project.
+                    Now, open the <code>pom.xml</code> file and add this before the <code>&lt;dependencies&gt;</code> section:
+                </p>
+                <pre class="pretty-print lang-xml"><code lang="xml">&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+      &lt;configuration&gt;
+        &lt;source&gt;1.5&lt;/source&gt;
+        &lt;target&gt;1.5&lt;/target&gt;
+      &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+&lt;repositories&gt;
+  &lt;repository&gt;
+      &lt;id&gt;qipki-snapshots-repository&lt;/id&gt;
+      &lt;url&gt;http://repository-qipki.forge.cloudbees.com/snapshot/&lt;/url&gt;
+      &lt;snapshots&gt;
+          &lt;enabled&gt;true&lt;/enabled&gt;
+      &lt;/snapshots&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;</code></pre>
+                <h5>Depends on the <code>qipki-ca</code> module</h5>
+                <p>
+                    Add <code>org.codeartisans.qipki:qipki-ca</code> as dependency to your project inside the 
+                    <code>&lt;dependencies&gt;</code> section:
+                </p>
+                <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
+  &lt;artifactId&gt;qipki-ca&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+                <p>
+                    Ensure that everything works by issueing a <code>mvn clean install</code> command.
+                </p>
+                <div class="alert-message success">
+                    <p>You can now start using the QiPki Embedded CA.</p>
+                </div>
                 <h5>Embedd</h5>
                 <pre class="prettyprint lang-java"><code class="language-java">package org.qipki.examples.embeddedca;
 
@@ -662,6 +780,8 @@ public class EmbeddedCaExample
                 <h5>Revoke a certificate <small>and consume the generated CRL</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h3>Going further</h3>
+                <h5>Assemble and configure <small>set the data and logging paths, choose backend implementations</small></h5>
+                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Manage certificate profiles <small>different types of certificates, assignment to CAs</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Use escrowed keypairs <small>eg. for digital signature</small></h5>
