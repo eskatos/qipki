@@ -6,18 +6,22 @@ This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the 
 
 ### QiPki 1.0
 
+Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA and will be based on Qi4j 1.4.
 
 ### QiPki 1.1
 
+Work is already in progress to add a reasonable CA with HTTP interactions.
 
-## Quid?
 
+## Details
+
+### Quid?
 Do we really want to do that? Is this even possible? Is it the right time?
 
 * Move to Qi4j 2.0-SNAPSHOT?
 
 
-## Work in progress
+### Work in progress
 
 * (###-) Harden files handling regarding UnitOfWorks
   * How to reduce locking in UoWFileFactory?
@@ -29,9 +33,9 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Try to use jmd instead of markdownj to process markdown in the website
 
 
-## Next steps - That would lead to a tiny 1.0
+### Next steps - That would lead to a tiny 1.0
 
-## After that
+### After that
 
 * (##--) Rework Qi4j HttpService
   * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
