@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title>QiPki</title>
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="description" content="QiPki is an effort to create Java developper tools to build cryptography into applications and heading towards building a suite of packaged cryptography services.">
+        <meta name="author" content="QiPki Community">
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -46,7 +46,7 @@
                         if( title == undefined )
                             title = href
                         $link.fancybox({
-                            'title'                 : '<a style="color: lightgray; font-weight: normal" target="_blank" href="'+href+'" title="'+title+'">'+title+'</a>',
+                            'title'                 : '<span style="font-weight: normal">Open <a style="color: lightgray;" target="_blank" href="'+href+'" title="'+title+'">'+title+'</a>',
                             'hideOnContentClick'    : false,
                             'width'                 : '95%',
                             'height'                : '95%',
@@ -176,8 +176,8 @@
                         <li id="link_embedded"><a href="#embedded">Embedded CA</a></li>
                         <li id="link_roadmap"><a href="#roadmap">Roadmap</a></li>
                         <li id="link_participate"><a href="#participate">Participate</a></li>
-                        <li ><a href="https://github.com/eskatos/qipki/issues">Bugs</a></li>
-                        <li ><a href="https://github.com/eskatos/qipki">Source</a></li>
+                        <li ><a target="_blank" href="https://github.com/eskatos/qipki/issues">Bugs</a></li>
+                        <li ><a target="_blank" href="https://github.com/eskatos/qipki">Source</a></li>
                     </ul>
                 </div>
             </div>
@@ -193,10 +193,10 @@
                     </p>
                     <p>
                         This is indeed a technology project. Development tries to follow principles learned from
-                        <a href="http://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>,
-                        <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>,
-                        <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">ReST</a> and more
-                        using the <a href="http://www.qi4j.org">Qi4j</a> engine and framework.
+                        <a class="iframe" href="http://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>,
+                        <a class="iframe" href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>,
+                        <a class="iframe" href="http://en.wikipedia.org/wiki/Representational_state_transfer">ReST</a> and more
+                        using the <a class="iframe" href="http://www.qi4j.org">Qi4j</a> engine and framework.
                     </p>
                 </div>
                 <div class="row">
@@ -256,7 +256,7 @@
                 <div class="page-header">
                     <h1>Licence <small>Apache Licence Version 2.0</small></h1>
                 </div>
-                <p>QiPki is licenced under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a></p>
+                <p>QiPki is licenced under the <a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a></p>
                 <pre style="width: 50em">
 
                                  Apache License
@@ -452,8 +452,10 @@
                 <h3>Latest release</h3>
                 <h5>Artifacts</h5>
                 <p>
-                    QiPki artifacts are synced into maven central and can be easily found
-                    <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.codeartisans.qipki%22">there</a>.
+                    QiPki artifacts are synced into maven central and can be downloaded from there.
+                </p>
+                <p>
+                    <a class="btn success iframe" title="Maven Central - QiPki groupId" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.codeartisans.qipki%22">Download QiPki</a>
                 </p>
                 <h5>Packaged release</h5>
                 <div class="alert-message warning">
@@ -464,11 +466,11 @@
                         <h3>Development builds</h3>
                         <p>
                             QiPki use the awesome DEV@cloud service gracefully provided by
-                            <a href="http://www.cloudbees.com/">Cloudbees</a> to FOSS projects.
+                            <a target="_blank" href="http://www.cloudbees.com/">Cloudbees</a> to FOSS projects.
                         </p>
                         <ul>
-                            <li><a href="https://qipki.ci.cloudbees.com/">Continuous Integration</a></li>
-                            <li><a href="http://repository-qipki.forge.cloudbees.com/snapshot/">Snapshot Maven
+                            <li><a class="iframe" href="https://qipki.ci.cloudbees.com/">Continuous Integration</a></li>
+                            <li><a class="iframe" href="http://repository-qipki.forge.cloudbees.com/snapshot/">Snapshot Maven
                                     repository</a></li>
                         </ul>
                         <p>Here is a POM snippet to add the snapshot repository:</p>
@@ -505,8 +507,8 @@
                 <p>
                     During the QiPki development a comprehensive Crypto API was build and is still enhanced.
                     This library does not try to reinvent the wheel where good wheels are found. It leverages the
-                    <a href="http://en.wikipedia.org/wiki/Java_Cryptography_Architecture">JCA</a>
-                    and <a href="http://www.bouncycastle.org/">BouncyCastle</a>.
+                    <a class="iframe" title="Java Cryptography Architecture" href="http://en.wikipedia.org/wiki/Java_Cryptography_Architecture">JCA</a>
+                    and <a class="iframe" title="The Legion of the Bouncy Castle" href="http://www.bouncycastle.org/">BouncyCastle</a>.
                 </p>
                 <p>
                     The main goal of the Crypto API is to ease the developer pain by wrapping underlying tools
@@ -522,7 +524,7 @@
                         called the "message," and the hash value is sometimes called the message digest or simply digest.
                     </p>
                     <small>
-                        <a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>
+                        <a class="iframe" title="Cryptographic hash function" href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
@@ -538,7 +540,7 @@
                         information link.
                     </p>
                     <small>
-                        <a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>
+                        <a class="iframe" title="Symmetric-key algorithm" href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
@@ -557,7 +559,7 @@
                         the message content.
                     </p>
                     <small>
-                        <a href="http://en.wikipedia.org/wiki/Message_authentication_code">Message authentication code</a>
+                        <a class="iframe" title="Message authentication code" href="http://en.wikipedia.org/wiki/Message_authentication_code">Message authentication code</a>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
@@ -573,7 +575,7 @@
                         system serves as a signature verifier of documents locked by the owner of the private key.
                     </p>
                     <small>
-                        <a href="http://en.wikipedia.org/wiki/Asymmetric-key_cryptography">Asymmetric-key cryptography</a>
+                        <a class="iframe" title="Asymmetric-key cryptography" href="http://en.wikipedia.org/wiki/Asymmetric-key_cryptography">Asymmetric-key cryptography</a>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
@@ -587,7 +589,7 @@
                         certification path validation algorithm.
                     </p>
                     <small>
-                        <a href="http://en.wikipedia.org/wiki/X.509">X.509</a>
+                        <a class="iframe" title="X.509" href="http://en.wikipedia.org/wiki/X.509">X.509</a>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
@@ -650,7 +652,7 @@ public class EmbeddedCaExample
 </code></pre>
                 <p><span class="label important">TODO</span> Explain this code snippet.</p>
                 <h3>CA context</h3>
-                <p><span class="label important">TODO</span> Explain QiPki <a href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a> implementation.</p>
+                <p><span class="label important">TODO</span> Explain QiPki <a class="iframe" title="Data Context Interaction" href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a> implementation.</p>
                 <h5>Create a CA <small>self-signed and stored in a PKCS#12 file</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
                 <h5>Issue a certificate <small>using a predefined profile</small></h5>
@@ -691,7 +693,7 @@ public class EmbeddedCaExample
                         </p>
                         <p>
                             The HEAD of the source is kept as stable as possible thanks to 
-                            <a href="https://qipki.ci.cloudbees.com/">continuous integration</a>, if you are curious
+                            <a class="iframe" title="Continuous Integration" href="https://qipki.ci.cloudbees.com/">continuous integration</a>, if you are curious
                             you can take a look at the <em>ca-http-main</em> module output, you'll find a tarball there.
                         </p>
                     </div>
@@ -701,7 +703,7 @@ public class EmbeddedCaExample
                 </div>
                 <h3>Roadmap</h3>
                 <p>
-                    See the <a href="https://github.com/eskatos/qipki/blob/master/TODO.md">TODO.md</a> file at the git
+                    See the <a target="_blank" href="https://github.com/eskatos/qipki/blob/master/TODO.md">TODO.md</a> file at the git
                     repository root for more information on what's going on.
                 </p>
                 <div class="alert-message warning">
@@ -709,12 +711,15 @@ public class EmbeddedCaExample
                 </div>
                 <h5>QiPki 1.0</h5>
                 <p>
-                    Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA, a
-                    reasonable CA with HTTP interactions and will be based on Qi4j 1.4.
+                    Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA and will be based on Qi4j 1.4.
+                </p>
+                <h5>QiPki 1.1</h5>
+                <p>
+                    Work is already in progress to add a reasonable CA with HTTP interactions.
                 </p>
                 <h5>Next steps</h5>
                 <p>
-                    After the 1.0 the goals
+                    After the 1.1 the goals
                 </p>
                 <p>A reasonable Web GUI for the HTTP based CA</p>
                 <p>Validation Authority: CRLS, OCSP?</p>
@@ -729,8 +734,8 @@ public class EmbeddedCaExample
                 </p>
                 <p>
                     The CryptoAPI is used in several projects while for now the only project using the embeddable CA is the
-                    <a href="http://www.netheos.net/products/ekeynox/">eKeynox</a> suite from
-                    <a href="http://www.netheos.net/">Netheos</a>. It's already deployed and used in production in
+                    <a class="iframe" title="eKeynox" href="http://www.netheos.net/products/ekeynox/">eKeynox</a> suite from
+                    <a class="iframe" title="Netheos" href="http://www.netheos.net/">Netheos</a>. It's already deployed and used in production in
                     setups involving ten thousands of users/certificates.
                 </p>
             </div>
@@ -744,13 +749,16 @@ public class EmbeddedCaExample
                 <div class="row">
                     <div class="span13">
                         <p>
-                            QiPki is a young project, till it already is 2 years old.
-                            You can read more about it's history, status and roadmap <a href="#roadmap">here</a>.
+                            QiPki is a young project, till it already is 2 years old. You can read more about it's history, status 
+                            and roadmap <a href="#roadmap">here</a>.
                         </p>
                         <p>
                             Any kind of help would be useful, from suggestions, bug reports, patches to spotting a typo in this
                             very page :-) We'll welcome any kind of comment, remark, critics about the project, feel free to
-                            create a <a href="https://github.com/eskatos/qipki/issues/new">github issue</a>.
+                            create a new issue.
+                        </p>
+                        <p>
+                            <a class="btn success" title="Create a new issue" href="https://github.com/eskatos/qipki/issues/new">Create a new issue</a><br/>
                         </p>
                         <p>
                             As you certainly already understood, this is Work In Progress, don't expect something with easy setup
@@ -772,103 +780,27 @@ public class EmbeddedCaExample
                     the <code>ca-tests</code> submodule, see below for details.
                 </p>
                 <h3>Develop</h3>
-                <h5>Build system</h5>
                 <p>
-                    QiPki is writen in Java, it's built by <a href="http://maven.apache.org/">Maven</a> and all
-                    dependencies are hosted in central. This means that you only need to clone the QiPki git repository
-                    and run <code>mvn clean install</code> to compile, run tests, package and install QiPki artifacts in
-                    your local maven repository.Any Maven capable IDE will be able to open the Maven modules as first
-                    class IDE projects.
-                </p>
-                <p>We tried the following list of IDEs:</p>
-                <ul>
-                    <li><a href="http://netbeans.org/">Netbeans</a></li>
-                    <li><a href="http://www.eclipse.org/">Eclipse</a></li>
-                    <li><a href="http://www.jetbrains.com/idea/">IDEA</a></li>
-                </ul>
-                <p>An example oneliner that clone the git repository and build the project:</p>
-                <pre><code>git clone https://github.com/eskatos/qipki.git && mvn -f qipki/pom.xml clean install</code></pre>
-                <h5>Project layout</h5>
-                <p>
-                    QiPki is split in modules. This split is done with one main goal in mind: allow developpers to
-                    choose what part of QiPki they want to use. A root POM declare submodules, so this is a one level
-                    deep multi-modules project. There won't never be two levels as it bloat the build system.
+                    <img src="images/logo-github.png" style="float: left; margin-right: 10px"/>
+                    Git (with the help of Github) empower you to fork a module, hack on the source and share those changes 
+                    with others. You only have to involve the project team when you are ready to contribute those changes 
+                    back into the project's master (upstream) branch by sending a pull request. This is the preferred 
+                    contribution workflow.
                 </p>
                 <p>
-                    All artifacts share the very same groupId: <code>org.codeartisans.qipki</code>.
+                    Here is a quick summary of the workflow:
                 </p>
-                <p>QiPki modules:</p>
-                <table class="zebra-striped">
-                    <thead>
-                        <tr>
-                            <th>POM path</th>
-                            <th>Module name</th>
-                            <th>Artifact ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>~/pom.xml</td>
-                            <td>N/A - This is the root POM</td>
-                            <td>qipki</td>
-                        </tr>
-                        <tr>
-                            <td>~/crypto/pom.xml</td>
-                            <td>crypto</td>
-                            <td>qipki-crypto</td>
-                        </tr>
-                        <tr>
-                            <td>~/commons/pom.xml</td>
-                            <td>commons</td>
-                            <td>qipki-commons</td>
-                        </tr>
-                        <tr>
-                            <td>~/core/pom.xml</td>
-                            <td>core</td>
-                            <td>qipki-core</td>
-                        </tr>
-                        <tr>
-                            <td>~/testsupport/pom.xml</td>
-                            <td>testsupport</td>
-                            <td>qipki-testsupport</td>
-                        </tr>
-                        <tr>
-                            <td>~/mainsupport/pom.xml</td>
-                            <td>mainsupport</td>
-                            <td>qipki-mainsupport</td>
-                        </tr>
-                        <tr>
-                            <td>~/ca/pom.xml</td>
-                            <td>ca</td>
-                            <td>qipki-ca</td>
-                        </tr>
-                        <tr>
-                            <td>~/ca-http/pom.xml</td>
-                            <td>ca-http</td>
-                            <td>qipki-ca-http</td>
-                        </tr>
-                        <tr>
-                            <td>~/ca-http-client/pom.xml</td>
-                            <td>ca-http-client</td>
-                            <td>qipki-ca-http-client</td>
-                        </tr>
-                        <tr>
-                            <td>~/ca-http-main/pom.xml</td>
-                            <td>ca-http-main</td>
-                            <td>qipki-ca-http-main</td>
-                        </tr>
-                        <tr>
-                            <td>~/ca-tests/pom.xml</td>
-                            <td>ca-tests</td>
-                            <td>qipki-ca-tests</td>
-                        </tr>
-                        <tr>
-                            <td>~/web-client/pom.xml</td>
-                            <td>web-client</td>
-                            <td>qipki-web-client</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ol>
+                    <li>If you do not already have one, create a <a target="_blank" title="Create a github account" href="http://github.com">create a github account</a>.</li>
+                    <li><a class="iframe" href="http://help.github.com/set-up-git-redirect">Set up git</a> in your working environment if needed</li>
+                    <li><a class="iframe" href="http://help.github.com/forking">Fork</a> the QiPki repository to a copy into your github account</li>
+                    <li>Clone your newly forked copy onto your local workspace</li>
+                    <li><a class="iframe" href="build.html" title="How to build QiPki?">Build QiPki</a> from the sources</li>
+                    <li>Make changes and commit one or more times, using a branch would be a good idea, YMMV</li>
+                    <li>Pull later updates from the main repository and rebase them, optional but appreciated :-)</li>
+                    <li>Push your local commits to your private github repo (origin) </li>
+                    <li><a class="iframe" title="Github Pull Request" href="http://help.github.com/send-pull-requests/">Pull request</a> on github</li>
+                </ol>
             </div>
         </section> <!-- /participate -->
 
