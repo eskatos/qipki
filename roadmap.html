@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>QiPki</title>
+        <meta name="description" content="QiPki is an effort to create Java developper tools to build cryptography into applications and heading towards building a suite of packaged cryptography services.">
+        <meta name="author" content="QiPki Community">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="css/prettify.css" type="text/css" />
+        <link rel="stylesheet" href="fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+            }
+            code {
+                background-color: #F5F5F5;
+            }
+        </style>
+
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+        <script type="text/javascript" src="js/prettify.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.history.js"></script>
+        <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
+
+        <!-- Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [['_setAccount', 'UA-22729307-1'],['_trackPageview']];
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>QiPki Roadmap</h1>
+
+<p>This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track progress. After that a true issue management system will be used, but not before.</p>
+
+<h2>Overview</h2>
+
+<h3>QiPki 1.0</h3>
+
+<p>Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA and will be based on Qi4j 1.4.</p>
+
+<h3>QiPki 1.1</h3>
+
+<p>Work is already in progress to add a reasonable CA with HTTP interactions.</p>
+
+<h2>Details</h2>
+
+<h3>Quid?</h3>
+
+<p>Do we really want to do that? Is this even possible? Is it the right time?</p>
+
+<ul>
+<li>Move to Qi4j 2.0-SNAPSHOT?</li>
+</ul>
+
+<h3>Work in progress</h3>
+
+<ul>
+<li>(###-) Harden files handling regarding UnitOfWorks
+<ul><li>How to reduce locking in UoWFileFactory?</li>
+<li>Write plural handling in UoWFile</li>
+<li>Make it as a first class module prepared to be reversed into Qi4j 2.0</li></ul></li>
+<li>(#---) Documentation
+<ul><li>Build</li>
+<li>Embedded CA</li>
+<li>Try to use jmd instead of markdownj to process markdown in the website</li></ul></li>
+</ul>
+
+<h3>Next steps - That would lead to a tiny 1.0</h3>
+
+<h3>After that</h3>
+
+<ul>
+<li>(##--) Rework Qi4j HttpService
+<ul><li>Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)</li>
+<li>No more DefaultServlet</li>
+<li>Remove default servlet added by default</li>
+<li>Remove rootResourceBase from configuration</li>
+<li>Write a DefaultServletService &amp; DefaultServletConfiguration</li>
+<li>Add assembly helpers to add DefaultServlet</li>
+<li>QUID?</li>
+<li>See how to restrict requests on a specific host (Host http header)</li>
+<li>What to expose on JMX? Jetty statistics?</li>
+<li>Add a pluggable SSLContextProviderService or something like that with assembly facilities</li>
+<li>SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present</li></ul></li>
+<li>Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime</li>
+<li>(----) Review Qi4j SQL Support
+<ul><li>Merge my and Rickard support for DataSources</li>
+<li>Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)</li>
+<li>Add HSQLDB support to have another embedded SGBD</li>
+<li>Use MySQL Java deployment facilities</li></ul></li>
+<li>Enhance Crypto API
+<ul><li>Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI</li></ul></li>
+<li>(----) Add shiro for handling roles/permissions
+<ul><li>Model with one root Role and Permissions, other Roles will emerge themselves later</li>
+<li>See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts</li>
+<li>See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling</li>
+<li>Permissions defines permissions on interactions</li>
+<li>Privileges defines permissions on resources: get &amp; head / post &amp; put</li>
+<li>How to deal with domain needs ?</li>
+<li>Roles can be built by the deployer</li>
+<li>One role is built in, immutable and can be enabled/disabled live : root</li>
+<li>Some roles are built in:</li>
+<li>( chief security officer - ??? - maybe not needed )</li>
+<li>security officer</li>
+<li>certificate authority</li>
+<li>request authority officer</li>
+<li>end entity</li>
+<li>Permissions and Privileges needed for building roles are built in and mutables</li></ul></li>
+<li>(#---) WebUI
+<ul><li>Generate Javascript Overlay Types for all json resources at build time</li>
+<li>Find a way to write an eventbus bridge crossing iframes</li>
+<li>Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html</li></ul></li>
+<li>(----) Enhance Netscape extensions handling
+<ul><li>In X509DetailValue : all of them</li>
+<li>Netscape CA Revocation URL</li>
+<li>Netscape Revocation URL</li>
+<li>Netscape Renewal URL</li>
+<li>Automatically filled by CAs : Netscape CA Revocation URL</li>
+<li>In X509Profile : choose the good ones</li></ul></li>
+<li>(----) Enhance CRL support
+<ul><li>Use the task scheduler to generate CRLs so this is not done in request threads</li>
+<li>Add a command to force CRL regeneration</li>
+<li>Implements CRL next-update mechanism (See CRL.java in qipki-ca)</li>
+<li>See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)</li></ul></li>
+<li>(#---) Follow state refactoring with the Qi4j data migration system
+<ul><li>Get a documented database sample for 1.0-alpha6 and use it as a test resource</li>
+<li>Write a complete test scenario from the embedder point of view around the sample database</li>
+<li>Write unit tests for migrations</li></ul></li>
+<li>Reduce LOC in ReST Resources
+<ul><li>Qi4j 2.0 will provide constructs allowing to declare Resources as TransientComposites directly</li>
+<li>See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}</li>
+<li>Use @Concerns to factorize http Resources (error handling, logging etc..)</li></ul></li>
+<li>Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using http://www.jamon.org/</li>
+<li>Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable serialization</li>
+<li>Implement http cache handling
+<ul><li>@Cacheable Concern using a payload store</li>
+<li>UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries</li></ul></li>
+<li>Monitoring BoundedContext
+<ul><li>Integrate JavaMelody with Qi4j using a @Concern http://code.google.com/p/javamelody/</li>
+<li>What about integrating GwtMeasure with JavaMelody? http://code.google.com/p/gwt-measure/</li>
+<li>See how it would be possible to reuse the JMX world in a web UI</li>
+<li>JMX client in web, in an applet, as a webstart?</li>
+<li>JMX over websockets?</li>
+<li>http://www.oracle.com/technetwork/java/javase/jnlp-136707.html</li></ul></li>
+<li>Domain auditing bounded context filled by @SideEffects</li>
+<li>(#---) Add some generated documentation to the build process</li>
+<li>Enhance X509Profile with domain rules and certificate template creation</li>
+<li>Create a CAProfile role
+<ul><li>Needed to add rules to CAs that are use case driven and not standard driven</li>
+<li>A CA will addapt its behavior based on it's profile</li></ul></li>
+<li>Create a CRLIssuer role
+<ul><li>To be a CRLIssuer a CA must be allowed by it's CAProfile</li>
+<li>One could want to disable CRL issuance on a CA with appropriate CAProfile</li>
+<li>Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs</li></ul></li>
+<li>Add tool http resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
+<ul><li>With this we can write unit tests for certificate parsing using a bunch of external certificates</li></ul></li>
+<li>Change the way key pairs are protected
+<ul><li>Add PKCS#11 KeyStore support</li>
+<li>Add encipered filesystem based storage</li>
+<li>Add a key wallet to officers with the keys they're allowed to use</li>
+<li>A CAProfile allows, or not, issuance of escrowed certified keypairs</li>
+<li>The CA gets an EscrowSecretKey to protect the escrowed certified keypairs</li>
+<li>A CAProfile allows, or not, certificate issuance for known escrowed keypairs</li>
+<li>Add a warning if a CA signs a PKCS#10</li></ul></li>
+<li>Wrap client api as a small Qi4j Application usable without Qi4j imports</li>
+</ul>
+        </div>
+        <div class="container" id="footer">
+            <footer>
+                <p>&copy; QiPki Community 2011</p>
+            </footer>
+        </div> <!-- /footer -->
+    </body>
+</html>
