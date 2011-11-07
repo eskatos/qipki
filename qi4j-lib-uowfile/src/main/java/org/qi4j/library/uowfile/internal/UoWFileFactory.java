@@ -14,25 +14,31 @@
 package org.qi4j.library.uowfile.internal;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCallback;
 import org.qi4j.api.unitofwork.UnitOfWorkCallback.UnitOfWorkStatus;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qi4j.library.fileconfig.FileConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Mixins( UoWFileFactory.Mixin.class )
 public interface UoWFileFactory
-        extends ServiceComposite
+        extends ServiceComposite, Activatable
 {
 
     UoWFile createCurrentUoWFile( File file );
@@ -41,29 +47,57 @@ public interface UoWFileFactory
             implements UoWFileFactory
     {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger( "org.qi4j.library.uowfile" );
-
         private static class UoWFilesMetaInfo
                 extends HashMap<String, UoWFile>
         {
         }
 
+        private static final Logger LOGGER = LoggerFactory.getLogger( "org.qi4j.library.uowfile" );
         @Structure
         private UnitOfWorkFactory uowf;
+        @This
+        private ServiceComposite me;
+        @Optional
+        @Service
+        private FileConfiguration fileConfig;
+        private File workDir;
+
+        @Override
+        public void activate()
+                throws Exception
+        {
+            File tmp;
+            if ( fileConfig == null ) {
+                tmp = new File( System.getProperty( "java.io.tmpdir" ) );
+            } else {
+                tmp = fileConfig.temporaryDirectory();
+            }
+            workDir = new File( tmp, "uowfile-" + me.identity().get() );
+            if ( !workDir.exists() && !workDir.mkdirs() ) {
+                throw new IOException( "Unable to create temporary directory: " + workDir );
+            }
+        }
+
+        @Override
+        public void passivate()
+                throws Exception
+        {
+            // NOOP
+        }
 
         @Override
         public UoWFile createCurrentUoWFile( File file )
         {
-            return createUoWFile( uowf.currentUnitOfWork(), file );
+            return createUoWFile( uowf.currentUnitOfWork(), file, workDir );
         }
 
-        private static synchronized UoWFile createUoWFile( UnitOfWork uow, File file )
+        private static synchronized UoWFile createUoWFile( UnitOfWork uow, File file, File workDir )
         {
             UoWFilesMetaInfo uowMeta = ensureUoWMeta( uow );
             String absolutePath = file.getAbsolutePath();
             UoWFile uowFile = uowMeta.get( absolutePath );
             if ( uowFile == null ) {
-                uowFile = new UoWFile( file );
+                uowFile = new UoWFile( file, workDir );
                 uowFile.copyOriginalToCurrent();
                 uowMeta.put( absolutePath, uowFile );
                 LOGGER.trace( "Registered {} in UoW", uowFile );
@@ -74,7 +108,7 @@ public interface UoWFileFactory
         /**
          * Ensure UoW meta info tracking UoWFiles is present and UoW callback is registered.
          */
-        private static synchronized UoWFilesMetaInfo ensureUoWMeta( final UnitOfWork uow )
+        private static UoWFilesMetaInfo ensureUoWMeta( final UnitOfWork uow )
         {
             UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
             if ( uowMeta != null ) {

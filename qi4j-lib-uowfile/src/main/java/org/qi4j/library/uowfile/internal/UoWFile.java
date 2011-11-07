@@ -35,13 +35,13 @@ public class UoWFile
     private final File backup;
     private boolean copied = false;
 
-    UoWFile( File original )
+    UoWFile( File original, File workDir )
     {
         this.originalIdentity = original.length() + original.lastModified();
         this.original = original;
         long count = COUNT.incrementAndGet();
-        this.current = new File( original.getParentFile(), original.getName() + ".current." + count );
-        this.backup = new File( original.getParentFile(), original.getName() + ".backup." + count );
+        this.current = new File( workDir, original.getName() + ".current." + count );
+        this.backup = new File( workDir, original.getName() + ".backup." + count );
     }
 
     public File asFile()

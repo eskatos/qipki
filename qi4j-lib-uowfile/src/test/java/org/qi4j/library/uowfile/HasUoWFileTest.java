@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Stack;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -78,7 +79,24 @@ public class HasUoWFileTest
     @AfterClass
     public static void afterClass()
     {
-        // TODO Delete baseTestDir
+        // Delete test data
+        Stack<File> stack = new Stack<File>();
+        stack.push( baseTestDir );
+        while ( !stack.empty() ) {
+            File each = stack.peek();
+            if ( each.isDirectory() ) {
+                File[] children = each.listFiles();
+                if ( children.length > 0 ) {
+                    for ( File child : children ) {
+                        stack.push( child );
+                    }
+                } else {
+                    stack.pop().delete();
+                }
+            } else {
+                stack.pop().delete();
+            }
+        }
     }
 
     @Mixins( HasUoWFileTest.TestedEntityMixin.class )
@@ -289,7 +307,6 @@ public class HasUoWFileTest
     }
 
     @Test
-    // @Ignore // DO NOT WORK
     public void testRetry()
             throws IOException, UnitOfWorkCompletionException, InterruptedException
     {

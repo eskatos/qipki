@@ -1,6 +1,7 @@
 # QiPki Roadmap
 
-This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track progress. After that a true issue management system will be used, but not before.
+This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track 
+progress. After that a true issue management system will be used, but not before.
 
 ## Overview
 
@@ -16,6 +17,7 @@ Work is already in progress to add a reasonable CA with HTTP interactions.
 ## Details
 
 ### Quid?
+
 Do we really want to do that? Is this even possible? Is it the right time?
 
 * Move to Qi4j 2.0-SNAPSHOT?

@@ -24,6 +24,11 @@
         
         <!-- Qi4j bootstrap -->
         <dependency>
+            <groupId>org.qi4j.library</groupId>
+            <artifactId>org.qi4j.library.fileconfig</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
+        <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>org.qi4j.core.bootstrap</artifactId>
             <version>${version.qi4j}</version>
@@ -46,7 +51,7 @@
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${version.slf4j}</version>
