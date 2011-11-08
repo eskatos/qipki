@@ -17,21 +17,21 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
 
-import org.qipki.ca.domain.ca.CA;
-import org.qipki.ca.domain.x509profile.X509Profile;
-import org.qipki.commons.crypto.services.CryptoValuesFactory;
-import org.qipki.core.QiPkiFailure;
-import org.qipki.crypto.algorithms.DigestAlgorithm;
-import org.qipki.crypto.digest.DigestParameters;
-import org.qipki.crypto.digest.DigestService;
-import org.qipki.crypto.io.CryptIO;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+
+import org.qipki.ca.domain.ca.CA;
+import org.qipki.ca.domain.x509profile.X509Profile;
+import org.qipki.commons.crypto.services.CryptoValuesFactory;
+import org.qipki.core.QiPkiFailure;
+import org.qipki.crypto.algorithms.DigestAlgorithm;
+import org.qipki.crypto.digest.Digester;
+import org.qipki.crypto.digest.DigestParameters;
+import org.qipki.crypto.io.CryptIO;
 
 @Mixins( X509Factory.Mixin.class )
 public interface X509Factory
@@ -52,7 +52,7 @@ public interface X509Factory
         @Service
         private CryptIO cryptIO;
         @Service
-        private DigestService digester;
+        private Digester digester;
 
         @Override
         public X509 create( X509Certificate cert, CA issuer, X509Profile profile )

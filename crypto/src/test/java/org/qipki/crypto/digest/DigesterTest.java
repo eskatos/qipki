@@ -29,19 +29,20 @@ import org.qipki.crypto.DefaultCryptoContext;
 import static org.qipki.crypto.algorithms.DigestAlgorithm.*;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.codec.CryptCodexImpl;
-import static org.qipki.crypto.constants.IOConstants.*;
+import org.qipki.crypto.random.Random;
 
-public class DigestTest
+public class DigesterTest
         extends AbstractQi4jTest
 {
 
+    private static final String MESSAGE = "Le nom des fous est écrit partout.\n";
     private static final String EXPECTED_MD5 = "c623709621030a5e84d703b7a160d33a";
     private static final String EXPECTED_SHA_1 = "0fddb1ae5b5d1ab7b8503d1b68ff84c6e507ecdf";
     private static final String EXPECTED_SHA_256 = "2b9b4d8d02e5b9609ac1da0a7de879d0b6f41e845f0ba3f29ac3e15e7ee354ed";
     private static final String EXPECTED_SHA_384 = "20910472dd3a886c563d9637a4e1c94858319f090e9a56f335457d902a3c01d88fc7cc5aad5c99ccb446479c08ae5824";
     private static final String EXPECTED_SHA_512 = "cdbefb2d859f9e984a0032857469c3bba9fe03591772bbf5f1f866a4e8a31f9174e9a30e861d32ba4ff8e7c9f66bcdfed2df36f986e8388ce3cb775808de8bd4";
 
-    // SNIPPET BEGIN crypto.digest
+    // SNIPPET BEGIN crypto.digest.1
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
@@ -53,7 +54,7 @@ public class DigestTest
     public void testWithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( serviceLocator.<Digest>findService( Digest.class ).get() );
+        runTest( serviceLocator.<Digester>findService( Digester.class ).get() );
     }
 
     @Test
@@ -61,21 +62,39 @@ public class DigestTest
             throws UnsupportedEncodingException
     {
         Security.addProvider( new BouncyCastleProvider() );
-        runTest( new DigestImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
+        runTest( new DigesterImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
         Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
 
-    private void runTest( Digest digester )
+    private void runTest( Digester digester )
             throws UnsupportedEncodingException
     {
-        String message = "Le nom des fous est écrit partout.\n";
+        String hexMd5 = digester.hexDigest( MESSAGE, new DigestParameters( MD5 ) );
+        String hexSha1 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_1 ) );
+        String hexSha256 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_256 ) );
+        String hexSha384 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_384 ) );
+        String hexSha512 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_512 ) );
 
-        assertEquals( EXPECTED_MD5, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( MD5 ) ) );
-        assertEquals( EXPECTED_SHA_1, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_1 ) ) );
-        assertEquals( EXPECTED_SHA_256, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_256 ) ) );
-        assertEquals( EXPECTED_SHA_384, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_384 ) ) );
-        assertEquals( EXPECTED_SHA_512, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_512 ) ) );
+        assertEquals( EXPECTED_MD5, hexMd5 );
+        assertEquals( EXPECTED_SHA_1, hexSha1 );
+        assertEquals( EXPECTED_SHA_256, hexSha256 );
+        assertEquals( EXPECTED_SHA_384, hexSha384 );
+        assertEquals( EXPECTED_SHA_512, hexSha512 );
     }
-    // SNIPPET END crypto.digest
+    // SNIPPET END crypto.digest.1
+
+    @Test
+    // SNIPPET BEGIN crypto.digest.2
+    public void saltedHashExample()
+    {
+        Digester digest = serviceLocator.<Digester>findService( Digester.class ).get();
+        Random random = serviceLocator.<Random>findService( Random.class ).get();
+
+        byte[] salt = new byte[ 64 ];
+        random.nextBytes( salt );
+
+        String hexSaltedSha256x1024 = digest.hexDigest( MESSAGE, new DigestParameters( SHA_256, salt, 1024 ) );
+    }
+    // SNIPPET END crypto.digest.2
 
 }

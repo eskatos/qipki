@@ -20,6 +20,6 @@ import org.qipki.crypto.algorithms.SymetricAlgorithm;
 public interface CipherFactory
 {
 
-    BlockCipher newBlockCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding );
+    SymetricCipher newSymetricCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding );
 
 }

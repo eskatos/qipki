@@ -13,12 +13,22 @@
  */
 package org.qipki.crypto.cipher;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.EnumSet;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.codeartisans.java.toolbox.io.IO;
 
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
@@ -28,8 +38,8 @@ import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.qipki.crypto.jca.Transformation;
 import org.qipki.crypto.random.Random;
 
-public class BlockCipherImpl
-        implements BlockCipher
+public class SymetricCipherImpl
+        implements SymetricCipher
 {
 
     private static final EnumSet<SymetricAlgorithm> NO_SIC_CIPHER_ALGS = EnumSet.of( SymetricAlgorithm.Blowfish,
@@ -43,7 +53,7 @@ public class BlockCipherImpl
     private final BlockCipherModeOfOperation mode;
     private final BlockCipherPadding padding;
 
-    /* package */ BlockCipherImpl( Random random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    /* package */ SymetricCipherImpl( Random random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
         if ( mode == BlockCipherModeOfOperation.SIC && NO_SIC_CIPHER_ALGS.contains( algo ) ) {
             throw new IllegalAlgorithmException( "SIC-Mode cannot be used with " + algo.name() + " because it can become a twotime-pad if the blocksize of the cipher is too small." );
@@ -61,64 +71,131 @@ public class BlockCipherImpl
     }
 
     @Override
+    public byte[] cipher( byte[] data, byte[] key )
+    {
+        InputStream in = new ByteArrayInputStream( data );
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+
+            cipher( in, out, key );
+            return out.toByteArray();
+
+        } finally {
+            IO.closeSilently( out );
+            IO.closeSilently( in );
+        }
+    }
+
+    @Override
+    public void cipher( InputStream in, OutputStream out, Key key )
+    {
+        cipher( in, out, key.getEncoded() );
+    }
+
+    @Override
+    public void cipher( InputStream in, OutputStream out, byte[] key )
+    {
+        try {
+
+            Cipher cipher;
+            if ( useIV() ) {
+                byte[] iv = generateIV();
+                cipher = buildCipher( Cipher.ENCRYPT_MODE, key, iv );
+                out.write( iv );
+            } else {
+                cipher = buildCipher( Cipher.ENCRYPT_MODE, key );
+            }
+            process( cipher, in, out );
+
+        } catch ( IOException ex ) {
+            throw new CryptoFailure( ex.getMessage(), ex );
+        } catch ( GeneralSecurityException ex ) {
+            throw new CryptoFailure( ex.getMessage(), ex );
+        }
+    }
+
+    @Override
     public byte[] decipher( byte[] ciphered, Key key )
     {
         return decipher( ciphered, key.getEncoded() );
     }
 
     @Override
-    public byte[] cipher( byte[] data, byte[] key )
+    public byte[] decipher( byte[] data, byte[] key )
+    {
+        InputStream in = new ByteArrayInputStream( data );
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+
+            decipher( in, out, key );
+            return out.toByteArray();
+
+        } finally {
+            IO.closeSilently( out );
+            IO.closeSilently( in );
+        }
+    }
+
+    @Override
+    public void decipher( InputStream in, OutputStream out, Key key )
+    {
+        decipher( in, out, key.getEncoded() );
+    }
+
+    @Override
+    public void decipher( InputStream in, OutputStream out, byte[] key )
     {
         try {
+
+            Cipher cipher;
             if ( useIV() ) {
-
-                byte[] iv = generateIV();
-                Cipher cipher = buildCipher( Cipher.ENCRYPT_MODE, key, iv );
-
-                byte[] encrypted = cipher.doFinal( data );
-
-                byte[] output = new byte[ iv.length + encrypted.length ];
-                System.arraycopy( iv, 0, output, 0, iv.length );
-                System.arraycopy( encrypted, 0, output, iv.length, encrypted.length );
-
-                return output;
-
+                byte[] iv = new byte[ getIVBytesLength() ];
+                int len = in.read( iv, 0, iv.length );
+                if ( len != iv.length ) {
+                    throw new CryptoFailure( "Unable to read IV, not enough bytes" );
+                }
+                cipher = buildCipher( Cipher.DECRYPT_MODE, key, iv );
             } else {
-
-                return buildCipher( Cipher.ENCRYPT_MODE, key ).doFinal( data );
-
+                cipher = buildCipher( Cipher.DECRYPT_MODE, key );
             }
+            process( cipher, in, out );
+
+        } catch ( IOException ex ) {
+            throw new CryptoFailure( ex.getMessage(), ex );
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( ex.getMessage(), ex );
         }
     }
 
-    @Override
-    public byte[] decipher( byte[] data, byte[] key )
+    private void process( Cipher cipher, InputStream in, OutputStream out )
+            throws IOException, IllegalBlockSizeException, BadPaddingException
     {
-        try {
-            if ( useIV() ) {
+        int blockSize = cipher.getBlockSize();
+        int outputSize = cipher.getOutputSize( blockSize );
+        byte[] inBytes = new byte[ blockSize ];
+        byte[] outBytes = new byte[ outputSize ];
 
-                byte[] iv = new byte[ getIVBytesLength() ];
-                System.arraycopy( data, 0, iv, 0, iv.length );
-
-                int cipheredSize = data.length - iv.length;
-                byte[] ciphered = new byte[ cipheredSize ];
-                System.arraycopy( data, iv.length, ciphered, 0, cipheredSize );
-
-                Cipher cipher = buildCipher( Cipher.DECRYPT_MODE, key, iv );
-                return cipher.doFinal( ciphered );
-
+        int inLen = 0;
+        boolean done = false;
+        while ( !done ) {
+            inLen = in.read( inBytes );
+            if ( inLen == blockSize ) {
+                try {
+                    int outLength = cipher.update( inBytes, 0, blockSize, outBytes );
+                    out.write( outBytes, 0, outLength );
+                } catch ( ShortBufferException ex ) {
+                    throw new CryptoFailure( "The underlying cipher is a block cipher and the input data is too short to result in a new block.", ex );
+                }
             } else {
-
-                Cipher cipher = buildCipher( Cipher.DECRYPT_MODE, key );
-                return cipher.doFinal( data );
-
+                done = true;
             }
-
-        } catch ( GeneralSecurityException ex ) {
-            throw new CryptoFailure( ex.getMessage(), ex );
         }
+        if ( inLen > 0 ) {
+            outBytes = cipher.doFinal( inBytes, 0, inLen );
+        } else {
+            outBytes = cipher.doFinal();
+        }
+        out.write( outBytes );
     }
 
     private boolean useIV()

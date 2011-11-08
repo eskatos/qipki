@@ -31,15 +31,15 @@ import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
 
-public class DigestImpl
-        implements Digest
+public class DigesterImpl
+        implements Digester
 {
 
     private static final int BUFFER_SIZE = 128;
     private final CryptoContext cryptoContext;
     private final CryptCodex cryptCodex;
 
-    public DigestImpl( @Service CryptoContext cryptoContext, @Service CryptCodex cryptCodex )
+    public DigesterImpl( @Service CryptoContext cryptoContext, @Service CryptCodex cryptCodex )
     {
         this.cryptoContext = cryptoContext;
         this.cryptCodex = cryptCodex;

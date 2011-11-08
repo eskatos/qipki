@@ -16,8 +16,8 @@ package org.qipki.crypto.digest;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 
-@Mixins( DigestImpl.class )
-public interface DigestService
-        extends Digest, ServiceComposite
+@Mixins( DigesterImpl.class )
+public interface DigesterService
+        extends Digester, ServiceComposite
 {
 }

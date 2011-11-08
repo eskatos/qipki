@@ -29,10 +29,6 @@ public class SymetricGeneratorParameters
 
     public SymetricAlgorithm algorithm()
     {
-
-
-
-
         return algo;
     }
 

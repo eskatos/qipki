@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-public interface Digest
+public interface Digester
 {
 
     byte[] digest( InputStream data, DigestParameters params );

@@ -31,12 +31,13 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Enhance unit test code lisibility for snippets
   * Crypto API
   * Embedded CA
+* (#---) Enhance Crypto API
+  * Implement test and document stream ciphering
+  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 
 
 ### Next steps - That would lead to a tiny 1.0
 
-* Enhance Crypto API
-  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 
 ### After that
 

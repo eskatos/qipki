@@ -55,6 +55,7 @@ public class WebsiteMojo
         extends AbstractMojo
 {
 
+    private static final boolean DEBUG_SNIPPETS = false;
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * @parameter default-value="${project.basedir}/src/main/website/static"
@@ -158,6 +159,10 @@ public class WebsiteMojo
 
                         for ( Comment eachComment : cu.getComments() ) {
                             String candidate = eachComment.toString().trim();
+                            if ( DEBUG_SNIPPETS ) {
+                                System.out.println( "----------" );
+                                System.out.println( candidate );
+                            }
                             Matcher matcher = beginPattern.matcher( candidate );
                             if ( matcher.matches() ) {
                                 String snippetName = matcher.group( 1 );
@@ -190,11 +195,6 @@ public class WebsiteMojo
                                 String snippet = extractRange( wholeSource, start, end );
                                 snippet = "// Snippet extracted from " + eachSourceFile.getName() + " starting on line " + start + "\n\n" + snippet;
                                 snippet = StringEscapeUtils.escapeHtml( snippet );
-                                System.out.println( "" );
-                                System.out.println( "" );
-                                System.out.println( snippet );
-                                System.out.println( "" );
-                                System.out.println( "" );
                                 snippets.put( "snippet." + snippetName, snippet );
                             }
                         }

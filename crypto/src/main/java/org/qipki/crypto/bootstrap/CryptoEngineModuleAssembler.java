@@ -17,7 +17,7 @@ import org.qipki.crypto.QiCryptoEngine;
 import org.qipki.crypto.asymetric.AsymetricGeneratorService;
 import org.qipki.crypto.cipher.CipherFactoryService;
 import org.qipki.crypto.codec.CryptCodexService;
-import org.qipki.crypto.digest.DigestService;
+import org.qipki.crypto.digest.DigesterService;
 import org.qipki.crypto.io.CryptIOService;
 import org.qipki.crypto.mac.MACService;
 import org.qipki.crypto.objects.KeyInformation;
@@ -69,7 +69,7 @@ public class CryptoEngineModuleAssembler
                             weakRandom ? WeakRandomService.class : RandomService.class,
                             X509GeneratorService.class,
                             CryptIOService.class,
-                            DigestService.class,
+                            DigesterService.class,
                             MACService.class,
                             SymetricGeneratorService.class,
                             AsymetricGeneratorService.class,

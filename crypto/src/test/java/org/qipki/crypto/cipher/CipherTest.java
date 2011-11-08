@@ -18,6 +18,7 @@ import java.security.Security;
 import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import static org.qipki.crypto.algorithms.BlockCipherModeOfOperation.*;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
@@ -36,7 +37,7 @@ import org.junit.Test;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
-import org.qipki.crypto.CryptoContext;
+
 import org.qipki.crypto.DefaultCryptoContext;
 import static org.qipki.crypto.constants.IOConstants.*;
 import org.qipki.crypto.random.Random;
@@ -52,7 +53,7 @@ public class CipherTest
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar lobortis."
     };
 
-    // SNIPPET BEGIN crypto.cipher
+    // SNIPPET BEGIN crypto.cipher.block
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
@@ -87,16 +88,16 @@ public class CipherTest
             throws UnsupportedEncodingException
     {
         SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
-        BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
+        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES, CBC, PKCS5 );
         String plainText = "CipherMe";
         byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
         byte[] deciphered = cipher.decipher( ciphered, key );
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
-    // SNIPPET END crypto.cipher
+    // SNIPPET END crypto.cipher.block
 
     @Test
-    public void testAllBlockCipherAlgorithms()
+    public void testAllSymetricCipherAlgorithms()
             throws UnsupportedEncodingException
     {
         SymetricGenerator symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
@@ -117,7 +118,7 @@ public class CipherTest
                     }
                     try {
                         System.out.println( ">> Generating Key" );
-                        BlockCipher cipher = cipherFactory.newBlockCipher( eachAlgo, eachMode, eachPadding );
+                        SymetricCipher cipher = cipherFactory.newSymetricCipher( eachAlgo, eachMode, eachPadding );
                         SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( eachAlgo, keySize ) );
 
                         for ( String eachSample : SAMPLES ) {

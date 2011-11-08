@@ -27,7 +27,7 @@ import org.qipki.crypto.DefaultCryptoContext;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
-import org.qipki.crypto.cipher.BlockCipher;
+import org.qipki.crypto.cipher.SymetricCipher;
 import org.qipki.crypto.cipher.CipherFactory;
 import org.qipki.crypto.cipher.CipherFactoryImpl;
 import org.qipki.crypto.random.Random;
@@ -49,7 +49,7 @@ public class SymetricGeneratorTest
         SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 128 ) );
 
         CipherFactory cipherFactory = new CipherFactoryImpl( random );
-        BlockCipher cipher = cipherFactory.newBlockCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS5 );
+        SymetricCipher cipher = cipherFactory.newSymetricCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS5 );
         byte[] ciphered = cipher.cipher( "CipherMe".getBytes( "UTF-8" ), key );
         byte[] deciphered = cipher.decipher( ciphered, key );
         System.out.println( new String( deciphered, "UTF-8" ) ); // Will output "CipherMe"

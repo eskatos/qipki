@@ -571,9 +571,10 @@
                     <p>You can now start using the QiPki Crypto API.</p>
                 </div>
                 <p>
-                    Note that the examples shown below do not use any dependency injection framework and are all
-                    self sufficient. You'll see that every object is DI friendly. Plumbing code is provided for 
-                    integration with Qi4j with some added value.
+                    Note that the examples below are automaticaly extracted from actual code, often from unit tests.
+                    When applicable, theses examples show two ways to do things: with and without Qi4j.
+                    You'll se that the plumbing code provided for integration with Qi4j ease things a lot.
+                    Using another DI tool like Guice, CDI or Spring would help in quite the same way.
                 </p>
 
                 <!-- Digests -->
@@ -590,8 +591,23 @@
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.digest}</code></pre>
-
+                <p>
+                    The following code generate hexadecimal encoded hashes of a single string using several algorithms.
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.digest.1}</code></pre>
+                <p>
+                    The <code>DigestParameters</code> accept the following options:
+                </p>
+                <ul>
+                    <li><code>DigestAlgorithm algorithm</code>: the hashing algorithm to use</li>
+                    <li><code>byte[] salt</code>: the salt to use</li>
+                    <li><code>int iterations</code>: the number of times the hashing algorithm will be run</li>
+                </ul>
+                <p>
+                    Theses options let you make proper password hashing. Here is an example using a random 64 bits salt 
+                    and 1024 iterations:
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.digest.2}</code></pre>
 
                 <!-- Symetric cryptography -->
                 <h3>Symetric cryptography <small>AES for example</small></h3>
@@ -609,8 +625,13 @@
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <p>The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.</p>
-                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.cipher}</code></pre>
+                <h5>Block ciphers</h5>
+                <p>
+                    The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.cipher.block}</code></pre>
+                <h5>Stream ciphers</h5>
+                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
 
                 <!-- Message Authentication Codes -->
                 <h3>Message Authentication Codes</h3>

@@ -13,11 +13,12 @@
  */
 package org.qipki.crypto.cipher;
 
+import org.qi4j.api.injection.scope.Service;
+
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.qipki.crypto.random.Random;
-import org.qi4j.api.injection.scope.Service;
 
 public class CipherFactoryImpl
         implements CipherFactory
@@ -31,9 +32,9 @@ public class CipherFactoryImpl
     }
 
     @Override
-    public BlockCipher newBlockCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    public SymetricCipher newSymetricCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
-        return new BlockCipherImpl( random, algo, mode, padding );
+        return new SymetricCipherImpl( random, algo, mode, padding );
     }
 
 }
