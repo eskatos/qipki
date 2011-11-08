@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -181,13 +182,19 @@ public class WebsiteMojo
                         }
 
                         if ( !snippetsRanges.isEmpty() ) {
-                            String wholeSource = FileUtils.fileRead( eachSourceFile );
+                            String wholeSource = FileUtils.fileRead( eachSourceFile, "UTF-8" );
                             for ( Map.Entry<String, Pair<Integer>> eachEntry : snippetsRanges.entrySet() ) {
                                 String snippetName = eachEntry.getKey();
                                 int start = eachEntry.getValue().left();
                                 int end = eachEntry.getValue().right();
                                 String snippet = extractRange( wholeSource, start, end );
                                 snippet = "// Snippet extracted from " + eachSourceFile.getName() + " starting on line " + start + "\n\n" + snippet;
+                                snippet = StringEscapeUtils.escapeHtml( snippet );
+                                System.out.println( "" );
+                                System.out.println( "" );
+                                System.out.println( snippet );
+                                System.out.println( "" );
+                                System.out.println( "" );
                                 snippets.put( "snippet." + snippetName, snippet );
                             }
                         }
