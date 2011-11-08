@@ -603,7 +603,7 @@
     public void testWithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( serviceLocator.<Digest>findService( Digest.class ).get() );
+        runTest( serviceLocator.&lt;Digest&gt;findService( Digest.class ).get() );
     }
 
     @Test
@@ -618,7 +618,7 @@
     private void runTest( Digest digester )
             throws UnsupportedEncodingException
     {
-        String message = "Le nom des fous est √©crit partout.\n";
+        String message = &quot;Le nom des fous est &eacute;crit partout.\n&quot;;
 
         assertEquals( EXPECTED_MD5, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( MD5 ) ) );
         assertEquals( EXPECTED_SHA_1, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_1 ) ) );
@@ -659,8 +659,8 @@
     public void testAES128WithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get(),
-                 serviceLocator.<CipherFactory>findService( CipherFactory.class ).get() );
+        runTest( serviceLocator.&lt;SymetricGenerator&gt;findService( SymetricGenerator.class ).get(),
+                 serviceLocator.&lt;CipherFactory&gt;findService( CipherFactory.class ).get() );
     }
 
     @Test
@@ -683,7 +683,7 @@
     {
         SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
         BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
-        String plainText = "CipherMe";
+        String plainText = &quot;CipherMe&quot;;
         byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
         byte[] deciphered = cipher.decipher( ciphered, key );
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
@@ -756,13 +756,13 @@
     @Test
     public void testTemplate()
     {
-        String template = "CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
+        String template = &quot;CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}&quot;;
 
-        Map<String, String> variables = new HashMap<String, String>();
-        variables.put( "U_FIRSTNAME", "Paul" );
-        variables.put( "U_LASTNAME", "Merl,=\"+<>#;\\in" );
-        variables.put( "U_ORGANISATION", "Codearti‚Ç¨ans" );
-        variables.put( "U_EMAIL", "paul+zog@nosphere.org" );
+        Map&lt;String, String&gt; variables = new HashMap&lt;String, String&gt;();
+        variables.put( &quot;U_FIRSTNAME&quot;, &quot;Paul&quot; );
+        variables.put( &quot;U_LASTNAME&quot;, &quot;Merl,=\&quot;+&lt;&gt;#;\\in&quot; );
+        variables.put( &quot;U_ORGANISATION&quot;, &quot;Codearti&euro;ans&quot; );
+        variables.put( &quot;U_EMAIL&quot;, &quot;paul+zog@nosphere.org&quot; );
 
         DistinguishedName dn = new DistinguishedNameTemplate( template ).buildDN( variables );
 
