@@ -48,7 +48,8 @@
         <div class="container">
             <h1>QiPki Roadmap</h1>
 
-<p>This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track progress. After that a true issue management system will be used, but not before.</p>
+<p>This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track 
+progress. After that a true issue management system will be used, but not before.</p>
 
 <h2>Overview</h2>
 
@@ -73,17 +74,20 @@
 <h3>Work in progress</h3>
 
 <ul>
-<li>(###-) Harden files handling regarding UnitOfWorks
-<ul><li>How to reduce locking in UoWFileFactory?</li>
-<li>Write plural handling in UoWFile</li>
-<li>Make it as a first class module prepared to be reversed into Qi4j 2.0</li></ul></li>
 <li>(#---) Documentation
-<ul><li>Build</li>
-<li>Embedded CA</li>
-<li>Try to use jmd instead of markdownj to process markdown in the website</li></ul></li>
+<ul><li>Extract code snippets from actual source to generate documentation</li>
+<li>Rework the snippet parsing code in order to remove the javaparser dependency</li>
+<li>Enhance unit test code lisibility for snippets</li>
+<li>Crypto API</li>
+<li>Embedded CA</li></ul></li>
 </ul>
 
 <h3>Next steps - That would lead to a tiny 1.0</h3>
+
+<ul>
+<li>Enhance Crypto API
+<ul><li>Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI</li></ul></li>
+</ul>
 
 <h3>After that</h3>
 
@@ -106,8 +110,6 @@
 <li>Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)</li>
 <li>Add HSQLDB support to have another embedded SGBD</li>
 <li>Use MySQL Java deployment facilities</li></ul></li>
-<li>Enhance Crypto API
-<ul><li>Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI</li></ul></li>
 <li>(----) Add shiro for handling roles/permissions
 <ul><li>Model with one root Role and Permissions, other Roles will emerge themselves later</li>
 <li>See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts</li>

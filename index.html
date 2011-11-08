@@ -20,6 +20,7 @@
             }
             code {
                 background-color: #F5F5F5;
+                font-size: 0.9em;
             }
         </style>
 
@@ -481,6 +482,7 @@
         &lt;enabled&gt;true&lt;/enabled&gt;
     &lt;/snapshots&gt;
 &lt;/repository&gt;</code></pre>
+                        <p>Current development version is 1.0-alpha8-SNAPSHOT.</p>
                     </div>
                     <div class="span6">
                         <img src="http://web-static-cloudfront.s3.amazonaws.com/images/badges/BuiltOnDEV.png" style="float: right" />
@@ -524,7 +526,7 @@
                 <p>
                     Start by creating a new maven project with the following command:
                 </p>
-                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-SNAPSHOT</code></pre>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-alpha8-SNAPSHOT</code></pre>
                 <p>
                     Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
                 </p>
@@ -560,7 +562,7 @@
                 <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
   &lt;artifactId&gt;qipki-crypto&lt;/artifactId&gt;
-  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;1.0-alpha8-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
                 <p>
                     Ensure that everything works by issueing a <code>mvn clean install</code> command.
@@ -573,7 +575,9 @@
                     self sufficient. You'll see that every object is DI friendly. Plumbing code is provided for 
                     integration with Qi4j with some added value.
                 </p>
-                <h3>Hashs</h3>
+
+                <!-- Digests -->
+                <h3>Digests <small>aka. Hashes</small></h3>
                 <blockquote>
                     <p>
                         A cryptographic hash function is a deterministic procedure that takes an arbitrary block of data
@@ -586,21 +590,47 @@
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <p>
-                    The following code makes SHA256 hashes out of several types of bytes sources. The <code>Digester</code> 
-                    can return the hashes as a <code>byte[]</code> or as a <code>String</code> encoded in either hexadecimal
-                    or Base64.
-                </p>
-                <pre class="prettyprint lang-java"><code class="language-java">Security.addProvider( new BouncyCastleProvider() );
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DigestTest.java starting on line 45
 
-Digest digester = new DigestImpl( new DefaultCryptoContext(), new CryptCodexImpl() );
-DigestParameters sha256Params = new DigestParameters( SHA_256 );
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
+    }
 
-String stringHash = digester.hexDigest( "A string to hash", sha256Params ) ); // Defaults to UTF-8 encoding
-String fileHash   = digester.hexDigest( new File( "/path/to/file.foo" ), sha256Params ) );
+    @Test
+    public void testWithQi4j()
+            throws UnsupportedEncodingException
+    {
+        runTest( serviceLocator.<Digest>findService( Digest.class ).get() );
+    }
 
-Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
-                <h3>Symetric cryptography</h3>
+    @Test
+    public void testWithoutQi4j()
+            throws UnsupportedEncodingException
+    {
+        Security.addProvider( new BouncyCastleProvider() );
+        runTest( new DigestImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
+    }
+
+    private void runTest( Digest digester )
+            throws UnsupportedEncodingException
+    {
+        String message = "Le nom des fous est √©crit partout.\n";
+
+        assertEquals( EXPECTED_MD5, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( MD5 ) ) );
+        assertEquals( EXPECTED_SHA_1, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_1 ) ) );
+        assertEquals( EXPECTED_SHA_256, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_256 ) ) );
+        assertEquals( EXPECTED_SHA_384, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_384 ) ) );
+        assertEquals( EXPECTED_SHA_512, digester.hexDigest( message.getBytes( UTF_8 ), new DigestParameters( SHA_512 ) ) );
+    }
+</code></pre>
+
+
+                <!-- Symetric cryptography -->
+                <h3>Symetric cryptography <small>AES for example</small></h3>
                 <blockquote>
                     <p>
                         Symmetric-key algorithms are a class of algorithms for cryptography that use trivially related,
@@ -616,22 +646,52 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                     </small>
                 </blockquote>
                 <p>The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.</p>
-                <pre class="prettyprint lang-java"><code class="language-java">Security.addProvider( new BouncyCastleProvider() );
-Random random = new RandomImpl();
-( ( RandomImpl ) random ).activate(); // This is Work in Progress and won't be needed anymore soon.
-CryptoContext cryptoContext = new DefaultCryptoContext();
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from CipherTest.java starting on line 56
 
-SymetricGenerator symGen = new SymetricGeneratorImpl( cryptoContext );
-SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
+    @Override
+    public void assemble( ModuleAssembly module )
+            throws AssemblyException
+    {
+        new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
+    }
 
-CipherFactory cipherFactory = new CipherFactoryImpl( random );
-BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
-byte[] ciphered = cipher.cipher( "CipherMe".getBytes( "UTF-8" ), key );
-byte[] deciphered = cipher.decipher( ciphered, key );
-System.out.println( new String( deciphered, "UTF-8" ) ); // Will output "CipherMe"
+    @Test
+    public void testAES128WithQi4j()
+            throws UnsupportedEncodingException
+    {
+        runTest( serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get(),
+                 serviceLocator.<CipherFactory>findService( CipherFactory.class ).get() );
+    }
 
-Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
-                <h3>Message Authentication Code</h3>
+    @Test
+    public void testAES128()
+            throws Exception
+    {
+        Security.addProvider( new BouncyCastleProvider() );
+
+        Random random = new RandomImpl();
+        ( ( RandomImpl ) random ).activate(); // This is Work in Progress and won't be needed anymore soon.
+
+        runTest( new SymetricGeneratorImpl( new DefaultCryptoContext() ),
+                 new CipherFactoryImpl( random ) );
+
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
+    }
+
+    private void runTest( SymetricGenerator symGenerator, CipherFactory cipherFactory )
+            throws UnsupportedEncodingException
+    {
+        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
+        BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
+        String plainText = "CipherMe";
+        byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
+        byte[] deciphered = cipher.decipher( ciphered, key );
+        assertEquals( plainText, new String( deciphered, UTF_8 ) );
+    }
+</code></pre>
+
+                <!-- Message Authentication Codes -->
+                <h3>Message Authentication Codes</h3>
                 <blockquote>
                     <p>
                         In cryptography, a message authentication code (often MAC) is a short piece of information used
@@ -650,6 +710,8 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                     </small>
                 </blockquote>
                 <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+
+                <!-- Asymetric-key cryptography -->
                 <h3>Asymetric-key cryptography</h3>
                 <blockquote>
                     <p>
@@ -666,6 +728,8 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                     </small>
                 </blockquote>
                 <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+
+                <!-- X.509 -->
                 <h3>X.509</h3>
                 <blockquote>
                     <p>
@@ -679,9 +743,50 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <h5>Distinguished names</h5>
+                <p>
+                    The <code>DistinguishedName</code> class hide api complexity needed to handle X.509 distinguished
+                    names in the <a class="iframe" title="X.500" href="http://en.wikipedia.org/wiki/X.509">X.500</a>
+                    tradition, especially regarding encoding and special characters escape.
+                    The <code>DistinguishdNameTemplate</code> class build on this to provide a convenient way to 
+                    generate DNs from templates:
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DistinguishedNameTemplateTest.java starting on line 39
+
+    @Test
+    public void testTemplate()
+    {
+        String template = "CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
+
+        Map<String, String> variables = new HashMap<String, String>();
+        variables.put( "U_FIRSTNAME", "Paul" );
+        variables.put( "U_LASTNAME", "Merl,=\"+<>#;\\in" );
+        variables.put( "U_ORGANISATION", "Codearti‚Ç¨ans" );
+        variables.put( "U_EMAIL", "paul+zog@nosphere.org" );
+
+        DistinguishedName dn = new DistinguishedNameTemplate( template ).buildDN( variables );
+
+        systemOutput( dn );
+
+        // Assert formats
+        assertEquals( EXPECTED_RFC1779, dn.toString( RFC1779 ) );
+        assertEquals( EXPECTED_RFC1779_and_RFC3383, dn.toString( RFC1779_and_RFC3383 ) );
+
+        assertEquals( EXPECTED_RFC2253, dn.toString( RFC2253 ) );
+        assertEquals( EXPECTED_RFC2253_and_RFC3383, dn.toString( RFC2253_and_RFC3383 ) );
+        assertEquals( EXPECTED_RFC2253_CANONICAL, dn.toString( RFC2253_CANONICAL ) );
+
+        // Assert formats through BouncyCastle X509Name (does not support RFC1779 formatted Directory Strings)
+        assertEquals( EXPECTED_BC_RFC2253, new X509Name( dn.toString( RFC2253 ) ).toString() );
+        assertEquals( EXPECTED_BC_RFC2253_and_RFC3383, new X509Name( dn.toString( RFC2253_and_RFC3383 ) ).toString() );
+        assertEquals( EXPECTED_BC_RFC2253_CANONICAL, new X509Name( dn.toString( RFC2253_CANONICAL ) ).toString() );
+    }
+</code></pre>
+
+                <!-- I/O -->
                 <h3>I/O</h3>
                 <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+
             </div>
         </section> <!-- /crypto-->
 
@@ -702,7 +807,7 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                 <p>
                     Start by creating a new maven project with the following command:
                 </p>
-                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-SNAPSHOT</code></pre>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-alpha8-SNAPSHOT</code></pre>
                 <p>
                     Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
                 </p>
@@ -738,7 +843,7 @@ Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );</code></pre>
                 <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
   &lt;artifactId&gt;qipki-ca&lt;/artifactId&gt;
-  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;1.0-alpha8-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
                 <p>
                     Ensure that everything works by issueing a <code>mvn clean install</code> command.
