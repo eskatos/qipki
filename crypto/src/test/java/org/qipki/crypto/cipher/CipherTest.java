@@ -14,12 +14,17 @@
 package org.qipki.crypto.cipher;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Security;
 import javax.crypto.SecretKey;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
+import static org.qipki.crypto.algorithms.BlockCipherModeOfOperation.*;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
+import static org.qipki.crypto.algorithms.BlockCipherPadding.*;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
+import static org.qipki.crypto.algorithms.SymetricAlgorithm.*;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.jca.Transformation;
 import org.qipki.crypto.symetric.SymetricGenerator;
@@ -31,7 +36,12 @@ import org.junit.Test;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.test.AbstractQi4jTest;
-import org.qipki.crypto.constants.IOConstants;
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.DefaultCryptoContext;
+import static org.qipki.crypto.constants.IOConstants.*;
+import org.qipki.crypto.random.Random;
+import org.qipki.crypto.random.RandomImpl;
+import org.qipki.crypto.symetric.SymetricGeneratorImpl;
 
 public class CipherTest
         extends AbstractQi4jTest
@@ -42,13 +52,48 @@ public class CipherTest
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar lobortis."
     };
 
+    // SNIPPET BEGIN crypto.cipher
     @Override
-    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
         new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
     }
+
+    @Test
+    public void testAES128WithQi4j()
+            throws UnsupportedEncodingException
+    {
+        runTest( serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get(),
+                 serviceLocator.<CipherFactory>findService( CipherFactory.class ).get() );
+    }
+
+    @Test
+    public void testAES128()
+            throws Exception
+    {
+        Security.addProvider( new BouncyCastleProvider() );
+
+        Random random = new RandomImpl();
+        ( ( RandomImpl ) random ).activate(); // This is Work in Progress and won't be needed anymore soon.
+
+        runTest( new SymetricGeneratorImpl( new DefaultCryptoContext() ),
+                 new CipherFactoryImpl( random ) );
+
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
+    }
+
+    private void runTest( SymetricGenerator symGenerator, CipherFactory cipherFactory )
+            throws UnsupportedEncodingException
+    {
+        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
+        BlockCipher cipher = cipherFactory.newBlockCipher( AES, CBC, PKCS5 );
+        String plainText = "CipherMe";
+        byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
+        byte[] deciphered = cipher.decipher( ciphered, key );
+        assertEquals( plainText, new String( deciphered, UTF_8 ) );
+    }
+    // SNIPPET END crypto.cipher
 
     @Test
     public void testAllBlockCipherAlgorithms()
@@ -77,7 +122,7 @@ public class CipherTest
 
                         for ( String eachSample : SAMPLES ) {
 
-                            byte[] data = eachSample.getBytes( IOConstants.UTF_8 );
+                            byte[] data = eachSample.getBytes( UTF_8 );
                             System.out.println( ">> Ciphering: '" + eachSample + "'" );
                             byte[] ciphered = cipher.cipher( data, key );
                             System.out.println( ">> Unciphering" );
