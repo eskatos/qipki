@@ -27,6 +27,11 @@
                         <goals>
                             <goal>site</goal>
                         </goals>
+                        <configuration>
+                            <snippetSources>
+                                <snippetSource>${project.basedir}/../crypto/src/test/java</snippetSource>
+                            </snippetSources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -15,21 +15,49 @@
     
     
     <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.0.3</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.codeartisans</groupId>
-            <artifactId>jmd</artifactId>
-            <version>0.8.1-SNAPSHOT</version>
+            <artifactId>java-toolbox</artifactId>
+            <version>${version.java-toolbox}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.javaparser</groupId>
+            <artifactId>javaparser</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.madgag</groupId>
             <artifactId>markdownj-core</artifactId>
             <version>0.4.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>3.0-alpha-2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-interpolation</artifactId>
+            <version>1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-filtering</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
     </dependencies>
 
 </project>

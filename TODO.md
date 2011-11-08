@@ -25,7 +25,10 @@ Do we really want to do that? Is this even possible? Is it the right time?
 
 ### Work in progress
 
-* (##--) Documentation
+* (#---) Documentation
+  * Extract code snippets from actual source to generate documentation
+    * Rework the snippet parsing code in order to remove the javaparser dependency
+  * Enhance unit test code lisibility for snippets
   * Crypto API
   * Embedded CA
 
