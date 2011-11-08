@@ -14,16 +14,70 @@
 package org.qi4j.library.uowfile.plural;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.This;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.unitofwork.UnitOfWork;
+import org.qi4j.library.uowfile.internal.UoWFileFactory;
+
+@Mixins( HasUoWFiles.Mixin.class )
 public interface HasUoWFiles<T extends Enum<T>>
 {
 
+    /**
+     * IMPORTANT Use this {@link File} only inside read-only {@link UnitOfWork}s
+     */
+    File attachedFile( T key );
+
+    /**
+     * IMPORTANT Use these {@link File}s only inside read-only {@link UnitOfWork}s
+     */
     Iterable<File> attachedFiles();
 
-    File attachedFile( T key );
+    File managedFile( T key );
 
     Iterable<File> managedFiles();
 
-    File managedFile( T key );
+    abstract class Mixin<R extends Enum<R>>
+            implements HasUoWFiles<R>
+    {
+
+        @Service
+        private UoWFileFactory uowFileFactory;
+        @This
+        private UoWFilesLocator locator;
+
+        @Override
+        public File attachedFile( R key )
+        {
+            return locator.locateAttachedFile( key );
+        }
+
+        @Override
+        public Iterable<File> attachedFiles()
+        {
+            return locator.locateAttachedFiles();
+        }
+
+        @Override
+        public File managedFile( R key )
+        {
+            return uowFileFactory.createCurrentUoWFile( locator.locateAttachedFile( key ) ).asFile();
+        }
+
+        @Override
+        public Iterable<File> managedFiles()
+        {
+            List<File> managedFiles = new ArrayList<File>();
+            for ( File eachAttachedFile : ( Iterable<File> ) locator.locateAttachedFiles() ) {
+                managedFiles.add( uowFileFactory.createCurrentUoWFile( eachAttachedFile ).asFile() );
+            }
+            return managedFiles;
+        }
+
+    }
 
 }

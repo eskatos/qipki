@@ -25,17 +25,15 @@ Do we really want to do that? Is this even possible? Is it the right time?
 
 ### Work in progress
 
-* (###-) Harden files handling regarding UnitOfWorks
-  * How to reduce locking in UoWFileFactory?
-  * Write plural handling in UoWFile
-  * Make it as a first class module prepared to be reversed into Qi4j 2.0
-* (#---) Documentation
-  * Build
+* (##--) Documentation
+  * Crypto API
   * Embedded CA
-  * Try to use jmd instead of markdownj to process markdown in the website
 
 
 ### Next steps - That would lead to a tiny 1.0
+
+* Enhance Crypto API
+  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 
 ### After that
 
@@ -57,8 +55,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
   * Add HSQLDB support to have another embedded SGBD
   * Use MySQL Java deployment facilities
-* Enhance Crypto API
-  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts

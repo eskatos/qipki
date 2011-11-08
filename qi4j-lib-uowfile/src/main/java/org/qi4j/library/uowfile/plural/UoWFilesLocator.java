@@ -20,4 +20,6 @@ public interface UoWFilesLocator<T extends Enum<T>>
 
     File locateAttachedFile( T key );
 
+    Iterable<File> locateAttachedFiles();
+
 }

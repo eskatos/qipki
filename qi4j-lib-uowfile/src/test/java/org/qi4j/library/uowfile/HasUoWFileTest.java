@@ -19,11 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Stack;
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.qi4j.api.concern.Concerns;
@@ -45,7 +42,6 @@ import org.qi4j.api.unitofwork.UnitOfWorkPropagation;
 import org.qi4j.api.unitofwork.UnitOfWorkRetry;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.core.testsupport.AbstractQi4jTest;
 import org.qi4j.library.uowfile.internal.ConcurrentUoWFileModificationException;
 import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 import org.qi4j.library.uowfile.singular.UoWFileLocator;
@@ -55,49 +51,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HasUoWFileTest
-        extends AbstractQi4jTest
+        extends AbstractUoWFileTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( HasUoWFileTest.class );
     private static final URL CREATION_CONTENT_URL = HasUoWFileTest.class.getResource( "creation.txt" );
     private static final URL MODIFICATION_CONTENT_URL = HasUoWFileTest.class.getResource( "modification.txt" );
-    private static File baseTestDir;
-
-    @BeforeClass
-    public static void beforeClass()
-            throws IOException
-    {
-        File testDir = new File( "target/" + System.getProperty( "test" ) );
-        if ( !testDir.exists() ) {
-            if ( !testDir.mkdirs() ) {
-                throw new IOException( "Unable to create directory: " + testDir );
-            }
-        }
-        baseTestDir = testDir;
-    }
-
-    @AfterClass
-    public static void afterClass()
-    {
-        // Delete test data
-        Stack<File> stack = new Stack<File>();
-        stack.push( baseTestDir );
-        while ( !stack.empty() ) {
-            File each = stack.peek();
-            if ( each.isDirectory() ) {
-                File[] children = each.listFiles();
-                if ( children.length > 0 ) {
-                    for ( File child : children ) {
-                        stack.push( child );
-                    }
-                } else {
-                    stack.pop().delete();
-                }
-            } else {
-                stack.pop().delete();
-            }
-        }
-    }
 
     @Mixins( HasUoWFileTest.TestedEntityMixin.class )
     public interface TestedEntity

@@ -33,7 +33,6 @@ public class UoWFile
     private final File original;
     private final File current;
     private final File backup;
-    private boolean copied = false;
 
     UoWFile( File original, File workDir )
     {
