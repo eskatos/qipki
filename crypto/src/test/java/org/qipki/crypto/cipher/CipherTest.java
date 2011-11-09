@@ -13,12 +13,16 @@
  */
 package org.qipki.crypto.cipher;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Security;
 import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -62,12 +66,21 @@ public class CipherTest
         new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
     }
 
+    private SymetricGenerator symGenerator;
+    private CipherFactory cipherFactory;
+
+    @Before
+    public void before()
+    {
+        symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
+        cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
+    }
+
     @Test
     public void testAES128WithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get(),
-                 serviceLocator.<CipherFactory>findService( CipherFactory.class ).get() );
+        runTest( symGenerator, cipherFactory );
     }
 
     @Test
@@ -94,6 +107,32 @@ public class CipherTest
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
     // SNIPPET END crypto.cipher.block
+
+    @Test
+    // SNIPPET BEGIN crypto.cipher.stream
+    public void testOnStreams()
+            throws UnsupportedEncodingException
+    {
+        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
+        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES, CBC, PKCS5 );
+
+        String plainText = "CipherMe in a stream";
+
+        InputStream inputStream = new ByteArrayInputStream( plainText.getBytes( UTF_8 ) );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        cipher.cipher( inputStream, outputStream, key );
+        byte[] ciphered = outputStream.toByteArray();
+
+        inputStream = new ByteArrayInputStream( ciphered );
+        outputStream = new ByteArrayOutputStream();
+
+        cipher.decipher( inputStream, outputStream, key );
+        byte[] deciphered = outputStream.toByteArray();
+
+        assertEquals( plainText, new String( deciphered, UTF_8 ) );
+    }
+    // SNIPPET END crypto.cipher.stream
 
     @Test
     public void testAllSymetricCipherAlgorithms()

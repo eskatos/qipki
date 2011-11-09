@@ -625,13 +625,14 @@
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <h5>Block ciphers</h5>
                 <p>
                     The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.
                 </p>
                 <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.cipher.block}</code></pre>
-                <h5>Stream ciphers</h5>
-                <p><span class="label important">TODO</span> Add examples from the unit tests.</p>
+                <p>
+                    The very same operation applied on a data stream:
+                </p>
+                <pre class="prettyprint lang-java"><code class="language-java">${snippet.crypto.cipher.stream}</code></pre>
 
                 <!-- Message Authentication Codes -->
                 <h3>Message Authentication Codes</h3>
@@ -806,43 +807,43 @@ public class EmbeddedCaExample
 }
 </code></pre>
                 <p><span class="label important">TODO</span> Explain this code snippet.</p>
-                
+
                 <h3>CA context</h3>
                 <p><span class="label important">TODO</span> Explain QiPki <a class="iframe" title="Data Context Interaction" href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a> implementation.</p>
-                
+
                 <h5>Create a CA <small>self-signed and stored in a PKCS#12 file</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
+
                 <h5>Issue a certificate <small>using a predefined profile</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
+
                 <h5>Renew a certificate <small>using a new keypair</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
+
                 <h5>Revoke a certificate <small>and consume the generated CRL</small></h5>
                 <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
+
                 <h3>Going further</h3>
 
                 <!-- Logging -->
                 <h5>Logging</h3>
-                <p><span class="label important">TODO</span> Explain SLF4J usage and loggers hierarchy</p>
+                    <p><span class="label important">TODO</span> Explain SLF4J usage and loggers hierarchy</p>
 
-                <h5>Assemble and configure <small>set the data and logging paths, choose backend implementations</small></h5>
-                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
-                <h5>Manage certificate profiles <small>different types of certificates, assignment to CAs</small></h5>
-                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
-                <h5>Use escrowed keypairs <small>eg. for digital signature</small></h5>
-                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
-                <h5>Configure logging <small>using SLF4J</small></h5>
-                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
-                <h5>Expose runtime data through JMX <small>runtime configuration changes, statistics</small></h5>
-                <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
-                
+                    <h5>Assemble and configure <small>set the data and logging paths, choose backend implementations</small></h5>
+                    <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+
+                    <h5>Manage certificate profiles <small>different types of certificates, assignment to CAs</small></h5>
+                    <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+
+                    <h5>Use escrowed keypairs <small>eg. for digital signature</small></h5>
+                    <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+
+                    <h5>Configure logging <small>using SLF4J</small></h5>
+                    <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+
+                    <h5>Expose runtime data through JMX <small>runtime configuration changes, statistics</small></h5>
+                    <p><span class="label important">TODO</span>  Add examples from the unit tests.</p>
+
             </div>
         </section> <!-- /embedded-->
 
