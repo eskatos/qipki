@@ -35,14 +35,25 @@ public class SymetricGeneratorImpl
     }
 
     @Override
-    public SecretKey generateSecretKey( SymetricGeneratorParameters params )
+    public SecretKey generateCipheringKey( SymetricCipheringGeneratorParameters params )
+    {
+        return generateSecretKey( params.algorithm().jcaString(), params.keySize() );
+    }
+
+    @Override
+    public SecretKey generateSigningKey( SymetricSigningGeneratorParameters params )
+    {
+        return generateSecretKey( params.algorithm().jcaString(), params.keySize() );
+    }
+
+    private SecretKey generateSecretKey( String algoJcaString, int keySize )
     {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
-            keyGen.init( params.keySize() );
+            KeyGenerator keyGen = KeyGenerator.getInstance( algoJcaString, cryptoContext.providerName() );
+            keyGen.init( keySize );
             return keyGen.generateKey();
         } catch ( GeneralSecurityException ex ) {
-            throw new CryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " SecretKey", ex );
+            throw new CryptoFailure( "Unable to generate " + algoJcaString + " " + keySize + " SecretKey", ex );
         }
     }
 

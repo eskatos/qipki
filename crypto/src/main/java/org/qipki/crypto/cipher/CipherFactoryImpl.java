@@ -16,9 +16,6 @@ package org.qipki.crypto.cipher;
 import org.qi4j.api.injection.scope.Service;
 
 import org.qipki.crypto.CryptoContext;
-import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
-import org.qipki.crypto.algorithms.BlockCipherPadding;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
 
 public class CipherFactoryImpl
         implements CipherFactory
@@ -32,9 +29,9 @@ public class CipherFactoryImpl
     }
 
     @Override
-    public SymetricCipher newSymetricCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    public SymetricCipher newSymetricCipher( SymetricCipherFactoryParameters parameters )
     {
-        return new SymetricCipherImpl( cryptoContext.random(), algo, mode, padding );
+        return new SymetricCipherImpl( cryptoContext.random(), parameters.algorithm(), parameters.mode(), parameters.padding() );
     }
 
 }

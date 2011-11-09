@@ -16,6 +16,7 @@ package org.qipki.crypto.mac;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import javax.crypto.Mac;
 
@@ -24,12 +25,15 @@ import org.qi4j.api.injection.scope.Service;
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
+import org.qipki.crypto.constants.IOConstants;
 
+/**
+ * @see http://www.developer.com/java/ent/article.php/3787701/Message-Authentication-Unlocking-the-Secrets-of-the-Java-Cryptography-Extensions.htm
+ */
 public class MACImpl
         implements MAC
 {
 
-    private static final int BUFFER_SIZE = 128;
     private final CryptoContext cryptoContext;
     private final CryptCodex cryptCodex;
 
@@ -45,7 +49,7 @@ public class MACImpl
         try {
             Mac mac = Mac.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             mac.init( params.secretKey() );
-            byte[] buffer = new byte[ BUFFER_SIZE ];
+            byte[] buffer = new byte[ IOConstants.INTERNAL_BUFFERS_SIZE ];
             int length = 0;
             while ( ( length = data.read( buffer ) ) != -1 ) {
                 mac.update( buffer, 0, length );
@@ -86,6 +90,49 @@ public class MACImpl
     public String base64Mac( byte[] data, MACParameters params )
     {
         return cryptCodex.toBase64String( mac( data, params ) );
+    }
+
+    @Override
+    public byte[] mac( String data, MACParameters params )
+    {
+        try {
+            return mac( data.getBytes( IOConstants.UTF_8 ), params );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF-8 not supported! o_O ", ex );
+        }
+    }
+
+    @Override
+    public String hexMac( String data, MACParameters params )
+    {
+        return cryptCodex.toHexString( mac( data, params ) );
+    }
+
+    @Override
+    public String base64Mac( String data, MACParameters params )
+    {
+        return cryptCodex.toBase64String( mac( data, params ) );
+    }
+
+    @Override
+    public byte[] mac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException
+    {
+        return mac( data.getBytes( encoding ), params );
+    }
+
+    @Override
+    public String hexMac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException
+    {
+        return cryptCodex.toHexString( mac( data, encoding, params ) );
+    }
+
+    @Override
+    public String base64Mac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException
+    {
+        return cryptCodex.toBase64String( mac( data, encoding, params ) );
     }
 
 }

@@ -16,5 +16,6 @@ package org.qipki.crypto.constants;
 public interface IOConstants
 {
 
+    int INTERNAL_BUFFERS_SIZE = 4096;
     String UTF_8 = "UTF-8";
 }

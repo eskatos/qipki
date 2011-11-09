@@ -15,13 +15,15 @@ package org.qipki.crypto.symetric;
 
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
 
-public class SymetricGeneratorParameters
+public class SymetricCipheringGeneratorParameters
 {
 
+    public static final SymetricCipheringGeneratorParameters AES_128 = new SymetricCipheringGeneratorParameters( SymetricAlgorithm.AES, 128 );
+    public static final SymetricCipheringGeneratorParameters AES_256 = new SymetricCipheringGeneratorParameters( SymetricAlgorithm.AES, 256 );
     private final SymetricAlgorithm algo;
     private final int keySize;
 
-    public SymetricGeneratorParameters( SymetricAlgorithm algo, int keySize )
+    public SymetricCipheringGeneratorParameters( SymetricAlgorithm algo, int keySize )
     {
         this.algo = algo;
         this.keySize = keySize;

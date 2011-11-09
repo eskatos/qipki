@@ -46,5 +46,11 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.tab-size>8</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.tab-size>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinIfParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinIfParens>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.methodDeclBracePlacement>NEW_LINE</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.methodDeclBracePlacement>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTernaryOp>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTernaryOp>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineDisjunctiveCatchTypes>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineDisjunctiveCatchTypes>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineBinaryOp>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineBinaryOp>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineParenthesized>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineParenthesized>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTryResources>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTryResources>
+        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineFor>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineFor>
     </properties>
 </project-shared-configuration>

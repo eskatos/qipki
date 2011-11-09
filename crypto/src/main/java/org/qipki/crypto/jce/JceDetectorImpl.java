@@ -24,8 +24,9 @@ import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.qipki.crypto.cipher.SymetricCipher;
 import org.qipki.crypto.cipher.CipherFactory;
+import org.qipki.crypto.cipher.SymetricCipherFactoryParameters;
 import org.qipki.crypto.symetric.SymetricGenerator;
-import org.qipki.crypto.symetric.SymetricGeneratorParameters;
+import org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters;
 
 /**
  * Implementation of {@link JceDetector} that generate and try to use a 256bits AES key.
@@ -47,8 +48,8 @@ public class JceDetectorImpl
     public boolean areJceInstalled()
     {
         try {
-            SecretKey key = symGen.generateSecretKey( new SymetricGeneratorParameters( SymetricAlgorithm.AES, 256 ) );
-            SymetricCipher aesSicPkcs7 = cipherFactory.newSymetricCipher( SymetricAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS7 );
+            SecretKey key = symGen.generateCipheringKey( SymetricCipheringGeneratorParameters.AES_256 );
+            SymetricCipher aesSicPkcs7 = cipherFactory.newSymetricCipher( SymetricCipherFactoryParameters.AES_SIC_PKCS7 );
             aesSicPkcs7.cipher( new byte[]{}, key );
             return true;
         } catch ( CryptoFailure ex ) {

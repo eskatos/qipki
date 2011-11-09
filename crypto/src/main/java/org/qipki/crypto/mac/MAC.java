@@ -14,6 +14,7 @@
 package org.qipki.crypto.mac;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public interface MAC
 {
@@ -29,5 +30,20 @@ public interface MAC
     String hexMac( byte[] data, MACParameters params );
 
     String base64Mac( byte[] data, MACParameters params );
+
+    byte[] mac( String data, MACParameters params );
+
+    String hexMac( String data, MACParameters params );
+
+    String base64Mac( String data, MACParameters params );
+
+    byte[] mac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException;
+
+    String hexMac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException;
+
+    String base64Mac( String data, String encoding, MACParameters params )
+            throws UnsupportedEncodingException;
 
 }

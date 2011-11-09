@@ -37,18 +37,21 @@ public class DistinguishedNameTemplateTest
 
     // SNIPPET BEGIN crypto.dn
     @Test
-    public void testTemplate()
+    public void testDistinguishedNameTemplate()
     {
-        String template = "CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
+        // Create a template
+        String template = "CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, "
+                          + "OU=QiPki, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
 
-        Map<String, String> variables = new HashMap<String, String>();
-        variables.put( "U_FIRSTNAME", "Paul" );
-        variables.put( "U_LASTNAME", "Merl,=\"+<>#;\\in" );
-        variables.put( "U_ORGANISATION", "Codearti€ans" );
-        variables.put( "U_EMAIL", "paul+zog@nosphere.org" );
+        // Prepare context properties
+        Map<String, String> context = new HashMap<String, String>();
+        context.put( "U_FIRSTNAME", "Paul" );
+        context.put( "U_LASTNAME", "Merl,=\"+<>#;\\in" );
+        context.put( "U_ORGANISATION", "Codearti€ans" );
+        context.put( "U_EMAIL", "paul+zog@nosphere.org" );
 
-        DistinguishedName dn = new DistinguishedNameTemplate( template ).buildDN( variables );
-
+        // Build the DistinguishedName instance
+        DistinguishedName dn = new DistinguishedNameTemplate( template ).buildDN( context );
         systemOutput( dn );
 
         // Assert formats

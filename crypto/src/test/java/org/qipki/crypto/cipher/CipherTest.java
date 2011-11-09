@@ -22,88 +22,64 @@ import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import org.junit.Before;
+import org.codeartisans.java.toolbox.Strings;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.core.testsupport.AbstractQi4jTest;
-
+import org.qipki.crypto.AbstractQiPkiCryptoTest;
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.DefaultCryptoContext;
-import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
-import static org.qipki.crypto.algorithms.BlockCipherModeOfOperation.*;
-import org.qipki.crypto.algorithms.BlockCipherPadding;
-import static org.qipki.crypto.algorithms.BlockCipherPadding.*;
-import org.qipki.crypto.algorithms.IllegalAlgorithmException;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
-import static org.qipki.crypto.algorithms.SymetricAlgorithm.*;
-import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+import static org.qipki.crypto.cipher.SymetricCipherFactoryParameters.*;
 import static org.qipki.crypto.constants.IOConstants.*;
-import org.qipki.crypto.jca.Transformation;
 import org.qipki.crypto.symetric.SymetricGenerator;
-import org.qipki.crypto.symetric.SymetricGeneratorParameters;
+import static org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters.*;
 import org.qipki.crypto.symetric.SymetricGeneratorImpl;
 
 public class CipherTest
-        extends AbstractQi4jTest
+        extends AbstractQiPkiCryptoTest
 {
 
-    private static final String[] SAMPLES = new String[]{
+    public static final String[] SAMPLES = new String[]{
         "Hello World",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar lobortis."
     };
-
-    // SNIPPET BEGIN crypto.cipher.block
-    @Override
-    public void assemble( ModuleAssembly module )
-            throws AssemblyException
-    {
-        ModuleAssembly config = module.layer().module( "config" );
-        config.services( MemoryEntityStoreService.class );
-        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
-    }
-
-    private SymetricGenerator symGenerator;
-    private CipherFactory cipherFactory;
-
-    @Before
-    public void before()
-    {
-        symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
-        cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
-    }
 
     @Test
     public void testAES128WithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( symGenerator, cipherFactory );
+        testAES128( symGenerator, cipherFactory );
     }
 
     @Test
-    public void testAES128()
+    public void testAES128WithoutQi4j()
             throws Exception
     {
         Security.addProvider( new BouncyCastleProvider() );
 
         CryptoContext cryptoContext = new DefaultCryptoContext();
-        runTest( new SymetricGeneratorImpl( cryptoContext ),
-                 new CipherFactoryImpl( cryptoContext ) );
+        testAES128( new SymetricGeneratorImpl( cryptoContext ),
+                    new CipherFactoryImpl( cryptoContext ) );
 
         Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
 
-    private void runTest( SymetricGenerator symGenerator, CipherFactory cipherFactory )
+    // SNIPPET BEGIN crypto.cipher.block
+    private void testAES128( SymetricGenerator symGenerator, CipherFactory cipherFactory )
             throws UnsupportedEncodingException
     {
-        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
-        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES, CBC, PKCS5 );
+        // AES-128 key generation
+        SecretKey key = symGenerator.generateCipheringKey( AES_128 );
         String plainText = "CipherMe";
+        
+        // Cipher creation
+        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES_CBC_PKCS5 );
+        
+        // Cipher and decipher
         byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
         byte[] deciphered = cipher.decipher( ciphered, key );
+        
+        // Test
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
     // SNIPPET END crypto.cipher.block
@@ -113,69 +89,29 @@ public class CipherTest
     public void testOnStreams()
             throws UnsupportedEncodingException
     {
-        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( AES, 128 ) );
-        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES, CBC, PKCS5 );
-
+        // AES-128 key generation
+        SecretKey key = symGenerator.generateCipheringKey( AES_128 );
         String plainText = "CipherMe in a stream";
 
+        // Cipher creation
+        SymetricCipher cipher = cipherFactory.newSymetricCipher( AES_CBC_PKCS5 );
+
+        // Ciphering…
         InputStream inputStream = new ByteArrayInputStream( plainText.getBytes( UTF_8 ) );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         cipher.cipher( inputStream, outputStream, key );
         byte[] ciphered = outputStream.toByteArray();
 
+        // Deciphering…
         inputStream = new ByteArrayInputStream( ciphered );
         outputStream = new ByteArrayOutputStream();
 
         cipher.decipher( inputStream, outputStream, key );
         byte[] deciphered = outputStream.toByteArray();
 
+        // Test
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
     // SNIPPET END crypto.cipher.stream
-
-    @Test
-    public void testAllSymetricCipherAlgorithms()
-            throws UnsupportedEncodingException
-    {
-        SymetricGenerator symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
-        CipherFactory cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
-
-        for ( SymetricAlgorithm eachAlgo : SymetricAlgorithm.values() ) {
-            for ( BlockCipherModeOfOperation eachMode : BlockCipherModeOfOperation.values() ) {
-                for ( BlockCipherPadding eachPadding : BlockCipherPadding.values() ) {
-                    System.out.println( "> Testing " + new Transformation( eachAlgo, eachMode, eachPadding ).jcaTransformation() );
-                    int keySize = 128;
-                    switch ( eachAlgo ) {
-                        case DES:
-                            keySize = 64;
-                            break;
-                        case TripleDES:
-                            keySize = 192;
-                            break;
-                    }
-                    try {
-                        System.out.println( ">> Generating Key" );
-                        SymetricCipher cipher = cipherFactory.newSymetricCipher( eachAlgo, eachMode, eachPadding );
-                        SecretKey key = symGenerator.generateSecretKey( new SymetricGeneratorParameters( eachAlgo, keySize ) );
-
-                        for ( String eachSample : SAMPLES ) {
-
-                            byte[] data = eachSample.getBytes( UTF_8 );
-                            System.out.println( ">> Ciphering: '" + eachSample + "'" );
-                            byte[] ciphered = cipher.cipher( data, key );
-                            System.out.println( ">> Unciphering" );
-                            byte[] deciphered = cipher.decipher( ciphered, key );
-                            System.out.println( ">> Comparing" );
-                            assertArrayEquals( data, deciphered );
-
-                        }
-                    } catch ( IllegalAlgorithmException ex ) {
-                        System.out.println( ">> UNSUPPORTED " + ex.getMessage() );
-                    }
-                }
-            }
-        }
-    }
-
 }

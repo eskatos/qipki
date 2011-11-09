@@ -21,6 +21,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codeartisans.java.toolbox.Collections;
+import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,6 +44,12 @@ public class X509ExtensionsReaderTest
     public static void beforeClass()
     {
         Security.addProvider( new BouncyCastleProvider() );
+    }
+
+    @AfterClass
+    public static void afterClass()
+    {
+        Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
 
     private CryptCodexImpl cryptCodex;

@@ -19,22 +19,16 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.core.testsupport.AbstractQi4jTest;
-
+import org.qipki.crypto.AbstractQiPkiCryptoTest;
 import org.qipki.crypto.DefaultCryptoContext;
 import static org.qipki.crypto.algorithms.DigestAlgorithm.*;
-import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.codec.CryptCodexImpl;
 
 public class DigesterTest
-        extends AbstractQi4jTest
+        extends AbstractQiPkiCryptoTest
 {
 
     private static final String MESSAGE = "Le nom des fous est écrit partout.\n";
@@ -44,29 +38,11 @@ public class DigesterTest
     private static final String EXPECTED_SHA_384 = "20910472dd3a886c563d9637a4e1c94858319f090e9a56f335457d902a3c01d88fc7cc5aad5c99ccb446479c08ae5824";
     private static final String EXPECTED_SHA_512 = "cdbefb2d859f9e984a0032857469c3bba9fe03591772bbf5f1f866a4e8a31f9174e9a30e861d32ba4ff8e7c9f66bcdfed2df36f986e8388ce3cb775808de8bd4";
 
-    // SNIPPET BEGIN crypto.digest.1
-    @Override
-    public void assemble( ModuleAssembly module )
-            throws AssemblyException
-    {
-        ModuleAssembly config = module.layer().module( "config" );
-        config.services( MemoryEntityStoreService.class );
-        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
-    }
-
-    private Digester digester;
-
-    @Before
-    public void before()
-    {
-        digester = serviceLocator.<Digester>findService( Digester.class ).get();
-    }
-
     @Test
     public void testWithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( digester );
+        testDigester( digester );
     }
 
     @Test
@@ -74,19 +50,22 @@ public class DigesterTest
             throws UnsupportedEncodingException, GeneralSecurityException
     {
         Security.addProvider( new BouncyCastleProvider() );
-        runTest( new DigesterImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
+        testDigester( new DigesterImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
         Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
 
-    private void runTest( Digester digester )
+    // SNIPPET BEGIN crypto.digest.1
+    private void testDigester( Digester digester )
             throws UnsupportedEncodingException
     {
+        // Digest messages
         String hexMd5 = digester.hexDigest( MESSAGE, DigestParameters.MD5 );
         String hexSha1 = digester.hexDigest( MESSAGE, DigestParameters.SHA_1 );
         String hexSha256 = digester.hexDigest( MESSAGE, DigestParameters.SHA_256 );
         String hexSha384 = digester.hexDigest( MESSAGE, DigestParameters.SHA_384 );
         String hexSha512 = digester.hexDigest( MESSAGE, DigestParameters.SHA_512 );
 
+        // Test
         assertEquals( EXPECTED_MD5, hexMd5 );
         assertEquals( EXPECTED_SHA_1, hexSha1 );
         assertEquals( EXPECTED_SHA_256, hexSha256 );
@@ -99,8 +78,10 @@ public class DigesterTest
     // SNIPPET BEGIN crypto.digest.2
     public void saltedHashExample()
     {
+        // A Base64 encoded SHA-256 digest using a 64bit random salt and 1024 iterations
         String base64 = digester.base64Digest( MESSAGE, new DigestParameters( SHA_256, digester.generateSalt( 64 ), 1024 ) );
 
+        // A Hex encoded SHA-256 digest using a 64bit random salt and 1024 iterations
         String hex = digester.hexDigest( MESSAGE, digester.newParamsBuilder().using( SHA_256 ).salted( 64 ).iterations( 1024 ).build() );
     }
     // SNIPPET END crypto.digest.2

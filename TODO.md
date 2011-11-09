@@ -32,7 +32,10 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Crypto API
   * Embedded CA
 * (#---) Enhance Crypto API
-  * Implement test and document stream ciphering
+  * Review, test and document HMACs
+    * Still to write the SupportedTransformations test method for HMACs
+  * Review, test and document signatures
+  * Review, test and document X.509
   * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
 
 
@@ -41,6 +44,7 @@ Do we really want to do that? Is this even possible? Is it the right time?
 
 ### After that
 
+* (----) Use mocks in unit tests
 * (##--) Rework Qi4j HttpService
   * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
   * No more DefaultServlet

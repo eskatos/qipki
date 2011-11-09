@@ -13,13 +13,9 @@
  */
 package org.qipki.crypto.cipher;
 
-import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
-import org.qipki.crypto.algorithms.BlockCipherPadding;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
-
 public interface CipherFactory
 {
 
-    SymetricCipher newSymetricCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding );
+    SymetricCipher newSymetricCipher( SymetricCipherFactoryParameters parameters );
 
 }

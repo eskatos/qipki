@@ -18,6 +18,8 @@ import javax.crypto.SecretKey;
 public interface SymetricGenerator
 {
 
-    SecretKey generateSecretKey( SymetricGeneratorParameters params );
+    SecretKey generateCipheringKey( SymetricCipheringGeneratorParameters params );
+
+    SecretKey generateSigningKey( SymetricSigningGeneratorParameters params );
 
 }

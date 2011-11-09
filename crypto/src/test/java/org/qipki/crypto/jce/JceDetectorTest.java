@@ -16,37 +16,21 @@ package org.qipki.crypto.jce;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.core.testsupport.AbstractQi4jTest;
-
-import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+import org.qipki.crypto.AbstractQiPkiCryptoTest;
 
 public class JceDetectorTest
-        extends AbstractQi4jTest
+        extends AbstractQiPkiCryptoTest
 {
-
-    @Override
-    public void assemble( ModuleAssembly module )
-            throws AssemblyException
-    {
-        ModuleAssembly config = module.layer().module( "config" );
-        config.services( MemoryEntityStoreService.class );
-        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
-    }
 
     @Test
     public void testPresent()
     {
-        JceDetector jceDetector = serviceLocator.<JceDetector>findService( JceDetector.class ).get();
         assertTrue( "JCE must be installed to run QiPki crypto unit tests", jceDetector.areJceInstalled() );
     }
 
     @Test
     public void testEnsure()
     {
-        JceDetector jceDetector = serviceLocator.<JceDetector>findService( JceDetector.class ).get();
         jceDetector.ensureJceAreInstalled();
     }
 
