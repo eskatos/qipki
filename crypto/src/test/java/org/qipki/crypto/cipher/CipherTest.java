@@ -22,7 +22,6 @@ import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import org.codeartisans.java.toolbox.Strings;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -71,14 +70,14 @@ public class CipherTest
         // AES-128 key generation
         SecretKey key = symGenerator.generateCipheringKey( AES_128 );
         String plainText = "CipherMe";
-        
+
         // Cipher creation
         SymetricCipher cipher = cipherFactory.newSymetricCipher( AES_CBC_PKCS5 );
-        
+
         // Cipher and decipher
         byte[] ciphered = cipher.cipher( plainText.getBytes( UTF_8 ), key );
         byte[] deciphered = cipher.decipher( ciphered, key );
-        
+
         // Test
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
@@ -114,4 +113,5 @@ public class CipherTest
         assertEquals( plainText, new String( deciphered, UTF_8 ) );
     }
     // SNIPPET END crypto.cipher.stream
+
 }

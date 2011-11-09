@@ -39,6 +39,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.codeartisans.java.toolbox.Pair;
+import org.codeartisans.java.toolbox.Strings;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -193,7 +194,8 @@ public class WebsiteMojo
                                 int start = eachEntry.getValue().left();
                                 int end = eachEntry.getValue().right();
                                 String snippet = extractRange( wholeSource, start, end );
-                                snippet = "// Snippet extracted from " + eachSourceFile.getName() + " starting on line " + start + "\n\n" + snippet;
+                                snippet = Strings.verticalTrimLines( snippet );
+                                snippet = "// Snippet extracted from " + eachSourceFile.getName() + " starting on line " + start + "\n\n" + snippet + "\n";
                                 snippet = StringEscapeUtils.escapeHtml( snippet );
                                 snippets.put( "snippet." + snippetName, snippet );
                             }
