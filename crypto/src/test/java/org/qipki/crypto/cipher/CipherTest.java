@@ -22,7 +22,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
@@ -30,7 +29,6 @@ import org.qi4j.core.testsupport.AbstractQi4jTest;
 
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.DefaultCryptoContext;
-import org.qipki.crypto.QiCryptoConfiguration;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import static org.qipki.crypto.algorithms.BlockCipherModeOfOperation.*;
 import org.qipki.crypto.algorithms.BlockCipherPadding;

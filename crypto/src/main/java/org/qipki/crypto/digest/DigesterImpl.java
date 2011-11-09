@@ -30,6 +30,7 @@ import org.qi4j.api.injection.scope.Service;
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
+import org.qipki.crypto.constants.IOConstants;
 
 public class DigesterImpl
         implements Digester
@@ -43,6 +44,20 @@ public class DigesterImpl
     {
         this.cryptoContext = cryptoContext;
         this.cryptCodex = cryptCodex;
+    }
+
+    @Override
+    public DigestParametersBuilder newParamsBuilder()
+    {
+        return new DigestParametersBuilder( this );
+    }
+
+    @Override
+    public byte[] generateSalt( int length )
+    {
+        byte[] salt = new byte[ length ];
+        cryptoContext.random().nextBytes( salt );
+        return salt;
     }
 
     @Override
@@ -131,7 +146,7 @@ public class DigesterImpl
     public byte[] digest( String data, DigestParameters params )
     {
         try {
-            return digest( data, "UTF-8", params );
+            return digest( data, IOConstants.UTF_8, params );
         } catch ( UnsupportedEncodingException ex ) {
             throw new CryptoFailure( "UTF-8 not supported! o_O ", ex );
         }

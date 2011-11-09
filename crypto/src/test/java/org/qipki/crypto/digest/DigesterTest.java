@@ -19,6 +19,7 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -27,7 +28,6 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qi4j.core.testsupport.AbstractQi4jTest;
 
-import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.DefaultCryptoContext;
 import static org.qipki.crypto.algorithms.DigestAlgorithm.*;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
@@ -54,11 +54,19 @@ public class DigesterTest
         new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
     }
 
+    private Digester digester;
+
+    @Before
+    public void before()
+    {
+        digester = serviceLocator.<Digester>findService( Digester.class ).get();
+    }
+
     @Test
     public void testWithQi4j()
             throws UnsupportedEncodingException
     {
-        runTest( serviceLocator.<Digester>findService( Digester.class ).get() );
+        runTest( digester );
     }
 
     @Test
@@ -73,11 +81,11 @@ public class DigesterTest
     private void runTest( Digester digester )
             throws UnsupportedEncodingException
     {
-        String hexMd5 = digester.hexDigest( MESSAGE, new DigestParameters( MD5 ) );
-        String hexSha1 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_1 ) );
-        String hexSha256 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_256 ) );
-        String hexSha384 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_384 ) );
-        String hexSha512 = digester.hexDigest( MESSAGE, new DigestParameters( SHA_512 ) );
+        String hexMd5 = digester.hexDigest( MESSAGE, DigestParameters.MD5 );
+        String hexSha1 = digester.hexDigest( MESSAGE, DigestParameters.SHA_1 );
+        String hexSha256 = digester.hexDigest( MESSAGE, DigestParameters.SHA_256 );
+        String hexSha384 = digester.hexDigest( MESSAGE, DigestParameters.SHA_384 );
+        String hexSha512 = digester.hexDigest( MESSAGE, DigestParameters.SHA_512 );
 
         assertEquals( EXPECTED_MD5, hexMd5 );
         assertEquals( EXPECTED_SHA_1, hexSha1 );
@@ -91,13 +99,9 @@ public class DigesterTest
     // SNIPPET BEGIN crypto.digest.2
     public void saltedHashExample()
     {
-        Digester digest = serviceLocator.<Digester>findService( Digester.class ).get();
-        CryptoContext cryptoContext = serviceLocator.<CryptoContext>findService( CryptoContext.class ).get();
+        String base64 = digester.base64Digest( MESSAGE, new DigestParameters( SHA_256, digester.generateSalt( 64 ), 1024 ) );
 
-        byte[] salt = new byte[ 64 ];
-        cryptoContext.random().nextBytes( salt );
-
-        String hexSaltedSha256x1024 = digest.hexDigest( MESSAGE, new DigestParameters( SHA_256, salt, 1024 ) );
+        String hex = digester.hexDigest( MESSAGE, digester.newParamsBuilder().using( SHA_256 ).salted( 64 ).iterations( 1024 ).build() );
     }
     // SNIPPET END crypto.digest.2
 

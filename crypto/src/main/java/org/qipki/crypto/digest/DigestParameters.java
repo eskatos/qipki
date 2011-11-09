@@ -18,6 +18,26 @@ import org.qipki.crypto.algorithms.DigestAlgorithm;
 public class DigestParameters
 {
 
+    /**
+     * One {@link DigestAlgorithm#MD5} iteration with no salt.
+     */
+    public static final DigestParameters MD5 = new DigestParameters( DigestAlgorithm.MD5 );
+    /**
+     * One {@link DigestAlgorithm#SHA_1} iteration with no salt.
+     */
+    public static final DigestParameters SHA_1 = new DigestParameters( DigestAlgorithm.SHA_1 );
+    /**
+     * One {@link DigestAlgorithm#SHA_256} iteration with no salt.
+     */
+    public static final DigestParameters SHA_256 = new DigestParameters( DigestAlgorithm.SHA_256 );
+    /**
+     * One {@link DigestAlgorithm#SHA_384} iteration with no salt.
+     */
+    public static final DigestParameters SHA_384 = new DigestParameters( DigestAlgorithm.SHA_384 );
+    /**
+     * One {@link DigestAlgorithm#SHA_512} iteration with no salt.
+     */
+    public static final DigestParameters SHA_512 = new DigestParameters( DigestAlgorithm.SHA_512 );
     private final DigestAlgorithm algo;
     private final byte[] salt;
     private final int iterations;

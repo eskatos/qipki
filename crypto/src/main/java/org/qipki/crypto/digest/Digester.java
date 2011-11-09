@@ -20,6 +20,10 @@ import java.io.UnsupportedEncodingException;
 public interface Digester
 {
 
+    DigestParametersBuilder newParamsBuilder();
+
+    byte[] generateSalt( int length );
+
     byte[] digest( InputStream data, DigestParameters params );
 
     String hexDigest( InputStream data, DigestParameters params );
