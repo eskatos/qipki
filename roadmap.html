@@ -80,18 +80,20 @@ progress. After that a true issue management system will be used, but not before
 <li>Enhance unit test code lisibility for snippets</li>
 <li>Crypto API</li>
 <li>Embedded CA</li></ul></li>
+<li>(#---) Enhance Crypto API
+<ul><li>Review, test and document HMACs</li>
+<li>Still to write the SupportedTransformations test method for HMACs</li>
+<li>Review, test and document signatures</li>
+<li>Review, test and document X.509</li>
+<li>Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI</li></ul></li>
 </ul>
 
 <h3>Next steps - That would lead to a tiny 1.0</h3>
 
-<ul>
-<li>Enhance Crypto API
-<ul><li>Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI</li></ul></li>
-</ul>
-
 <h3>After that</h3>
 
 <ul>
+<li>(----) Use mocks in unit tests</li>
 <li>(##--) Rework Qi4j HttpService
 <ul><li>Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)</li>
 <li>No more DefaultServlet</li>
