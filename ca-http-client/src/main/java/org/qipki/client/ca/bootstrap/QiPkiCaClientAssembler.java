@@ -18,6 +18,7 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
+import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
 import org.qipki.client.ca.api.CAClientService;
 import org.qipki.client.ca.api.CryptoStoreClientService;
 import org.qipki.client.ca.api.QiPkiHttpCaClientService;
@@ -32,6 +33,8 @@ public class QiPkiCaClientAssembler
 {
 
     private final Visibility visibility;
+    private ModuleAssembly configModule;
+    private Visibility configVisibility = Visibility.layer;
 
     public QiPkiCaClientAssembler()
     {
@@ -43,11 +46,23 @@ public class QiPkiCaClientAssembler
         this.visibility = visibility;
     }
 
+    public QiPkiCaClientAssembler withConfigModule( ModuleAssembly configModule )
+    {
+        this.configModule = configModule;
+        return this;
+    }
+
+    public QiPkiCaClientAssembler withConfigVisibility( Visibility configVisibility )
+    {
+        this.configVisibility = configVisibility;
+        return this;
+    }
+
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new CryptoEngineModuleAssembler( visibility ).assemble( module );
+        new CryptoEngineModuleAssembler( visibility ).withConfigModule( configModule ).withConfigVisibility( configVisibility ).assemble( module );
         new CryptoValuesModuleAssembler( visibility ).assemble( module );
         new RestValuesModuleAssembler( visibility ).assemble( module );
 
@@ -58,6 +73,9 @@ public class QiPkiCaClientAssembler
                             CryptoStoreClientService.class,
                             CAClientService.class ).
                 visibleIn( visibility );
+
+        configModule.entities( QiPkiCaHttpClientConfiguration.class );
+
     }
 
 }

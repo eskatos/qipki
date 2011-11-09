@@ -20,6 +20,14 @@ import java.security.Key;
 public interface SymetricCipher
 {
 
+    byte[] cipher( String data, Key key );
+
+    byte[] decipher( String ciphered, Key key );
+
+    byte[] cipher( String data, byte[] key );
+
+    byte[] decipher( String ciphered, byte[] key );
+
     byte[] cipher( byte[] data, Key key );
 
     byte[] decipher( byte[] ciphered, Key key );

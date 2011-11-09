@@ -14,6 +14,7 @@
 package org.qipki.crypto.x509;
 
 import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
@@ -25,6 +26,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.DefaultCryptoContext;
 import org.qipki.crypto.codec.CryptCodexImpl;
 import org.qipki.crypto.io.CryptIOImpl;
 import static org.qipki.crypto.x509.X509TestConstants.RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM;
@@ -51,18 +53,10 @@ public class X509ExtensionsReaderTest
 
     @Before
     public void before()
+            throws GeneralSecurityException
     {
         cryptCodex = new CryptCodexImpl();
-        CryptoContext cryptoContext = new CryptoContext()
-        {
-
-            @Override
-            public String providerName()
-            {
-                return BouncyCastleProvider.PROVIDER_NAME;
-            }
-
-        };
+        CryptoContext cryptoContext = new DefaultCryptoContext();
         cryptIO = new CryptIOImpl( cryptoContext );
         x509ExtReader = new X509ExtensionsReaderImpl( cryptCodex );
         baltimoreCyberTrustCodeSigningRoot = cryptIO.readX509PEM( new InputStreamReader( X509ExtensionsReaderTest.class.getResourceAsStream( RSRC_NAME_BALTIMORE_CRYBERTRUST_CODESIGNING_ROOT_PEM ) ) );

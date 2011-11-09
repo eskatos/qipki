@@ -15,26 +15,26 @@ package org.qipki.crypto.cipher;
 
 import org.qi4j.api.injection.scope.Service;
 
+import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
-import org.qipki.crypto.random.Random;
 
 public class CipherFactoryImpl
         implements CipherFactory
 {
 
-    private final Random random;
+    private final CryptoContext cryptoContext;
 
-    public CipherFactoryImpl( @Service Random random )
+    public CipherFactoryImpl( @Service CryptoContext cryptoContext )
     {
-        this.random = random;
+        this.cryptoContext = cryptoContext;
     }
 
     @Override
     public SymetricCipher newSymetricCipher( SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
-        return new SymetricCipherImpl( random, algo, mode, padding );
+        return new SymetricCipherImpl( cryptoContext.random(), algo, mode, padding );
     }
 
 }

@@ -13,16 +13,65 @@
  */
 package org.qipki.crypto;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class DefaultCryptoContext
         implements CryptoContext
 {
 
+    private final String providerName;
+    private final SecureRandom random;
+
+    public DefaultCryptoContext()
+            throws NoSuchAlgorithmException
+    {
+        this( BouncyCastleProvider.PROVIDER_NAME, "SHA1PRNG", 128 );
+    }
+
+    public DefaultCryptoContext( String randomAlgorithm )
+            throws NoSuchAlgorithmException
+    {
+        this( BouncyCastleProvider.PROVIDER_NAME, randomAlgorithm, 128 );
+    }
+
+    public DefaultCryptoContext( String randomAlgorithm, int seedSize )
+            throws NoSuchAlgorithmException
+    {
+        this( BouncyCastleProvider.PROVIDER_NAME, randomAlgorithm, seedSize );
+    }
+
+    public DefaultCryptoContext( String providerName, String randomAlgorithm, int seedSize )
+            throws NoSuchAlgorithmException
+    {
+        this.providerName = providerName;
+        this.random = SecureRandom.getInstance( "SHA1PRNG" );
+        this.random.setSeed( random.generateSeed( 128 ) );
+    }
+
+    public DefaultCryptoContext( SecureRandom random )
+    {
+        this( BouncyCastleProvider.PROVIDER_NAME, random );
+    }
+
+    public DefaultCryptoContext( String providerName, SecureRandom random )
+    {
+        this.providerName = providerName;
+        this.random = random;
+    }
+
     @Override
     public String providerName()
     {
-        return BouncyCastleProvider.PROVIDER_NAME;
+        return providerName;
+    }
+
+    @Override
+    public SecureRandom random()
+    {
+        return random;
     }
 
 }

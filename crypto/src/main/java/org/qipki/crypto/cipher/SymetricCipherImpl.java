@@ -18,8 +18,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.SecureRandom;
 import java.util.EnumSet;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -35,8 +37,8 @@ import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
+import org.qipki.crypto.constants.IOConstants;
 import org.qipki.crypto.jca.Transformation;
-import org.qipki.crypto.random.Random;
 
 public class SymetricCipherImpl
         implements SymetricCipher
@@ -48,12 +50,12 @@ public class SymetricCipherImpl
                                                                                      SymetricAlgorithm.XTEA,
                                                                                      SymetricAlgorithm.TEA,
                                                                                      SymetricAlgorithm.DES );
-    private final Random random;
+    private final SecureRandom random;
     private final SymetricAlgorithm algo;
     private final BlockCipherModeOfOperation mode;
     private final BlockCipherPadding padding;
 
-    /* package */ SymetricCipherImpl( Random random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    /* package */ SymetricCipherImpl( SecureRandom random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
         if ( mode == BlockCipherModeOfOperation.SIC && NO_SIC_CIPHER_ALGS.contains( algo ) ) {
             throw new IllegalAlgorithmException( "SIC-Mode cannot be used with " + algo.name() + " because it can become a twotime-pad if the blocksize of the cipher is too small." );
@@ -62,6 +64,26 @@ public class SymetricCipherImpl
         this.algo = algo;
         this.mode = mode;
         this.padding = padding;
+    }
+
+    @Override
+    public byte[] cipher( String data, Key key )
+    {
+        try {
+            return cipher( data.getBytes( IOConstants.UTF_8 ), key );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
+        }
+    }
+
+    @Override
+    public byte[] cipher( String data, byte[] key )
+    {
+        try {
+            return cipher( data.getBytes( IOConstants.UTF_8 ), key );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
+        }
     }
 
     @Override
@@ -111,6 +133,26 @@ public class SymetricCipherImpl
             throw new CryptoFailure( ex.getMessage(), ex );
         } catch ( GeneralSecurityException ex ) {
             throw new CryptoFailure( ex.getMessage(), ex );
+        }
+    }
+
+    @Override
+    public byte[] decipher( String ciphered, Key key )
+    {
+        try {
+            return decipher( ciphered.getBytes( IOConstants.UTF_8 ), key );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
+        }
+    }
+
+    @Override
+    public byte[] decipher( String ciphered, byte[] key )
+    {
+        try {
+            return decipher( ciphered.getBytes( IOConstants.UTF_8 ), key );
+        } catch ( UnsupportedEncodingException ex ) {
+            throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
         }
     }
 
@@ -249,10 +291,7 @@ public class SymetricCipherImpl
             throws GeneralSecurityException
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
-        // FIXME Find a way to provide the SecureRandom
-        cipher.init( cipherMode,
-                     new SecretKeySpec( key, algo.jcaString() ),
-                     new IvParameterSpec( iv ) );
+        cipher.init( cipherMode, new SecretKeySpec( key, algo.jcaString() ), new IvParameterSpec( iv ), random );
         return cipher;
     }
 
@@ -261,8 +300,7 @@ public class SymetricCipherImpl
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
         // FIXME Find a way to provide the SecureRandom
-        cipher.init( cipherMode,
-                     new SecretKeySpec( key, algo.jcaString() ) );
+        cipher.init( cipherMode, new SecretKeySpec( key, algo.jcaString() ), random );
         return cipher;
     }
 

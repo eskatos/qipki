@@ -18,10 +18,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.EntityTestAssembler;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 
 import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
 import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
@@ -48,10 +47,10 @@ public class QiPkiHttpCaClientTest
             throws AssemblyException
     {
         super.assemble( module );
-        new QiPkiCaClientAssembler().assemble( module );
         ModuleAssembly config = module.layer().module( "config" );
-        new EntityTestAssembler( Visibility.layer ).assemble( config );
-        config.entities( QiPkiCaHttpClientConfiguration.class );
+        config.services( MemoryEntityStoreService.class );
+
+        new QiPkiCaClientAssembler().withConfigModule( config ).assemble( module );
         config.forMixin( QiPkiCaHttpClientConfiguration.class ).declareDefaults().apiUri().set( "http://localhost:8443/api" );
     }
 

@@ -18,7 +18,8 @@ import org.junit.Test;
 
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.AbstractQi4jTest;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.core.testsupport.AbstractQi4jTest;
 
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 
@@ -27,10 +28,12 @@ public class JceDetectorTest
 {
 
     @Override
-    public void assemble( ModuleAssembly ma )
+    public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new CryptoEngineModuleAssembler().withWeakRandom().assemble( ma );
+        ModuleAssembly config = module.layer().module( "config" );
+        config.services( MemoryEntityStoreService.class );
+        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
     }
 
     @Test

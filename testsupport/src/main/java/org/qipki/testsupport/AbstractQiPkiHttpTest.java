@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.commons.bootstrap.RestValuesModuleAssembler;
 import org.qipki.commons.crypto.services.CryptoValuesFactory;
@@ -73,7 +74,9 @@ public abstract class AbstractQiPkiHttpTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new CryptoEngineModuleAssembler().assemble( module );
+        ModuleAssembly config = module.layer().module( "config" );
+        config.services( MemoryEntityStoreService.class );
+        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
         new CryptoValuesModuleAssembler().assemble( module );
         new RestValuesModuleAssembler().assemble( module );
     }

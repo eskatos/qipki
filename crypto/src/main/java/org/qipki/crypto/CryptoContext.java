@@ -13,9 +13,13 @@
  */
 package org.qipki.crypto;
 
+import java.security.SecureRandom;
+
 public interface CryptoContext
 {
 
     String providerName();
+
+    SecureRandom random();
 
 }

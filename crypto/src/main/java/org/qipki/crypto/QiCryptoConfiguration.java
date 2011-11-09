@@ -14,6 +14,7 @@
 package org.qipki.crypto;
 
 import org.qi4j.api.common.Optional;
+import org.qi4j.api.configuration.ConfigurationComposite;
 import org.qi4j.api.property.Property;
 
 /**
@@ -21,36 +22,49 @@ import org.qi4j.api.property.Property;
  * By default the provider is inserted on activate and removed on passivate.
  */
 public interface QiCryptoConfiguration
+        extends ConfigurationComposite
 {
 
     /**
      * Defaulted to Boolean.TRUE
-     * @return
      */
     @Optional
     Property<Boolean> ensureJCE();
 
-    @Optional
-    Property<Boolean> overrideProvider();
-
+    /**
+     * Defaulted to BouncyCastle
+     */
     @Optional
     Property<String> providerName();
 
+    /**
+     * Defaulted to BouncyCastle
+     */
     @Optional
     Property<String> providerClass();
 
     /**
      * Defaulted to Boolean.TRUE
-     * @return
      */
     @Optional
     Property<Boolean> insertProviderOnActivate();
 
     /**
      * Defaulted to Boolean.TRUE
-     * @return
      */
     @Optional
     Property<Boolean> removeProviderOnPassivate();
+
+    /**
+     * @return  Defaults to SHA1PRNG
+     */
+    @Optional
+    Property<String> randomAlgorithm();
+
+    /**
+     * @return  Defaults to 128 bytes
+     */
+    @Optional
+    Property<Integer> randomSeedSize();
 
 }

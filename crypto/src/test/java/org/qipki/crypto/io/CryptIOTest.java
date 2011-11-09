@@ -15,6 +15,7 @@ package org.qipki.crypto.io;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.Security;
@@ -31,6 +32,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.DefaultCryptoContext;
 
 public class CryptIOTest
 {
@@ -43,18 +45,9 @@ public class CryptIOTest
 
     @Test
     public void testKeyPairIO()
-            throws IOException
+            throws IOException, GeneralSecurityException
     {
-        CryptoContext cryptoContext = new CryptoContext()
-        {
-
-            @Override
-            public String providerName()
-            {
-                return BouncyCastleProvider.PROVIDER_NAME;
-            }
-
-        };
+        CryptoContext cryptoContext = new DefaultCryptoContext();
 
         AsymetricGenerator asymGen = new AsymetricGeneratorImpl( cryptoContext );
         CryptIO cryptIO = new CryptIOImpl( cryptoContext );

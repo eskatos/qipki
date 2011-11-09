@@ -14,10 +14,12 @@
 package org.qipki.crypto;
 
 import java.security.Provider;
+import java.security.SecureRandom;
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codeartisans.java.toolbox.Strings;
 import org.qi4j.api.common.Optional;
+import org.qi4j.api.configuration.Configuration;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
@@ -33,7 +35,6 @@ public interface QiCryptoEngine
         extends CryptoContext, Activatable, ServiceComposite
 {
 
-    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
             implements QiCryptoEngine
     {
@@ -41,27 +42,36 @@ public interface QiCryptoEngine
         private static final Logger LOGGER = LoggerFactory.getLogger( QiCryptoEngine.Mixin.class );
         @This
         @Optional
-        private QiCryptoConfiguration configuration;
+        private Configuration<QiCryptoConfiguration> configuration;
+        private Boolean ensureJce;
+        private Boolean insertProviderOnActivate;
+        private Boolean removeProviderOnPassivate;
         private String providerName;
+        private Class<? extends Provider> providerClass;
+        private String randomAlgorithm;
+        private Integer randomSeedSize;
+        private SecureRandom secureRandom;
 
         @Override
         public void activate()
                 throws Exception
         {
-            providerName = readProviderName();
-            if ( readInsertProviderOnActivate() ) {
+            loadConfiguration();
+            if ( insertProviderOnActivate ) {
                 if ( Security.getProvider( providerName ) == null ) {
 
-                    Security.addProvider( readProviderClass().newInstance() );
+                    Security.addProvider( providerClass.newInstance() );
 
                     if ( LOGGER.isDebugEnabled() ) {
-                        LOGGER.debug( "Inserted {} with name: {}", readProviderClass(), readProviderName() );
+                        LOGGER.debug( "Inserted {} with name: {}", providerClass, providerName );
                     }
                 } else if ( LOGGER.isDebugEnabled() ) {
                     LOGGER.debug( "A Provider is already registered with the name {}. Doing nothing.", providerName );
                 }
             }
-            if ( readEnsureJCE() ) {
+            secureRandom = SecureRandom.getInstance( randomAlgorithm );
+            secureRandom.setSeed( secureRandom.generateSeed( randomSeedSize ) );
+            if ( ensureJce ) {
                 // TODO
             }
         }
@@ -70,17 +80,65 @@ public interface QiCryptoEngine
         public void passivate()
                 throws Exception
         {
-            if ( readRemoveProviderOnPassivate() ) {
+            if ( removeProviderOnPassivate ) {
                 if ( Security.getProvider( providerName ) == null ) {
 
                     Security.removeProvider( providerName );
 
                     if ( LOGGER.isDebugEnabled() ) {
-                        LOGGER.debug( "Removed Provider named {}", readProviderName() );
+                        LOGGER.debug( "Removed Provider named {}", providerName );
                     }
                 } else if ( LOGGER.isDebugEnabled() ) {
                     LOGGER.debug( "No Provider registered with the name {}. Doing nothing.", providerName );
                 }
+            }
+            ensureJce = null;
+            insertProviderOnActivate = null;
+            removeProviderOnPassivate = null;
+            providerName = null;
+            providerClass = null;
+            randomAlgorithm = null;
+            randomSeedSize = null;
+            secureRandom = null;
+        }
+
+        private void loadConfiguration()
+                throws ClassNotFoundException
+        {
+            configuration.refresh();
+            QiCryptoConfiguration config = configuration.configuration();
+
+            ensureJce = config.ensureJCE().get();
+            if ( ensureJce == null ) {
+                ensureJce = Boolean.TRUE;
+            }
+
+            insertProviderOnActivate = config.insertProviderOnActivate().get();
+            if ( insertProviderOnActivate == null ) {
+                insertProviderOnActivate = Boolean.TRUE;
+            }
+            removeProviderOnPassivate = config.removeProviderOnPassivate().get();
+            if ( removeProviderOnPassivate == null ) {
+                removeProviderOnPassivate = Boolean.TRUE;
+            }
+
+            providerName = config.providerName().get();
+            String providerClassName = config.providerClass().get();
+            if ( Strings.isEmpty( providerName ) || Strings.isEmpty( providerClassName ) ) {
+                providerName = BouncyCastleProvider.PROVIDER_NAME;
+                providerClass = BouncyCastleProvider.class;
+            } else {
+                providerClass = ( Class<? extends Provider> ) Class.forName( providerClassName );
+            }
+
+            randomAlgorithm = config.randomAlgorithm().get();
+            if ( Strings.isEmpty( randomAlgorithm ) ) {
+                randomAlgorithm = "SHA1PRNG";
+            }
+
+            randomSeedSize = config.randomSeedSize().get();
+            if ( randomSeedSize == null ) {
+                randomSeedSize = 128;
             }
         }
 
@@ -90,66 +148,10 @@ public interface QiCryptoEngine
             return providerName;
         }
 
-        private boolean readEnsureJCE()
+        @Override
+        public SecureRandom random()
         {
-            if ( configuration == null ) {
-                return true;
-            }
-            Boolean ensure = configuration.ensureJCE().get();
-            if ( ensure == null ) {
-                return true;
-            }
-            return ensure;
-        }
-
-        private boolean readInsertProviderOnActivate()
-        {
-            if ( configuration == null ) {
-                return true;
-            }
-            Boolean insert = configuration.insertProviderOnActivate().get();
-            if ( insert == null ) {
-                return true;
-            }
-            return insert;
-        }
-
-        private String readProviderName()
-        {
-            if ( readOverrideProvider() ) {
-                return configuration.providerName().get();
-            }
-            return BouncyCastleProvider.PROVIDER_NAME;
-        }
-
-        private Class<? extends Provider> readProviderClass()
-                throws ClassNotFoundException
-        {
-            if ( readOverrideProvider() ) {
-                return ( Class<? extends Provider> ) Class.forName( configuration.providerClass().get() );
-            }
-            return BouncyCastleProvider.class;
-        }
-
-        private boolean readOverrideProvider()
-        {
-            if ( configuration == null || configuration.overrideProvider().get() == null || !configuration.overrideProvider().get() ) {
-                return false;
-            }
-            return !Strings.isEmpty( configuration.providerName().get() )
-                    && !Strings.isEmpty( configuration.providerClass().get() );
-        }
-
-        private boolean readRemoveProviderOnPassivate()
-        {
-            if ( configuration == null ) {
-                return true;
-            }
-            Boolean remove = configuration.removeProviderOnPassivate().get();
-            if ( remove == null ) {
-                return true;
-            }
-            return remove;
+            return secureRandom;
         }
 
     }

@@ -14,6 +14,7 @@
 package org.qipki.crypto.digest;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -23,13 +24,14 @@ import org.junit.Test;
 
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.AbstractQi4jTest;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.core.testsupport.AbstractQi4jTest;
 
+import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.DefaultCryptoContext;
 import static org.qipki.crypto.algorithms.DigestAlgorithm.*;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.codec.CryptCodexImpl;
-import org.qipki.crypto.random.Random;
 
 public class DigesterTest
         extends AbstractQi4jTest
@@ -47,7 +49,9 @@ public class DigesterTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
+        ModuleAssembly config = module.layer().module( "config" );
+        config.services( MemoryEntityStoreService.class );
+        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
     }
 
     @Test
@@ -59,7 +63,7 @@ public class DigesterTest
 
     @Test
     public void testWithoutQi4j()
-            throws UnsupportedEncodingException
+            throws UnsupportedEncodingException, GeneralSecurityException
     {
         Security.addProvider( new BouncyCastleProvider() );
         runTest( new DigesterImpl( new DefaultCryptoContext(), new CryptCodexImpl() ) );
@@ -88,10 +92,10 @@ public class DigesterTest
     public void saltedHashExample()
     {
         Digester digest = serviceLocator.<Digester>findService( Digester.class ).get();
-        Random random = serviceLocator.<Random>findService( Random.class ).get();
+        CryptoContext cryptoContext = serviceLocator.<CryptoContext>findService( CryptoContext.class ).get();
 
         byte[] salt = new byte[ 64 ];
-        random.nextBytes( salt );
+        cryptoContext.random().nextBytes( salt );
 
         String hexSaltedSha256x1024 = digest.hexDigest( MESSAGE, new DigestParameters( SHA_256, salt, 1024 ) );
     }

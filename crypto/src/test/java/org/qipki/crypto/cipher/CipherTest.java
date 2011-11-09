@@ -19,6 +19,18 @@ import javax.crypto.SecretKey;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.core.testsupport.AbstractQi4jTest;
+
+import org.qipki.crypto.CryptoContext;
+import org.qipki.crypto.DefaultCryptoContext;
+import org.qipki.crypto.QiCryptoConfiguration;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import static org.qipki.crypto.algorithms.BlockCipherModeOfOperation.*;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
@@ -27,21 +39,10 @@ import org.qipki.crypto.algorithms.IllegalAlgorithmException;
 import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import static org.qipki.crypto.algorithms.SymetricAlgorithm.*;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
+import static org.qipki.crypto.constants.IOConstants.*;
 import org.qipki.crypto.jca.Transformation;
 import org.qipki.crypto.symetric.SymetricGenerator;
 import org.qipki.crypto.symetric.SymetricGeneratorParameters;
-
-import static org.junit.Assert.*;
-import org.junit.Test;
-
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.test.AbstractQi4jTest;
-
-import org.qipki.crypto.DefaultCryptoContext;
-import static org.qipki.crypto.constants.IOConstants.*;
-import org.qipki.crypto.random.Random;
-import org.qipki.crypto.random.RandomImpl;
 import org.qipki.crypto.symetric.SymetricGeneratorImpl;
 
 public class CipherTest
@@ -58,7 +59,9 @@ public class CipherTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        new CryptoEngineModuleAssembler().withWeakRandom().assemble( module );
+        ModuleAssembly config = module.layer().module( "config" );
+        config.services( MemoryEntityStoreService.class );
+        new CryptoEngineModuleAssembler().withConfigModule( config ).assemble( module );
     }
 
     @Test
@@ -75,11 +78,9 @@ public class CipherTest
     {
         Security.addProvider( new BouncyCastleProvider() );
 
-        Random random = new RandomImpl();
-        ( ( RandomImpl ) random ).activate(); // This is Work in Progress and won't be needed anymore soon.
-
-        runTest( new SymetricGeneratorImpl( new DefaultCryptoContext() ),
-                 new CipherFactoryImpl( random ) );
+        CryptoContext cryptoContext = new DefaultCryptoContext();
+        runTest( new SymetricGeneratorImpl( cryptoContext ),
+                 new CipherFactoryImpl( cryptoContext ) );
 
         Security.removeProvider( BouncyCastleProvider.PROVIDER_NAME );
     }
@@ -135,7 +136,6 @@ public class CipherTest
                     } catch ( IllegalAlgorithmException ex ) {
                         System.out.println( ">> UNSUPPORTED " + ex.getMessage() );
                     }
-
                 }
             }
         }

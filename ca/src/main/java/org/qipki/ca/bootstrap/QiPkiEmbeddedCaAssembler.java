@@ -156,8 +156,11 @@ public class QiPkiEmbeddedCaAssembler
 
         LayerAssembly crypto = app.layer( LAYER_CRYPTO );
         {
-            new CryptoEngineModuleAssembler( Visibility.application ).assemble(
-                    crypto.module( MODULE_CRYPTO_ENGINE ) );
+            ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
+
+            new CryptoEngineModuleAssembler( Visibility.application ).withConfigModule( config ).
+                    withConfigVisibility( Visibility.application ).
+                    assemble( crypto.module( MODULE_CRYPTO_ENGINE ) );
             new CryptoValuesModuleAssembler( Visibility.application ).assemble(
                     crypto.module( MODULE_CRYPTO_VALUES ) );
         }
@@ -188,6 +191,7 @@ public class QiPkiEmbeddedCaAssembler
         presentation.uses( application, crypto, configuration );
         application.uses( domain, crypto, configuration );
         domain.uses( crypto, configuration, infrastructure );
+        crypto.uses( configuration );
         infrastructure.uses( configuration );
 
         onLayerUses( app );
