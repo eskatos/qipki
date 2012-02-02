@@ -58,7 +58,7 @@
             <plugin>
                 <groupId>org.codeartisans</groupId>
                 <artifactId>jsw-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0</version>
                 <executions>
                     <execution>
                         <goals>
