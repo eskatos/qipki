@@ -41,7 +41,7 @@ public class DistinguishedNameTemplateTest
     {
         // Create a template
         String template = "CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, "
-                          + "OU=QiPki, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
+                          + "OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}";
 
         // Prepare context properties
         Map<String, String> context = new HashMap<String, String>();

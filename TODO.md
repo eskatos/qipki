@@ -1,17 +1,18 @@
 # QiPki Roadmap
 
-This documents the constantly evolving QiPki Roadmap. Until 1.0-rc1 this is the prefered way to gather and track 
+This documents the constantly evolving QiPki Roadmap. Until decided this is the prefered way to gather and track 
 progress. After that a true issue management system will be used, but not before.
 
 ## Overview
 
 ### QiPki 1.0
 
-Work in progress will lead to QiPki 1.0 that will contain a comprehensive embeddable CA and will be based on Qi4j 1.4.
+Released early 2012, it contains a comprehensive embeddable CA and is based on Qi4j 1.4.
 
 ### QiPki 1.1
 
 Work is already in progress to add a reasonable CA with HTTP interactions.
+From here it will be based on Qi4j 2.0.
 
 
 ## Details
@@ -21,6 +22,7 @@ Work is already in progress to add a reasonable CA with HTTP interactions.
 Do we really want to do that? Is this even possible? Is it the right time?
 
 * Move to Qi4j 2.0-SNAPSHOT?
+  * Yes we do, yes it is, yes it is :)
 
 
 ### Work in progress

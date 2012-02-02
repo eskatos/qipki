@@ -36,16 +36,19 @@ See [http://qipki.org](http://qipki.org)
 ### master
 
 * KeyStores, EscrowedKeyPairs and CRLs are now stored on the filesystem thanks to the FileConfiguration API
+* Added CRL Distribution Point handling
+* Hardened file management alongside UnitOfWorks
 * Distribution packaged as a unix daemon in qipki-main-http-ca
 * Added X509Context.renew( PKCS10CertificationRequest pkcs10 ) interaction
 * Added EscrowedKeyPairContext.delete() interaction
 * Added basic profiles creation scenarii in X509ProfileFactory and X509ProfileListContext
-* QiPkiHttpCa can now be told what base url to use to generate links in representations (Usefull when accessed through a reverse proxy for example)
+* Added an embedded Scheduler for background jobs
+* Reverse http routing support in QiPkiHttpCa
 * Management layer in QiPkiHttpCa exposing the Qi4j application structure through JMX
 * Simplified bootstrap supporting both embedded and standalone ways
 * Build layout review: more straightforward, more simple
 * No more OSGi support
-* Upstream update: Qi4j 1.4
+* Upstream update: Qi4j 1.4.1
 
 ### 1.0-alpha7 - 2011/06/02
 
