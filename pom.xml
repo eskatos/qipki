@@ -53,8 +53,8 @@
         <version.slf4j>1.6.4</version.slf4j>
         <version.logback>1.0.0</version.logback>
         <version.httpclient>4.0.3</version.httpclient>
-        <version.java-toolbox>1.5-SNAPSHOT</version.java-toolbox>
-        <version.spicyplates>1.0-SNAPSHOT</version.spicyplates>
+        <version.java-toolbox>1.5</version.java-toolbox>
+        <version.spicyplates>1.0</version.spicyplates>
         <version.commons-lang>2.5</version.commons-lang>
         <version.junit>4.7</version.junit>
     </properties>
