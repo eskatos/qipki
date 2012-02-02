@@ -804,7 +804,7 @@ public void testDistinguishedNameTemplate()
 {
     // Create a template
     String template = &quot;CN=${U_FIRSTNAME} ${U_LASTNAME}, E=${U_EMAIL}, O=${U_ORGANISATION}, &quot;
-                      + &quot;OU=QiPki, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}&quot;;
+                      + &quot;OU=Github, 0.9.2342.19200300.100.1.5=${D_SERIALNUMBER}&quot;;
 
     // Prepare context properties
     Map&lt;String, String&gt; context = new HashMap&lt;String, String&gt;();
@@ -989,13 +989,13 @@ public class EmbeddedCaExample
                 <div class="row">
                     <div class="span10">
                         <p>
-                            Latest release, 1.0-alpha7, contains a usable embedded CA without CRL support. This version
-                            uses an embedded instance of Apache Derby to store all of its data, including keystores, and an
-                            embedded Sesame based RDF repository for indexing/querying.
+                            Latest release, 1.0, contains a usable embedded CA with CRL support. This version
+                            uses an embedded instance of Apache Derby to store all of its data, an
+                            embedded Sesame based RDF repository for indexing/querying and the filesystem to store keystores and crls.
                         </p>
                         <p>
-                            The following release, probably 1.0-alpha8, will have CRL support, allows you to choose more
-                            store/indexing/querying backend implementations and uses keystores from the filesystem.
+                            The following release, probably 1.1-*, will be based on Qi4j 2.0, allows you to choose more
+                            store/indexing/querying backend implementations and have a comprehensive set of web user interfaces.
                         </p>
                         <p>
                             The current codebase is being worked on mainly to implement all the CA interactions as http
