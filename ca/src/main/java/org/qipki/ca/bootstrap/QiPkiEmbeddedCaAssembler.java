@@ -177,13 +177,15 @@ public class QiPkiEmbeddedCaAssembler
             persistAss.assemble( infrastructure.module( MODULE_PERSISTENCE ) );
             persistAss.assembleConfigModule( config );
 
-            // Job Scheduler
-            ModuleAssembly scheduler = infrastructure.module( MODULE_SCHEDULER );
-            new SchedulerAssembler().withConfigAssembly( config ).
-                    withConfigVisibility( Visibility.application ).
-                    withTimeline().
-                    visibleIn( Visibility.application ).
-                    assemble( scheduler );
+            if ( false ) { // FIXME Deactivated
+                // Job Scheduler
+                ModuleAssembly scheduler = infrastructure.module( MODULE_SCHEDULER );
+                new SchedulerAssembler().withConfigAssembly( config ).
+                        withConfigVisibility( Visibility.application ).
+                        withTimeline().
+                        visibleIn( Visibility.application ).
+                        assemble( scheduler );
+            }
         }
 
         onAssemble( app );
