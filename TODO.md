@@ -27,6 +27,11 @@ Do we really want to do that? Is this even possible? Is it the right time?
 
 ### Work in progress
 
+* Clean release point before heading develop branch to follow Qi4j 2.0 development
+
+
+### Next steps - That would lead to a tiny 1.0
+
 * (#---) Documentation
   * Extract code snippets from actual source to generate documentation
     * Rework the snippet parsing code in order to remove the javaparser dependency
@@ -39,10 +44,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Review, test and document signatures
   * Review, test and document X.509
   * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
-
-
-### Next steps - That would lead to a tiny 1.0
-
 
 ### After that
 
@@ -59,7 +60,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
     * What to expose on JMX? Jetty statistics?
     * Add a pluggable SSLContextProviderService or something like that with assembly facilities
     * SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present
-* Fix Scheduler passivation, it seems one thread is not interrupted correctly causing very slow shutdown during unit tests and runtime
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
   * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
