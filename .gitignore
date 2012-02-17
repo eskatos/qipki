@@ -1,4 +1,5 @@
 .DS_Store*
+.*.swp
 derby.log
 ./target
 commons/target
