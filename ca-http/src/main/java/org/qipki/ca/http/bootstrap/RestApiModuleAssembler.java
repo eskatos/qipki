@@ -51,7 +51,6 @@ public class RestApiModuleAssembler
 {
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {

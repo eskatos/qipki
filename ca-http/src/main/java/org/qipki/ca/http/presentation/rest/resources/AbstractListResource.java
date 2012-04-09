@@ -45,7 +45,8 @@ public abstract class AbstractListResource
     {
         String startParam = getQueryParamValue( "start", "0" );
         int start = Integer.valueOf( startParam );
-        return new StringRepresentation( list( start ).toJSON() );
+        RestListValue list = list( start );
+        return new StringRepresentation( list.toString() );
     }
 
     protected abstract RestListValue list( int start );

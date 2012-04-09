@@ -14,8 +14,10 @@
 package org.qipki.ca.bootstrap;
 
 import java.io.IOException;
+
 import org.codeartisans.java.toolbox.Strings;
 import org.codeartisans.java.toolbox.network.FreePortFinder;
+
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
@@ -27,6 +29,7 @@ import org.qi4j.library.jmx.JMXAssembler;
 import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
+
 import static org.qipki.ca.bootstrap.CaAssemblyNames.*;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.core.bootstrap.persistence.InMemoryPersistenceAssembler;

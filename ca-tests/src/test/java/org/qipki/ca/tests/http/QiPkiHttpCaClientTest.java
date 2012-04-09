@@ -57,7 +57,7 @@ public class QiPkiHttpCaClientTest
     @Before
     public void beforeClient()
     {
-        caClient = serviceLocator.<QiPkiHttpCaClient>findService( QiPkiHttpCaClient.class ).get();
+        caClient = module.<QiPkiHttpCaClient>findService( QiPkiHttpCaClient.class ).get();
     }
 
     @Test

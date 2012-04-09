@@ -25,6 +25,7 @@ import org.qipki.commons.rest.values.representations.CAValue;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
 import org.qipki.commons.rest.values.representations.EscrowedKeyPairValue;
 import org.qipki.commons.rest.values.representations.RestListValue;
+import org.qipki.commons.rest.values.representations.RestValue;
 import org.qipki.commons.rest.values.representations.RevocationValue;
 import org.qipki.commons.rest.values.representations.X509DetailValue;
 import org.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
@@ -53,32 +54,32 @@ public class RestValuesModuleAssembler
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
         // Params
-        module.addValues( CryptoStoreFactoryParamsValue.class,
-                          CAFactoryParamsValue.class,
-                          X509ProfileFactoryParamsValue.class,
-                          X509FactoryParamsValue.class,
-                          X509RevocationParamsValue.class,
-                          EscrowedKeyPairFactoryParamsValue.class ).
+        module.values( CryptoStoreFactoryParamsValue.class,
+                       CAFactoryParamsValue.class,
+                       X509ProfileFactoryParamsValue.class,
+                       X509FactoryParamsValue.class,
+                       X509RevocationParamsValue.class,
+                       EscrowedKeyPairFactoryParamsValue.class ).
                 visibleIn( visibility );
-        module.addServices( ParamsFactory.class ).
+        module.services( ParamsFactory.class ).
                 visibleIn( visibility );
 
         // Rest values
-        module.addValues( RestListValue.class,
-                          CaApiURIsValue.class,
-                          CryptoStoreValue.class,
-                          CAValue.class,
-                          X509ProfileAssignmentValue.class,
-                          X509ProfileValue.class,
-                          X509Value.class,
-                          X509DetailValue.class,
-                          RevocationValue.class,
-                          EscrowedKeyPairValue.class ).
+        module.values( RestValue.class,
+                       RestListValue.class,
+                       CaApiURIsValue.class,
+                       CryptoStoreValue.class,
+                       CAValue.class,
+                       X509ProfileAssignmentValue.class,
+                       X509ProfileValue.class,
+                       X509Value.class,
+                       X509DetailValue.class,
+                       RevocationValue.class,
+                       EscrowedKeyPairValue.class ).
                 visibleIn( visibility );
 
     }

@@ -13,10 +13,9 @@
  */
 package org.qipki.ca.application.contexts.escrowedkeypair;
 
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-import org.qi4j.api.unitofwork.UnitOfWorkRetry;
-import org.qi4j.spi.util.CollectionUtils;
+import org.codeartisans.java.toolbox.Collections;
+
+import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
 
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.qipki.core.dci.Context;
@@ -24,9 +23,6 @@ import org.qipki.core.dci.Context;
 public class EscrowedKeyPairContext
         extends Context
 {
-
-    @Structure
-    private UnitOfWorkFactory uowf;
 
     public EscrowedKeyPair escrowedKeyPair()
     {
@@ -37,11 +33,11 @@ public class EscrowedKeyPairContext
     public void delete()
     {
         EscrowedKeyPair ekp = context.role( EscrowedKeyPair.class );
-        if ( CollectionUtils.firstElementOrNull( ekp.x509s() ) != null ) {
+        if ( Collections.firstElementOrNull( ekp.x509s() ) != null ) {
             // TODO Throw list of X509 identities and list text in exception so the UI could present it to the user
             throw new IllegalStateException( "EscrowedKeyPair cannot be deleted as it has associated X509s" );
         }
-        uowf.currentUnitOfWork().remove( ekp );
+        module.currentUnitOfWork().remove( ekp );
     }
 
 }

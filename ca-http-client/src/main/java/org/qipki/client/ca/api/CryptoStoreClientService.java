@@ -59,7 +59,7 @@ public interface CryptoStoreClientService
         @Override
         public CryptoStoreValue create( CryptoStoreFactoryParamsValue params )
         {
-            String jsonCryptoStore = restClient.postJSON( restClient.fetchApiURIs().cryptoStoreListUri().get(), params.toJSON() );
+            String jsonCryptoStore = restClient.postJSON( restClient.fetchApiURIs().cryptoStoreListUri().get(), params.toString() );
             return vbf.newValueFromJSON( CryptoStoreValue.class, jsonCryptoStore );
         }
 

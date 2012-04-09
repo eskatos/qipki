@@ -13,9 +13,9 @@
  */
 package org.qipki.ca.domain.ca.sub;
 
-import org.qipki.ca.domain.ca.CA;
+import org.qi4j.api.association.Association;
 
-import org.qi4j.api.entity.association.Association;
+import org.qipki.ca.domain.ca.CA;
 
 public interface SubCA
         extends CA, SubCABehavior

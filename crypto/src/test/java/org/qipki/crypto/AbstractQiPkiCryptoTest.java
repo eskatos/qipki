@@ -16,8 +16,8 @@ package org.qipki.crypto;
 import org.junit.Before;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-import org.qi4j.core.testsupport.AbstractQi4jTest;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
+import org.qi4j.test.AbstractQi4jTest;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 import org.qipki.crypto.cipher.CipherFactory;
 import org.qipki.crypto.digest.Digester;
@@ -48,12 +48,12 @@ public abstract class AbstractQiPkiCryptoTest
     @Before
     public void beforeAbstractQiPkiCryptoTest()
     {
-        cryptoContext = serviceLocator.<CryptoContext>findService( CryptoContext.class ).get();
-        jceDetector = serviceLocator.<JceDetector>findService( JceDetector.class ).get();
-        digester = serviceLocator.<Digester>findService( Digester.class ).get();
-        symGenerator = serviceLocator.<SymetricGenerator>findService( SymetricGenerator.class ).get();
-        cipherFactory = serviceLocator.<CipherFactory>findService( CipherFactory.class ).get();
-        mac = serviceLocator.<MAC>findService( MAC.class ).get();
+        cryptoContext = module.<CryptoContext>findService( CryptoContext.class ).get();
+        jceDetector = module.<JceDetector>findService( JceDetector.class ).get();
+        digester = module.<Digester>findService( Digester.class ).get();
+        symGenerator = module.<SymetricGenerator>findService( SymetricGenerator.class ).get();
+        cipherFactory = module.<CipherFactory>findService( CipherFactory.class ).get();
+        mac = module.<MAC>findService( MAC.class ).get();
     }
 
 }

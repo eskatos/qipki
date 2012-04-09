@@ -49,7 +49,7 @@ public interface X509Repository
         {
             QueryBuilder<X509> builder = qbf.newQueryBuilder( X509.class );
             builder = builder.where( eq( templateFor( X509.class ).sha256Fingerprint(), hexSha256 ) );
-            Query<X509> query = builder.newQuery( uowf.currentUnitOfWork() );
+            Query<X509> query = uowf.currentUnitOfWork().newQuery( builder );
             assert query.count() <= 1;
             return Collections.firstElementOrNull( query );
         }

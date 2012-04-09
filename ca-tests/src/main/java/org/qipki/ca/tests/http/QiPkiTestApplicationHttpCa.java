@@ -19,6 +19,7 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 
+import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.http.bootstrap.QiPkiHttpCaAssembler;
 import org.qipki.ca.tests.QiPkiCaFixtures;
 import org.qipki.core.AbstractQiPkiApplication;
@@ -27,7 +28,7 @@ import org.qipki.testsupport.AbstractQiPkiHttpTest;
 import org.qipki.testsupport.QiPkiTestSupport;
 
 public class QiPkiTestApplicationHttpCa
-        extends AbstractQiPkiApplication
+        extends AbstractQiPkiApplication<RootContext>
 {
 
     public QiPkiTestApplicationHttpCa( String testCodeName )

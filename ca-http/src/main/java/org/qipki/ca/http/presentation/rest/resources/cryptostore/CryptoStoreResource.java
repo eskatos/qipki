@@ -53,7 +53,7 @@ public class CryptoStoreResource
         CryptoStore cs = csCtx.cryptoStore();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.cryptoStore( cs ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.cryptoStore( cs ).toString(), MediaType.APPLICATION_JSON );
     }
 
 }

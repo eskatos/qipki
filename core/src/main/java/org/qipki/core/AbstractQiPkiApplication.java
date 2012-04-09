@@ -16,12 +16,12 @@ package org.qipki.core;
 import org.qipki.core.bootstrap.ModuleFinder;
 import org.qi4j.api.Qi4j;
 import org.qi4j.api.common.InvalidApplicationException;
+import org.qi4j.api.structure.Application;
+import org.qi4j.api.structure.ApplicationDescriptor;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
 import org.qi4j.spi.Qi4jSPI;
-import org.qi4j.spi.structure.ApplicationModelSPI;
-import org.qi4j.spi.structure.ApplicationSPI;
 
 import org.qipki.core.dci.Context;
 import org.qipki.core.dci.InteractionContext;
@@ -37,8 +37,8 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractQiPkiApplication.class );
     private final ApplicationAssembler appAssembler;
     protected Energy4Java qi4j;
-    protected ApplicationModelSPI applicationModel;
-    protected ApplicationSPI application;
+    protected ApplicationDescriptor applicationModel;
+    protected Application application;
     protected Qi4jSPI spi;
     protected Qi4j api;
 
@@ -100,10 +100,7 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     {
         return ensureDciModuleFinder().
                 findModule( application ).
-                objectBuilderFactory().
-                newObjectBuilder( ensureRootContextType() ).
-                use( new InteractionContext() ).
-                newInstance();
+                newObject( ensureRootContextType(), new InteractionContext() );
     }
 
     @Override

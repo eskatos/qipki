@@ -53,7 +53,7 @@ public class X509ProfileResource
         X509Profile x509Profile = x509Ctx.x509Profile();
 
         // Representation
-        return new StringRepresentation( valuesFactory.x509Profile( x509Profile ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( valuesFactory.x509Profile( x509Profile ).toString(), MediaType.APPLICATION_JSON );
     }
 
 }

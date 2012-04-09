@@ -20,7 +20,7 @@ import java.util.Stack;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import org.qi4j.core.testsupport.AbstractQi4jTest;
+import org.qi4j.test.AbstractQi4jTest;
 
 public abstract class AbstractUoWFileTest
         extends AbstractQi4jTest

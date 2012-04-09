@@ -13,11 +13,10 @@
  */
 package org.qipki.ca.http.presentation.rest;
 
-import org.qi4j.api.composite.TransientBuilderFactory;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.object.NoSuchObjectException;
-import org.qi4j.api.object.ObjectBuilderFactory;
 
+import org.qi4j.api.structure.Module;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.Finder;
@@ -28,18 +27,16 @@ public class ObjectResourceFinder
 {
 
     @Structure
-    private ObjectBuilderFactory obf;
-    @Structure
-    private TransientBuilderFactory tbf;
+    private Module module;
 
     @Override
     public ServerResource create( Class<? extends ServerResource> targetClass, Request request, Response response )
     {
         try {
-            return obf.newObject( targetClass );
+            return module.newObject( targetClass );
         } catch ( NoSuchObjectException ex ) {
+            return module.newTransient( targetClass );
         }
-        return tbf.newTransient( targetClass );
     }
 
 }

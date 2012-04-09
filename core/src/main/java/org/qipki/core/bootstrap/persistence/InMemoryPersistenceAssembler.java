@@ -29,7 +29,7 @@ public class InMemoryPersistenceAssembler
             throws AssemblyException
     {
         module.services( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
-        new RdfMemoryStoreAssembler( null, Visibility.application, Visibility.application ).assemble( module );
+        new RdfMemoryStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
     }
 
     @Override

@@ -59,7 +59,7 @@ public interface CAClientService
         @Override
         public CAValue create( CAFactoryParamsValue params )
         {
-            String jsonCa = restClient.postJSON( restClient.fetchApiURIs().caListUri().get(), params.toJSON() );
+            String jsonCa = restClient.postJSON( restClient.fetchApiURIs().caListUri().get(), params.toString() );
             return vbf.newValueFromJSON( CAValue.class, jsonCa );
         }
 

@@ -44,8 +44,6 @@ import org.qipki.ca.domain.x509.X509Repository;
 import org.qipki.ca.domain.x509profile.X509ProfileEntity;
 import org.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.qipki.ca.domain.x509profile.X509ProfileRepository;
-import org.qipki.commons.crypto.services.CryptoValuesFactory;
-import org.qipki.commons.crypto.values.ValidityIntervalValue;
 import org.qipki.core.bootstrap.AutomaticReindexingAssembler;
 import org.qipki.core.sideeffects.TracingSideEffect;
 
@@ -55,52 +53,48 @@ public class CaDomainModuleAssembler
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public void assemble( ModuleAssembly ma )
+    public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        // Values
-        ma.values( ValidityIntervalValue.class );
-
         // Entities
-        ma.entities( CryptoStoreEntity.class,
-                     RootCAEntity.class,
-                     SubCAEntity.class,
-                     CRLEntity.class,
-                     X509ProfileAssignmentEntity.class,
-                     X509ProfileEntity.class,
-                     X509Entity.class,
-                     RevocationEntity.class,
-                     EscrowedKeyPairEntity.class ).
+        module.entities( CryptoStoreEntity.class,
+                         RootCAEntity.class,
+                         SubCAEntity.class,
+                         CRLEntity.class,
+                         X509ProfileAssignmentEntity.class,
+                         X509ProfileEntity.class,
+                         X509Entity.class,
+                         RevocationEntity.class,
+                         EscrowedKeyPairEntity.class ).
                 visibleIn( Visibility.application );
 
         // Services
-        ma.services( CryptoStoreRepository.class,
-                     CryptoStoreFactory.class,
-                     CARepository.class,
-                     CAFactory.class,
-                     CRLFactory.class,
-                     X509ProfileAssignmentFactory.class,
-                     X509ProfileRepository.class,
-                     X509ProfileFactory.class,
-                     X509Repository.class,
-                     X509Factory.class,
-                     RevocationFactory.class,
-                     CryptoValuesFactory.class,
-                     EscrowedKeyPairFactory.class,
-                     EscrowedKeyPairRepository.class ).
+        module.services( CryptoStoreRepository.class,
+                         CryptoStoreFactory.class,
+                         CARepository.class,
+                         CAFactory.class,
+                         CRLFactory.class,
+                         X509ProfileAssignmentFactory.class,
+                         X509ProfileRepository.class,
+                         X509ProfileFactory.class,
+                         X509Repository.class,
+                         X509Factory.class,
+                         RevocationFactory.class,
+                         EscrowedKeyPairFactory.class,
+                         EscrowedKeyPairRepository.class ).
                 visibleIn( Visibility.application ).
                 withSideEffects( TracingSideEffect.class );
 
-        ma.services( CryptoStoreFileService.class,
-                     EscrowedKeyPairFileService.class,
-                     CRLFileService.class ).
+        module.services( CryptoStoreFileService.class,
+                         EscrowedKeyPairFileService.class,
+                         CRLFileService.class ).
                 visibleIn( Visibility.module );
 
         // UoWFile handling
-        new UoWFileAssembler().assemble( ma );
+        new UoWFileAssembler( Visibility.module ).assemble( module );
 
         // Automatic reindex
-        new AutomaticReindexingAssembler().assemble( ma );
+        new AutomaticReindexingAssembler( Visibility.module ).assemble( module );
     }
 
 }

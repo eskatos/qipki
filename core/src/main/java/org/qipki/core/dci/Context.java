@@ -41,7 +41,7 @@ public abstract class Context
      */
     protected <T> T subContext( Class<T> contextClass )
     {
-        return module.objectBuilderFactory().newObjectBuilder( contextClass ).use( context ).newInstance();
+        return module.newObject( contextClass, context );
     }
 
 }

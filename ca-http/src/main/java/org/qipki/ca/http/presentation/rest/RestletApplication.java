@@ -15,13 +15,12 @@ package org.qipki.ca.http.presentation.rest;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.Uses;
-import org.qi4j.api.object.ObjectBuilderFactory;
+import org.qi4j.api.structure.Module;
 import org.qi4j.api.unitofwork.ConcurrentEntityModificationException;
 import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkException;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 import org.qipki.ca.application.WrongParametersException;
 import org.qipki.ca.http.presentation.rest.resources.AbstractDCIResource;
@@ -64,9 +63,7 @@ public class RestletApplication
 
     private static final Logger LOGGER = LoggerFactory.getLogger( RestletApplication.class );
     @Structure
-    private ObjectBuilderFactory obf;
-    @Structure
-    private UnitOfWorkFactory uowf;
+    private Module module;
 
     public RestletApplication( @Uses Context parentContext )
     {
@@ -111,7 +108,7 @@ public class RestletApplication
 
     private Finder createFinder( Class<? extends ServerResource> resource )
     {
-        Finder finder = obf.newObject( Finder.class );
+        Finder finder = module.newObject( Finder.class );
         finder.setTargetClass( resource );
         return finder;
     }
@@ -119,7 +116,7 @@ public class RestletApplication
     @Override
     public void handle( Request request, Response response )
     {
-        UnitOfWork uow = uowf.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         try {
             super.handle( request, response );
             uow.complete();

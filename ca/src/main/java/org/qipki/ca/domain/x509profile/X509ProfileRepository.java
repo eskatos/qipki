@@ -48,7 +48,7 @@ public interface X509ProfileRepository
         {
             QueryBuilder<X509Profile> builder = qbf.newQueryBuilder( getBoxedClass() );
             builder = builder.where( eq( templateFor( X509Profile.class ).name(), name ) );
-            Query<X509Profile> query = builder.newQuery( uowf.currentUnitOfWork() ).
+            Query<X509Profile> query = uowf.currentUnitOfWork().newQuery( builder ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

@@ -39,7 +39,7 @@ public class CaApiRootResource
     protected Representation get()
             throws ResourceException
     {
-        return new StringRepresentation( restValuesFactory.caApiURIs().toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.caApiURIs().toString(), MediaType.APPLICATION_JSON );
     }
 
 }

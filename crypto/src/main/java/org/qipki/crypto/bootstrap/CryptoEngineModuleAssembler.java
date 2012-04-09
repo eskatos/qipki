@@ -83,6 +83,7 @@ public class CryptoEngineModuleAssembler
     }
 
     private void onAssemble( ModuleAssembly module, Visibility visibility, ModuleAssembly configModule, Visibility configVisibility )
+            throws AssemblyException
     {
         module.services( JceDetectorService.class,
                          CryptObjectsFactory.class,

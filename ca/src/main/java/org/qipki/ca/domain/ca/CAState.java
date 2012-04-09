@@ -15,13 +15,13 @@ package org.qipki.ca.domain.ca;
 
 import java.util.List;
 
+import org.qi4j.api.association.Association;
+import org.qi4j.api.association.ManyAssociation;
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.entity.Aggregated;
 import org.qi4j.api.entity.Identity;
-import org.qi4j.api.entity.association.Association;
-import org.qi4j.api.entity.association.ManyAssociation;
-
 import org.qi4j.api.property.Property;
+
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.qipki.ca.domain.crl.CRL;
 import org.qipki.ca.domain.cryptostore.CryptoStore;

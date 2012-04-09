@@ -17,8 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.qi4j.api.io.Inputs;
-import org.qi4j.api.io.Outputs;
+import org.qi4j.io.Inputs;
+import org.qi4j.io.Outputs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

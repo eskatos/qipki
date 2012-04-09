@@ -72,7 +72,7 @@ public class CAResource
         CA ca = caCtx.ca();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.ca( ca ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.ca( ca ).toString(), MediaType.APPLICATION_JSON );
     }
 
     @Override

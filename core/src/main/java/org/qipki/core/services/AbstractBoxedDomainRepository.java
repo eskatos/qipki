@@ -44,13 +44,14 @@ public abstract class AbstractBoxedDomainRepository<T>
     public Query<T> findAllPaginated( int firstResult, int maxResults )
     {
         QueryBuilder<T> builder = qbf.newQueryBuilder( getBoxedClass() );
-        Query<T> query = builder.newQuery( uowf.currentUnitOfWork() ).
+        Query<T> query = uowf.currentUnitOfWork().newQuery( builder ).
                 firstResult( firstResult ).
                 maxResults( maxResults );
         return query;
     }
 
     // TODO make getBoxedClass more robust and cleanup the code
+    @SuppressWarnings( "unchecked" )
     protected final Class<T> getBoxedClass()
     {
         Class<T> rv = null;

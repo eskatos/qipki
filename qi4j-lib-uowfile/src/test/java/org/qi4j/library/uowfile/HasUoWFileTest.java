@@ -29,19 +29,19 @@ import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.This;
-import org.qi4j.api.io.Inputs;
-import org.qi4j.api.io.Outputs;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-import org.qi4j.api.unitofwork.UnitOfWorkConcern;
-import org.qi4j.api.unitofwork.UnitOfWorkPropagation;
-import org.qi4j.api.unitofwork.UnitOfWorkRetry;
+import org.qi4j.api.unitofwork.concern.UnitOfWorkConcern;
+import org.qi4j.api.unitofwork.concern.UnitOfWorkPropagation;
+import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
+import org.qi4j.io.Inputs;
+import org.qi4j.io.Outputs;
 import org.qi4j.library.uowfile.internal.ConcurrentUoWFileModificationException;
 import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 import org.qi4j.library.uowfile.singular.UoWFileLocator;
@@ -159,7 +159,7 @@ public class HasUoWFileTest
     @Before
     public void beforeTest()
     {
-        testService = serviceLocator.<TestService>findService( TestService.class ).get();
+        testService = module.<TestService>findService( TestService.class ).get();
     }
 
     @Test
@@ -169,14 +169,14 @@ public class HasUoWFileTest
         LOGGER.info( "# Test Creation ##############################################################################" );
 
         // Test discarded creation
-        UnitOfWork uow = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         TestedEntity entity = createTestedEntity( uow, "Testing Creation Rollback" );
         File attachedFile = entity.attachedFile();
         uow.discard();
         assertFalse( "File still exists after discarded creation UoW", attachedFile.exists() );
 
         // Test completed creation
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         entity = createTestedEntity( uow, "Testing Creation" );
         attachedFile = entity.attachedFile();
         uow.complete();
@@ -190,20 +190,20 @@ public class HasUoWFileTest
         LOGGER.info( "# Test Modification ##########################################################################" );
 
         // Create new
-        UnitOfWork uow = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         TestedEntity entity = createTestedEntity( uow, "Testing Modification" );
         String entityId = entity.identity().get();
         File attachedFile = entity.attachedFile();
         uow.complete();
 
         // Testing discarded modification
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         testService.modifyFile( entityId );
         uow.discard();
         assertTrue( "File content after discarded modification was not the good one", isFileFirstLineEqualsTo( attachedFile, "Creation" ) );
 
         // Testing completed modification
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         testService.modifyFile( entityId );
         uow.complete();
         assertTrue( "Modified file content was not the good one", isFileFirstLineEqualsTo( attachedFile, "Modification" ) );
@@ -216,21 +216,21 @@ public class HasUoWFileTest
         LOGGER.info( "# Test Deletion ##############################################################################" );
 
         // Create new
-        UnitOfWork uow = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         TestedEntity entity = createTestedEntity( uow, "Testing Deletion" );
         String entityId = entity.identity().get();
         File attachedFile = entity.attachedFile();
         uow.complete();
 
         // Testing discarded deletion
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         entity = uow.get( TestedEntity.class, entityId );
         uow.remove( entity );
         uow.discard();
         assertTrue( "File do not exists after discarded deletion", attachedFile.exists() );
 
         // Testing completed deletion
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         entity = uow.get( TestedEntity.class, entityId );
         uow.remove( entity );
         uow.complete();
@@ -244,16 +244,16 @@ public class HasUoWFileTest
         LOGGER.info( "# Test Concurrent Modification ###############################################################" );
 
         // Create new
-        UnitOfWork uow = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         TestedEntity entity = createTestedEntity( uow, "Testing Concurrent Modification" );
         String entityId = entity.identity().get();
         uow.complete();
 
         // Testing concurrent modification
-        uow = unitOfWorkFactory.newUnitOfWork();
+        uow = module.newUnitOfWork();
         entity = uow.get( TestedEntity.class, entityId );
         Inputs.text( MODIFICATION_CONTENT_URL ).transferTo( Outputs.text( entity.managedFile() ) );
-        UnitOfWork uow2 = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow2 = module.newUnitOfWork();
         entity = uow2.get( TestedEntity.class, entityId );
         Inputs.text( MODIFICATION_CONTENT_URL ).transferTo( Outputs.text( entity.managedFile() ) );
         uow.complete();
@@ -272,7 +272,7 @@ public class HasUoWFileTest
         LOGGER.info( "# Test Retry #################################################################################" );
 
         // Create new
-        UnitOfWork uow = unitOfWorkFactory.newUnitOfWork();
+        UnitOfWork uow = module.newUnitOfWork();
         TestedEntity entity = createTestedEntity( uow, "Testing Concurrent Modification" );
         final String entityId = entity.identity().get();
         File attachedFile = entity.attachedFile();

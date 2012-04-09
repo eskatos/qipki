@@ -13,13 +13,13 @@
  */
 package org.qipki.core.bootstrap;
 
+import org.qi4j.api.structure.Application;
 import org.qi4j.api.structure.Module;
-import org.qi4j.spi.structure.ApplicationSPI;
 
 public class ModuleFinder
 {
 
-    public Module findModule( ApplicationSPI application )
+    public Module findModule( Application application )
     {
         return null;
     }

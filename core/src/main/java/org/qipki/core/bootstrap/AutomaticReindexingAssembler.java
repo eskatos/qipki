@@ -26,14 +26,26 @@ public class AutomaticReindexingAssembler
         implements Assembler
 {
 
+    private final Visibility visibility;
+
+    public AutomaticReindexingAssembler()
+    {
+        this.visibility = Visibility.module;
+    }
+
+    public AutomaticReindexingAssembler( Visibility visibility )
+    {
+        this.visibility = visibility;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly ma )
             throws AssemblyException
     {
-        ma.services( ReindexerService.class ).visibleIn( Visibility.module );
-        ma.entities( ReindexerConfiguration.class ).visibleIn( Visibility.module );
-        ma.services( AutomaticReindexerService.class ).visibleIn( Visibility.module ).instantiateOnStartup();
+        ma.services( ReindexerService.class ).visibleIn( visibility );
+        ma.entities( ReindexerConfiguration.class ).visibleIn( visibility );
+        ma.services( AutomaticReindexerService.class ).visibleIn( visibility ).instantiateOnStartup();
     }
 
 }

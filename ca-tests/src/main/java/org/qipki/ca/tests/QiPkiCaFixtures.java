@@ -26,12 +26,11 @@ import org.qipki.crypto.storage.KeyStoreType;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.structure.Module;
 import org.qi4j.api.unitofwork.UnitOfWork;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 @Mixins( QiPkiCaFixtures.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
@@ -52,9 +51,7 @@ public interface QiPkiCaFixtures
     {
 
         @Structure
-        private UnitOfWorkFactory uowf;
-        @Structure
-        private ObjectBuilderFactory obf;
+        private Module module;
         @Service
         private CryptoValuesFactory cryptoValuesFactory;
 
@@ -62,7 +59,7 @@ public interface QiPkiCaFixtures
         public void activate()
                 throws Exception
         {
-            UnitOfWork uow = uowf.newUnitOfWork();
+            UnitOfWork uow = module.newUnitOfWork();
             RootContext rootCtx = newRootContext();
 
             // Do we need to create fixtures
@@ -95,7 +92,7 @@ public interface QiPkiCaFixtures
                 uow.complete();
 
 
-                uow = uowf.newUnitOfWork();
+                uow = module.newUnitOfWork();
                 rootCtx = newRootContext();
 
                 cryptoStore = rootCtx.cryptoStoreContext( cryptoStoreId ).cryptoStore();
@@ -115,7 +112,7 @@ public interface QiPkiCaFixtures
 
         protected final RootContext newRootContext()
         {
-            return obf.newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
+            return module.newObject( RootContext.class, new InteractionContext() );
         }
 
     }

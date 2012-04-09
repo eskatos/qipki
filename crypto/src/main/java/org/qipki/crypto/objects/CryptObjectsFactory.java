@@ -17,8 +17,8 @@ import java.security.PublicKey;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.structure.Module;
 
 @Mixins( CryptObjectsFactory.Mixin.class )
 public interface CryptObjectsFactory
@@ -33,12 +33,12 @@ public interface CryptObjectsFactory
     {
 
         @Structure
-        private ObjectBuilderFactory obf;
+        private Module module;
 
         @Override
         public KeyInformation newKeyInformationInstance( PublicKey publicKey )
         {
-            return obf.newObjectBuilder( KeyInformation.class ).use( publicKey ).newInstance();
+            return module.newObject( KeyInformation.class, publicKey );
         }
 
     }

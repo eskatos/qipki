@@ -42,7 +42,7 @@ public class AbstractDCIResource
 
     protected final RootContext newRootContext()
     {
-        return module.objectBuilderFactory().newObjectBuilder( RootContext.class ).use( new InteractionContext() ).newInstance();
+        return module.newObject( RootContext.class, new InteractionContext() );
     }
 
     protected final <T> T ensureRequestAttribute( String key, Class<? extends T> type, Status ifAbsent )

@@ -50,7 +50,7 @@ public abstract class AbstractQiPkiHttpCaTest
         HttpGet get = new HttpGet( "/api" );
         addAcceptJsonHeader( get );
         String jsonApi = httpClient.execute( new HttpHost( LOCALHOST, DEFAULT_PORT ), get, strResponseHandler );
-        caApi = valueBuilderFactory.newValueFromJSON( CaApiURIsValue.class, jsonApi );
+        caApi = module.newValueFromJSON( CaApiURIsValue.class, jsonApi );
     }
 
 }

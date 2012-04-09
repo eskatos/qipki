@@ -110,13 +110,13 @@ public interface UoWFileFactory
          */
         private static UoWFilesMetaInfo ensureUoWMeta( final UnitOfWork uow )
         {
-            UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
+            UoWFilesMetaInfo uowMeta = uow.metaInfo( UoWFilesMetaInfo.class );
             if ( uowMeta != null ) {
                 return uowMeta;
             }
 
             uowMeta = new UoWFilesMetaInfo();
-            uow.metaInfo().set( uowMeta );
+            uow.setMetaInfo( uowMeta );
 
             uow.addUnitOfWorkCallback( new UnitOfWorkCallback()
             {
@@ -125,7 +125,7 @@ public interface UoWFileFactory
                 public void beforeCompletion()
                         throws UnitOfWorkCompletionException
                 {
-                    UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
+                    UoWFilesMetaInfo uowMeta = uow.metaInfo( UoWFilesMetaInfo.class );
                     if ( uowMeta != null && !uowMeta.isEmpty() ) {
                         List<UoWFile> concurrentlyModified = new ArrayList<UoWFile>();
                         for ( UoWFile eachUoWFile : uowMeta.values() ) {
@@ -144,7 +144,7 @@ public interface UoWFileFactory
                 @Override
                 public void afterCompletion( UnitOfWorkStatus status )
                 {
-                    UoWFilesMetaInfo uowMeta = uow.metaInfo().get( UoWFilesMetaInfo.class );
+                    UoWFilesMetaInfo uowMeta = uow.metaInfo( UoWFilesMetaInfo.class );
                     if ( uowMeta != null && !uowMeta.isEmpty() ) {
                         for ( UoWFile eachUoWFile : uowMeta.values() ) {
                             if ( status == UnitOfWorkStatus.DISCARDED ) {
@@ -152,7 +152,7 @@ public interface UoWFileFactory
                             }
                             eachUoWFile.cleanup();
                         }
-                        uow.metaInfo().get( UoWFilesMetaInfo.class ).clear();
+                        uow.metaInfo( UoWFilesMetaInfo.class ).clear();
                     }
                 }
 

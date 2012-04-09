@@ -55,7 +55,7 @@ public interface EscrowedKeyPairRepository
             QueryBuilder<EscrowedKeyPair> builder = qbf.newQueryBuilder( EscrowedKeyPair.class );
             EscrowedKeyPair ekpTemplate = templateFor( EscrowedKeyPair.class );
             builder = builder.where( contains( ekpTemplate.x509s(), x509Repository.findByIdentity( x509Identity ) ) );
-            Query<EscrowedKeyPair> query = builder.newQuery( uowf.currentUnitOfWork() );
+            Query<EscrowedKeyPair> query = uowf.currentUnitOfWork().newQuery( builder );
             assert query.count() <= 1;
             return Collections.firstElementOrNull( query );
         }

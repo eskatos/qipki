@@ -48,7 +48,7 @@ public interface CARepository
         {
             QueryBuilder<CA> builder = qbf.newQueryBuilder( getBoxedClass() );
             builder = builder.where( eq( templateFor( CA.class ).name(), name ) );
-            Query<CA> query = builder.newQuery( uowf.currentUnitOfWork() ).
+            Query<CA> query = uowf.currentUnitOfWork().newQuery( builder ).
                     firstResult( firstResult ).
                     maxResults( maxResults );
             return query;

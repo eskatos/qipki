@@ -13,7 +13,7 @@
  */
 package org.qipki.testsupport;
 
-import org.qi4j.core.testsupport.AbstractQi4jTest;
+import org.qi4j.test.AbstractQi4jTest;
 
 public abstract class AbstractQiPkiTest
         extends AbstractQi4jTest

@@ -60,7 +60,7 @@ public class DerbySesamePersistenceAssembler
             new DerbySQLEntityStoreAssembler( Visibility.application ).assemble( module );
         }
         // Sesame
-        new RdfNativeSesameStoreAssembler( null, Visibility.application, Visibility.application ).assemble( module );
+        new RdfNativeSesameStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
     }
 
     @Override

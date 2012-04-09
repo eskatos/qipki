@@ -29,17 +29,12 @@ import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.storage.KeyStoreType;
 
-import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.unitofwork.UnitOfWork;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-import org.qi4j.api.unitofwork.UnitOfWorkRetry;
+import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
 
 public class CAContext
         extends Context
 {
-
-    @Structure
-    private UnitOfWorkFactory uowf;
 
     public CA ca()
     {
@@ -49,7 +44,7 @@ public class CAContext
     @UnitOfWorkRetry
     public CA updateCA( Map<String, KeyEscrowPolicy> profileAssignments )
     {
-        UnitOfWork uow = uowf.currentUnitOfWork();
+        UnitOfWork uow = module.currentUnitOfWork();
         CA ca = context.role( CA.class );
         // Remove existing assignments
         Iterator<X509ProfileAssignment> it = ca.allowedX509Profiles().iterator();

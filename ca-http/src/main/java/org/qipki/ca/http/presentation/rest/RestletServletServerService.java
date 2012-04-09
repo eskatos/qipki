@@ -17,10 +17,9 @@ import javax.servlet.Servlet;
 
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.object.ObjectBuilder;
-import org.qi4j.api.object.ObjectBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 
+import org.qi4j.api.structure.Module;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.ext.servlet.ServerServlet;
@@ -37,14 +36,12 @@ public interface RestletServletServerService
     {
 
         @Structure
-        private ObjectBuilderFactory obf;
+        private Module module;
 
         @Override
         protected Application createApplication( Context context )
         {
-            ObjectBuilder<Application> app = obf.newObjectBuilder( Application.class );
-            app.use( context.createChildContext(), getServletConfig(), getServletContext() );
-            return app.newInstance();
+            return module.newObject( Application.class, context.createChildContext(), getServletConfig(), getServletContext() );
         }
 
     }

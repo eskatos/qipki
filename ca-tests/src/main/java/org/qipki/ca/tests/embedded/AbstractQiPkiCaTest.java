@@ -60,9 +60,9 @@ public abstract class AbstractQiPkiCaTest
     @Before
     public void beforeEachAbstractQiPkiCaTest()
     {
-        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
-        x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
-        asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
+        cryptio = module.<CryptIO>findService( CryptIO.class ).get();
+        x509Generator = module.<X509Generator>findService( X509Generator.class ).get();
+        asymGenerator = module.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
 
     }
 

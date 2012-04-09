@@ -85,12 +85,12 @@ public abstract class AbstractQiPkiHttpTest
     public void qiPkiHttpBefore()
             throws Exception
     {
-        cryptio = serviceLocator.<CryptIO>findService( CryptIO.class ).get();
-        x509Generator = serviceLocator.<X509Generator>findService( X509Generator.class ).get();
-        asymGenerator = serviceLocator.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
-        paramsFactory = serviceLocator.<ParamsFactory>findService( ParamsFactory.class ).get();
-        cryptoValuesFactory = serviceLocator.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
-        x509ExtValuesFactory = serviceLocator.<X509ExtensionsValueFactory>findService( X509ExtensionsValueFactory.class ).get();
+        cryptio = module.<CryptIO>findService( CryptIO.class ).get();
+        x509Generator = module.<X509Generator>findService( X509Generator.class ).get();
+        asymGenerator = module.<AsymetricGenerator>findService( AsymetricGenerator.class ).get();
+        paramsFactory = module.<ParamsFactory>findService( ParamsFactory.class ).get();
+        cryptoValuesFactory = module.<CryptoValuesFactory>findService( CryptoValuesFactory.class ).get();
+        x509ExtValuesFactory = module.<X509ExtensionsValueFactory>findService( X509ExtensionsValueFactory.class ).get();
         strResponseHandler = new BasicResponseHandler();
         bytesResponseHandler = new ResponseHandler<byte[]>()
         {

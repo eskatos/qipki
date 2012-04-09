@@ -82,24 +82,19 @@ public interface X509ProfileFactory
             profile.validityDays().set( validityDays );
             profile.netscapeCertComment().set( comment );
             if ( keyUsages != null ) {
-                profile.keyUsages().set( vbf.newValueBuilder( KeyUsagesValue.class ).
-                        withPrototype( keyUsages ).newInstance() );
+                profile.keyUsages().set( vbf.newValueBuilderWithPrototype( keyUsages ).newInstance() );
             }
             if ( extendedKeyUsages != null ) {
-                profile.extendedKeyUsages().set( vbf.newValueBuilder( ExtendedKeyUsagesValue.class ).
-                        withPrototype( extendedKeyUsages ).newInstance() );
+                profile.extendedKeyUsages().set( vbf.newValueBuilderWithPrototype( extendedKeyUsages ).newInstance() );
             }
             if ( netscapeCertTypes != null ) {
-                profile.netscapeCertTypes().set( vbf.newValueBuilder( NetscapeCertTypesValue.class ).
-                        withPrototype( netscapeCertTypes ).newInstance() );
+                profile.netscapeCertTypes().set( vbf.newValueBuilderWithPrototype( netscapeCertTypes ).newInstance() );
             }
             if ( basicConstraints != null ) {
-                profile.basicConstraints().set( vbf.newValueBuilder( BasicConstraintsValue.class ).
-                        withPrototype( basicConstraints ).newInstance() );
+                profile.basicConstraints().set( vbf.newValueBuilderWithPrototype( basicConstraints ).newInstance() );
             }
             if ( nameConstraints != null ) {
-                profile.nameConstraints().set( vbf.newValueBuilder( NameConstraintsValue.class ).
-                        withPrototype( nameConstraints ).newInstance() );
+                profile.nameConstraints().set( vbf.newValueBuilderWithPrototype( nameConstraints ).newInstance() );
             }
             return builder.newInstance();
         }

@@ -13,9 +13,9 @@
  */
 package org.qipki.ca;
 
+import org.qi4j.api.structure.Application;
 import org.qi4j.api.structure.Module;
 import org.qi4j.bootstrap.ApplicationAssembler;
-import org.qi4j.spi.structure.ApplicationSPI;
 
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.bootstrap.CaAssemblyNames;
@@ -30,7 +30,7 @@ public class AbstractQiPkiCa
     {
 
         @Override
-        public Module findModule( ApplicationSPI application )
+        public Module findModule( Application application )
         {
             return application.findModule( CaAssemblyNames.LAYER_APPLICATION, CaAssemblyNames.MODULE_CA_DCI );
         }

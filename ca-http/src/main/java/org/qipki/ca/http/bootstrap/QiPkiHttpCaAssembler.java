@@ -44,7 +44,7 @@ public class QiPkiHttpCaAssembler
         if ( port != null ) {
             this.port = port;
         } else {
-            port = DEFAULT_PORT;
+            this.port = DEFAULT_PORT;
         }
         this.docRoot = docRoot;
         return this;

@@ -38,17 +38,17 @@ public class CaDCIModuleAssembler
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addObjects( RootContext.class,
-                           CryptoStoreListContext.class,
-                           CryptoStoreContext.class,
-                           CAListContext.class,
-                           CAContext.class,
-                           X509ProfileListContext.class,
-                           X509ProfileContext.class,
-                           X509ListContext.class,
-                           X509Context.class,
-                           EscrowedKeyPairContext.class,
-                           EscrowedKeyPairListContext.class ).
+        module.objects( RootContext.class,
+                        CryptoStoreListContext.class,
+                        CryptoStoreContext.class,
+                        CAListContext.class,
+                        CAContext.class,
+                        X509ProfileListContext.class,
+                        X509ProfileContext.class,
+                        X509ListContext.class,
+                        X509Context.class,
+                        EscrowedKeyPairContext.class,
+                        EscrowedKeyPairListContext.class ).
                 visibleIn( Visibility.application );
 
     }

@@ -57,7 +57,7 @@ public class QiPkiCryptoStoreTest
 
         LOGGER.debug( "KEYSTORES: {}", jsonKsList );
 
-        RestListValue ksList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonKsList );
+        RestListValue ksList = module.newValueFromJSON( RestListValue.class, jsonKsList );
 
         assertEquals( 1, ksList.items().get().size() );
 
@@ -79,10 +79,10 @@ public class QiPkiCryptoStoreTest
         CryptoStoreFactoryParamsValue params = paramsFactory.createCryptoStoreFactoryParams( ksName,
                                                                                              KeyStoreType.JKS,
                                                                                              "changeit".toCharArray() );
-        post.setEntity( new StringEntity( params.toJSON() ) );
+        post.setEntity( new StringEntity( params.toString() ) );
         String ksJson = httpClient.execute( post, strResponseHandler );
         LOGGER.info( "testCreateKeyStore JSON: " + ksJson );
-        CryptoStoreValue ks = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, ksJson );
+        CryptoStoreValue ks = module.newValueFromJSON( CryptoStoreValue.class, ksJson );
 
         assertEquals( ksName, ks.name().get() );
 

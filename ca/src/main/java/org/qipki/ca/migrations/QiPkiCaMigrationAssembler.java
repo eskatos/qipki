@@ -13,6 +13,7 @@
  */
 package org.qipki.ca.migrations;
 
+import org.qi4j.api.service.importer.NewObjectImporter;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
@@ -20,7 +21,6 @@ import org.qi4j.migration.MigrationConfiguration;
 import org.qi4j.migration.MigrationEventLogger;
 import org.qi4j.migration.MigrationService;
 import org.qi4j.migration.assembly.MigrationBuilder;
-import org.qi4j.spi.service.importer.NewObjectImporter;
 
 public class QiPkiCaMigrationAssembler
         implements Assembler

@@ -31,13 +31,13 @@ public class FragmentedTransientTest
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addTransients( StoryTellerComposite.class ).withMixins( HelloMixin.class, ByeMixin.class );
+        module.transients( StoryTellerComposite.class ).withMixins( HelloMixin.class, ByeMixin.class );
     }
 
     @Test
     public void test()
     {
-        StoryTellerComposite st = transientBuilderFactory.newTransient( StoryTellerComposite.class );
+        StoryTellerComposite st = module.newTransient( StoryTellerComposite.class );
         System.out.println( st.sayHello( "Bonnie" ) );
         System.out.println( st.sayBye( "Bonnie" ) );
     }

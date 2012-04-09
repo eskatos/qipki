@@ -117,7 +117,7 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( get );
         String jsonCaList = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
-        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
+        RestListValue caList = module.newValueFromJSON( RestListValue.class, jsonCaList );
         assertEquals( 4, caList.items().get().size() );
         LOGGER.info( "INDEX REPOSITORY BEEN REFILLED SUCCESSFULLY" );
     }
@@ -203,15 +203,15 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( get );
         String jsonCaList = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "CAs List: {}", new JSONObject( jsonCaList ).toString( 2 ) );
-        RestListValue caList = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonCaList );
+        RestListValue caList = module.newValueFromJSON( RestListValue.class, jsonCaList );
         CAValue firstCa = ( CAValue ) caList.items().get().get( 0 );
 
         // Get first CA as Value
         get = new HttpGet( firstCa.uri().get() );
         addAcceptJsonHeader( get );
         String caJson = httpClient.execute( get, strResponseHandler );
-        CAValue ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
-        LOGGER.debug( "First CA JSON:\n{}", ca.toJSON() );
+        CAValue ca = module.newValueFromJSON( CAValue.class, caJson );
+        LOGGER.debug( "First CA JSON:\n{}", ca.toString() );
 
 
         // Get first CA CRL
@@ -225,9 +225,9 @@ public class QiPkiHttpCaTest
         HttpPost post = new HttpPost( caApi.cryptoStoreListUri().get() );
         addAcceptJsonHeader( post );
         CryptoStoreFactoryParamsValue csParams = paramsFactory.createCryptoStoreFactoryParams( testCryptoStoreName, KeyStoreType.JKS, "changeit".toCharArray() );
-        post.setEntity( new StringEntity( csParams.toJSON() ) );
+        post.setEntity( new StringEntity( csParams.toString() ) );
         String csJson = httpClient.execute( post, strResponseHandler );
-        CryptoStoreValue cryptoStore = valueBuilderFactory.newValueFromJSON( CryptoStoreValue.class, csJson );
+        CryptoStoreValue cryptoStore = module.newValueFromJSON( CryptoStoreValue.class, csJson );
 
 
         // Create a new CA
@@ -235,9 +235,9 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( post );
         KeyPairSpecValue keyPairSpec = cryptoValuesFactory.createKeySpec( AsymetricAlgorithm.RSA, 512 );
         CAFactoryParamsValue caParams = paramsFactory.createCAFactoryParams( cryptoStore.uri().get(), testCaName, 1, "CN=" + testCaName, keyPairSpec, null );
-        post.setEntity( new StringEntity( caParams.toJSON() ) );
+        post.setEntity( new StringEntity( caParams.toString() ) );
         caJson = httpClient.execute( post, strResponseHandler );
-        ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
+        ca = module.newValueFromJSON( CAValue.class, caJson );
 
 
         // Create a new X509Profile
@@ -250,21 +250,21 @@ public class QiPkiHttpCaTest
                 x509ExtValuesFactory.buildNetscapeCertTypesValue( false, EnumSet.of( NetscapeCertType.sslClient ) ),
                 x509ExtValuesFactory.buildBasicConstraintsValue( true, false, 0 ),
                 null );
-        post.setEntity( new StringEntity( profileParams.toJSON() ) );
+        post.setEntity( new StringEntity( profileParams.toString() ) );
         String sslClientProfileJson = httpClient.execute( post, strResponseHandler );
-        X509ProfileValue sslClientProfile = valueBuilderFactory.newValueFromJSON( X509ProfileValue.class, sslClientProfileJson );
+        X509ProfileValue sslClientProfile = module.newValueFromJSON( X509ProfileValue.class, sslClientProfileJson );
 
 
         // Add profile to CA
         post = new HttpPost( ca.uri().get() );
         addAcceptJsonHeader( post );
-        ValueBuilder<CAValue> caValueBuilder = valueBuilderFactory.newValueBuilder( CAValue.class ).withPrototype( ca ); // Needed as Values are immutables
+        ValueBuilder<CAValue> caValueBuilder = module.newValueBuilderWithPrototype( ca ); // Needed as Values are immutables
         ca = caValueBuilder.prototype();
         ca.allowedX509Profiles().get().add( paramsFactory.createX509ProfileAssignment( sslClientProfile.uri().get(), KeyEscrowPolicy.allowed ) );
         ca = caValueBuilder.newInstance();
-        post.setEntity( new StringEntity( ca.toJSON() ) );
+        post.setEntity( new StringEntity( ca.toString() ) );
         caJson = httpClient.execute( post, strResponseHandler );
-        ca = valueBuilderFactory.newValueFromJSON( CAValue.class, caJson );
+        ca = module.newValueFromJSON( CAValue.class, caJson );
 
 
         // Request certificate on X509Factory with a PKCS#10 request using the first CA
@@ -277,10 +277,10 @@ public class QiPkiHttpCaTest
         X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), pkcs10PEM );
         post = new HttpPost( caApi.x509ListUri().get() );
         addAcceptJsonHeader( post );
-        post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );
+        post.setEntity( new StringEntity( x509FactoryParams.toString() ) );
         String jsonX509 = httpClient.execute( post, strResponseHandler );
-        X509Value newX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
-        LOGGER.debug( "New X509 created using /api/x509/factory after POST/302/REDIRECT: {}", newX509.toJSON() );
+        X509Value newX509 = module.newValueFromJSON( X509Value.class, jsonX509 );
+        LOGGER.debug( "New X509 created using /api/x509/factory after POST/302/REDIRECT: {}", newX509.toString() );
 
 
         // Get detailled info about new X509
@@ -288,7 +288,7 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( get );
         String jsonX509Detail = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "New X509 detail: {}", new JSONObject( jsonX509Detail ).toString( 2 ) );
-        X509DetailValue newX509Detail = valueBuilderFactory.newValueFromJSON( X509DetailValue.class, jsonX509Detail );
+        X509DetailValue newX509Detail = module.newValueFromJSON( X509DetailValue.class, jsonX509Detail );
 
         assertTrue( newX509Detail.keysExtensions().get().extendedKeyUsages().get().extendedKeyUsages().get().contains( ExtendedKeyUsage.clientAuth ) );
         assertTrue( newX509Detail.keysExtensions().get().netscapeCertTypes().get().netscapeCertTypes().get().contains( NetscapeCertType.sslClient ) );
@@ -299,7 +299,7 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( get );
         String jsonX509List = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "X509s List: {}", new JSONObject( jsonX509List ).toString( 2 ) );
-        RestListValue x509List = valueBuilderFactory.newValueFromJSON( RestListValue.class, jsonX509List );
+        RestListValue x509List = module.newValueFromJSON( RestListValue.class, jsonX509List );
         X509Value firstX509 = ( X509Value ) x509List.items().get().get( 0 );
 
 
@@ -308,14 +308,14 @@ public class QiPkiHttpCaTest
         addAcceptJsonHeader( get );
         jsonX509 = httpClient.execute( get, strResponseHandler );
         LOGGER.debug( "First X509: {}", new JSONObject( jsonX509 ).toString( 2 ) );
-        firstX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
+        firstX509 = module.newValueFromJSON( X509Value.class, jsonX509 );
 
 
         // Revoke first X509
         X509RevocationParamsValue x509RevocationParams = paramsFactory.createX509RevocationParams( RevocationReason.cessationOfOperation );
         post = new HttpPost( firstX509.revocationUri().get() );
         addAcceptJsonHeader( post );
-        post.setEntity( new StringEntity( x509RevocationParams.toJSON() ) );
+        post.setEntity( new StringEntity( x509RevocationParams.toString() ) );
         String jsonRevocation = httpClient.execute( post, strResponseHandler );
         LOGGER.debug( jsonRevocation );
 
@@ -331,10 +331,10 @@ public class QiPkiHttpCaTest
         EscrowedKeyPairFactoryParamsValue escrowParams = paramsFactory.createEscrowedKeyPairFactoryParams( AsymetricAlgorithm.RSA, 512 );
         post = new HttpPost( caApi.escrowedKeyPairListUri().get() );
         addAcceptJsonHeader( post );
-        post.setEntity( new StringEntity( escrowParams.toJSON() ) );
+        post.setEntity( new StringEntity( escrowParams.toString() ) );
         String jsonEscrowed = httpClient.execute( post, strResponseHandler );
         LOGGER.debug( "EscrowedKeyPair : {}", new JSONObject( jsonEscrowed ).toString( 2 ) );
-        EscrowedKeyPairValue ekp = valueBuilderFactory.newValueFromJSON( EscrowedKeyPairValue.class, jsonEscrowed );
+        EscrowedKeyPairValue ekp = module.newValueFromJSON( EscrowedKeyPairValue.class, jsonEscrowed );
 
 
         // Recover KeyPair
@@ -351,10 +351,10 @@ public class QiPkiHttpCaTest
         x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), ekp.uri().get(), dn );
         post = new HttpPost( caApi.x509ListUri().get() );
         addAcceptJsonHeader( post );
-        post.setEntity( new StringEntity( x509FactoryParams.toJSON() ) );
+        post.setEntity( new StringEntity( x509FactoryParams.toString() ) );
         jsonX509 = httpClient.execute( post, strResponseHandler );
-        newX509 = valueBuilderFactory.newValueFromJSON( X509Value.class, jsonX509 );
-        LOGGER.debug( "New X509 created using /api/x509/factory and an escrowed keypair after POST/302/REDIRECT: {}", newX509.toJSON() );
+        newX509 = module.newValueFromJSON( X509Value.class, jsonX509 );
+        LOGGER.debug( "New X509 created using /api/x509/factory and an escrowed keypair after POST/302/REDIRECT: {}", newX509.toString() );
 
 
         // Getting new X509 PEM

@@ -53,7 +53,7 @@ public class EscrowedKeyPairResource
         EscrowedKeyPair ekp = ekpCtx.escrowedKeyPair();
 
         // Representation
-        return new StringRepresentation( restValuesFactory.escrowedKeyPair( ekp ).toJSON(), MediaType.APPLICATION_JSON );
+        return new StringRepresentation( restValuesFactory.escrowedKeyPair( ekp ).toString(), MediaType.APPLICATION_JSON );
     }
 
 }
