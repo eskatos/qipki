@@ -13,12 +13,10 @@
  */
 package org.qipki.ca;
 
-import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
-import org.qipki.core.AbstractQiPkiApplication;
 
 public class QiPkiEmbeddedCa
-        extends AbstractQiPkiApplication<RootContext>
+        extends AbstractQiPkiCa
 {
 
     public QiPkiEmbeddedCa( QiPkiEmbeddedCaAssembler appAssembler )
