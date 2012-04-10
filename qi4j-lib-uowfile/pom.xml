@@ -39,11 +39,13 @@
             <groupId>org.qi4j.core</groupId>
             <artifactId>org.qi4j.core.testsupport</artifactId>
             <version>${version.qi4j}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.qi4j.core</groupId>
             <artifactId>org.qi4j.core.runtime</artifactId>
             <version>${version.qi4j}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -57,6 +59,7 @@
             <version>${version.slf4j}</version>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
 
 </project>
