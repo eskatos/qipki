@@ -33,7 +33,11 @@ See [http://qipki.org](http://qipki.org)
 
 ## Changelog
 
-### master
+### develop
+
+* Upstream update: Qi4j 2.0-SNAPSHOT
+
+### 1.0 - 2012/02/17
 
 * KeyStores, EscrowedKeyPairs and CRLs are now stored on the filesystem thanks to the FileConfiguration API
 * Added CRL Distribution Point handling
