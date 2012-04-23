@@ -11,33 +11,24 @@ Released early 2012, it contains a comprehensive embeddable CA and is based on Q
 
 ### QiPki 1.1
 
-Work is already in progress to add a reasonable CA with HTTP interactions.
+Work is already in progress to enhance the Crypto API and CA context.
 From here it will be based on Qi4j 2.0.
 
 
 ## Details
 
-### Quid?
+QiPki generally uses a Commit-Then-Review policy on most changes.
 
-Do we really want to do that? Is this even possible? Is it the right time?
-
-* Move to Qi4j 2.0-SNAPSHOT?
-  * Yes we do, yes it is, yes it is :)
+We use the git branching model provided by [git-flow](https://github.com/nvie/gitflow#readme) described in [this web page](http://nvie.com/posts/a-successful-git-branching-model/).
 
 
 ### Work in progress
 
-* Clean release point before heading develop branch to follow Qi4j 2.0 development
+* Move to Qi4j 2.0-SNAPSHOT
 
 
-### Next steps - That would lead to a tiny 1.0
+### Next steps
 
-* (#---) Documentation
-  * Extract code snippets from actual source to generate documentation
-    * Rework the snippet parsing code in order to remove the javaparser dependency
-  * Enhance unit test code lisibility for snippets
-  * Crypto API
-  * Embedded CA
 * (#---) Enhance Crypto API
   * Review, test and document HMACs
     * Still to write the SupportedTransformations test method for HMACs
@@ -47,6 +38,52 @@ Do we really want to do that? Is this even possible? Is it the right time?
 
 ### After that
 
+* (----) Review Qi4j SQL Support
+  * Merge my and Rickard support for DataSources
+  * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
+  * Add HSQLDB support to have another embedded SGBD
+  * Use MySQL Java deployment facilities
+* (#---) Follow state refactoring with the Qi4j data migration system
+  * Build a documented database sample for 1.0-alpha6 and use it as a test resource
+  * Write a complete test scenario from the embedder point of view around the sample database
+  * Write unit tests for migrations
+* (#---) Documentation
+  * Extract code snippets from actual source to generate documentation
+    * Rework the snippet parsing code in order to remove the javaparser dependency
+  * Enhance unit test code lisibility for snippets
+  * Crypto API
+  * Embedded CA
+* Change the way keys are handled
+  * Write behavioral mixins for entities using the crypto services
+  * Apply DCI for usecases modeling
+  * Add PKCS#11 KeyStore support
+  * Add encipered filesystem based storage
+  * Add a key wallet to officers with the keys they're allowed to use
+  * A CAProfile allows, or not, issuance of escrowed certified keypairs
+    * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
+  * A CAProfile allows, or not, certificate issuance for known escrowed keypairs
+  * Add a warning if a CA signs a PKCS#10
+* Wrap client api as a small Qi4j Application usable without Qi4j imports
+* Create a CAProfile role
+  * Needed to add rules to CAs that are use case driven and not standard driven
+  * A CA will addapt its behavior based on it's profile
+* Create a CRLIssuer role
+  * To be a CRLIssuer a CA must be allowed by it's CAProfile
+  * One could want to disable CRL issuance on a CA with appropriate CAProfile
+  * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
+* Enhance X509Profile with domain rules and certificate template creation
+* (----) Enhance Netscape extensions handling
+  * In X509DetailValue : all of them
+  * Netscape CA Revocation URL
+  * Netscape Revocation URL
+  * Netscape Renewal URL
+  * Automatically filled by CAs : Netscape CA Revocation URL
+  * In X509Profile : choose the good ones
+* (----) Enhance CRL support
+  * Use the task scheduler to generate CRLs so this is not done in request threads
+  * Add a command to force CRL regeneration
+  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
+    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
 * (----) Use mocks in unit tests
 * (##--) Rework Qi4j HttpService
   * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
@@ -60,11 +97,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
     * What to expose on JMX? Jetty statistics?
     * Add a pluggable SSLContextProviderService or something like that with assembly facilities
     * SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present
-* (----) Review Qi4j SQL Support
-  * Merge my and Rickard support for DataSources
-  * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
-  * Add HSQLDB support to have another embedded SGBD
-  * Use MySQL Java deployment facilities
 * (----) Add shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge themselves later
   * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
@@ -85,22 +117,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
   * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
-* (----) Enhance Netscape extensions handling
-  * In X509DetailValue : all of them
-  * Netscape CA Revocation URL
-  * Netscape Revocation URL
-  * Netscape Renewal URL
-  * Automatically filled by CAs : Netscape CA Revocation URL
-  * In X509Profile : choose the good ones
-* (----) Enhance CRL support
-  * Use the task scheduler to generate CRLs so this is not done in request threads
-  * Add a command to force CRL regeneration
-  * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
-    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
-* (#---) Follow state refactoring with the Qi4j data migration system
-  * Get a documented database sample for 1.0-alpha6 and use it as a test resource
-  * Write a complete test scenario from the embedder point of view around the sample database
-  * Write unit tests for migrations
 * Reduce LOC in ReST Resources
   * Qi4j 2.0 will provide constructs allowing to declare Resources as TransientComposites directly
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
@@ -119,22 +135,6 @@ Do we really want to do that? Is this even possible? Is it the right time?
   * http://www.oracle.com/technetwork/java/javase/jnlp-136707.html
 * Domain auditing bounded context filled by @SideEffects
 * (#---) Add some generated documentation to the build process
-* Enhance X509Profile with domain rules and certificate template creation
-* Create a CAProfile role
-  * Needed to add rules to CAs that are use case driven and not standard driven
-  * A CA will addapt its behavior based on it's profile
-* Create a CRLIssuer role
-  * To be a CRLIssuer a CA must be allowed by it's CAProfile
-  * One could want to disable CRL issuance on a CA with appropriate CAProfile
-  * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
 * Add tool http resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
   * With this we can write unit tests for certificate parsing using a bunch of external certificates
-* Change the way key pairs are protected
-  * Add PKCS#11 KeyStore support
-  * Add encipered filesystem based storage
-  * Add a key wallet to officers with the keys they're allowed to use
-  * A CAProfile allows, or not, issuance of escrowed certified keypairs
-    * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
-  * A CAProfile allows, or not, certificate issuance for known escrowed keypairs
-  * Add a warning if a CA signs a PKCS#10 
-* Wrap client api as a small Qi4j Application usable without Qi4j imports
+* Add tool for  see [this web page](http://docs.codehaus.org/display/SONAR/Settings+Encryption).
