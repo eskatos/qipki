@@ -1,13 +1,15 @@
 # QiPki Roadmap
 
-This documents the constantly evolving QiPki Roadmap. Until decided this is the prefered way to gather and track 
-progress. After that a true issue management system will be used, but not before.
+This documents the constantly evolving QiPki Roadmap. Until decided this is the
+prefered way to gather and track progress. After that a true issue management
+system will be used, but not before.
 
 ## Overview
 
 ### QiPki 1.0
 
-Released early 2012, it contains a comprehensive embeddable CA and is based on Qi4j 1.4.
+Released early 2012, it contains a comprehensive embeddable CA and is based on
+Qi4j 1.4.
 
 ### QiPki 1.1
 
@@ -19,7 +21,9 @@ From here it will be based on Qi4j 2.0.
 
 QiPki generally uses a Commit-Then-Review policy on most changes.
 
-We use the git branching model provided by [git-flow](https://github.com/nvie/gitflow#readme) described in [this web page](http://nvie.com/posts/a-successful-git-branching-model/).
+We use the git branching model provided by
+[git-flow](https://github.com/nvie/gitflow#readme) described in
+[this web page](http://nvie.com/posts/a-successful-git-branching-model/).
 
 
 ### Work in progress
@@ -34,22 +38,28 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
     * Still to write the SupportedTransformations test method for HMACs
   * Review, test and document signatures
   * Review, test and document X.509
-  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies, maybe with optional JSR330 @Inject annotations for use with compatible IoC containers like Guice or CDI
+  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies,
+    maybe with optional JSR330 @Inject annotations for use with compatible IoC
+    containers like Guice or CDI
 
 ### After that
 
 * (----) Review Qi4j SQL Support
   * Merge my and Rickard support for DataSources
-  * Find a clever way to use FileConfiguration API to store databases in ~/data for SGBDs that support it (Derby only ATM)
+  * Find a clever way to use FileConfiguration API to store databases in ~/data
+    for SGBDs that support it (Derby only ATM)
   * Add HSQLDB support to have another embedded SGBD
   * Use MySQL Java deployment facilities
 * (#---) Follow state refactoring with the Qi4j data migration system
-  * Build a documented database sample for 1.0-alpha6 and use it as a test resource
-  * Write a complete test scenario from the embedder point of view around the sample database
+  * Build a documented database sample for 1.0-alpha6 and use it as a test
+    resource
+  * Write a complete test scenario from the embedder point of view around the
+    sample database
   * Write unit tests for migrations
 * (#---) Documentation
   * Extract code snippets from actual source to generate documentation
-    * Rework the snippet parsing code in order to remove the javaparser dependency
+    * Rework the snippet parsing code in order to remove the javaparser
+      dependency
   * Enhance unit test code lisibility for snippets
   * Crypto API
   * Embedded CA
@@ -59,9 +69,9 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
   * Add PKCS#11 KeyStore support
   * Add encipered filesystem based storage
   * Add a key wallet to officers with the keys they're allowed to use
-  * A CAProfile allows, or not, issuance of escrowed certified keypairs
+  * CAProfile allows, or not, issuance of escrowed certified keypairs
     * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
-  * A CAProfile allows, or not, certificate issuance for known escrowed keypairs
+  * CAProfile allows, or not, certificate issuance for known escrowed keypairs
   * Add a warning if a CA signs a PKCS#10
 * Wrap client api as a small Qi4j Application usable without Qi4j imports
 * Create a CAProfile role
@@ -70,7 +80,8 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
 * Create a CRLIssuer role
   * To be a CRLIssuer a CA must be allowed by it's CAProfile
   * One could want to disable CRL issuance on a CA with appropriate CAProfile
-  * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a CA isssuing CRLs
+  * Revocation on a SubSubSubCA would climb the CAs hierarchy unless finding a
+    CA isssuing CRLs
 * Enhance X509Profile with domain rules and certificate template creation
 * (----) Enhance Netscape extensions handling
   * In X509DetailValue : all of them
@@ -80,13 +91,16 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
   * Automatically filled by CAs : Netscape CA Revocation URL
   * In X509Profile : choose the good ones
 * (----) Enhance CRL support
-  * Use the task scheduler to generate CRLs so this is not done in request threads
+  * Use the task scheduler to generate CRLs so this is not done in request
+    threads
   * Add a command to force CRL regeneration
   * Implements CRL next-update mechanism (See CRL.java in qipki-ca)
-    * See if providing two next-update implementations is worth the effort (Netscape and Microsoft ways)
+    * See if providing two next-update implementations is worth the effort
+      (Netscape and Microsoft ways)
 * (----) Use mocks in unit tests
 * (##--) Rework Qi4j HttpService
-  * Write unit tests for as much as possible of the configuration options (vhosts, mutual authentication etc..)
+  * Write unit tests for as much as possible of the configuration options
+    (vhosts, mutual authentication etc..)
   * No more DefaultServlet
     * Remove default servlet added by default
     * Remove rootResourceBase from configuration
@@ -95,12 +109,17 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
   * QUID?
     * See how to restrict requests on a specific host (Host http header)
     * What to expose on JMX? Jetty statistics?
-    * Add a pluggable SSLContextProviderService or something like that with assembly facilities
-    * SecureJettyMixin would use SecureJettyConfiguration by default but use SSLContextProviderService if present
-* (----) Add shiro for handling roles/permissions
-  * Model with one root Role and Permissions, other Roles will emerge themselves later
-  * See if programmatic security algorithms (vs. annotations) fits well in DCI Contexts
-  * See if the security can be applied to bounded contexts (ca, ra ..) without any web context and then add http handling
+    * Add a pluggable SSLContextProviderService or something like that with
+      assembly facilities
+    * SecureJettyMixin would use SecureJettyConfiguration by default but use
+      SSLContextProviderService if present
+* (----) Use shiro for handling roles/permissions
+  * Model with one root Role and Permissions, other Roles will emerge
+    themselves later
+  * See if programmatic security algorithms (vs. annotations) fits well in DCI
+    Contexts
+  * See if the security can be applied to bounded contexts (ca, ra ..) without
+    any web context and then add http handling
   * Permissions defines permissions on interactions
   * Privileges defines permissions on resources: get & head / post & put
   * How to deal with domain needs ?
@@ -112,29 +131,38 @@ We use the git branching model provided by [git-flow](https://github.com/nvie/gi
     * certificate authority
     * request authority officer
     * end entity
-  * Permissions and Privileges needed for building roles are built in and mutables
+  * Permissions and Privileges needed for building roles are built in and
+    mutables
 * (#---) WebUI
   * Generate Javascript Overlay Types for all json resources at build time
   * Find a way to write an eventbus bridge crossing iframes
-  * Split gwt code, see http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html
+  * [Split gwt code](http://mojo.codehaus.org/gwt-maven-plugin/user-guide/productivity.html)
 * Reduce LOC in ReST Resources
-  * Qi4j 2.0 will provide constructs allowing to declare Resources as TransientComposites directly
+  * Qi4j 2.0 will provide constructs allowing to declare Resources as
+    TransientComposites directly
   * See {@link org.qipki.ca.http.presentation.rest.RestletFinder#create}
   * Use @Concerns to factorize http Resources (error handling, logging etc..)
-* Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using http://www.jamon.org/
-* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable serialization
+* Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using
+  [Jamon](http://www.jamon.org/(
+* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable
+  serialization
 * Implement http cache handling
   * @Cacheable Concern using a payload store
-  * UoW hooks to fill in cache store with payload bytes along http metadatas for caching support (etag...) and remove invalid entries
+  * UoW hooks to fill in cache store with payload bytes along http metadatas
+    for caching support (etag...) and remove invalid entries
 * Monitoring BoundedContext
-  * Integrate JavaMelody with Qi4j using a @Concern http://code.google.com/p/javamelody/
-  * What about integrating GwtMeasure with JavaMelody? http://code.google.com/p/gwt-measure/
+  * Integrate [JavaMelody](http://code.google.com/p/javamelody/) with Qi4j
+    using a @Concern   
+  * What about integrating [GwtMeasure](http://code.google.com/p/gwt-measure/) with JavaMelody? 
   * See how it would be possible to reuse the JMX world in a web UI
   * JMX client in web, in an applet, as a webstart?
   * JMX over websockets?
   * http://www.oracle.com/technetwork/java/javase/jnlp-136707.html
 * Domain auditing bounded context filled by @SideEffects
 * (#---) Add some generated documentation to the build process
-* Add tool http resources, for example a resource that parse a given x509 certificate and return a X509DetailValue
-  * With this we can write unit tests for certificate parsing using a bunch of external certificates
-* Add tool for  see [this web page](http://docs.codehaus.org/display/SONAR/Settings+Encryption).
+* Add tool http resources, for example a resource that parse a given x509
+  certificate and return a X509DetailValue
+  * With this we can write unit tests for certificate parsing using a bunch of
+    external certificates
+* Add tool for encryption see
+  [this web page](http://docs.codehaus.org/display/SONAR/Settings+Encryption).
