@@ -19,11 +19,17 @@ public class SymetricSigningGeneratorParameters
 {
 
     public static final SymetricSigningGeneratorParameters HmacMD5_128 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacMD5, 128 );
+
     public static final SymetricSigningGeneratorParameters HmacSHA1_128 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA1, 128 );
+
     public static final SymetricSigningGeneratorParameters HmacSHA256_256 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA256, 256 );
+
     public static final SymetricSigningGeneratorParameters HmacSHA384_384 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA384, 384 );
+
     public static final SymetricSigningGeneratorParameters HmacSHA512_512 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA512, 512 );
+
     private final MACAlgorithm algorithm;
+
     private final int keySize;
 
     public SymetricSigningGeneratorParameters( MACAlgorithm algorithm, int keySize )

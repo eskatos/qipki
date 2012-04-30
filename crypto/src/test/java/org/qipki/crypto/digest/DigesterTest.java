@@ -17,14 +17,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.Security;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.qipki.crypto.AbstractQiPkiCryptoTest;
 import org.qipki.crypto.DefaultCryptoContext;
-import static org.qipki.crypto.algorithms.DigestAlgorithm.*;
+import static org.qipki.crypto.algorithms.DigestAlgorithm.SHA_256;
 import org.qipki.crypto.codec.CryptCodexImpl;
 
 public class DigesterTest
@@ -32,10 +31,15 @@ public class DigesterTest
 {
 
     private static final String MESSAGE = "Le nom des fous est écrit partout.\n";
+
     private static final String EXPECTED_MD5 = "c623709621030a5e84d703b7a160d33a";
+
     private static final String EXPECTED_SHA_1 = "0fddb1ae5b5d1ab7b8503d1b68ff84c6e507ecdf";
+
     private static final String EXPECTED_SHA_256 = "2b9b4d8d02e5b9609ac1da0a7de879d0b6f41e845f0ba3f29ac3e15e7ee354ed";
+
     private static final String EXPECTED_SHA_384 = "20910472dd3a886c563d9637a4e1c94858319f090e9a56f335457d902a3c01d88fc7cc5aad5c99ccb446479c08ae5824";
+
     private static final String EXPECTED_SHA_512 = "cdbefb2d859f9e984a0032857469c3bba9fe03591772bbf5f1f866a4e8a31f9174e9a30e861d32ba4ff8e7c9f66bcdfed2df36f986e8388ce3cb775808de8bd4";
 
     @Test

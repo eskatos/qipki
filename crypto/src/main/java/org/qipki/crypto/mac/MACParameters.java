@@ -21,6 +21,7 @@ public class MACParameters
 {
 
     private final MACAlgorithm algo;
+
     private final Key secretKey;
 
     public MACParameters( MACAlgorithm algo, Key secretKey )

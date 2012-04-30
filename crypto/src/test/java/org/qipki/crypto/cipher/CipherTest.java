@@ -18,20 +18,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Security;
+
 import javax.crypto.SecretKey;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.qipki.crypto.AbstractQiPkiCryptoTest;
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.DefaultCryptoContext;
-import static org.qipki.crypto.cipher.SymetricCipherFactoryParameters.*;
-import static org.qipki.crypto.constants.IOConstants.*;
+import static org.qipki.crypto.cipher.SymetricCipherFactoryParameters.AES_CBC_PKCS5;
+import static org.qipki.crypto.constants.IOConstants.UTF_8;
+import static org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters.AES_128;
 import org.qipki.crypto.symetric.SymetricGenerator;
-import static org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters.*;
 import org.qipki.crypto.symetric.SymetricGeneratorImpl;
 
 public class CipherTest

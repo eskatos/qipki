@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+
 import javax.crypto.Mac;
 
 import org.qi4j.api.injection.scope.Service;
@@ -35,6 +36,7 @@ public class MACImpl
 {
 
     private final CryptoContext cryptoContext;
+
     private final CryptCodex cryptCodex;
 
     public MACImpl( @Service CryptoContext cryptoContext, @Service CryptCodex cryptCodex )
@@ -46,19 +48,30 @@ public class MACImpl
     @Override
     public byte[] mac( InputStream data, MACParameters params )
     {
-        try {
-            Mac mac = Mac.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
-            mac.init( params.secretKey() );
-            byte[] buffer = new byte[ IOConstants.INTERNAL_BUFFERS_SIZE ];
-            int length = 0;
-            while ( ( length = data.read( buffer ) ) != -1 ) {
-                mac.update( buffer, 0, length );
-            }
-            return mac.doFinal();
-        } catch ( IOException ex ) {
-            throw new CryptoFailure( "Unable to read data to MAC with " + params.algorithm().jcaString(), ex );
-        } catch ( GeneralSecurityException ex ) {
-            throw new CryptoFailure( "Unable to MAC using " + params.algorithm().jcaString(), ex );
+        switch ( params.algorithm() ) {
+            case CBC_MAC:
+                throw new UnsupportedOperationException( "TODO Implement CBC-MAC http://en.wikipedia.org/wiki/CBC-MAC" );
+            case CMAC:
+                throw new UnsupportedOperationException( "TODO Implement CMAC http://en.wikipedia.org/wiki/CMAC" );
+            case UMAC:
+                throw new UnsupportedOperationException( "TODO Implement UMAC http://en.wikipedia.org/wiki/UMAC" );
+            case Poly1305_AES:
+                throw new UnsupportedOperationException( "TODO Implement Poly1305-AES http://cr.yp.to/mac.html" );
+            default:
+                try {
+                    Mac mac = Mac.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
+                    mac.init( params.secretKey() );
+                    byte[] buffer = new byte[ IOConstants.INTERNAL_BUFFERS_SIZE ];
+                    int length = 0;
+                    while ( ( length = data.read( buffer ) ) != -1 ) {
+                        mac.update( buffer, 0, length );
+                    }
+                    return mac.doFinal();
+                } catch ( IOException ex ) {
+                    throw new CryptoFailure( "Unable to read data to MAC with " + params.algorithm().jcaString(), ex );
+                } catch ( GeneralSecurityException ex ) {
+                    throw new CryptoFailure( "Unable to MAC using " + params.algorithm().jcaString(), ex );
+                }
         }
     }
 
