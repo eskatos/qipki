@@ -28,7 +28,12 @@ We use the git branching model provided by
 
 ### Work in progress
 
-* Move to Qi4j 2.0-SNAPSHOT
+* (----) Review Qi4j 2.0 SQL Support
+  * Merge my and Rickard support for DataSources
+  * Find a clever way to use FileConfiguration API to store databases in ~/data
+    for SGBDs that support it (Derby only ATM)
+  * Add HSQLDB support to have another embedded SGBD
+  * Use MySQL Java deployment facilities
 
 
 ### Next steps
@@ -44,12 +49,6 @@ We use the git branching model provided by
 
 ### After that
 
-* (----) Review Qi4j SQL Support
-  * Merge my and Rickard support for DataSources
-  * Find a clever way to use FileConfiguration API to store databases in ~/data
-    for SGBDs that support it (Derby only ATM)
-  * Add HSQLDB support to have another embedded SGBD
-  * Use MySQL Java deployment facilities
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Build a documented database sample for 1.0-alpha6 and use it as a test
     resource
