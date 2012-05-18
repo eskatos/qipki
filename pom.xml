@@ -61,9 +61,6 @@
 
     <modules>
 
-       <!-- Qi4j extensions & libraries -->
-       <module>qi4j-lib-uowfile</module>
-
         <!-- Common building blocks -->
         <module>crypto</module>
         <module>core</module>

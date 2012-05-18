@@ -26,13 +26,13 @@
             <artifactId>qipki-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>org.qi4j.library.uowfile</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Libraries -->
+        <dependency>
+            <groupId>org.qi4j.library</groupId>
+            <artifactId>org.qi4j.library.uowfile</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
         <dependency>
             <groupId>org.qi4j.library</groupId>
             <artifactId>org.qi4j.library.fileconfig</artifactId>

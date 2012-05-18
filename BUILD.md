@@ -37,11 +37,6 @@ All QiPki modules use the `org.codeartisans.qipki` group ID.
             <td>Unit tests plumbing</td>
         </tr>
         <tr>
-            <td>./qi4j-lib-uowfile/</td>
-            <td>org.qi4j.library.uowfile</td>
-            <td>Qi4j library to bind operations on files to a UnitOfWork</td>
-        </tr>
-        <tr>
             <td>./crypto/</td>
             <td>qipki-crypto</td>
             <td>Crypto Engine</td>
