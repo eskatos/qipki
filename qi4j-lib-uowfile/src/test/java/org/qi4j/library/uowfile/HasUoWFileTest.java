@@ -32,9 +32,9 @@ import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.structure.Module;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.api.unitofwork.concern.UnitOfWorkConcern;
 import org.qi4j.api.unitofwork.concern.UnitOfWorkPropagation;
 import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
@@ -42,6 +42,7 @@ import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.io.Inputs;
 import org.qi4j.io.Outputs;
+import org.qi4j.library.uowfile.bootstrap.UoWFileAssembler;
 import org.qi4j.library.uowfile.internal.ConcurrentUoWFileModificationException;
 import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 import org.qi4j.library.uowfile.singular.UoWFileLocator;
@@ -103,7 +104,7 @@ public class HasUoWFileTest
     {
 
         @Structure
-        private UnitOfWorkFactory uowf;
+        private Module module;
 
         @Override
         public void modifyFile( String entityId )
@@ -138,7 +139,7 @@ public class HasUoWFileTest
         private void modifyFileImmediatly( String entityId )
                 throws IOException
         {
-            TestedEntity entity = uowf.currentUnitOfWork().get( TestedEntity.class, entityId );
+            TestedEntity entity = module.currentUnitOfWork().get( TestedEntity.class, entityId );
             Inputs.text( MODIFICATION_CONTENT_URL ).transferTo( Outputs.text( entity.managedFile() ) );
         }
 
@@ -286,7 +287,7 @@ public class HasUoWFileTest
             public void run()
             {
                 try {
-                    testService.modifyFileWithRetry( entityId, 0, 10000 );
+                    testService.modifyFileWithRetry( entityId, 0, 3000 );
                 } catch ( Exception ex1 ) {
                     ex.add( ex1 );
                 }
@@ -300,7 +301,7 @@ public class HasUoWFileTest
             public void run()
             {
                 try {
-                    testService.modifyFileWithRetry( entityId, 5000, 0 );
+                    testService.modifyFileWithRetry( entityId, 1000, 0 );
                 } catch ( Exception ex1 ) {
                     ex.add( ex1 );
                 }
@@ -331,15 +332,6 @@ public class HasUoWFileTest
         entity = builder.newInstance();
         Inputs.text( CREATION_CONTENT_URL ).transferTo( Outputs.text( entity.managedFile() ) );
         return entity;
-    }
-
-    private boolean isFileFirstLineEqualsTo( File file, String start )
-            throws IOException
-    {
-        List<String> lines = new ArrayList<String>();
-        // This load the full file but used test resources are single line files
-        Inputs.text( file ).transferTo( Outputs.collection( lines ) );
-        return lines.get( 0 ).trim().startsWith( start );
     }
 
 }

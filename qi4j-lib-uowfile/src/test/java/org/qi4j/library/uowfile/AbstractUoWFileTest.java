@@ -15,11 +15,15 @@ package org.qi4j.library.uowfile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import org.qi4j.io.Inputs;
+import org.qi4j.io.Outputs;
 import org.qi4j.test.AbstractQi4jTest;
 
 public abstract class AbstractUoWFileTest
@@ -62,6 +66,15 @@ public abstract class AbstractUoWFileTest
                 stack.pop().delete();
             }
         }
+    }
+
+    protected final boolean isFileFirstLineEqualsTo( File file, String start )
+            throws IOException
+    {
+        List<String> lines = new ArrayList<String>();
+        // This load the full file but used test resources are single line files
+        Inputs.text( file ).transferTo( Outputs.collection( lines ) );
+        return lines.get( 0 ).trim().startsWith( start );
     }
 
 }

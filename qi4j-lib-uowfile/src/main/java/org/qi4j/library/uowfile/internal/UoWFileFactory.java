@@ -26,11 +26,12 @@ import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.Activatable;
 import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.structure.Application;
+import org.qi4j.api.structure.Module;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkCallback;
 import org.qi4j.api.unitofwork.UnitOfWorkCallback.UnitOfWorkStatus;
 import org.qi4j.api.unitofwork.UnitOfWorkCompletionException;
-import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.library.fileconfig.FileConfiguration;
 
 import org.slf4j.Logger;
@@ -54,7 +55,9 @@ public interface UoWFileFactory
 
         private static final Logger LOGGER = LoggerFactory.getLogger( "org.qi4j.library.uowfile" );
         @Structure
-        private UnitOfWorkFactory uowf;
+        private Application app;
+        @Structure
+        private Module module;
         @This
         private ServiceComposite me;
         @Optional
@@ -68,7 +71,7 @@ public interface UoWFileFactory
         {
             File tmp;
             if ( fileConfig == null ) {
-                tmp = new File( System.getProperty( "java.io.tmpdir" ) );
+                tmp = new File( System.getProperty( "java.io.tmpdir" ), app.name() + "-" + app.version() );
             } else {
                 tmp = fileConfig.temporaryDirectory();
             }
@@ -88,7 +91,7 @@ public interface UoWFileFactory
         @Override
         public UoWFile createCurrentUoWFile( File file )
         {
-            return createUoWFile( uowf.currentUnitOfWork(), file, workDir );
+            return createUoWFile( module.currentUnitOfWork(), file, workDir );
         }
 
         private static synchronized UoWFile createUoWFile( UnitOfWork uow, File file, File workDir )
