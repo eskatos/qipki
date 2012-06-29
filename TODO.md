@@ -28,7 +28,7 @@ We use the git branching model provided by
 
 ### Work in progress
 
-* (----) Review Qi4j 2.0 SQL Support
+* (##--) Review Qi4j 2.0 SQL Support
   * Merge my and Rickard support for DataSources
   * Find a clever way to use FileConfiguration API to store databases in ~/data
     for SGBDs that support it (Derby only ATM)
@@ -46,9 +46,12 @@ We use the git branching model provided by
   * Provide an artifact containing the CryptoAPI without any Qi4j dependencies,
     maybe with optional JSR330 @Inject annotations for use with compatible IoC
     containers like Guice or CDI
+  * Add FlexiProvider based tests to testdrive the Provider independence
+    http://www.flexiprovider.de/
 
 ### After that
 
+* What about integration of http://www.cryptool.org/en/jcryptool ?
 * (#---) Follow state refactoring with the Qi4j data migration system
   * Build a documented database sample for 1.0-alpha6 and use it as a test
     resource
