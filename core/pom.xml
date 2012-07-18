@@ -69,6 +69,11 @@
 
         <!-- Tests -->
         <dependency>
+            <groupId>org.qi4j.core</groupId>
+            <artifactId>org.qi4j.core.testsupport</artifactId>
+            <version>${version.qi4j}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${version.junit}</version>
