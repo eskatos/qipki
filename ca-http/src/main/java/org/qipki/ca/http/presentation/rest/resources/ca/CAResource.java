@@ -82,7 +82,7 @@ public class CAResource
         try {
             // Data
             String identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            CAValue caValue = module.valueBuilderFactory().newValueFromJSON( CAValue.class, entity.getText() );
+            CAValue caValue = module.newValueFromJSON( CAValue.class, entity.getText() );
             Map<String, KeyEscrowPolicy> profileAssignments = new HashMap<String, KeyEscrowPolicy>();
             for ( X509ProfileAssignmentValue eachAssignment : caValue.allowedX509Profiles().get() ) {
                 profileAssignments.put( new CaUriResolver( getRootRef(), eachAssignment.x509ProfileUri().get() ).identity(),

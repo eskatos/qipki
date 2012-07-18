@@ -70,7 +70,7 @@ public class CAListResource
         try {
 
             // Data
-            CAFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
+            CAFactoryParamsValue params = module.newValueFromJSON( CAFactoryParamsValue.class, entity.getText() );
 
             // Context
             CAListContext caListCtx = newRootContext().caListContext();

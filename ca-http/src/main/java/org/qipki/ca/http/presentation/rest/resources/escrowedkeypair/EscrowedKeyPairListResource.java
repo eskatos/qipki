@@ -71,7 +71,7 @@ public class EscrowedKeyPairListResource
         try {
 
             // Data
-            EscrowedKeyPairFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( EscrowedKeyPairFactoryParamsValue.class, entity.getText() );
+            EscrowedKeyPairFactoryParamsValue params = module.newValueFromJSON( EscrowedKeyPairFactoryParamsValue.class, entity.getText() );
 
             // Context
             EscrowedKeyPairListContext escrowListContext = newRootContext().escrowedKeyPairListContext();

@@ -58,7 +58,7 @@ public class X509RevocationResource
 
             // Data
             String x509Identity = ensureRequestAttribute( PARAM_IDENTITY, String.class, Status.CLIENT_ERROR_BAD_REQUEST );
-            X509RevocationParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509RevocationParamsValue.class, entity.getText() );
+            X509RevocationParamsValue params = module.newValueFromJSON( X509RevocationParamsValue.class, entity.getText() );
 
             // Context
             RootContext rootCtx = newRootContext();

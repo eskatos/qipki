@@ -71,7 +71,7 @@ public class X509ProfileListResource
         try {
 
             // Data
-            X509ProfileFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509ProfileFactoryParamsValue.class, entity.getText() );
+            X509ProfileFactoryParamsValue params = module.newValueFromJSON( X509ProfileFactoryParamsValue.class, entity.getText() );
 
             // Context
             X509ProfileListContext x509ProfileListCtx = newRootContext().x509ProfileListContext();

@@ -72,7 +72,7 @@ public class X509ListResource
         try {
 
             // Data
-            X509FactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
+            X509FactoryParamsValue params = module.newValueFromJSON( X509FactoryParamsValue.class, entity.getText() );
             Boolean escrowed = params.escrowedKeyPairUri().get() != null;
 
             // Context

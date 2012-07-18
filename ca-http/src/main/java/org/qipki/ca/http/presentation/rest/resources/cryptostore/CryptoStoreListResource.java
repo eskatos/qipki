@@ -71,7 +71,7 @@ public class CryptoStoreListResource
         try {
 
             // Data
-            CryptoStoreFactoryParamsValue params = module.valueBuilderFactory().newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
+            CryptoStoreFactoryParamsValue params = module.newValueFromJSON( CryptoStoreFactoryParamsValue.class, entity.getText() );
 
             // Context
             CryptoStoreListContext csListCtx = newRootContext().cryptoStoreListContext();
