@@ -17,11 +17,12 @@ import java.security.Key;
 import java.security.PublicKey;
 import java.security.interfaces.DSAKey;
 import java.security.interfaces.RSAKey;
+
 import javax.crypto.interfaces.DHKey;
 
-import org.qipki.crypto.CryptoFailure;
-
 import org.qi4j.api.injection.scope.Uses;
+
+import org.qipki.crypto.CryptoFailure;
 
 public class KeyInformation
 {

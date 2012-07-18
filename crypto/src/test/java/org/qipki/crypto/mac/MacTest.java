@@ -15,12 +15,12 @@ package org.qipki.crypto.mac;
 
 import javax.crypto.SecretKey;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import org.qipki.crypto.AbstractQiPkiCryptoTest;
-import static org.qipki.crypto.algorithms.MACAlgorithm.*;
-import static org.qipki.crypto.symetric.SymetricSigningGeneratorParameters.*;
+import static org.qipki.crypto.algorithms.MACAlgorithm.HmacSHA256;
+import static org.qipki.crypto.symetric.SymetricSigningGeneratorParameters.HmacSHA256_256;
 
 public class MacTest
         extends AbstractQiPkiCryptoTest
@@ -46,5 +46,4 @@ public class MacTest
         System.out.println( "Bob: Alright Alice!" + " [ " + bobMAC + " ]" );
     }
     // SNIPPET END crypto.mac.1
-
 }

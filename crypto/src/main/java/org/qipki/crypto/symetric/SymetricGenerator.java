@@ -15,6 +15,7 @@ package org.qipki.crypto.symetric;
 
 import javax.crypto.SecretKey;
 
+// TODO Rename to SymetricKeyGenerator
 public interface SymetricGenerator
 {
 
