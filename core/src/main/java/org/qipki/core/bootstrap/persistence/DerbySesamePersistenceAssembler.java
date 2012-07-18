@@ -19,62 +19,57 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.sql.assembly.DerbySQLEntityStoreAssembler;
 import org.qi4j.index.rdf.assembly.RdfNativeSesameStoreAssembler;
 import org.qi4j.library.rdf.repository.NativeConfiguration;
+import org.qi4j.library.sql.assembly.DBCPDataSourceServiceAssembler;
+import org.qi4j.library.sql.assembly.DataSourceAssembler;
 import org.qi4j.library.sql.common.SQLConfiguration;
-import org.qi4j.library.sql.ds.DBCPDataSourceConfiguration;
-import org.qi4j.library.sql.ds.DataSourceService;
-import org.qi4j.library.sql.ds.assembly.DataSourceAssembler;
+import org.qi4j.library.sql.datasource.DataSourceConfiguration;
 
 /**
  * Apache Derby entities and Sesame indexing/query.
- * 
- * Derby use either a JDBC connection string or a DataSourceService
- * Sesame use files located by the FileConfiguration API.
+ *
+ * Derby use either a JDBC connection string or a DataSourceService Sesame use files located by the FileConfiguration
+ * API.
  */
 public class DerbySesamePersistenceAssembler
         implements PersistenceAssembler
 {
 
     private final String derbyConnectionString;
-    private final DataSourceService derbyDataSourceService;
+    private ModuleAssembly configModule;
 
     public DerbySesamePersistenceAssembler( String derbyConnectionString )
     {
         this.derbyConnectionString = derbyConnectionString;
-        this.derbyDataSourceService = null;
     }
 
-    public DerbySesamePersistenceAssembler( DataSourceService derbyDataSourceService )
+    @Override
+    public void withConfigModule( ModuleAssembly config )
     {
-        this.derbyConnectionString = null;
-        this.derbyDataSourceService = derbyDataSourceService;
+        this.configModule = config;
     }
 
     @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        // Derby
-        if ( derbyDataSourceService != null ) {
-            new DerbySQLEntityStoreAssembler( Visibility.application, new DataSourceAssembler( derbyDataSourceService ) ).assemble( module );
-        } else {
-            new DerbySQLEntityStoreAssembler( Visibility.application ).assemble( module );
-        }
-        // Sesame
-        new RdfNativeSesameStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
-    }
+        ModuleAssembly config = configModule == null ? module : configModule;
 
-    @Override
-    public void assembleConfigModule( ModuleAssembly config )
-            throws AssemblyException
-    {
-        // Derby
-        if ( derbyDataSourceService != null ) {
-            config.entities( SQLConfiguration.class ).visibleIn( Visibility.application );
-        } else {
-            config.entities( DBCPDataSourceConfiguration.class, SQLConfiguration.class ).visibleIn( Visibility.application );
-            config.forMixin( DBCPDataSourceConfiguration.class ).declareDefaults().url().set( derbyConnectionString );
-        }
-        // Sesame
+        // Derby DataSource
+        new DBCPDataSourceServiceAssembler( "qipki-datasource-service", Visibility.application, config, Visibility.application ).assemble( module );
+        DataSourceAssembler dataSourceAssembler = new DataSourceAssembler( "qipki-datasource-service", "qipki-datasource", Visibility.application );
+        DataSourceConfiguration dsConfiguration = config.forMixin( DataSourceConfiguration.class ).declareDefaults();
+        dsConfiguration.enabled().set( Boolean.TRUE );
+        dsConfiguration.driver().set( "org.apache.derby.jdbc.EmbeddedDriver" ); // TODO FIXME Support both client and embedded driver!
+        dsConfiguration.url().set( derbyConnectionString );
+
+        // Derby EntityStore
+        new DerbySQLEntityStoreAssembler( Visibility.application, dataSourceAssembler ).assemble( module );
+        config.entities( SQLConfiguration.class ).visibleIn( Visibility.application );
+        SQLConfiguration sqlConfiguration = config.forMixin( SQLConfiguration.class ).declareDefaults();
+        sqlConfiguration.schemaName().set( "qipki" );
+
+        // Sesame Index & Query
+        new RdfNativeSesameStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
         config.entities( NativeConfiguration.class ).visibleIn( Visibility.application );
     }
 

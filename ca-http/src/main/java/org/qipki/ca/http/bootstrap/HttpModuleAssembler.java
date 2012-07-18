@@ -14,20 +14,20 @@
 package org.qipki.ca.http.bootstrap;
 
 import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.library.http.JettyConfiguration;
-
-import org.qipki.core.bootstrap.AssemblerWithConfig;
-import org.qipki.ca.http.presentation.http.HttpService;
+import org.qi4j.library.http.JettyServiceAssembler;
 
 public class HttpModuleAssembler
-        implements AssemblerWithConfig
+        implements Assembler
 {
 
     private String iface;
     private Integer port;
     private String docRoot;
+    private ModuleAssembly configModule;
 
     public HttpModuleAssembler withInterface( String iface )
     {
@@ -47,20 +47,21 @@ public class HttpModuleAssembler
         return this;
     }
 
+    public HttpModuleAssembler withConfigModule( ModuleAssembly config )
+    {
+        this.configModule = config;
+        return this;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
-        module.addServices( HttpService.class ).
-                visibleIn( Visibility.module ).
-                instantiateOnStartup();
-    }
-
-    @Override
-    public void assembleConfigModule( ModuleAssembly config )
-            throws AssemblyException
-    {
+        ModuleAssembly config = configModule == null ? module : configModule;
+        
+        new JettyServiceAssembler().withConfigModule( config ).withConfigVisibility( Visibility.application ).assemble( module );
+        
         config.entities( JettyConfiguration.class ).visibleIn( Visibility.application );
         JettyConfiguration jettyConfig = config.forMixin( JettyConfiguration.class ).declareDefaults();
         jettyConfig.hostName().set( iface );

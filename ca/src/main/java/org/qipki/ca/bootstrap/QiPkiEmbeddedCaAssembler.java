@@ -177,8 +177,8 @@ public class QiPkiEmbeddedCaAssembler
             if ( persistAss == null ) {
                 persistAss = new InMemoryPersistenceAssembler();
             }
+            persistAss.withConfigModule( config );
             persistAss.assemble( infrastructure.module( MODULE_PERSISTENCE ) );
-            persistAss.assembleConfigModule( config );
 
             if ( false ) { // FIXME Deactivated
                 // Job Scheduler

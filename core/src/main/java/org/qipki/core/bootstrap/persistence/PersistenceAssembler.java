@@ -13,9 +13,13 @@
  */
 package org.qipki.core.bootstrap.persistence;
 
-import org.qipki.core.bootstrap.AssemblerWithConfig;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.ModuleAssembly;
 
 public interface PersistenceAssembler
-        extends AssemblerWithConfig
+        extends Assembler
 {
+
+    void withConfigModule( ModuleAssembly config );
+
 }

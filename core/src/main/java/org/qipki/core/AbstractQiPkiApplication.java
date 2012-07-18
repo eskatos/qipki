@@ -13,7 +13,6 @@
  */
 package org.qipki.core;
 
-import org.qipki.core.bootstrap.ModuleFinder;
 import org.qi4j.api.Qi4j;
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.structure.Application;
@@ -23,6 +22,7 @@ import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
 import org.qi4j.spi.Qi4jSPI;
 
+import org.qipki.core.bootstrap.ModuleFinder;
 import org.qipki.core.dci.Context;
 import org.qipki.core.dci.InteractionContext;
 
@@ -107,8 +107,7 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     public UnitOfWorkFactory unitOfWorkFactory()
     {
         return ensureDciModuleFinder().
-                findModule( application ).
-                unitOfWorkFactory();
+                findModule( application );
     }
 
     @Override

@@ -66,12 +66,12 @@ public class QiPkiHttpCaAssembler
         LayerAssembly presentation = app.layer( LAYER_PRESENTATION );
 
         HttpModuleAssembler httpAssembler = new HttpModuleAssembler().withInterface( iface ).withPort( port ).withDocRoot( docRoot );
+        httpAssembler.withConfigModule( config );
         httpAssembler.assemble( presentation.module( MODULE_HTTP ) );
-        httpAssembler.assembleConfigModule( config );
 
         RestApiModuleAssembler restApiAssembler = new RestApiModuleAssembler();
+        restApiAssembler.withConfigModule( config );
         restApiAssembler.assemble( presentation.module( MODULE_REST_API ) );
-        restApiAssembler.assembleConfigModule( config );
 
         if ( webClientAssembler != null ) {
             webClientAssembler.assemble( presentation.module( MODULE_WEB_CLIENT ) );

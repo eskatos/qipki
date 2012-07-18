@@ -25,18 +25,16 @@ public class InMemoryPersistenceAssembler
 {
 
     @Override
+    public void withConfigModule( ModuleAssembly config )
+    {
+    }
+
+    @Override
     public void assemble( ModuleAssembly module )
             throws AssemblyException
     {
         module.services( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
         new RdfMemoryStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
-    }
-
-    @Override
-    public void assembleConfigModule( ModuleAssembly config )
-            throws AssemblyException
-    {
-        // No configuration
     }
 
 }
