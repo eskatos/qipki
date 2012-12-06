@@ -193,7 +193,7 @@
                         heading towards building a suite of packaged cryptography services.
                     </p>
                     <p>
-                        This is indeed a technology project. Development tries to follow principles learned from
+                        Development tries to follow principles learned from
                         <a class="iframe" href="http://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>,
                         <a class="iframe" href="http://en.wikipedia.org/wiki/Data,_Context,_and_Interaction">DCI</a>,
                         <a class="iframe" href="http://en.wikipedia.org/wiki/Representational_state_transfer">ReST</a> and more
@@ -482,7 +482,7 @@
         &lt;enabled&gt;true&lt;/enabled&gt;
     &lt;/snapshots&gt;
 &lt;/repository&gt;</code></pre>
-                        <p>Current development version is 1.0-alpha8-SNAPSHOT.</p>
+                        <p>Current development version is 2.0-SNAPSHOT.</p>
                     </div>
                     <div class="span6">
                         <img src="http://web-static-cloudfront.s3.amazonaws.com/images/badges/BuiltOnDEV.png" style="float: right" />
@@ -526,7 +526,7 @@
                 <p>
                     Start by creating a new maven project with the following command:
                 </p>
-                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-alpha8-SNAPSHOT</code></pre>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=2.0-SNAPSHOT</code></pre>
                 <p>
                     Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
                 </p>
@@ -562,7 +562,7 @@
                 <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
   &lt;artifactId&gt;qipki-crypto&lt;/artifactId&gt;
-  &lt;version&gt;1.0-alpha8-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
                 <p>
                     Ensure that everything works by issueing a <code>mvn clean install</code> command.
@@ -594,7 +594,7 @@
                 <p>
                     The following code generate hexadecimal encoded hashes of a single string using several algorithms.
                 </p>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DigesterTest.java starting on line 58
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DigesterTest.java starting on line 62
 
 private void testDigester( Digester digester )
         throws UnsupportedEncodingException
@@ -627,7 +627,7 @@ private void testDigester( Digester digester )
                     Theses options let you make proper password hashing. Here is an example using a random 64 bits salt 
                     and 1024 iterations:
                 </p>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DigesterTest.java starting on line 79
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from DigesterTest.java starting on line 83
 
 public void saltedHashExample()
 {
@@ -861,7 +861,7 @@ public void testDistinguishedNameTemplate()
                 <p>
                     Start by creating a new maven project with the following command:
                 </p>
-                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=1.0-alpha8-SNAPSHOT</code></pre>
+                <pre class="pretty-print lang-shell"><code lang="shell">mvn -B archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.mycompany.app -DartifactId=my-app -Dversion=2.0-SNAPSHOT</code></pre>
                 <p>
                     Replace <code>com.mycompany.app</code> and <code>my-app</code> by the groupId and artifactId you want to use.
                 </p>
@@ -897,7 +897,7 @@ public void testDistinguishedNameTemplate()
                 <pre class="pretty-print lang-xml"><code lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.codeartisans.qipki&lt;/groupId&gt;
   &lt;artifactId&gt;qipki-ca&lt;/artifactId&gt;
-  &lt;version&gt;1.0-alpha8-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
                 <p>
                     Ensure that everything works by issueing a <code>mvn clean install</code> command.
