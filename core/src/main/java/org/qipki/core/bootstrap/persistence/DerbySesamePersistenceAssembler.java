@@ -19,10 +19,10 @@ import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.sql.assembly.DerbySQLEntityStoreAssembler;
 import org.qi4j.index.rdf.assembly.RdfNativeSesameStoreAssembler;
 import org.qi4j.library.rdf.repository.NativeConfiguration;
-import org.qi4j.library.sql.assembly.DBCPDataSourceServiceAssembler;
 import org.qi4j.library.sql.assembly.DataSourceAssembler;
 import org.qi4j.library.sql.common.SQLConfiguration;
 import org.qi4j.library.sql.datasource.DataSourceConfiguration;
+import org.qi4j.library.sql.dbcp.DBCPDataSourceServiceAssembler;
 
 /**
  * Apache Derby entities and Sesame indexing/query.
@@ -54,21 +54,36 @@ public class DerbySesamePersistenceAssembler
     {
         ModuleAssembly config = configModule == null ? module : configModule;
 
-        // Derby DataSource
-        new DBCPDataSourceServiceAssembler( "qipki-datasource-service", Visibility.application, config, Visibility.application ).assemble( module );
-        DataSourceAssembler dataSourceAssembler = new DataSourceAssembler( "qipki-datasource-service", "qipki-datasource", Visibility.application );
+        // SQL DataSourceService
+        new DBCPDataSourceServiceAssembler().
+                identifiedBy( "qipki-datasource-service" ).
+                visibleIn( Visibility.application ).
+                withConfig( config ).
+                withConfigVisibility( Visibility.application ).
+                assemble( module );
+
+        // SQL DataSource
+        new DataSourceAssembler().
+                withDataSourceServiceIdentity( "qipki-datasource-service" ).
+                identifiedBy( "qipki-datasource" ).
+                visibleIn( Visibility.application ).
+                withCircuitBreaker().
+                assemble( module );
         DataSourceConfiguration dsConfiguration = config.forMixin( DataSourceConfiguration.class ).declareDefaults();
         dsConfiguration.enabled().set( Boolean.TRUE );
         dsConfiguration.driver().set( "org.apache.derby.jdbc.EmbeddedDriver" ); // TODO FIXME Support both client and embedded driver!
         dsConfiguration.url().set( derbyConnectionString );
 
-        // Derby EntityStore
-        new DerbySQLEntityStoreAssembler( Visibility.application, dataSourceAssembler ).assemble( module );
-        config.entities( SQLConfiguration.class ).visibleIn( Visibility.application );
+        // SQL EntityStore
+        new DerbySQLEntityStoreAssembler().
+                visibleIn( Visibility.application ).
+                withConfig( config ).
+                withConfigVisibility( Visibility.application ).
+                assemble( module );
         SQLConfiguration sqlConfiguration = config.forMixin( SQLConfiguration.class ).declareDefaults();
         sqlConfiguration.schemaName().set( "qipki" );
 
-        // Sesame Index & Query
+        // RDF Index & Query
         new RdfNativeSesameStoreAssembler( Visibility.application, Visibility.application ).assemble( module );
         config.entities( NativeConfiguration.class ).visibleIn( Visibility.application );
     }

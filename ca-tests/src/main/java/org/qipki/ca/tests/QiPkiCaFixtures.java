@@ -13,6 +13,14 @@
  */
 package org.qipki.ca.tests;
 
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.service.ServiceActivation;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.structure.Module;
+import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
 import org.qipki.ca.domain.ca.CA;
@@ -23,19 +31,10 @@ import org.qipki.core.dci.InteractionContext;
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qipki.crypto.storage.KeyStoreType;
 
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.service.Activatable;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.structure.Module;
-import org.qi4j.api.unitofwork.UnitOfWork;
-
 @Mixins( QiPkiCaFixtures.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
 public interface QiPkiCaFixtures
-        extends Activatable, ServiceComposite
+        extends ServiceComposite, ServiceActivation
 {
 
     String KEYSTORE_NAME = "Test KeyStore";
@@ -56,7 +55,7 @@ public interface QiPkiCaFixtures
         private CryptoValuesFactory cryptoValuesFactory;
 
         @Override
-        public void activate()
+        public void activateService()
                 throws Exception
         {
             UnitOfWork uow = module.newUnitOfWork();
@@ -105,7 +104,7 @@ public interface QiPkiCaFixtures
         }
 
         @Override
-        public void passivate()
+        public void passivateService()
                 throws Exception
         {
         }

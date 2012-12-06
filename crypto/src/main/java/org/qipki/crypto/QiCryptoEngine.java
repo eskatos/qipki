@@ -22,7 +22,7 @@ import org.qi4j.api.common.Optional;
 import org.qi4j.api.configuration.Configuration;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.Activatable;
+import org.qi4j.api.service.ServiceActivation;
 import org.qi4j.api.service.ServiceComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 @Mixins( QiCryptoEngine.Mixin.class )
 public interface QiCryptoEngine
-        extends CryptoContext, Activatable, ServiceComposite
+        extends CryptoContext, ServiceComposite, ServiceActivation
 {
 
     abstract class Mixin
@@ -53,7 +53,7 @@ public interface QiCryptoEngine
         private SecureRandom secureRandom;
 
         @Override
-        public void activate()
+        public void activateService()
                 throws Exception
         {
             loadConfiguration();
@@ -77,7 +77,7 @@ public interface QiCryptoEngine
         }
 
         @Override
-        public void passivate()
+        public void passivateService()
                 throws Exception
         {
             if ( removeProviderOnPassivate ) {
@@ -106,7 +106,7 @@ public interface QiCryptoEngine
                 throws ClassNotFoundException
         {
             configuration.refresh();
-            QiCryptoConfiguration config = configuration.configuration();
+            QiCryptoConfiguration config = configuration.get();
 
             ensureJce = config.ensureJCE().get();
             if ( ensureJce == null ) {

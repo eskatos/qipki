@@ -44,13 +44,13 @@ public interface RestApiService
         {
             config.refresh();
             if ( false ) {
-                if ( config == null || config.configuration() == null ) {
+                if ( config == null || config.get() == null ) {
                     // Configuration was null, will use detected
                     apiRootRef = detected;
                     return;
                 }
             }
-            String configured = config.configuration().clientBaseUrl().get();
+            String configured = config.get().clientBaseUrl().get();
             if ( Strings.isEmpty( configured ) ) {
                 // Configured clientBaseUrl was empty, will use detected
                 apiRootRef = detected;

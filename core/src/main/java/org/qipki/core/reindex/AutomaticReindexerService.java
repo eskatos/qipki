@@ -18,18 +18,17 @@ import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.Activatable;
+import org.qi4j.api.service.ServiceActivation;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWork;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.index.reindexer.ReindexerService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Mixins( AutomaticReindexerService.Mixin.class )
 public interface AutomaticReindexerService
-        extends ServiceComposite, Activatable
+        extends ServiceComposite, ServiceActivation
 {
 
     @SuppressWarnings( "PublicInnerClass" )
@@ -46,10 +45,10 @@ public interface AutomaticReindexerService
         private ReindexerService reindexer;
 
         @Override
-        public void activate()
+        public void activateService()
                 throws Exception
         {
-            Boolean doReindex = configuration.configuration().doReindexOnActivation().get();
+            Boolean doReindex = configuration.get().doReindexOnActivation().get();
             if ( doReindex ) {
                 LOGGER.debug( "Will start automatic reindex now.." );
 
@@ -67,7 +66,7 @@ public interface AutomaticReindexerService
         }
 
         @Override
-        public void passivate()
+        public void passivateService()
                 throws Exception
         {
         }

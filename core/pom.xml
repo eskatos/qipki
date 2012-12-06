@@ -31,7 +31,7 @@
             <artifactId>bcprov-jdk16</artifactId>
             <version>${version.bouncy}</version>
         </dependency>
-        
+
         <!-- Qi4j bootstrap -->
         <dependency>
             <groupId>org.qi4j.core</groupId>
@@ -44,16 +44,10 @@
             <groupId>org.qi4j.extension</groupId>
             <artifactId>org.qi4j.extension.entitystore-sql</artifactId>
             <version>${version.qi4j}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.qi4j.library</groupId>
-            <artifactId>org.qi4j.library.rdf</artifactId>
+            <artifactId>org.qi4j.library.sql-dbcp</artifactId>
             <version>${version.qi4j}</version>
         </dependency>
         <dependency>
