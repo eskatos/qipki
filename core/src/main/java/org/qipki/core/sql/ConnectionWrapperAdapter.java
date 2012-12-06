@@ -13,6 +13,7 @@
  */
 package org.qipki.core.sql;
 
+import java.lang.reflect.Method;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -23,6 +24,7 @@ import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.SQLXML;
 import java.sql.Savepoint;
@@ -30,6 +32,7 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * A simple connection wrapper (for overriding)
@@ -386,6 +389,61 @@ public class ConnectionWrapperAdapter
             throws SQLException
     {
         return c.isWrapperFor( iface );
+    }
+
+    public int getNetworkTimeout()
+            throws SQLException
+    {
+        try {
+            Method method = c.getClass().getMethod( "getNetworkTimeout" );
+            return ( Integer ) method.invoke( c );
+        } catch ( Exception ex ) {
+            throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
+        }
+    }
+
+    public void setNetworkTimeout( Executor executor, int timeout )
+            throws SQLException
+    {
+        try {
+            Method method = c.getClass().getMethod( "setNetworkTimeout", Executor.class, Integer.class );
+            method.invoke( c, executor, timeout );
+        } catch ( Exception ex ) {
+            throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
+        }
+    }
+
+    public void abort( Executor executor )
+            throws SQLException
+    {
+        try {
+            Method method = c.getClass().getMethod( "abort", Executor.class );
+            method.invoke( c, executor );
+        } catch ( Exception ex ) {
+            throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
+        }
+    }
+
+    public String getSchema()
+            throws SQLException
+    {
+        try {
+            Method method = c.getClass().getMethod( "getSchema" );
+            return ( String ) method.invoke( c );
+        } catch ( Exception ex ) {
+            throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
+        }
+    }
+
+    public void setSchema( String schema )
+            throws SQLException
+    {
+        try {
+            Method method = c.getClass().getMethod( "getSchema", String.class );
+            method.invoke( c, schema );
+        } catch ( Exception ex ) {
+            throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
+        }
     }
 
 }
