@@ -23,8 +23,8 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
 import org.qi4j.bootstrap.*;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-import org.qi4j.library.fileconfig.FileConfiguration;
 import org.qi4j.library.fileconfig.FileConfigurationOverride;
+import org.qi4j.library.fileconfig.FileConfigurationService;
 import org.qi4j.library.jmx.JMXAssembler;
 import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
@@ -114,9 +114,9 @@ public class QiPkiEmbeddedCaAssembler
         LayerAssembly configuration = app.layer( LAYER_CONFIGURATION );
         {
             ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
-            config.services( FileConfiguration.class ).visibleIn( Visibility.application );
+            config.services( FileConfigurationService.class ).visibleIn( Visibility.application );
             if ( fileConfigOverride != null ) {
-                config.services( FileConfiguration.class ).setMetaInfo( fileConfigOverride );
+                config.services( FileConfigurationService.class ).setMetaInfo( fileConfigOverride );
             }
             config.services( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             config.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );

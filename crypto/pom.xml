@@ -44,11 +44,6 @@
             <artifactId>bcprov-jdk16</artifactId>
             <version>${version.bouncy}</version>
         </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
-        </dependency>
 
         <!-- Logging -->
         <dependency>
@@ -88,7 +83,7 @@
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
 </project>
