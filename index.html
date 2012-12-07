@@ -659,10 +659,10 @@ public void saltedHashExample()
                 <p>
                     The following code generates a 128 bits AES key and then use it to cipher a string then to decipher it using CBC mode of operation and PKCS5 padding.
                 </p>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from CipherTest.java starting on line 67
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from CipherTest.java starting on line 77
 
 private void testAES128( SymetricGenerator symGenerator, CipherFactory cipherFactory )
-        throws UnsupportedEncodingException
+    throws UnsupportedEncodingException
 {
     // AES-128 key generation
     SecretKey key = symGenerator.generateCipheringKey( AES_128 );
@@ -683,10 +683,10 @@ private void testAES128( SymetricGenerator symGenerator, CipherFactory cipherFac
                 <p>
                     The very same operation applied on a data stream:
                 </p>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from CipherTest.java starting on line 88
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from CipherTest.java starting on line 98
 
 public void testOnStreams()
-        throws UnsupportedEncodingException
+    throws UnsupportedEncodingException
 {
     // AES-128 key generation
     SecretKey key = symGenerator.generateCipheringKey( AES_128 );
@@ -734,7 +734,7 @@ public void testOnStreams()
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from MacTest.java starting on line 30
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from MacTest.java starting on line 45
 
 @Test
 public void testMac()
