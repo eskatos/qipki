@@ -13,24 +13,23 @@
  */
 package org.qipki.ca.domain.revocation;
 
-import org.qipki.ca.domain.x509.X509;
-import org.qipki.crypto.x509.RevocationReason;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qipki.ca.domain.x509.X509;
+import org.qipki.crypto.x509.RevocationReason;
 
 @Mixins( RevocationFactory.Mixin.class )
 public interface RevocationFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     Revocation create( X509 x509, RevocationReason reason );
 
     abstract class Mixin
-            implements RevocationFactory
+        implements RevocationFactory
     {
 
         @Structure

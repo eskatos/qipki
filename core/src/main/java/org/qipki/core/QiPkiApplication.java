@@ -14,11 +14,10 @@
 package org.qipki.core;
 
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.core.dci.Context;
 
 public interface QiPkiApplication<RootContextType extends Context>
-        extends Runnable
+    extends Runnable
 {
 
     void stop();

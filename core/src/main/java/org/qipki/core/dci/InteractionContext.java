@@ -25,40 +25,47 @@ import java.util.Map;
 public class InteractionContext
 {
 
-    private Map<Class, Object> roles = new HashMap<Class, Object>();
+    private Map<Class<?>, Object> roles = new HashMap<Class<?>, Object>();
     private List<Object> objects = new ArrayList<Object>();
 
+    @SuppressWarnings( "LeakingThisInConstructor" )
     public InteractionContext()
     {
         objects.add( this );
     }
 
-    public void playRoles( Object object, Class... roleClasses )
+    public void playRoles( Object object, Class<?>... roleClasses )
     {
-        if ( object == null ) {
+        if( object == null )
+        {
             return;
         }
-        for ( Class roleClass : roleClasses ) {
+        for( Class<?> roleClass : roleClasses )
+        {
             roles.put( roleClass, object );
         }
         objects.add( 0, object );
     }
 
     public <T> T role( Class<T> roleClass )
-            throws IllegalArgumentException
+        throws IllegalArgumentException
     {
         Object object = roles.get( roleClass );
 
-        if ( object == null ) {
+        if( object == null )
+        {
             // If no explicit mapping has been made, see if
             // any other mapped objects could work
-            for ( Object possibleObject : objects ) {
-                if ( roleClass.isInstance( possibleObject ) ) {
+            for( Object possibleObject : objects )
+            {
+                if( roleClass.isInstance( possibleObject ) )
+                {
                     return roleClass.cast( possibleObject );
                 }
             }
         }
-        if ( object == null ) {
+        if( object == null )
+        {
             throw new IllegalArgumentException( "No object in context for role:" + roleClass.getSimpleName() );
         }
         return roleClass.cast( object );
@@ -69,29 +76,39 @@ public class InteractionContext
         List<T> list = new ArrayList<T>();
         Object object = roles.get( roleClass );
 
-        if ( object != null ) {
+        if( object != null )
+        {
             list.add( roleClass.cast( object ) );
         }
-        for ( Object possibleObject : objects ) {
-            if ( roleClass.isInstance( possibleObject ) ) {
+        for( Object possibleObject : objects )
+        {
+            if( roleClass.isInstance( possibleObject ) )
+            {
                 list.add( roleClass.cast( possibleObject ) );
             }
         }
         return list;
     }
 
-    public void map( Class fromRoleClass, Class... toRoleClasses )
+    public void map( Class<?> fromRoleClass, Class<?>... toRoleClasses )
     {
         Object object = roles.get( fromRoleClass );
-        if ( object != null ) {
-            for ( Class toRoleClass : toRoleClasses ) {
-                if ( toRoleClass.isInstance( object ) ) {
+        if( object != null )
+        {
+            for( Class<?> toRoleClass : toRoleClasses )
+            {
+                if( toRoleClass.isInstance( object ) )
+                {
                     roles.put( toRoleClass, object );
-                } else {
+                }
+                else
+                {
                     throw new IllegalArgumentException( object + " does not implement role type " + toRoleClass.getName() );
                 }
             }
-        } else {
+        }
+        else
+        {
             throw new IllegalArgumentException( fromRoleClass.getName() + " has not been mapped" );
         }
     }

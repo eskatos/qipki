@@ -13,6 +13,10 @@
  */
 package org.qipki.ca.bootstrap;
 
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
@@ -25,18 +29,13 @@ import org.qipki.ca.application.contexts.x509.X509ListContext;
 import org.qipki.ca.application.contexts.x509profile.X509ProfileContext;
 import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 
-import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-
 public class CaDCIModuleAssembler
-        implements Assembler
+    implements Assembler
 {
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         module.objects( RootContext.class,
                         CryptoStoreListContext.class,
@@ -49,7 +48,7 @@ public class CaDCIModuleAssembler
                         X509Context.class,
                         EscrowedKeyPairContext.class,
                         EscrowedKeyPairListContext.class ).
-                visibleIn( Visibility.application );
+            visibleIn( Visibility.application );
 
     }
 

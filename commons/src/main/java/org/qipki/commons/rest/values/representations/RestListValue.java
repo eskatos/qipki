@@ -14,14 +14,13 @@
 package org.qipki.commons.rest.values.representations;
 
 import java.util.List;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 // TODO make it generic and implementing Iterable
 public interface RestListValue
-        extends RestValue, ValueComposite
+    extends RestValue, ValueComposite
 {
 
     @UseDefaults

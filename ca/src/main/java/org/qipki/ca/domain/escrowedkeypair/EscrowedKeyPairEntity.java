@@ -18,6 +18,6 @@ import org.qi4j.api.mixin.Mixins;
 
 @Mixins( EscrowedKeyPairMixin.class )
 public interface EscrowedKeyPairEntity
-        extends EscrowedKeyPair, EntityComposite
+    extends EscrowedKeyPair, EntityComposite
 {
 }

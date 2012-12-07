@@ -13,10 +13,11 @@
  */
 package org.qipki.ca.application.contexts;
 
+import org.qi4j.api.injection.scope.Service;
 import org.qipki.ca.application.contexts.ca.CAContext;
 import org.qipki.ca.application.contexts.ca.CAListContext;
-import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.qipki.ca.application.contexts.cryptostore.CryptoStoreContext;
+import org.qipki.ca.application.contexts.cryptostore.CryptoStoreListContext;
 import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairContext;
 import org.qipki.ca.application.contexts.escrowedkeypair.EscrowedKeyPairListContext;
 import org.qipki.ca.application.contexts.x509.X509Context;
@@ -24,11 +25,11 @@ import org.qipki.ca.application.contexts.x509.X509ListContext;
 import org.qipki.ca.application.contexts.x509profile.X509ProfileContext;
 import org.qipki.ca.application.contexts.x509profile.X509ProfileListContext;
 import org.qipki.ca.domain.ca.CA;
-import org.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.qipki.ca.domain.ca.CAFactory;
 import org.qipki.ca.domain.ca.CARepository;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
+import org.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFactory;
@@ -44,13 +45,11 @@ import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.core.dci.Context;
 import org.qipki.crypto.io.CryptIO;
 
-import org.qi4j.api.injection.scope.Service;
-
 /**
  * QUID Use ServiceReference for lazy service instanciation ?
  */
 public class RootContext
-        extends Context
+    extends Context
 {
 
     @Service

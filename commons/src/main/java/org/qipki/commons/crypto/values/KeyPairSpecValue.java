@@ -15,11 +15,10 @@ package org.qipki.commons.crypto.values;
 
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
-
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 
 public interface KeyPairSpecValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<AsymetricAlgorithm> algorithm();

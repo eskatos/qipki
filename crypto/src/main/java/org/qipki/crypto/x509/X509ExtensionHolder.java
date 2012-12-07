@@ -13,26 +13,26 @@
  */
 package org.qipki.crypto.x509;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DEREncodable;
-import org.bouncycastle.asn1.DERObjectIdentifier;
 
 public final class X509ExtensionHolder
 {
 
-    private final DERObjectIdentifier derOID;
+    private final ASN1ObjectIdentifier asn1OID;
     private final boolean critical;
     private final DEREncodable value;
 
-    public X509ExtensionHolder( DERObjectIdentifier derOID, boolean critical, DEREncodable value )
+    public X509ExtensionHolder( ASN1ObjectIdentifier asn1OID, boolean critical, DEREncodable value )
     {
-        this.derOID = derOID;
+        this.asn1OID = asn1OID;
         this.critical = critical;
         this.value = value;
     }
 
-    public DERObjectIdentifier getDerOID()
+    public ASN1ObjectIdentifier getASN1OID()
     {
-        return derOID;
+        return asn1OID;
     }
 
     public boolean isCritical()

@@ -23,13 +23,13 @@ import org.qi4j.migration.MigrationService;
 import org.qi4j.migration.assembly.MigrationBuilder;
 
 public class QiPkiCaMigrationAssembler
-        implements Assembler
+    implements Assembler
 {
 
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         module.objects( MigrationEventLogger.class );
         module.importedServices( MigrationEventLogger.class ).importedBy( NewObjectImporter.class );

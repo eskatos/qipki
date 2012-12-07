@@ -17,7 +17,6 @@ import java.security.cert.X509Certificate;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.bouncycastle.asn1.misc.MiscObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -28,29 +27,35 @@ import org.bouncycastle.asn1.x509.GeneralSubtree;
 import org.bouncycastle.asn1.x509.NameConstraints;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
-import static org.bouncycastle.asn1.x509.X509Extensions.*;
-
-import org.qipki.commons.crypto.values.x509.ConstraintsExtensionsValue;
-import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
-import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
-import org.qipki.commons.crypto.values.x509.KeysExtensionsValue;
-import org.qipki.commons.crypto.values.x509.AuthorityKeyIdentifierValue;
-import org.qipki.commons.crypto.values.x509.CRLDistributionPointsValue;
-import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
-import org.qipki.commons.crypto.values.x509.PrivateKeyUsageIntervalValue;
-import org.qipki.commons.crypto.values.x509.SubjectKeyIdentifierValue;
-import org.qipki.commons.crypto.values.x509.NamesExtensionsValue;
+import org.bouncycastle.asn1.x509.X509Extension;
+import org.joda.time.Interval;
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.injection.scope.Structure;
+import org.qi4j.api.mixin.Mixins;
+import org.qi4j.api.service.ServiceComposite;
+import org.qi4j.api.value.ValueBuilder;
+import org.qi4j.api.value.ValueBuilderFactory;
 import org.qipki.commons.crypto.values.x509.AlternativeNamesValue;
+import org.qipki.commons.crypto.values.x509.AuthorityKeyIdentifierValue;
+import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
+import org.qipki.commons.crypto.values.x509.CRLDistributionPointsValue;
 import org.qipki.commons.crypto.values.x509.CertificatePoliciesValue;
 import org.qipki.commons.crypto.values.x509.CertificatePoliciesValue.PolicyInformationValue;
 import org.qipki.commons.crypto.values.x509.CertificatePoliciesValue.PolicyQualifierInfoValue;
+import org.qipki.commons.crypto.values.x509.ConstraintsExtensionsValue;
 import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
+import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
+import org.qipki.commons.crypto.values.x509.KeysExtensionsValue;
+import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
+import org.qipki.commons.crypto.values.x509.NamesExtensionsValue;
 import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.qipki.commons.crypto.values.x509.PoliciesExtensionsValue;
 import org.qipki.commons.crypto.values.x509.PolicyConstraintsValue;
 import org.qipki.commons.crypto.values.x509.PolicyConstraintsValue.PolicyConstraintValue;
 import org.qipki.commons.crypto.values.x509.PolicyMappingsValue;
 import org.qipki.commons.crypto.values.x509.PolicyMappingsValue.PolicyMappingValue;
+import org.qipki.commons.crypto.values.x509.PrivateKeyUsageIntervalValue;
+import org.qipki.commons.crypto.values.x509.SubjectKeyIdentifierValue;
 import org.qipki.commons.crypto.values.x509.X509GeneralNameValue;
 import org.qipki.commons.crypto.values.x509.X509GeneralSubtreeValue;
 import org.qipki.crypto.codec.CryptCodex;
@@ -63,19 +68,10 @@ import org.qipki.crypto.x509.RevocationReason;
 import org.qipki.crypto.x509.X509ExtensionsReader;
 import org.qipki.crypto.x509.X509GeneralName;
 
-import org.joda.time.Interval;
-
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.injection.scope.Structure;
-import org.qi4j.api.mixin.Mixins;
-import org.qi4j.api.service.ServiceComposite;
-import org.qi4j.api.value.ValueBuilder;
-import org.qi4j.api.value.ValueBuilderFactory;
-
 // TODO Merge X509ExtensionsValueFactory into CryptoValuesFactory
 @Mixins( X509ExtensionsValueFactory.Mixin.class )
 public interface X509ExtensionsValueFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     KeysExtensionsValue buildKeysExtensionsValue( X509Certificate cert );
@@ -102,7 +98,7 @@ public interface X509ExtensionsValueFactory
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements X509ExtensionsValueFactory
+        implements X509ExtensionsValueFactory
     {
 
         @Structure
@@ -122,60 +118,68 @@ public interface X509ExtensionsValueFactory
             AuthorityKeyIdentifier authKeyId = x509ExtReader.getAuthorityKeyIdentifier( cert );
             Interval privKeyUsageInterval = x509ExtReader.getPrivateKeyUsagePeriod( cert );
             DistributionPoint[] crlDistPoints = x509ExtReader.getCRLDistributionPoints( cert );
-            if ( keyUsages.isEmpty() && extendedKeyUsages.isEmpty() && netscapeCertTypes.isEmpty()
-                    && subKeyId == null && authKeyId == null && privKeyUsageInterval == null && crlDistPoints == null ) {
+            if( keyUsages.isEmpty() && extendedKeyUsages.isEmpty() && netscapeCertTypes.isEmpty()
+                && subKeyId == null && authKeyId == null && privKeyUsageInterval == null && crlDistPoints == null )
+            {
                 return null;
             }
 
             ValueBuilder<KeysExtensionsValue> keyExtensionsBuilder = vbf.newValueBuilder( KeysExtensionsValue.class );
             KeysExtensionsValue keyExtensions = keyExtensionsBuilder.prototype();
 
-            if ( !keyUsages.isEmpty() ) {
+            if( !keyUsages.isEmpty() )
+            {
                 KeyUsagesValue kuv = buildKeyUsagesValue(
-                        cert.getCriticalExtensionOIDs().contains( KeyUsage.getId() ),
-                        keyUsages );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.keyUsage.getId() ),
+                    keyUsages );
                 keyExtensions.keyUsages().set( kuv );
             }
 
-            if ( !extendedKeyUsages.isEmpty() ) {
+            if( !extendedKeyUsages.isEmpty() )
+            {
                 ExtendedKeyUsagesValue ekuv = buildExtendedKeyUsagesValue(
-                        cert.getCriticalExtensionOIDs().contains( ExtendedKeyUsage.getId() ),
-                        extendedKeyUsages );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.extendedKeyUsage.getId() ),
+                    extendedKeyUsages );
                 keyExtensions.extendedKeyUsages().set( ekuv );
             }
 
-            if ( !netscapeCertTypes.isEmpty() ) {
+            if( !netscapeCertTypes.isEmpty() )
+            {
                 NetscapeCertTypesValue nctv = buildNetscapeCertTypesValue(
-                        cert.getCriticalExtensionOIDs().contains( MiscObjectIdentifiers.netscapeCertType.getId() ),
-                        netscapeCertTypes );
+                    cert.getCriticalExtensionOIDs().contains( MiscObjectIdentifiers.netscapeCertType.getId() ),
+                    netscapeCertTypes );
                 keyExtensions.netscapeCertTypes().set( nctv );
             }
 
-            if ( subKeyId != null ) {
+            if( subKeyId != null )
+            {
                 SubjectKeyIdentifierValue skiv = buildSubjectKeyIdentifierValue(
-                        cert.getCriticalExtensionOIDs().contains( SubjectKeyIdentifier.getId() ),
-                        cryptCodex.toHexString( subKeyId ) );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.subjectKeyIdentifier.getId() ),
+                    cryptCodex.toHexString( subKeyId ) );
                 keyExtensions.subjectKeyIdentifier().set( skiv );
             }
 
-            if ( authKeyId != null ) {
+            if( authKeyId != null )
+            {
                 AuthorityKeyIdentifierValue aki = buildAuthorityKeyIdentifierValue(
-                        cert.getCriticalExtensionOIDs().contains( AuthorityKeyIdentifier.getId() ),
-                        authKeyId );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.authorityKeyIdentifier.getId() ),
+                    authKeyId );
                 keyExtensions.authorityKeyIdentifier().set( aki );
             }
 
-            if ( privKeyUsageInterval != null ) {
+            if( privKeyUsageInterval != null )
+            {
                 PrivateKeyUsageIntervalValue pkuiv = buildPrivateKeyUsageIntervalValue(
-                        cert.getCriticalExtensionOIDs().contains( PrivateKeyUsagePeriod.getId() ),
-                        privKeyUsageInterval );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.privateKeyUsagePeriod.getId() ),
+                    privKeyUsageInterval );
                 keyExtensions.privateKeyUsageInterval().set( pkuiv );
             }
 
-            if ( crlDistPoints != null ) {
+            if( crlDistPoints != null )
+            {
                 CRLDistributionPointsValue cdpv = buildCRLDistributionPointsValue(
-                        cert.getCriticalExtensionOIDs().contains( CRLDistributionPoints.getId() ),
-                        crlDistPoints );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.cRLDistributionPoints.getId() ),
+                    crlDistPoints );
                 keyExtensions.crlDistributionPoints().set( cdpv );
             }
 
@@ -188,24 +192,27 @@ public interface X509ExtensionsValueFactory
             Set<PolicyInformation> certPolicies = x509ExtReader.getCertificatePolicies( cert );
             Set<PolicyMapping> policyMappings = x509ExtReader.getPolicyMappings( cert );
 
-            if ( certPolicies.isEmpty() && policyMappings.isEmpty() ) {
+            if( certPolicies.isEmpty() && policyMappings.isEmpty() )
+            {
                 return null;
             }
 
             ValueBuilder<PoliciesExtensionsValue> policiesExtensionsBuilder = vbf.newValueBuilder( PoliciesExtensionsValue.class );
             PoliciesExtensionsValue policiesExtensions = policiesExtensionsBuilder.prototype();
 
-            if ( !certPolicies.isEmpty() ) {
+            if( !certPolicies.isEmpty() )
+            {
                 CertificatePoliciesValue cpv = buildCertificatePoliciesValue(
-                        cert.getCriticalExtensionOIDs().contains( CertificatePolicies.getId() ),
-                        certPolicies );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.certificatePolicies.getId() ),
+                    certPolicies );
                 policiesExtensions.certificatePolicies().set( cpv );
             }
 
-            if ( !policyMappings.isEmpty() ) {
+            if( !policyMappings.isEmpty() )
+            {
                 PolicyMappingsValue pmv = buildPolicyMappingsValue(
-                        cert.getCriticalExtensionOIDs().contains( PolicyMappings.getId() ),
-                        policyMappings );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.policyMappings.getId() ),
+                    policyMappings );
                 policiesExtensions.policyMappings().set( pmv );
             }
 
@@ -218,24 +225,27 @@ public interface X509ExtensionsValueFactory
             Map<X509GeneralName, String> subjectNames = x509ExtReader.asMap( x509ExtReader.getSubjectAlternativeNames( cert ) );
             Map<X509GeneralName, String> issuerNames = x509ExtReader.asMap( x509ExtReader.getIssuerAlternativeNames( cert ) );
 
-            if ( subjectNames.isEmpty() && issuerNames.isEmpty() ) {
+            if( subjectNames.isEmpty() && issuerNames.isEmpty() )
+            {
                 return null;
             }
 
             ValueBuilder<NamesExtensionsValue> namesExtensionsBuilder = vbf.newValueBuilder( NamesExtensionsValue.class );
             NamesExtensionsValue namesExtensions = namesExtensionsBuilder.prototype();
 
-            if ( !subjectNames.isEmpty() ) {
+            if( !subjectNames.isEmpty() )
+            {
                 AlternativeNamesValue san = buildAlternativeNamesValue(
-                        cert.getCriticalExtensionOIDs().contains( SubjectAlternativeName.getId() ),
-                        subjectNames );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.subjectAlternativeName.getId() ),
+                    subjectNames );
                 namesExtensions.subjectAlternativeNames().set( san );
             }
 
-            if ( !issuerNames.isEmpty() ) {
+            if( !issuerNames.isEmpty() )
+            {
                 AlternativeNamesValue ian = buildAlternativeNamesValue(
-                        cert.getCriticalExtensionOIDs().contains( IssuerAlternativeName.getId() ),
-                        issuerNames );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.issuerAlternativeName.getId() ),
+                    issuerNames );
                 namesExtensions.issuerAlternativeNames().set( ian );
             }
 
@@ -249,32 +259,36 @@ public interface X509ExtensionsValueFactory
             NameConstraints nameConstraints = x509ExtReader.getNameConstraints( cert );
             Set<PolicyConstraint> policyConstraints = x509ExtReader.getPolicyConstraints( cert );
 
-            if ( basicConstraints == null && nameConstraints == null && policyConstraints.isEmpty() ) {
+            if( basicConstraints == null && nameConstraints == null && policyConstraints.isEmpty() )
+            {
                 return null;
             }
 
             ValueBuilder<ConstraintsExtensionsValue> constraintsExtensionsBuilder = vbf.newValueBuilder( ConstraintsExtensionsValue.class );
             ConstraintsExtensionsValue constraintsExtensions = constraintsExtensionsBuilder.prototype();
 
-            if ( basicConstraints != null ) {
+            if( basicConstraints != null )
+            {
                 BasicConstraintsValue bcv = buildBasicConstraintsValue(
-                        cert.getCriticalExtensionOIDs().contains( BasicConstraints.getId() ),
-                        basicConstraints.isCA(),
-                        basicConstraints.getPathLenConstraint() == null ? 0 : basicConstraints.getPathLenConstraint().longValue() );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.basicConstraints.getId() ),
+                    basicConstraints.isCA(),
+                    basicConstraints.getPathLenConstraint() == null ? 0 : basicConstraints.getPathLenConstraint().longValue() );
                 constraintsExtensions.basicConstraints().set( bcv );
             }
 
-            if ( nameConstraints != null ) {
+            if( nameConstraints != null )
+            {
                 NameConstraintsValue ncv = buildNameConstraintsValue(
-                        cert.getCriticalExtensionOIDs().contains( NameConstraints.getId() ),
-                        nameConstraints );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.nameConstraints.getId() ),
+                    nameConstraints );
                 constraintsExtensions.nameConstraints().set( ncv );
             }
 
-            if ( !policyConstraints.isEmpty() ) {
+            if( !policyConstraints.isEmpty() )
+            {
                 PolicyConstraintsValue pcv = buildPolicyConstraintsValue(
-                        cert.getCriticalExtensionOIDs().contains( PolicyConstraints.getId() ),
-                        policyConstraints );
+                    cert.getCriticalExtensionOIDs().contains( X509Extension.policyConstraints.getId() ),
+                    policyConstraints );
                 constraintsExtensions.policyConstraints().set( pcv );
             }
 
@@ -326,7 +340,8 @@ public interface X509ExtensionsValueFactory
             AuthorityKeyIdentifierValue akiValue = akiBuilder.prototype();
             akiValue.critical().set( critical );
             akiValue.hexKeyIdentifier().set( cryptCodex.toHexString( authKeyId.getKeyIdentifier() ) );
-            if ( authKeyId.getAuthorityCertSerialNumber() != null ) {
+            if( authKeyId.getAuthorityCertSerialNumber() != null )
+            {
                 akiValue.serialNumber().set( authKeyId.getAuthorityCertSerialNumber().longValue() );
             }
             akiValue.names().set( buildSetOfGeneralNames( x509ExtReader.asMap( authKeyId.getAuthorityCertIssuer() ) ) );
@@ -352,19 +367,23 @@ public interface X509ExtensionsValueFactory
             Set<String> endpoints = new LinkedHashSet<String>();
             Set<RevocationReason> reasons = new LinkedHashSet<RevocationReason>();
             Set<X509GeneralNameValue> issuerNames = new LinkedHashSet<X509GeneralNameValue>();
-            for ( DistributionPoint eachPoint : crlDistPoints ) {
-                switch ( eachPoint.getDistributionPoint().getType() ) {
+            for( DistributionPoint eachPoint : crlDistPoints )
+            {
+                switch( eachPoint.getDistributionPoint().getType() )
+                {
                     case DistributionPointName.FULL_NAME:
-                        endpoints.addAll( x509ExtReader.asMap( ( GeneralNames ) eachPoint.getDistributionPoint().getName() ).values() );
+                        endpoints.addAll( x509ExtReader.asMap( (GeneralNames) eachPoint.getDistributionPoint().getName() ).values() );
                         break;
                     case DistributionPointName.NAME_RELATIVE_TO_CRL_ISSUER:
                     default:
                         endpoints.add( cryptCodex.toString( eachPoint.getDistributionPoint().getName() ) );
                 }
-                if ( eachPoint.getReasons() != null ) {
+                if( eachPoint.getReasons() != null )
+                {
                     reasons.addAll( x509ExtReader.getRevocationReasons( eachPoint.getReasons() ) );
                 }
-                if ( eachPoint.getCRLIssuer() != null ) {
+                if( eachPoint.getCRLIssuer() != null )
+                {
                     issuerNames.addAll( buildSetOfGeneralNames( x509ExtReader.asMap( eachPoint.getCRLIssuer() ) ) );
                 }
             }
@@ -380,12 +399,14 @@ public interface X509ExtensionsValueFactory
             CertificatePoliciesValue cpValue = cpBuilder.prototype();
             cpValue.critical().set( critical );
             Set<PolicyInformationValue> policyValues = new LinkedHashSet<PolicyInformationValue>();
-            for ( PolicyInformation eachPolicy : certPolicies ) {
+            for( PolicyInformation eachPolicy : certPolicies )
+            {
                 ValueBuilder<PolicyInformationValue> pBuilder = vbf.newValueBuilder( PolicyInformationValue.class );
                 PolicyInformationValue pValue = pBuilder.prototype();
                 pValue.oid().set( eachPolicy.getPolicyIdentifier().getId() );
-                for ( int idx = 0; idx < eachPolicy.getPolicyQualifiers().size(); idx++ ) {
-                    PolicyQualifierInfo eachInfo = ( PolicyQualifierInfo ) eachPolicy.getPolicyQualifiers().getObjectAt( idx );
+                for( int idx = 0; idx < eachPolicy.getPolicyQualifiers().size(); idx++ )
+                {
+                    PolicyQualifierInfo eachInfo = (PolicyQualifierInfo) eachPolicy.getPolicyQualifiers().getObjectAt( idx );
                     ValueBuilder<PolicyQualifierInfoValue> qualifierValueBuilder = vbf.newValueBuilder( PolicyQualifierInfoValue.class );
                     PolicyQualifierInfoValue qualifierValue = qualifierValueBuilder.prototype();
                     qualifierValue.oid().set( eachInfo.getPolicyQualifierId().getId() );
@@ -404,7 +425,8 @@ public interface X509ExtensionsValueFactory
             PolicyMappingsValue pmValue = pmBuilder.prototype();
             pmValue.critical().set( critical );
             Set<PolicyMappingValue> mappingValues = new LinkedHashSet<PolicyMappingValue>();
-            for ( PolicyMapping eachMapping : policyMappings ) {
+            for( PolicyMapping eachMapping : policyMappings )
+            {
                 ValueBuilder<PolicyMappingValue> mBuilder = vbf.newValueBuilder( PolicyMappingValue.class );
                 PolicyMappingValue mValue = mBuilder.prototype();
                 mValue.issuerDomainPolicyOID().set( eachMapping.getIssuerDomainPolicyOID() );
@@ -439,12 +461,14 @@ public interface X509ExtensionsValueFactory
         {
             LinkedHashSet<X509GeneralSubtreeValue> permittedSubtrees = new LinkedHashSet<X509GeneralSubtreeValue>();
             LinkedHashSet<X509GeneralSubtreeValue> excludedSubtrees = new LinkedHashSet<X509GeneralSubtreeValue>();
-            for ( int idx = 0; idx < nameConstraints.getPermittedSubtrees().size(); idx++ ) {
-                GeneralSubtree eachSubtree = ( GeneralSubtree ) nameConstraints.getPermittedSubtrees().getObjectAt( idx );
+            for( int idx = 0; idx < nameConstraints.getPermittedSubtrees().size(); idx++ )
+            {
+                GeneralSubtree eachSubtree = (GeneralSubtree) nameConstraints.getPermittedSubtrees().getObjectAt( idx );
                 permittedSubtrees.add( buildGeneralSubtree( eachSubtree ) );
             }
-            for ( int idx = 0; idx < nameConstraints.getExcludedSubtrees().size(); idx++ ) {
-                GeneralSubtree eachSubtree = ( GeneralSubtree ) nameConstraints.getExcludedSubtrees().getObjectAt( idx );
+            for( int idx = 0; idx < nameConstraints.getExcludedSubtrees().size(); idx++ )
+            {
+                GeneralSubtree eachSubtree = (GeneralSubtree) nameConstraints.getExcludedSubtrees().getObjectAt( idx );
                 excludedSubtrees.add( buildGeneralSubtree( eachSubtree ) );
             }
             return buildNameConstraintsValue( critical, permittedSubtrees, excludedSubtrees );
@@ -467,7 +491,8 @@ public interface X509ExtensionsValueFactory
             PolicyConstraintsValue pcValue = pcBuilder.prototype();
             pcValue.critical().set( critical );
             Set<PolicyConstraintValue> constrainsSet = new LinkedHashSet<PolicyConstraintValue>();
-            for ( PolicyConstraint eachConstraint : policyConstraints ) {
+            for( PolicyConstraint eachConstraint : policyConstraints )
+            {
                 ValueBuilder<PolicyConstraintValue> cBuilder = vbf.newValueBuilder( PolicyConstraintValue.class );
                 PolicyConstraintValue cValue = cBuilder.prototype();
                 cValue.requireExplicitPolicy().set( eachConstraint.getRequireExplicitPolicy() );
@@ -498,7 +523,8 @@ public interface X509ExtensionsValueFactory
         private Set<X509GeneralNameValue> buildSetOfGeneralNames( Map<X509GeneralName, String> names )
         {
             Set<X509GeneralNameValue> setOfNames = new LinkedHashSet<X509GeneralNameValue>();
-            for ( Map.Entry<X509GeneralName, String> eachName : names.entrySet() ) {
+            for( Map.Entry<X509GeneralName, String> eachName : names.entrySet() )
+            {
                 setOfNames.add( buildGeneralName( eachName ) );
             }
             return setOfNames;

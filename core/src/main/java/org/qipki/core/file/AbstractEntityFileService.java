@@ -14,9 +14,7 @@
 package org.qipki.core.file;
 
 import java.io.File;
-
 import org.qi4j.library.fileconfig.FileConfiguration;
-
 import org.qipki.core.QiPkiFailure;
 
 public abstract class AbstractEntityFileService
@@ -32,12 +30,17 @@ public abstract class AbstractEntityFileService
     protected final File ensureDataDir( String dataDirName )
     {
         File dataDir = new File( fileConfig.dataDirectory(), dataDirName );
-        if ( dataDir.exists() ) {
-            if ( !dataDir.isDirectory() ) {
+        if( dataDir.exists() )
+        {
+            if( !dataDir.isDirectory() )
+            {
                 throw new QiPkiFailure( dataDirName + " already exists and is not a directory" );
             }
-        } else {
-            if ( !dataDir.mkdirs() ) {
+        }
+        else
+        {
+            if( !dataDir.mkdirs() )
+            {
                 throw new QiPkiFailure( dataDirName + " directory do not exists and was unable to create it" );
             }
         }

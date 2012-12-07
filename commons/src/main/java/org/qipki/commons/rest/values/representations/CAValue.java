@@ -15,15 +15,13 @@ package org.qipki.commons.rest.values.representations;
 
 import java.util.List;
 import java.util.Set;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
-
 import org.qipki.commons.fragments.HasName;
 
 public interface CAValue
-        extends RestValue, HasName, ValueComposite
+    extends RestValue, HasName, ValueComposite
 {
 
     Property<String> cryptoStoreUri();

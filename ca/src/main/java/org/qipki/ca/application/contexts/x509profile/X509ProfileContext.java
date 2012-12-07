@@ -17,7 +17,7 @@ import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.core.dci.Context;
 
 public class X509ProfileContext
-        extends Context
+    extends Context
 {
 
     public X509Profile x509Profile()

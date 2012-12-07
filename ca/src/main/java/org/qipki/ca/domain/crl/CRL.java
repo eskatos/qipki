@@ -15,7 +15,6 @@ package org.qipki.ca.domain.crl;
 
 import java.io.File;
 import java.math.BigInteger;
-
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.injection.scope.Service;
@@ -56,14 +55,14 @@ import org.qi4j.library.uowfile.singular.UoWFileLocator;
  */
 @Mixins( CRL.Mixin.class )
 public interface CRL
-        extends HasUoWFileLifecycle, Identity
+    extends HasUoWFileLifecycle, Identity
 {
 
     @Queryable( false )
     Property<BigInteger> lastCRLNumber();
 
     static abstract class Mixin
-            implements CRL, UoWFileLocator
+        implements CRL, UoWFileLocator
     {
 
         @Service

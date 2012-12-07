@@ -14,24 +14,22 @@
 package org.qipki.ca.domain.escrowedkeypair;
 
 import java.io.File;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.library.fileconfig.FileConfiguration;
-
 import org.qipki.core.file.AbstractEntityFileService;
 
 @Mixins( EscrowedKeyPairFileService.Mixin.class )
 public interface EscrowedKeyPairFileService
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     File getEscrowedKeyPairFile( EscrowedKeyPair ekp );
 
     abstract class Mixin
-            extends AbstractEntityFileService
-            implements EscrowedKeyPairFileService
+        extends AbstractEntityFileService
+        implements EscrowedKeyPairFileService
     {
 
         private static final String DATA_DIRNAME = "keypairs";
@@ -46,7 +44,7 @@ public interface EscrowedKeyPairFileService
         public File getEscrowedKeyPairFile( EscrowedKeyPair ekp )
         {
             String ekpFileName = new StringBuilder( ekp.identity().get() ).append( "-" ).
-                    append( FILE_SUFFIX ).append( ".pem" ).toString();
+                append( FILE_SUFFIX ).append( ".pem" ).toString();
             return new File( ensureDataDir( DATA_DIRNAME ), ekpFileName );
         }
 

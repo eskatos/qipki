@@ -13,11 +13,10 @@
  */
 package org.qipki.commons.rest.values.params;
 
+import org.qi4j.api.value.ValueComposite;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 
-import org.qi4j.api.value.ValueComposite;
-
 public interface EscrowedKeyPairFactoryParamsValue
-        extends KeyPairSpecValue, ValueComposite
+    extends KeyPairSpecValue, ValueComposite
 {
 }

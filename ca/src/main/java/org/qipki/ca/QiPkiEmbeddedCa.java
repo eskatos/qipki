@@ -16,7 +16,7 @@ package org.qipki.ca;
 import org.qipki.ca.bootstrap.QiPkiEmbeddedCaAssembler;
 
 public class QiPkiEmbeddedCa
-        extends AbstractQiPkiCa
+    extends AbstractQiPkiCa
 {
 
     public QiPkiEmbeddedCa( QiPkiEmbeddedCaAssembler appAssembler )

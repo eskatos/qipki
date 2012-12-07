@@ -21,17 +21,15 @@ import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.bootstrap.ApplicationAssembler;
 import org.qi4j.bootstrap.Energy4Java;
 import org.qi4j.spi.Qi4jSPI;
-
 import org.qipki.core.bootstrap.ModuleFinder;
 import org.qipki.core.dci.Context;
 import org.qipki.core.dci.InteractionContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings( "ProtectedField" )
 public abstract class AbstractQiPkiApplication<RootContextType extends Context>
-        implements QiPkiApplication<RootContextType>
+    implements QiPkiApplication<RootContextType>
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractQiPkiApplication.class );
@@ -55,10 +53,12 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     @Override
     public final void run()
     {
-        if ( application != null ) {
+        if( application != null )
+        {
             throw new IllegalStateException( "QiPkiApplication named " + application.name() + " is already active, cannot continue" );
         }
-        try {
+        try
+        {
 
             LOGGER.debug( "Assembling QiPKI Application" );
             qi4j = new Energy4Java();
@@ -83,11 +83,17 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
             application.activate();
             afterActivate();
 
-        } catch ( Exception ex ) {
-            if ( application != null ) {
-                try {
+        }
+        catch( Exception ex )
+        {
+            if( application != null )
+            {
+                try
+                {
                     application.passivate();
-                } catch ( Exception ex1 ) {
+                }
+                catch( Exception ex1 )
+                {
                     LOGGER.warn( "QiPKI Application named {} not null and could not passivate it.", application.name(), ex1 );
                 }
             }
@@ -99,29 +105,33 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     public final RootContextType newRootContext()
     {
         return ensureDciModuleFinder().
-                findModule( application ).
-                newObject( ensureRootContextType(), new InteractionContext() );
+            findModule( application ).
+            newObject( ensureRootContextType(), new InteractionContext() );
     }
 
     @Override
     public UnitOfWorkFactory unitOfWorkFactory()
     {
         return ensureDciModuleFinder().
-                findModule( application );
+            findModule( application );
     }
 
     @Override
     public final void stop()
     {
-        try {
-            if ( application != null ) {
+        try
+        {
+            if( application != null )
+            {
                 LOGGER.info( "Shutting down QiPKI Application {}", application.name() );
                 beforePassivate();
                 application.passivate();
                 afterPassivate();
                 application = null;
             }
-        } catch ( Exception ex ) {
+        }
+        catch( Exception ex )
+        {
             LOGGER.warn( "Unable to passivate QiPKI Application", ex );
         }
     }
@@ -129,7 +139,8 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     private ModuleFinder ensureDciModuleFinder()
     {
         ModuleFinder finder = dciModuleFinder();
-        if ( finder == null ) {
+        if( finder == null )
+        {
             throw new UnsupportedOperationException( "This QiPkiApplication do not support DCI" );
         }
         return finder;
@@ -138,7 +149,8 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     protected Class<RootContextType> ensureRootContextType()
     {
         Class<RootContextType> rootContextType = rootContextType();
-        if ( rootContextType == null ) {
+        if( rootContextType == null )
+        {
             throw new UnsupportedOperationException( "This QiPkiApplication do not support DCI" );
         }
         return rootContextType;
@@ -155,22 +167,22 @@ public abstract class AbstractQiPkiApplication<RootContextType extends Context>
     }
 
     protected void beforeActivate()
-            throws Exception
+        throws Exception
     {
     }
 
     protected void afterActivate()
-            throws Exception
+        throws Exception
     {
     }
 
     protected void beforePassivate()
-            throws Exception
+        throws Exception
     {
     }
 
     protected void afterPassivate()
-            throws Exception
+        throws Exception
     {
     }
 

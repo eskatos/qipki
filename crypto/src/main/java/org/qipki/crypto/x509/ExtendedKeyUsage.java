@@ -70,6 +70,7 @@ public enum ExtendedKeyUsage
         return keyPurposeId;
     }
 
+    @SuppressWarnings( "UseOfObsoleteCollectionType" )
     public static Vector<KeyPurposeId> usage( Set<ExtendedKeyUsage> extKeyUsages )
     {
         Vector<KeyPurposeId> keyPurposes = new Vector<KeyPurposeId>( extKeyUsages.size() );

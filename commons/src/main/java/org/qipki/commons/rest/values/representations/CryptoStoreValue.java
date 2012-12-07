@@ -13,11 +13,10 @@
  */
 package org.qipki.commons.rest.values.representations;
 
+import org.qi4j.api.value.ValueComposite;
 import org.qipki.commons.crypto.states.CryptoStoreState;
 
-import org.qi4j.api.value.ValueComposite;
-
 public interface CryptoStoreValue
-        extends RestValue, CryptoStoreState, ValueComposite
+    extends RestValue, CryptoStoreState, ValueComposite
 {
 }

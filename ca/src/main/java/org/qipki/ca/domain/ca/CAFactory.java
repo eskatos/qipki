@@ -23,15 +23,12 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
-import org.bouncycastle.asn1.x509.X509Extensions;
+import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 import org.joda.time.Duration;
-
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
@@ -39,7 +36,6 @@ import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.ca.domain.ca.root.RootCA;
 import org.qipki.ca.domain.ca.sub.SubCA;
 import org.qipki.ca.domain.crl.CRL;
@@ -49,15 +45,15 @@ import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.core.QiPkiFailure;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
-import org.qipki.crypto.x509.X509Generator;
 import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.KeyUsage;
 import org.qipki.crypto.x509.X509ExtensionHolder;
 import org.qipki.crypto.x509.X509ExtensionsBuilder;
+import org.qipki.crypto.x509.X509Generator;
 
 @Mixins( CAFactory.Mixin.class )
 public interface CAFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     RootCA createRootCA( String name, Integer validityDays, DistinguishedName distinguishedName,
@@ -71,7 +67,7 @@ public interface CAFactory
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements CAFactory
+        implements CAFactory
     {
 
         @Structure
@@ -90,7 +86,8 @@ public interface CAFactory
                                     KeyPairSpecValue keySpec, CryptoStore cryptoStore,
                                     String... crlDistPoints )
         {
-            try {
+            try
+            {
                 // Self signed CA
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
                 PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( distinguishedName, keyPair );
@@ -109,8 +106,9 @@ public interface CAFactory
                 createCa( ca, name, cryptoStore, keyPair, cert );
 
                 return caBuilder.newInstance();
-
-            } catch ( GeneralSecurityException ex ) {
+            }
+            catch( GeneralSecurityException ex )
+            {
                 throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
             }
         }
@@ -121,7 +119,8 @@ public interface CAFactory
                                   KeyPairSpecValue keySpec, CryptoStore cryptoStore,
                                   String... crlDistPoints )
         {
-            try {
+            try
+            {
                 // Sub CA
                 KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( keySpec.algorithm().get(), keySpec.length().get() ) );
                 PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( distinguishedName, keyPair );
@@ -141,20 +140,21 @@ public interface CAFactory
                 ca.issuer().set( parentCA );
 
                 return caBuilder.newInstance();
-            } catch ( GeneralSecurityException ex ) {
+            }
+            catch( GeneralSecurityException ex )
+            {
                 throw new QiPkiFailure( "Unable to create self signed keypair plus certificate", ex );
             }
         }
 
         private void createCa( CA ca, String name, CryptoStore cryptoStore, KeyPair keyPair, X509Certificate cert )
-                throws GeneralSecurityException
+            throws GeneralSecurityException
         {
             ca.name().set( name );
             ca.cryptoStore().set( cryptoStore );
 
             // Store in associated CryptoStore
             cryptoStore.storeCertifiedKeyPair( ca.identity().get(), keyPair.getPrivate(), cert );
-
             // Generate initial CRL
             {
                 X509CRL x509CRL = x509Generator.generateX509CRL( cert, keyPair.getPrivate() );
@@ -167,13 +167,13 @@ public interface CAFactory
         {
             List<X509ExtensionHolder> extensions = new ArrayList<X509ExtensionHolder>();
             SubjectKeyIdentifier subjectKeyID = x509ExtBuilder.buildSubjectKeyIdentifier( subjectPubKey );
-            extensions.add( new X509ExtensionHolder( X509Extensions.SubjectKeyIdentifier, false, subjectKeyID ) );
+            extensions.add( new X509ExtensionHolder( X509Extension.subjectKeyIdentifier, false, subjectKeyID ) );
             AuthorityKeyIdentifier authKeyID = x509ExtBuilder.buildAuthorityKeyIdentifier( issuerPubKey );
-            extensions.add( new X509ExtensionHolder( X509Extensions.AuthorityKeyIdentifier, false, authKeyID ) );
+            extensions.add( new X509ExtensionHolder( X509Extension.authorityKeyIdentifier, false, authKeyID ) );
             BasicConstraints bc = x509ExtBuilder.buildCABasicConstraints( 0L );
-            extensions.add( new X509ExtensionHolder( X509Extensions.BasicConstraints, true, bc ) );
+            extensions.add( new X509ExtensionHolder( X509Extension.basicConstraints, true, bc ) );
             org.bouncycastle.asn1.x509.KeyUsage keyUsages = x509ExtBuilder.buildKeyUsages( EnumSet.of( KeyUsage.cRLSign, KeyUsage.keyCertSign ) );
-            extensions.add( new X509ExtensionHolder( X509Extensions.KeyUsage, true, keyUsages ) );
+            extensions.add( new X509ExtensionHolder( X509Extension.keyUsage, true, keyUsages ) );
             return extensions;
         }
 

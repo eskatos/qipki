@@ -17,7 +17,7 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.ModuleAssembly;
 
 public interface PersistenceAssembler
-        extends Assembler
+    extends Assembler
 {
 
     void withConfigModule( ModuleAssembly config );

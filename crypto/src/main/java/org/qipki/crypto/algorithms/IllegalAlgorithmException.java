@@ -19,6 +19,8 @@ public class IllegalAlgorithmException
     extends CryptoFailure
 {
 
+    private static final long serialVersionUID = 1L;
+
     public IllegalAlgorithmException( String msg )
     {
         super( msg );

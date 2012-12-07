@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.x509profile;
 
 public class X509ProfileMixin
-        implements X509ProfileBehavior
+    implements X509ProfileBehavior
 {
 }

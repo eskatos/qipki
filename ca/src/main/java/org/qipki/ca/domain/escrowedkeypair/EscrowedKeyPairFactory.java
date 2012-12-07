@@ -20,14 +20,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.KeyPair;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qipki.crypto.asymetric.AsymetricGenerator;
 import org.qipki.crypto.asymetric.AsymetricGeneratorParameters;
@@ -35,14 +33,14 @@ import org.qipki.crypto.io.CryptIO;
 
 @Mixins( EscrowedKeyPairFactory.Mixin.class )
 public interface EscrowedKeyPairFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     EscrowedKeyPair create( AsymetricAlgorithm algorithm, Integer length );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements EscrowedKeyPairFactory
+        implements EscrowedKeyPairFactory
     {
 
         @Structure
@@ -74,20 +72,29 @@ public interface EscrowedKeyPairFactory
         private static void writeToFile( CharSequence chars, File dest )
         {
             OutputStream out = null;
-            try {
+            try
+            {
                 out = new FileOutputStream( dest );
                 PrintWriter printWriter = new PrintWriter( new OutputStreamWriter( out, "UTF-8" ) );
                 printWriter.println( chars );
                 printWriter.flush();
                 out.flush();
-            } catch ( IOException e ) {
+            }
+            catch( IOException e )
+            {
                 throw new RuntimeException( e.getMessage(), e );
-            } finally {
-                try {
-                    if ( out != null ) {
+            }
+            finally
+            {
+                try
+                {
+                    if( out != null )
+                    {
                         out.close();
                     }
-                } catch ( Exception ignored ) {
+                }
+                catch( Exception ignored )
+                {
                 }
             }
         }

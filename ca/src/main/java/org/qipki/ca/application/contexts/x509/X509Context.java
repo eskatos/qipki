@@ -14,9 +14,7 @@
 package org.qipki.ca.application.contexts.x509;
 
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
@@ -28,7 +26,7 @@ import org.qipki.core.dci.Context;
 import org.qipki.crypto.x509.RevocationReason;
 
 public class X509Context
-        extends Context
+    extends Context
 {
 
     public X509 x509()

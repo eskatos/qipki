@@ -15,9 +15,7 @@ package org.qipki.ca.domain.ca;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 import org.qipki.ca.domain.revocation.Revocation;
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.ca.domain.x509profile.X509Profile;

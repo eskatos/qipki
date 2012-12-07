@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.ca;
 
 public interface CA
-        extends CAState, CABehavior
+    extends CAState, CABehavior
 {
 }

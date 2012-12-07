@@ -16,6 +16,6 @@ package org.qipki.ca.domain.ca.root;
 import org.qipki.ca.domain.ca.CA;
 
 public interface RootCA
-        extends CA, RootCABehavior
+    extends CA, RootCABehavior
 {
 }

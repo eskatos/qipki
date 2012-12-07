@@ -15,14 +15,13 @@ package org.qipki.core.services;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 
 public abstract class AbstractBoxedDomainRepository<T>
-        implements BoxedDomainRepository<T>
+    implements BoxedDomainRepository<T>
 {
 
     protected final UnitOfWorkFactory uowf;
@@ -45,8 +44,8 @@ public abstract class AbstractBoxedDomainRepository<T>
     {
         QueryBuilder<T> builder = qbf.newQueryBuilder( getBoxedClass() );
         Query<T> query = uowf.currentUnitOfWork().newQuery( builder ).
-                firstResult( firstResult ).
-                maxResults( maxResults );
+            firstResult( firstResult ).
+            maxResults( maxResults );
         return query;
     }
 
@@ -56,13 +55,17 @@ public abstract class AbstractBoxedDomainRepository<T>
     {
         Class<T> rv = null;
         Type genericSuperClass = this.getClass().getGenericSuperclass();
-        Type genericSuperSuperClass = ( ( Class ) genericSuperClass ).getGenericSuperclass();
-        if ( genericSuperSuperClass instanceof ParameterizedType ) {
-            ParameterizedType parameterizedType = ( ParameterizedType ) genericSuperSuperClass;
-            for ( Type actual : parameterizedType.getActualTypeArguments() ) {
-                if ( actual instanceof Class ) {
-                    if ( rv == null ) {
-                        rv = ( Class<T> ) actual;
+        Type genericSuperSuperClass = ( (Class) genericSuperClass ).getGenericSuperclass();
+        if( genericSuperSuperClass instanceof ParameterizedType )
+        {
+            ParameterizedType parameterizedType = (ParameterizedType) genericSuperSuperClass;
+            for( Type actual : parameterizedType.getActualTypeArguments() )
+            {
+                if( actual instanceof Class )
+                {
+                    if( rv == null )
+                    {
+                        rv = (Class<T>) actual;
                     }
                 }
             }

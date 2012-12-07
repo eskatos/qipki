@@ -14,10 +14,8 @@
 package org.qipki.ca.bootstrap;
 
 import java.io.IOException;
-
 import org.codeartisans.java.toolbox.Strings;
 import org.codeartisans.java.toolbox.network.FreePortFinder;
-
 import org.qi4j.api.common.InvalidApplicationException;
 import org.qi4j.api.common.Visibility;
 import org.qi4j.api.structure.Application.Mode;
@@ -29,16 +27,16 @@ import org.qi4j.library.jmx.JMXAssembler;
 import org.qi4j.library.jmx.JMXConnectorConfiguration;
 import org.qi4j.library.jmx.JMXConnectorService;
 import org.qi4j.library.scheduler.bootstrap.SchedulerAssembler;
-
-import static org.qipki.ca.bootstrap.CaAssemblyNames.*;
 import org.qipki.commons.bootstrap.CryptoValuesModuleAssembler;
 import org.qipki.core.bootstrap.persistence.InMemoryPersistenceAssembler;
 import org.qipki.core.bootstrap.persistence.PersistenceAssembler;
 import org.qipki.core.reindex.AutomaticReindexerConfiguration;
 import org.qipki.crypto.bootstrap.CryptoEngineModuleAssembler;
 
+import static org.qipki.ca.bootstrap.CaAssemblyNames.*;
+
 public class QiPkiEmbeddedCaAssembler
-        implements ApplicationAssembler
+    implements ApplicationAssembler
 {
 
     private final String appName;
@@ -54,9 +52,12 @@ public class QiPkiEmbeddedCaAssembler
     {
         this.appName = appName;
         this.appVersion = appVersion;
-        if ( appMode == null ) {
+        if( appMode == null )
+        {
             this.appMode = Mode.development;
-        } else {
+        }
+        else
+        {
             this.appMode = appMode;
         }
     }
@@ -95,19 +96,22 @@ public class QiPkiEmbeddedCaAssembler
     @Override
     @SuppressWarnings( "unchecked" )
     public final ApplicationAssembly assemble( ApplicationAssemblyFactory applicationFactory )
-            throws AssemblyException
+        throws AssemblyException
     {
         ApplicationAssembly app = applicationFactory.newApplicationAssembly();
-        if ( !Strings.isEmpty( appName ) ) {
+        if( !Strings.isEmpty( appName ) )
+        {
             app.setName( appName );
         }
         app.setMode( appMode );
-        if ( !Strings.isEmpty( appVersion ) ) {
+        if( !Strings.isEmpty( appVersion ) )
+        {
             app.setVersion( appVersion );
         }
 
         LayerAssembly presentation = app.layer( LAYER_PRESENTATION );
-        if ( presentationTestsAssembler != null ) {
+        if( presentationTestsAssembler != null )
+        {
             presentationTestsAssembler.assemble( presentation.module( MODULE_TESTS_IN_PRESENTATION ) );
         }
 
@@ -115,14 +119,16 @@ public class QiPkiEmbeddedCaAssembler
         {
             ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
             config.services( FileConfigurationService.class ).visibleIn( Visibility.application );
-            if ( fileConfigOverride != null ) {
+            if( fileConfigOverride != null )
+            {
                 config.services( FileConfigurationService.class ).setMetaInfo( fileConfigOverride );
             }
             config.services( MemoryEntityStoreService.class ).visibleIn( Visibility.module );
             config.entities( AutomaticReindexerConfiguration.class ).visibleIn( Visibility.application );
         }
 
-        if ( jmxManagement ) {
+        if( jmxManagement )
+        {
             final LayerAssembly management = app.layer( LAYER_MANAGEMENT );
             {
                 ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
@@ -133,12 +139,18 @@ public class QiPkiEmbeddedCaAssembler
                 config.entities( JMXConnectorConfiguration.class ).visibleIn( Visibility.application );
                 JMXConnectorConfiguration jmxConfigDefaults = config.forMixin( JMXConnectorConfiguration.class ).declareDefaults();
                 jmxConfigDefaults.enabled().set( Boolean.TRUE );
-                if ( jmxPort != null && jmxPort != -1 ) {
+                if( jmxPort != null && jmxPort != -1 )
+                {
                     jmxConfigDefaults.port().set( jmxPort );
-                } else {
-                    try {
+                }
+                else
+                {
+                    try
+                    {
                         jmxConfigDefaults.port().set( FreePortFinder.findRandom() );
-                    } catch ( IOException ex ) {
+                    }
+                    catch( IOException ex )
+                    {
                         throw new AssemblyException( "No default JMX port provided and unable to dynamicaly find a free one", ex );
                     }
                 }
@@ -148,13 +160,13 @@ public class QiPkiEmbeddedCaAssembler
         LayerAssembly application = app.layer( LAYER_APPLICATION );
         {
             new CaDCIModuleAssembler().assemble(
-                    application.module( MODULE_CA_DCI ) );
+                application.module( MODULE_CA_DCI ) );
         }
 
         LayerAssembly domain = app.layer( LAYER_DOMAIN );
         {
             new CaDomainModuleAssembler().assemble(
-                    domain.module( MODULE_CA_DOMAIN ) );
+                domain.module( MODULE_CA_DOMAIN ) );
         }
 
         LayerAssembly crypto = app.layer( LAYER_CRYPTO );
@@ -162,10 +174,10 @@ public class QiPkiEmbeddedCaAssembler
             ModuleAssembly config = configuration.module( MODULE_CONFIGURATION );
 
             new CryptoEngineModuleAssembler( Visibility.application ).withConfigModule( config ).
-                    withConfigVisibility( Visibility.application ).
-                    assemble( crypto.module( MODULE_CRYPTO_ENGINE ) );
+                withConfigVisibility( Visibility.application ).
+                assemble( crypto.module( MODULE_CRYPTO_ENGINE ) );
             new CryptoValuesModuleAssembler( Visibility.application ).assemble(
-                    crypto.module( MODULE_CRYPTO_VALUES ) );
+                crypto.module( MODULE_CRYPTO_VALUES ) );
         }
 
         LayerAssembly infrastructure = app.layer( LAYER_INFRASTRUCTURE );
@@ -174,20 +186,22 @@ public class QiPkiEmbeddedCaAssembler
 
             // Persistence
             PersistenceAssembler persistAss = this.persistenceAssembler;
-            if ( persistAss == null ) {
+            if( persistAss == null )
+            {
                 persistAss = new InMemoryPersistenceAssembler();
             }
             persistAss.withConfigModule( config );
             persistAss.assemble( infrastructure.module( MODULE_PERSISTENCE ) );
 
-            if ( false ) { // FIXME Deactivated
+            if( false )
+            { // FIXME Deactivated
                 // Job Scheduler
                 ModuleAssembly scheduler = infrastructure.module( MODULE_SCHEDULER );
                 new SchedulerAssembler().withConfigAssembly( config ).
-                        withConfigVisibility( Visibility.application ).
-                        withTimeline().
-                        visibleIn( Visibility.application ).
-                        assemble( scheduler );
+                    withConfigVisibility( Visibility.application ).
+                    withTimeline().
+                    visibleIn( Visibility.application ).
+                    assemble( scheduler );
             }
         }
 
@@ -202,16 +216,18 @@ public class QiPkiEmbeddedCaAssembler
         onLayerUses( app );
 
         // Management Layer uses all application layers
-        if ( jmxManagement ) {
+        if( jmxManagement )
+        {
             final LayerAssembly management = app.layer( LAYER_MANAGEMENT );
             app.visit( new AssemblyVisitorAdapter<InvalidApplicationException>()
             {
 
                 @Override
                 public void visitLayer( LayerAssembly eachLayer )
-                        throws InvalidApplicationException
+                    throws InvalidApplicationException
                 {
-                    if ( !management.name().equals( eachLayer.name() ) ) {
+                    if( !management.name().equals( eachLayer.name() ) )
+                    {
                         management.uses( eachLayer );
                     }
                 }
@@ -223,7 +239,7 @@ public class QiPkiEmbeddedCaAssembler
     }
 
     protected void onAssemble( ApplicationAssembly applicationAssembly )
-            throws AssemblyException
+        throws AssemblyException
     {
     }
 

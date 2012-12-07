@@ -13,9 +13,10 @@
  */
 package org.qipki.ca.application.contexts.ca;
 
-import java.util.Collections;
 import java.util.List;
 import org.qi4j.api.common.Optional;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.qipki.ca.application.WrongParametersBuilder;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.ca.CAFactory;
@@ -31,11 +32,8 @@ import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 import org.qipki.crypto.constraints.X500Name;
 import org.qipki.crypto.x509.DistinguishedName;
 
-import org.qi4j.api.query.Query;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
-
 public class CAListContext
-        extends Context
+    extends Context
 {
 
     public Query<CA> list( int start )
@@ -53,30 +51,41 @@ public class CAListContext
         return context.role( CryptoValuesFactory.class ).createKeySpec( algorithm, length );
     }
 
-    public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, @Optional List<String> crlDistPoints )
+    public RootCA createRootCA( String cryptoStoreIdentity, String name, int validityDays,
+                                @X500Name String distinguishedName, KeyPairSpecValue keySpec,
+                                @Optional List<String> crlDistPoints )
     {
-        if ( crlDistPoints == null ) {
-            crlDistPoints = Collections.emptyList();
-        }
+        String[] crlDistPointsArray = crlDistPoints == null
+                                      ? new String[ 0 ]
+                                      : crlDistPoints.toArray( new String[ crlDistPoints.size() ] );
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
-        return context.role( CAFactory.class ).createRootCA( name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore, crlDistPoints.toArray( new String[]{} ) );
+        return context.role( CAFactory.class ).createRootCA( name, validityDays,
+                                                             new DistinguishedName( distinguishedName ),
+                                                             keySpec, cryptoStore, crlDistPointsArray );
     }
 
-    public SubCA createSubCA( String cryptoStoreIdentity, String parentCaIdentity, String name, int validityDays, @X500Name String distinguishedName, KeyPairSpecValue keySpec, @Optional List<String> crlDistPoints )
+    public SubCA createSubCA( String cryptoStoreIdentity, String parentCaIdentity, String name, int validityDays,
+                              @X500Name String distinguishedName, KeyPairSpecValue keySpec,
+                              @Optional List<String> crlDistPoints )
     {
-        if ( crlDistPoints == null ) {
-            crlDistPoints = Collections.emptyList();
-        }
+        String[] crlDistPointsArray = crlDistPoints == null
+                                      ? new String[ 0 ]
+                                      : crlDistPoints.toArray( new String[ crlDistPoints.size() ] );
         CryptoStore cryptoStore = context.role( CryptoStoreRepository.class ).findByIdentity( cryptoStoreIdentity );
         CA parentCA = fetchParentCA( parentCaIdentity );
-        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays, new DistinguishedName( distinguishedName ), keySpec, cryptoStore, crlDistPoints.toArray( new String[]{} ) );
+        return context.role( CAFactory.class ).createSubCA( parentCA, name, validityDays,
+                                                            new DistinguishedName( distinguishedName ),
+                                                            keySpec, cryptoStore, crlDistPointsArray );
     }
 
     private CA fetchParentCA( String identity )
     {
-        try {
+        try
+        {
             return context.role( CARepository.class ).findByIdentity( identity );
-        } catch ( NoSuchEntityException ex ) {
+        }
+        catch( NoSuchEntityException ex )
+        {
             throw new WrongParametersBuilder().missings( "Parent CA Identity" ).build( ex );
         }
     }

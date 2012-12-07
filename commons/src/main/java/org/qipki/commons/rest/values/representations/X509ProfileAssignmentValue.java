@@ -13,13 +13,12 @@
  */
 package org.qipki.commons.rest.values.representations;
 
-import org.qipki.commons.crypto.states.KeyEscrowPolicy;
-
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 
 public interface X509ProfileAssignmentValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<KeyEscrowPolicy> keyEscrowPolicy();

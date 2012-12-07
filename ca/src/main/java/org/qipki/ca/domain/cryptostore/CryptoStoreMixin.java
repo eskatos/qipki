@@ -20,17 +20,15 @@ import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.library.uowfile.singular.HasUoWFile;
 import org.qi4j.library.uowfile.singular.UoWFileLocator;
-
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 
 public abstract class CryptoStoreMixin
-        implements CryptoStoreBehavior, UoWFileLocator
+    implements CryptoStoreBehavior, UoWFileLocator
 {
 
     @Service
@@ -45,10 +43,13 @@ public abstract class CryptoStoreMixin
     @Override
     public X509Certificate getX509Certificate( String slotId )
     {
-        try {
+        try
+        {
             KeyStore ks = loadKeyStore();
-            return ( X509Certificate ) ks.getCertificate( slotId );
-        } catch ( KeyStoreException ex ) {
+            return (X509Certificate) ks.getCertificate( slotId );
+        }
+        catch( KeyStoreException ex )
+        {
             throw new CryptoFailure( "Unable to load X509 certificate from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
@@ -56,10 +57,13 @@ public abstract class CryptoStoreMixin
     @Override
     public PrivateKey getPrivateKey( String slotId )
     {
-        try {
+        try
+        {
             KeyStore ks = loadKeyStore();
-            return ( PrivateKey ) ks.getKey( slotId, meAsCryptoStore.password().get() );
-        } catch ( GeneralSecurityException ex ) {
+            return (PrivateKey) ks.getKey( slotId, meAsCryptoStore.password().get() );
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to load private key from " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }
@@ -67,13 +71,16 @@ public abstract class CryptoStoreMixin
     @Override
     public void storeCertifiedKeyPair( String slotId, PrivateKey privateKey, Certificate... certChain )
     {
-        try {
+        try
+        {
             KeyStore ks = loadKeyStore();
             ks.setEntry( slotId,
                          new KeyStore.PrivateKeyEntry( privateKey, certChain ),
                          new KeyStore.PasswordProtection( meAsCryptoStore.password().get() ) );
             cryptIO.writeKeyStore( ks, meAsCryptoStore.password().get(), meAsHasUoWFile.managedFile() );
-        } catch ( KeyStoreException ex ) {
+        }
+        catch( KeyStoreException ex )
+        {
             throw new CryptoFailure( "Unable to store certified keypair in " + meAsCryptoStore.name().get() + "/" + slotId, ex );
         }
     }

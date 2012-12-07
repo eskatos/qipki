@@ -13,10 +13,9 @@
  */
 package org.qipki.commons.crypto.states;
 
-import org.qipki.commons.crypto.values.ValidityIntervalValue;
 import org.qi4j.api.entity.Queryable;
-
 import org.qi4j.api.property.Property;
+import org.qipki.commons.crypto.values.ValidityIntervalValue;
 
 public interface X509State
 {

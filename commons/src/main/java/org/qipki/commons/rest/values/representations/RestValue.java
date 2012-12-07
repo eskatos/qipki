@@ -17,7 +17,7 @@ import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface RestValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<String> uri();

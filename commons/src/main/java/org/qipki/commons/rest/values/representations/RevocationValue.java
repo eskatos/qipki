@@ -13,13 +13,12 @@
  */
 package org.qipki.commons.rest.values.representations;
 
-import org.qipki.crypto.x509.RevocationReason;
-
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.crypto.x509.RevocationReason;
 
 public interface RevocationValue
-        extends RestValue, ValueComposite
+    extends RestValue, ValueComposite
 {
 
     Property<String> x509Uri();

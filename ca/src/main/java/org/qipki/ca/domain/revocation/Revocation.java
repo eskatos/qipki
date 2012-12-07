@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.revocation;
 
 public interface Revocation
-        extends RevocationState
+    extends RevocationState
 {
 }

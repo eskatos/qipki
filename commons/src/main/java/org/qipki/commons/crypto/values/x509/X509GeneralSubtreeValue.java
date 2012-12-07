@@ -20,7 +20,7 @@ import org.qi4j.api.value.ValueComposite;
 import org.qi4j.library.constraints.annotation.GreaterThan;
 
 public interface X509GeneralSubtreeValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<X509GeneralNameValue> base();

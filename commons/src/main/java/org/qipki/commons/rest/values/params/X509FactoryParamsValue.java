@@ -18,7 +18,7 @@ import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface X509FactoryParamsValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<String> caUri();

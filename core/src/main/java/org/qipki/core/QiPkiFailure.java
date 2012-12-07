@@ -14,7 +14,7 @@
 package org.qipki.core;
 
 public class QiPkiFailure
-        extends RuntimeException
+    extends RuntimeException
 {
 
     private static final long serialVersionUID = 1L;

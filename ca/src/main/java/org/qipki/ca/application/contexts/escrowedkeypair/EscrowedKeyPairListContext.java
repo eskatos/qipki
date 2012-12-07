@@ -13,16 +13,15 @@
  */
 package org.qipki.ca.application.contexts.escrowedkeypair;
 
+import org.qi4j.api.query.Query;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPair;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairFactory;
 import org.qipki.ca.domain.escrowedkeypair.EscrowedKeyPairRepository;
 import org.qipki.core.dci.Context;
 import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 
-import org.qi4j.api.query.Query;
-
 public class EscrowedKeyPairListContext
-        extends Context
+    extends Context
 {
 
     public Query<EscrowedKeyPair> list( int start )

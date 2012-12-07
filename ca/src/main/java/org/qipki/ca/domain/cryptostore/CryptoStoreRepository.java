@@ -13,24 +13,23 @@
  */
 package org.qipki.ca.domain.cryptostore;
 
-import org.qipki.core.services.AbstractBoxedDomainRepository;
-import org.qipki.core.services.BoxedDomainRepository;
-
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.QueryBuilderFactory;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
+import org.qipki.core.services.AbstractBoxedDomainRepository;
+import org.qipki.core.services.BoxedDomainRepository;
 
 @Mixins( CryptoStoreRepository.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
 public interface CryptoStoreRepository
-        extends BoxedDomainRepository<CryptoStore>, ServiceComposite
+    extends BoxedDomainRepository<CryptoStore>, ServiceComposite
 {
 
     abstract class Mixin
-            extends AbstractBoxedDomainRepository<CryptoStore>
-            implements CryptoStoreRepository
+        extends AbstractBoxedDomainRepository<CryptoStore>
+        implements CryptoStoreRepository
     {
 
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )

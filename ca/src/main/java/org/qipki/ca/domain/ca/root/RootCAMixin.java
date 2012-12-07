@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.ca.root;
 
 public abstract class RootCAMixin
-        implements RootCABehavior
+    implements RootCABehavior
 {
 }

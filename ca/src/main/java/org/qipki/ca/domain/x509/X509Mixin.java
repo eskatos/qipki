@@ -16,15 +16,12 @@ package org.qipki.ca.domain.x509;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.openssl.PEMReader;
-
+import org.qi4j.api.injection.scope.This;
 import org.qipki.core.QiPkiFailure;
 
-import org.qi4j.api.injection.scope.This;
-
 public class X509Mixin
-        implements X509Behavior
+    implements X509Behavior
 {
 
     @This
@@ -33,9 +30,12 @@ public class X509Mixin
     @Override
     public X509Certificate x509Certificate()
     {
-        try {
-            return ( X509Certificate ) new PEMReader( new StringReader( state.pem().get() ) ).readObject();
-        } catch ( IOException ex ) {
+        try
+        {
+            return (X509Certificate) new PEMReader( new StringReader( state.pem().get() ) ).readObject();
+        }
+        catch( IOException ex )
+        {
             throw new QiPkiFailure( "Unable to read X509 pem", ex );
         }
     }

@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.ca.profileassignment;
 
 public interface X509ProfileAssignment
-        extends X509ProfileAssignmentState
+    extends X509ProfileAssignmentState
 {
 }

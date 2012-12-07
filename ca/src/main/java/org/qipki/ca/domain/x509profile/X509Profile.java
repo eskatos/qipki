@@ -13,11 +13,10 @@
  */
 package org.qipki.ca.domain.x509profile;
 
+import org.qi4j.api.entity.Identity;
 import org.qipki.commons.crypto.states.X509ProfileState;
 
-import org.qi4j.api.entity.Identity;
-
 public interface X509Profile
-        extends X509ProfileState, Identity, X509ProfileBehavior
+    extends X509ProfileState, Identity, X509ProfileBehavior
 {
 }

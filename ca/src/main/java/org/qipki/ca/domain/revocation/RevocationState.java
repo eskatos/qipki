@@ -13,16 +13,15 @@
  */
 package org.qipki.ca.domain.revocation;
 
+import org.qi4j.api.association.Association;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.Queryable;
-import org.qi4j.api.association.Association;
 import org.qi4j.api.property.Property;
-
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.crypto.x509.RevocationReason;
 
 public interface RevocationState
-        extends Identity
+    extends Identity
 {
 
     Association<X509> x509();

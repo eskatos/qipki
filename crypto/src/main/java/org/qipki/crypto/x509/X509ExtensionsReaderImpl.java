@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
@@ -122,7 +123,7 @@ public class X509ExtensionsReaderImpl
             Enumeration<?> e = requestedExtensions.oids();
             while( e.hasMoreElements() )
             {
-                DERObjectIdentifier oid = (DERObjectIdentifier) e.nextElement();
+                ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier) e.nextElement();
                 X509Extension extension = requestedExtensions.getExtension( oid );
                 extractedExtensions.add( new X509ExtensionHolder( oid, extension.isCritical(), X509Extension.convertValueToObject( extension ) ) );
             }
@@ -135,7 +136,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.AuthorityKeyIdentifier.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.authorityKeyIdentifier.getId() );
             if( value == null )
             {
                 return null;
@@ -154,7 +155,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.SubjectKeyIdentifier.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.subjectKeyIdentifier.getId() );
             if( value == null )
             {
                 return null;
@@ -194,7 +195,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.ExtendedKeyUsage.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.extendedKeyUsage.getId() );
             if( value == null )
             {
                 return Collections.emptySet();
@@ -269,7 +270,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.PrivateKeyUsagePeriod.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.privateKeyUsagePeriod.getId() );
             if( value == null )
             {
                 return null;
@@ -295,7 +296,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.CRLDistributionPoints.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.cRLDistributionPoints.getId() );
             if( value == null )
             {
                 return null;
@@ -315,7 +316,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.CertificatePolicies.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.certificatePolicies.getId() );
             if( value == null )
             {
                 return Collections.emptySet();
@@ -341,7 +342,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.PolicyMappings.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.policyMappings.getId() );
             if( value == null )
             {
                 return Collections.emptySet();
@@ -375,7 +376,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.SubjectAlternativeName.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.subjectAlternativeName.getId() );
             if( value == null )
             {
                 return null;
@@ -393,7 +394,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.IssuerAlternativeName.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.issuerAlternativeName.getId() );
             if( value == null )
             {
                 return null;
@@ -411,7 +412,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.BasicConstraints.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.basicConstraints.getId() );
             if( value == null )
             {
                 return null;
@@ -430,7 +431,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.NameConstraints.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.nameConstraints.getId() );
             if( value == null )
             {
                 return null;
@@ -448,7 +449,7 @@ public class X509ExtensionsReaderImpl
     {
         try
         {
-            byte[] value = cert.getExtensionValue( X509Extensions.PolicyConstraints.getId() );
+            byte[] value = cert.getExtensionValue( X509Extension.policyConstraints.getId() );
             if( value == null )
             {
                 return Collections.emptySet();
@@ -519,8 +520,8 @@ public class X509ExtensionsReaderImpl
     public Map.Entry<X509GeneralName, String> asImmutableMapEntry( GeneralName generalName )
     {
         int nameType = generalName.getTagNo();
-        X509GeneralName x509GeneralName = null;
-        String value = null;
+        X509GeneralName x509GeneralName;
+        String value;
         switch( nameType )
         {
             case GeneralName.otherName:

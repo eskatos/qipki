@@ -17,15 +17,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.security.KeyPair;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.This;
 import org.qi4j.library.uowfile.singular.UoWFileLocator;
-
 import org.qipki.crypto.io.CryptIO;
 
 public abstract class EscrowedKeyPairMixin
-        implements EscrowedKeyPairBehavior, UoWFileLocator
+    implements EscrowedKeyPairBehavior, UoWFileLocator
 {
 
     @This
@@ -44,9 +42,12 @@ public abstract class EscrowedKeyPairMixin
     @Override
     public KeyPair keyPair()
     {
-        try {
+        try
+        {
             return cryptio.readKeyPairPEM( new FileReader( me.managedFile() ) );
-        } catch ( FileNotFoundException ex ) {
+        }
+        catch( FileNotFoundException ex )
+        {
             throw new IllegalStateException( ex.getMessage(), ex );
         }
     }

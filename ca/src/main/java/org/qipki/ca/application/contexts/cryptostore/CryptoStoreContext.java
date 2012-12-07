@@ -17,7 +17,7 @@ import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.core.dci.Context;
 
 public class CryptoStoreContext
-        extends Context
+    extends Context
 {
 
     public CryptoStore cryptoStore()

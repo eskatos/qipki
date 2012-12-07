@@ -14,24 +14,22 @@
 package org.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
-
-import org.qipki.commons.crypto.values.HasCriticality;
-import org.qipki.commons.crypto.values.HasOID;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.commons.crypto.values.HasCriticality;
+import org.qipki.commons.crypto.values.HasOID;
 
 @SuppressWarnings( "PublicInnerClass" )
 public interface CertificatePoliciesValue
-        extends HasCriticality, ValueComposite
+    extends HasCriticality, ValueComposite
 {
 
     @UseDefaults
     Property<Set<PolicyInformationValue>> policies();
 
     public interface PolicyInformationValue
-            extends HasOID, ValueComposite
+        extends HasOID, ValueComposite
     {
 
         @UseDefaults
@@ -40,7 +38,7 @@ public interface CertificatePoliciesValue
     }
 
     public interface PolicyQualifierInfoValue
-            extends HasOID, ValueComposite
+        extends HasOID, ValueComposite
     {
 
         Property<String> qualifier();

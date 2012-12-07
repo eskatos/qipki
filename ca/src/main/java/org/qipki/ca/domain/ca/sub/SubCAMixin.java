@@ -14,6 +14,6 @@
 package org.qipki.ca.domain.ca.sub;
 
 public abstract class SubCAMixin
-        implements SubCABehavior
+    implements SubCABehavior
 {
 }

@@ -13,14 +13,13 @@
  */
 package org.qipki.ca.domain.escrowedkeypair;
 
-import org.qi4j.api.entity.Identity;
 import org.qi4j.api.association.ManyAssociation;
-
+import org.qi4j.api.entity.Identity;
 import org.qipki.ca.domain.x509.X509;
 import org.qipki.commons.crypto.states.EscrowedKeyPairState;
 
 public interface EscrowedKeyPair
-        extends EscrowedKeyPairState, Identity, EscrowedKeyPairBehavior
+    extends EscrowedKeyPairState, Identity, EscrowedKeyPairBehavior
 {
 
     ManyAssociation<X509> x509s();

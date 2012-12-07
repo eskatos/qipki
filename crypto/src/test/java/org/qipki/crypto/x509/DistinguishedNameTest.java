@@ -14,11 +14,10 @@
 package org.qipki.crypto.x509;
 
 import junit.framework.TestCase;
-
 import org.apache.commons.lang.StringUtils;
 
 public class DistinguishedNameTest
-        extends TestCase
+    extends TestCase
 {
 
     private static final String WRONG_SAMPLE = "WRONG=ROI, BAD=HENOK";
@@ -30,10 +29,13 @@ public class DistinguishedNameTest
     @SuppressWarnings( "ResultOfObjectAllocationIgnored" )
     public void test_wrong()
     {
-        try {
+        try
+        {
             new DistinguishedName( WRONG_SAMPLE );
             fail( "Was expecting an IllegalArgumentException with the following DN string representation: " + WRONG_SAMPLE );
-        } catch ( IllegalArgumentException ex ) {
+        }
+        catch( IllegalArgumentException ex )
+        {
         }
     }
 

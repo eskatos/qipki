@@ -22,6 +22,7 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Vector;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
@@ -99,7 +100,6 @@ public class X509GeneratorImpl
     {
         try
         {
-
             X509V3CertificateGenerator x509v3Generator = new X509V3CertificateGenerator();
 
             DateTime now = new DateTime();
@@ -114,11 +114,10 @@ public class X509GeneratorImpl
 
             for( X509ExtensionHolder eachExtensionHolder : x509Extensions )
             {
-                x509v3Generator.addExtension( eachExtensionHolder.getDerOID(), eachExtensionHolder.isCritical(), eachExtensionHolder.getValue() );
+                x509v3Generator.addExtension( eachExtensionHolder.getASN1OID(), eachExtensionHolder.isCritical(), eachExtensionHolder.getValue() );
             }
 
             return x509v3Generator.generate( privateKey, cryptoContext.providerName() );
-
         }
         catch( GeneralSecurityException ex )
         {
@@ -140,8 +139,8 @@ public class X509GeneratorImpl
             crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
             crlGen.setNextUpdate( new DateTime().minus( Time.CLOCK_SKEW ).plusHours( 12 ).toDate() );
             crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
-            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
-            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
+            crlGen.addExtension( X509Extension.authorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
+            crlGen.addExtension( X509Extension.cRLNumber, false, new CRLNumber( BigInteger.ONE ) );
             return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
         }
         catch( GeneralSecurityException ex )
@@ -161,8 +160,8 @@ public class X509GeneratorImpl
             crlGen.setThisUpdate( skewedNow.toDate() );
             crlGen.setNextUpdate( skewedNow.plusHours( 12 ).toDate() );
             crlGen.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
-            crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
-            crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( lastCRLNumber ) );
+            crlGen.addExtension( X509Extension.authorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
+            crlGen.addExtension( X509Extension.cRLNumber, false, new CRLNumber( lastCRLNumber ) );
             crlGen.addCRL( previousCRL );
             crlGen.addCRLEntry( revokedCertificate.getSerialNumber(), skewedNow.toDate(), reason.reason() );
             return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
@@ -173,19 +172,16 @@ public class X509GeneratorImpl
         }
     }
 
-    @SuppressWarnings(
-    {
-        "UseOfObsoleteCollectionType", "unchecked"
-    } )
+    @SuppressWarnings( "UseOfObsoleteCollectionType" )
     private DERSet generateSANAttribute( GeneralNames subGeneralNames )
     {
         if( subGeneralNames == null )
         {
             return new DERSet();
         }
-        Vector oids = new Vector();
-        Vector values = new Vector();
-        oids.add( X509Extensions.SubjectAlternativeName );
+        Vector<ASN1ObjectIdentifier> oids = new Vector<ASN1ObjectIdentifier>();
+        Vector<X509Extension> values = new Vector<X509Extension>();
+        oids.add( X509Extension.subjectAlternativeName );
         values.add( new X509Extension( false, new DEROctetString( subGeneralNames ) ) );
         X509Extensions extensions = new X509Extensions( oids, values );
         Attribute attribute = new Attribute( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest, new DERSet( extensions ) );

@@ -13,6 +13,10 @@
  */
 package org.qipki.commons.bootstrap;
 
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
 import org.qipki.commons.rest.values.CaApiURIsValue;
 import org.qipki.commons.rest.values.params.CAFactoryParamsValue;
 import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
@@ -32,13 +36,8 @@ import org.qipki.commons.rest.values.representations.X509ProfileAssignmentValue;
 import org.qipki.commons.rest.values.representations.X509ProfileValue;
 import org.qipki.commons.rest.values.representations.X509Value;
 
-import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-
 public class RestValuesModuleAssembler
-        implements Assembler
+    implements Assembler
 {
 
     private final Visibility visibility;
@@ -55,7 +54,7 @@ public class RestValuesModuleAssembler
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         // Params
         module.values( CryptoStoreFactoryParamsValue.class,
@@ -64,9 +63,9 @@ public class RestValuesModuleAssembler
                        X509FactoryParamsValue.class,
                        X509RevocationParamsValue.class,
                        EscrowedKeyPairFactoryParamsValue.class ).
-                visibleIn( visibility );
+            visibleIn( visibility );
         module.services( ParamsFactory.class ).
-                visibleIn( visibility );
+            visibleIn( visibility );
 
         // Rest values
         module.values( RestValue.class,
@@ -80,7 +79,7 @@ public class RestValuesModuleAssembler
                        X509DetailValue.class,
                        RevocationValue.class,
                        EscrowedKeyPairValue.class ).
-                visibleIn( visibility );
+            visibleIn( visibility );
 
     }
 

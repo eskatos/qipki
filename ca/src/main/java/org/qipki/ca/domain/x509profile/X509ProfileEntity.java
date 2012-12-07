@@ -18,6 +18,6 @@ import org.qi4j.api.mixin.Mixins;
 
 @Mixins( X509ProfileMixin.class )
 public interface X509ProfileEntity
-        extends X509Profile, EntityComposite
+    extends X509Profile, EntityComposite
 {
 }

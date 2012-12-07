@@ -21,7 +21,7 @@ import org.qi4j.index.rdf.assembly.RdfMemoryStoreAssembler;
 import org.qi4j.spi.uuid.UuidIdentityGeneratorService;
 
 public class InMemoryPersistenceAssembler
-        implements PersistenceAssembler
+    implements PersistenceAssembler
 {
 
     @Override
@@ -31,7 +31,7 @@ public class InMemoryPersistenceAssembler
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         module.services( MemoryEntityStoreService.class, UuidIdentityGeneratorService.class ).visibleIn( Visibility.application );
         new RdfMemoryStoreAssembler( Visibility.application, Visibility.application ).assemble( module );

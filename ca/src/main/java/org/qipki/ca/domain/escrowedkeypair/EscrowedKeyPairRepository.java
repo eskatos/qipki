@@ -20,25 +20,26 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
-import static org.qi4j.api.query.QueryExpressions.contains;
-import static org.qi4j.api.query.QueryExpressions.templateFor;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qipki.ca.domain.x509.X509Repository;
 import org.qipki.core.services.AbstractBoxedDomainRepository;
 import org.qipki.core.services.BoxedDomainRepository;
 
+import static org.qi4j.api.query.QueryExpressions.contains;
+import static org.qi4j.api.query.QueryExpressions.templateFor;
+
 @Mixins( EscrowedKeyPairRepository.Mixin.class )
 public interface EscrowedKeyPairRepository
-        extends BoxedDomainRepository<EscrowedKeyPair>, ServiceComposite
+    extends BoxedDomainRepository<EscrowedKeyPair>, ServiceComposite
 {
 
     EscrowedKeyPair findByX509Identity( String x509Identity );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            extends AbstractBoxedDomainRepository<EscrowedKeyPair>
-            implements EscrowedKeyPairRepository
+        extends AbstractBoxedDomainRepository<EscrowedKeyPair>
+        implements EscrowedKeyPairRepository
     {
 
         @Service

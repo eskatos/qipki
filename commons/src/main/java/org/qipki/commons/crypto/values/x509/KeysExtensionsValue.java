@@ -18,7 +18,7 @@ import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface KeysExtensionsValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     @Optional

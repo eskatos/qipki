@@ -14,24 +14,22 @@
 package org.qipki.ca.domain.cryptostore;
 
 import java.io.File;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.library.fileconfig.FileConfiguration;
-
 import org.qipki.core.file.AbstractEntityFileService;
 
 @Mixins( CryptoStoreFileService.Mixin.class )
 public interface CryptoStoreFileService
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     File getKeyStoreFile( CryptoStore cryptoStore );
 
     abstract class Mixin
-            extends AbstractEntityFileService
-            implements CryptoStoreFileService
+        extends AbstractEntityFileService
+        implements CryptoStoreFileService
     {
 
         private static final String DATA_DIRNAME = "cryptostores";
@@ -46,8 +44,8 @@ public interface CryptoStoreFileService
         public File getKeyStoreFile( CryptoStore cryptoStore )
         {
             String keyStoreFileName = new StringBuilder( cryptoStore.identity().get() ).append( "-" ).
-                    append( FILE_SUFFIX ).append( "." ).
-                    append( cryptoStore.storeType().get().fileExtension() ).toString();
+                append( FILE_SUFFIX ).append( "." ).
+                append( cryptoStore.storeType().get().fileExtension() ).toString();
             return new File( ensureDataDir( DATA_DIRNAME ), keyStoreFileName );
         }
 

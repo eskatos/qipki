@@ -14,12 +14,11 @@
 package org.qipki.commons.crypto.values;
 
 import java.util.Date;
-
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
 
 public interface ValidityIntervalValue
-        extends ValueComposite
+    extends ValueComposite
 {
 
     Property<Date> notBefore();

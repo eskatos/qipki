@@ -35,6 +35,7 @@ public interface QiCryptoEngine
     extends CryptoContext, ServiceComposite, ServiceActivation
 {
 
+    @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
         implements QiCryptoEngine
     {
@@ -61,7 +62,6 @@ public interface QiCryptoEngine
             {
                 if( Security.getProvider( providerName ) == null )
                 {
-
                     Security.addProvider( providerClass.newInstance() );
 
                     if( LOGGER.isDebugEnabled() )
@@ -90,7 +90,6 @@ public interface QiCryptoEngine
             {
                 if( Security.getProvider( providerName ) == null )
                 {
-
                     Security.removeProvider( providerName );
 
                     if( LOGGER.isDebugEnabled() )

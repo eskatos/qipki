@@ -14,24 +14,22 @@
 package org.qipki.ca.domain.crl;
 
 import java.io.File;
-
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.library.fileconfig.FileConfiguration;
-
 import org.qipki.core.file.AbstractEntityFileService;
 
 @Mixins( CRLFileService.Mixin.class )
 public interface CRLFileService
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     File getCRLFile( CRL crl );
 
     abstract class Mixin
-            extends AbstractEntityFileService
-            implements CRLFileService
+        extends AbstractEntityFileService
+        implements CRLFileService
     {
 
         private static final String DATA_DIRNAME = "crl";
@@ -46,7 +44,7 @@ public interface CRLFileService
         public File getCRLFile( CRL crl )
         {
             String keyStoreFileName = new StringBuilder( crl.identity().get() ).append( "-" ).
-                    append( FILE_SUFFIX ).append( ".crl" ).toString();
+                append( FILE_SUFFIX ).append( ".crl" ).toString();
             return new File( ensureDataDir( DATA_DIRNAME ), keyStoreFileName );
         }
 

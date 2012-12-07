@@ -19,24 +19,25 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.query.Query;
 import org.qi4j.api.query.QueryBuilder;
 import org.qi4j.api.query.QueryBuilderFactory;
-import static org.qi4j.api.query.QueryExpressions.eq;
-import static org.qi4j.api.query.QueryExpressions.templateFor;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qipki.core.services.AbstractBoxedDomainRepository;
 import org.qipki.core.services.BoxedDomainRepository;
 
+import static org.qi4j.api.query.QueryExpressions.eq;
+import static org.qi4j.api.query.QueryExpressions.templateFor;
+
 @Mixins( X509Repository.Mixin.class )
 public interface X509Repository
-        extends BoxedDomainRepository<X509>, ServiceComposite
+    extends BoxedDomainRepository<X509>, ServiceComposite
 {
 
     X509 findByHexSha256( String hexSha256 );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            extends AbstractBoxedDomainRepository<X509>
-            implements X509Repository
+        extends AbstractBoxedDomainRepository<X509>
+        implements X509Repository
     {
 
         public Mixin( @Structure UnitOfWorkFactory uowf, @Structure QueryBuilderFactory qbf )

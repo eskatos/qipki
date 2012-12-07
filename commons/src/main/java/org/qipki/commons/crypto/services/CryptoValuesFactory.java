@@ -14,22 +14,19 @@
 package org.qipki.commons.crypto.services;
 
 import java.util.Date;
-
-import org.qipki.commons.crypto.values.KeyPairSpecValue;
-import org.qipki.commons.crypto.values.ValidityIntervalValue;
-import org.qipki.crypto.algorithms.AsymetricAlgorithm;
-
 import org.joda.time.Interval;
-
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
+import org.qipki.commons.crypto.values.KeyPairSpecValue;
+import org.qipki.commons.crypto.values.ValidityIntervalValue;
+import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 
 @Mixins( CryptoValuesFactory.Mixin.class )
 public interface CryptoValuesFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     ValidityIntervalValue buildValidityInterval( Interval interval );
@@ -40,7 +37,7 @@ public interface CryptoValuesFactory
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements CryptoValuesFactory
+        implements CryptoValuesFactory
     {
 
         @Structure

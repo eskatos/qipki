@@ -18,7 +18,7 @@ import org.qi4j.api.configuration.ConfigurationComposite;
 import org.qi4j.api.property.Property;
 
 public interface AutomaticReindexerConfiguration
-        extends ConfigurationComposite
+    extends ConfigurationComposite
 {
 
     @UseDefaults

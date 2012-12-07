@@ -13,11 +13,10 @@
  */
 package org.qipki.commons.rest.values.params;
 
+import org.qi4j.api.value.ValueComposite;
 import org.qipki.commons.crypto.states.X509ProfileState;
 
-import org.qi4j.api.value.ValueComposite;
-
 public interface X509ProfileFactoryParamsValue
-        extends X509ProfileState, ValueComposite
+    extends X509ProfileState, ValueComposite
 {
 }

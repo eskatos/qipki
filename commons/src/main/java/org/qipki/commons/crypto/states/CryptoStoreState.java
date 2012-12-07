@@ -14,12 +14,11 @@
 package org.qipki.commons.crypto.states;
 
 import org.qi4j.api.property.Property;
-
-import org.qipki.crypto.storage.KeyStoreType;
 import org.qipki.commons.fragments.HasName;
+import org.qipki.crypto.storage.KeyStoreType;
 
 public interface CryptoStoreState
-        extends HasName
+    extends HasName
 {
 
     Property<KeyStoreType> storeType();

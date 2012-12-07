@@ -21,7 +21,6 @@ import java.util.Map;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.codeartisans.java.toolbox.Collections;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,8 +51,10 @@ import org.qipki.crypto.x509.RevocationReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertNotNull;
+
 public class QiPkiEmbeddedCaTest
-        extends AbstractQiPkiCaTest
+    extends AbstractQiPkiCaTest
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( QiPkiEmbeddedCaTest.class );
@@ -84,7 +85,7 @@ public class QiPkiEmbeddedCaTest
 
     @Test
     public void testInit()
-            throws UnitOfWorkCompletionException
+        throws UnitOfWorkCompletionException
     {
         System.out.println( "##################################################" );
         System.out.println( "                    Init" );
@@ -137,7 +138,7 @@ public class QiPkiEmbeddedCaTest
 
     @Test
     public void testRenewX509()
-            throws UnitOfWorkCompletionException, CertificateEncodingException
+        throws UnitOfWorkCompletionException, CertificateEncodingException
     {
         System.out.println( "##################################################" );
         System.out.println( "                   RenewX509" );
@@ -159,7 +160,7 @@ public class QiPkiEmbeddedCaTest
 
     @Test
     public void testRevokeX509()
-            throws UnitOfWorkCompletionException, CertificateEncodingException
+        throws UnitOfWorkCompletionException, CertificateEncodingException
     {
         System.out.println( "##################################################" );
         System.out.println( "                   RevokeX509" );
@@ -178,7 +179,7 @@ public class QiPkiEmbeddedCaTest
     }
 
     private X509Certificate issueX509()
-            throws UnitOfWorkCompletionException
+        throws UnitOfWorkCompletionException
     {
         PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new DistinguishedName( buildDN( "IssueX509" ) ), keyPair );
 
@@ -205,7 +206,8 @@ public class QiPkiEmbeddedCaTest
     {
         Query<CA> findCA = caListContext.findByName( caName, 0 );
         long caCount = findCA.count();
-        if ( caCount <= 0 || caCount > 1 ) {
+        if( caCount <= 0 || caCount > 1 )
+        {
             throw new IllegalStateException( "No or more than one (" + caCount + ") " + caName + " CA found, cannot continue" );
         }
         return Collections.firstElementOrNull( findCA );
@@ -215,14 +217,15 @@ public class QiPkiEmbeddedCaTest
     {
         Query<X509Profile> findProfile = x509ProfileListContext.findByName( profileName, 0 );
         long profileCount = findProfile.count();
-        if ( profileCount <= 0 || profileCount > 1 ) {
+        if( profileCount <= 0 || profileCount > 1 )
+        {
             throw new IllegalStateException( "No or more than one (" + profileCount + ") " + profileName + " X509Profile found, cannot continue" );
         }
         return Collections.firstElementOrNull( findProfile );
     }
 
     private X509 findX509ByHexSha256Hash( X509ListContext x509ListContext, X509Certificate cert )
-            throws CertificateEncodingException
+        throws CertificateEncodingException
     {
         String hexSha256 = new Sha256Hash( cert.getEncoded() ).toHex();
         X509 x509 = x509ListContext.findByHexSha256( hexSha256 );

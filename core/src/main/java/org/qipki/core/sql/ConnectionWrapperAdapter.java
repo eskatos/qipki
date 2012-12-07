@@ -35,10 +35,10 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * A simple connection wrapper (for overriding)
+ * A simple Connection wrapper (for overriding)
  */
 public class ConnectionWrapperAdapter
-        implements Connection
+    implements Connection
 {
 
     protected final Connection c;
@@ -50,398 +50,423 @@ public class ConnectionWrapperAdapter
 
     @Override
     public Statement createStatement()
-            throws SQLException
+        throws SQLException
     {
         return c.createStatement();
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql );
     }
 
     @Override
     public CallableStatement prepareCall( String sql )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareCall( sql );
     }
 
     @Override
     public String nativeSQL( String sql )
-            throws SQLException
+        throws SQLException
     {
         return c.nativeSQL( sql );
     }
 
     @Override
     public void setAutoCommit( boolean autoCommit )
-            throws SQLException
+        throws SQLException
     {
         c.setAutoCommit( autoCommit );
     }
 
     @Override
     public boolean getAutoCommit()
-            throws SQLException
+        throws SQLException
     {
         return c.getAutoCommit();
     }
 
     @Override
     public void commit()
-            throws SQLException
+        throws SQLException
     {
         c.commit();
     }
 
     @Override
     public void rollback()
-            throws SQLException
+        throws SQLException
     {
         c.rollback();
     }
 
     @Override
     public void close()
-            throws SQLException
+        throws SQLException
     {
         c.close();
     }
 
     @Override
     public boolean isClosed()
-            throws SQLException
+        throws SQLException
     {
         return c.isClosed();
     }
 
     @Override
     public DatabaseMetaData getMetaData()
-            throws SQLException
+        throws SQLException
     {
         return c.getMetaData();
     }
 
     @Override
     public void setReadOnly( boolean readOnly )
-            throws SQLException
+        throws SQLException
     {
         c.setReadOnly( readOnly );
     }
 
     @Override
     public boolean isReadOnly()
-            throws SQLException
+        throws SQLException
     {
         return c.isReadOnly();
     }
 
     @Override
     public void setCatalog( String catalog )
-            throws SQLException
+        throws SQLException
     {
         c.setCatalog( catalog );
     }
 
     @Override
     public String getCatalog()
-            throws SQLException
+        throws SQLException
     {
         return c.getCatalog();
     }
 
     @Override
     public void setTransactionIsolation( int level )
-            throws SQLException
+        throws SQLException
     {
         c.setTransactionIsolation( level );
     }
 
     @Override
     public int getTransactionIsolation()
-            throws SQLException
+        throws SQLException
     {
         return c.getTransactionIsolation();
     }
 
     @Override
     public SQLWarning getWarnings()
-            throws SQLException
+        throws SQLException
     {
         return c.getWarnings();
     }
 
     @Override
     public void clearWarnings()
-            throws SQLException
+        throws SQLException
     {
         c.clearWarnings();
     }
 
     @Override
     public Statement createStatement( int resultSetType, int resultSetConcurrency )
-            throws SQLException
+        throws SQLException
     {
         return c.createStatement( resultSetType, resultSetConcurrency );
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql, int resultSetType, int resultSetConcurrency )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql, resultSetType, resultSetConcurrency );
     }
 
     @Override
     public CallableStatement prepareCall( String sql, int resultSetType, int resultSetConcurrency )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareCall( sql, resultSetType, resultSetConcurrency );
     }
 
     @Override
     public Map<String, Class<?>> getTypeMap()
-            throws SQLException
+        throws SQLException
     {
         return c.getTypeMap();
     }
 
     @Override
     public void setTypeMap( Map<String, Class<?>> map )
-            throws SQLException
+        throws SQLException
     {
         c.setTypeMap( map );
     }
 
     @Override
     public void setHoldability( int holdability )
-            throws SQLException
+        throws SQLException
     {
         c.setHoldability( holdability );
     }
 
     @Override
     public int getHoldability()
-            throws SQLException
+        throws SQLException
     {
         return c.getHoldability();
     }
 
     @Override
     public Savepoint setSavepoint()
-            throws SQLException
+        throws SQLException
     {
         return c.setSavepoint();
     }
 
     @Override
     public Savepoint setSavepoint( String name )
-            throws SQLException
+        throws SQLException
     {
         return c.setSavepoint( name );
     }
 
     @Override
     public void rollback( Savepoint savepoint )
-            throws SQLException
+        throws SQLException
     {
         c.rollback( savepoint );
     }
 
     @Override
     public void releaseSavepoint( Savepoint savepoint )
-            throws SQLException
+        throws SQLException
     {
         c.releaseSavepoint( savepoint );
     }
 
     @Override
     public Statement createStatement( int resultSetType, int resultSetConcurrency, int resultSetHoldability )
-            throws SQLException
+        throws SQLException
     {
         return c.createStatement( resultSetType, resultSetConcurrency, resultSetHoldability );
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql, resultSetType, resultSetConcurrency, resultSetHoldability );
     }
 
     @Override
     public CallableStatement prepareCall( String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareCall( sql, resultSetType, resultSetConcurrency, resultSetHoldability );
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql, int autoGeneratedKeys )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql, autoGeneratedKeys );
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql, int[] columnIndexes )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql, columnIndexes );
     }
 
     @Override
     public PreparedStatement prepareStatement( String sql, String[] columnNames )
-            throws SQLException
+        throws SQLException
     {
         return c.prepareStatement( sql, columnNames );
     }
 
     @Override
     public Clob createClob()
-            throws SQLException
+        throws SQLException
     {
         return c.createClob();
     }
 
     @Override
     public Blob createBlob()
-            throws SQLException
+        throws SQLException
     {
         return c.createBlob();
     }
 
     @Override
     public NClob createNClob()
-            throws SQLException
+        throws SQLException
     {
         return c.createNClob();
     }
 
     @Override
     public SQLXML createSQLXML()
-            throws SQLException
+        throws SQLException
     {
         return c.createSQLXML();
     }
 
     @Override
     public boolean isValid( int timeout )
-            throws SQLException
+        throws SQLException
     {
         return c.isValid( timeout );
     }
 
     @Override
     public void setClientInfo( String name, String value )
-            throws SQLClientInfoException
+        throws SQLClientInfoException
     {
         c.setClientInfo( name, value );
     }
 
     @Override
     public void setClientInfo( Properties properties )
-            throws SQLClientInfoException
+        throws SQLClientInfoException
     {
         c.setClientInfo( properties );
     }
 
     @Override
     public String getClientInfo( String name )
-            throws SQLException
+        throws SQLException
     {
         return c.getClientInfo( name );
     }
 
     @Override
     public Properties getClientInfo()
-            throws SQLException
+        throws SQLException
     {
         return c.getClientInfo();
     }
 
     @Override
     public Array createArrayOf( String typeName, Object[] elements )
-            throws SQLException
+        throws SQLException
     {
         return c.createArrayOf( typeName, elements );
     }
 
     @Override
     public Struct createStruct( String typeName, Object[] attributes )
-            throws SQLException
+        throws SQLException
     {
         return c.createStruct( typeName, attributes );
     }
 
     @Override
     public <T> T unwrap( Class<T> iface )
-            throws SQLException
+        throws SQLException
     {
         return c.unwrap( iface );
     }
 
     @Override
     public boolean isWrapperFor( Class<?> iface )
-            throws SQLException
+        throws SQLException
     {
         return c.isWrapperFor( iface );
     }
 
     public int getNetworkTimeout()
-            throws SQLException
+        throws SQLException
     {
-        try {
+        try
+        {
             Method method = c.getClass().getMethod( "getNetworkTimeout" );
-            return ( Integer ) method.invoke( c );
-        } catch ( Exception ex ) {
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new Connection methods added in Java7." );
+            return (Integer) method.invoke( c );
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }
 
     public void setNetworkTimeout( Executor executor, int timeout )
-            throws SQLException
+        throws SQLException
     {
-        try {
+        try
+        {
             Method method = c.getClass().getMethod( "setNetworkTimeout", Executor.class, Integer.class );
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new Connection methods added in Java7." );
             method.invoke( c, executor, timeout );
-        } catch ( Exception ex ) {
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }
 
     public void abort( Executor executor )
-            throws SQLException
+        throws SQLException
     {
-        try {
+        try
+        {
             Method method = c.getClass().getMethod( "abort", Executor.class );
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new Connection methods added in Java7." );
             method.invoke( c, executor );
-        } catch ( Exception ex ) {
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }
 
     public String getSchema()
-            throws SQLException
+        throws SQLException
     {
-        try {
+        try
+        {
             Method method = c.getClass().getMethod( "getSchema" );
-            return ( String ) method.invoke( c );
-        } catch ( Exception ex ) {
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new Connection methods added in Java7." );
+            return (String) method.invoke( c );
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }
 
     public void setSchema( String schema )
-            throws SQLException
+        throws SQLException
     {
-        try {
+        try
+        {
             Method method = c.getClass().getMethod( "getSchema", String.class );
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new Connection methods added in Java7." );
             method.invoke( c, schema );
-        } catch ( Exception ex ) {
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }

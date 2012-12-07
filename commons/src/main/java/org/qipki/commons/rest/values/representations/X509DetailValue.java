@@ -13,16 +13,15 @@
  */
 package org.qipki.commons.rest.values.representations;
 
-import org.qipki.commons.crypto.values.x509.KeysExtensionsValue;
-import org.qipki.commons.crypto.values.x509.ConstraintsExtensionsValue;
-import org.qipki.commons.crypto.values.x509.PoliciesExtensionsValue;
-import org.qipki.commons.crypto.values.x509.NamesExtensionsValue;
-
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.property.Property;
+import org.qipki.commons.crypto.values.x509.ConstraintsExtensionsValue;
+import org.qipki.commons.crypto.values.x509.KeysExtensionsValue;
+import org.qipki.commons.crypto.values.x509.NamesExtensionsValue;
+import org.qipki.commons.crypto.values.x509.PoliciesExtensionsValue;
 
 public interface X509DetailValue
-        extends X509Value
+    extends X509Value
 {
 
     Property<Integer> certificateVersion();

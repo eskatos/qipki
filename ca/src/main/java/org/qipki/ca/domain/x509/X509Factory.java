@@ -16,33 +16,31 @@ package org.qipki.ca.domain.x509;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import javax.security.auth.x500.X500Principal;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.qipki.core.QiPkiFailure;
 import org.qipki.crypto.algorithms.DigestAlgorithm;
-import org.qipki.crypto.digest.Digester;
 import org.qipki.crypto.digest.DigestParameters;
+import org.qipki.crypto.digest.Digester;
 import org.qipki.crypto.io.CryptIO;
 
 @Mixins( X509Factory.Mixin.class )
 public interface X509Factory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     X509 create( X509Certificate cert, CA issuer, X509Profile profile );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements X509Factory
+        implements X509Factory
     {
 
         @Structure
@@ -57,7 +55,8 @@ public interface X509Factory
         @Override
         public X509 create( X509Certificate cert, CA issuer, X509Profile profile )
         {
-            try {
+            try
+            {
 
                 EntityBuilder<X509> x509Builder = uowf.currentUnitOfWork().newEntityBuilder( X509.class );
 
@@ -76,7 +75,9 @@ public interface X509Factory
 
                 return x509Builder.newInstance();
 
-            } catch ( CertificateEncodingException ex ) {
+            }
+            catch( CertificateEncodingException ex )
+            {
                 throw new QiPkiFailure( "Unable to calculate X509Certificate fingerprints", ex );
             }
         }

@@ -13,10 +13,9 @@
  */
 package org.qipki.commons.crypto.states;
 
-import org.qipki.crypto.algorithms.AsymetricAlgorithm;
-
 import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
+import org.qipki.crypto.algorithms.AsymetricAlgorithm;
 
 public interface EscrowedKeyPairState
 {

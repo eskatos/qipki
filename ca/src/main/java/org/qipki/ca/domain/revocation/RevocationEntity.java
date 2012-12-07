@@ -16,6 +16,6 @@ package org.qipki.ca.domain.revocation;
 import org.qi4j.api.entity.EntityComposite;
 
 public interface RevocationEntity
-        extends Revocation, EntityComposite
+    extends Revocation, EntityComposite
 {
 }

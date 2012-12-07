@@ -29,6 +29,7 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.misc.NetscapeCertType;
+import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
@@ -40,7 +41,6 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x509.X509Name;
 import org.qipki.crypto.CryptoFailure;
 
 public class X509ExtensionsBuilderImpl
@@ -122,7 +122,7 @@ public class X509ExtensionsBuilderImpl
         for( Map.Entry<X500Principal, Iterable<String>> eachIssuerEntry : crlDistPointsData.entrySet() )
         {
 
-            GeneralName issuerName = new GeneralName( new X509Name( eachIssuerEntry.getKey().getName() ) );
+            GeneralName issuerName = new GeneralName( new X500Name( eachIssuerEntry.getKey().getName() ) );
             ASN1EncodableVector issuerVector = new ASN1EncodableVector();
             issuerVector.add( issuerName );
             GeneralNames issuerNames = new GeneralNames( new DERSequence( issuerVector ) );

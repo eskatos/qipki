@@ -14,7 +14,6 @@
 package org.qipki.ca.domain.x509profile;
 
 import java.util.EnumSet;
-
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
@@ -23,20 +22,19 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
 import org.qi4j.api.value.ValueBuilderFactory;
-
+import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
-import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.crypto.x509.ExtendedKeyUsage;
 import org.qipki.crypto.x509.KeyUsage;
 import org.qipki.crypto.x509.NetscapeCertType;
 
 @Mixins( X509ProfileFactory.Mixin.class )
 public interface X509ProfileFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     X509Profile create( String name, Integer validityDays, @Optional String comment,
@@ -56,7 +54,7 @@ public interface X509ProfileFactory
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements X509ProfileFactory
+        implements X509ProfileFactory
     {
 
         @Structure
@@ -81,19 +79,24 @@ public interface X509ProfileFactory
             profile.name().set( name );
             profile.validityDays().set( validityDays );
             profile.netscapeCertComment().set( comment );
-            if ( keyUsages != null ) {
+            if( keyUsages != null )
+            {
                 profile.keyUsages().set( vbf.newValueBuilderWithPrototype( keyUsages ).newInstance() );
             }
-            if ( extendedKeyUsages != null ) {
+            if( extendedKeyUsages != null )
+            {
                 profile.extendedKeyUsages().set( vbf.newValueBuilderWithPrototype( extendedKeyUsages ).newInstance() );
             }
-            if ( netscapeCertTypes != null ) {
+            if( netscapeCertTypes != null )
+            {
                 profile.netscapeCertTypes().set( vbf.newValueBuilderWithPrototype( netscapeCertTypes ).newInstance() );
             }
-            if ( basicConstraints != null ) {
+            if( basicConstraints != null )
+            {
                 profile.basicConstraints().set( vbf.newValueBuilderWithPrototype( basicConstraints ).newInstance() );
             }
-            if ( nameConstraints != null ) {
+            if( nameConstraints != null )
+            {
                 profile.nameConstraints().set( vbf.newValueBuilderWithPrototype( nameConstraints ).newInstance() );
             }
             return builder.newInstance();

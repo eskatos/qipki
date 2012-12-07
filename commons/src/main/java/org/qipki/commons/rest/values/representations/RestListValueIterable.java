@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RestListValueIterable<T extends RestValue>
-        implements Iterable<T>
+    implements Iterable<T>
 {
 
     private final List<RestValue> items;
@@ -35,7 +35,7 @@ public class RestListValueIterable<T extends RestValue>
 
     @SuppressWarnings( "PublicInnerClass" )
     public class RestListValueIterator
-            implements Iterator<T>
+        implements Iterator<T>
     {
 
         private final Iterator<RestValue> delegate;
@@ -55,7 +55,7 @@ public class RestListValueIterable<T extends RestValue>
         @SuppressWarnings( "unchecked" )
         public T next()
         {
-            return ( T ) delegate.next();
+            return (T) delegate.next();
         }
 
         @Override

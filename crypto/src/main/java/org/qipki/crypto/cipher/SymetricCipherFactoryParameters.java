@@ -13,9 +13,9 @@
  */
 package org.qipki.crypto.cipher;
 
+import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
-import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 
 public class SymetricCipherFactoryParameters
 {

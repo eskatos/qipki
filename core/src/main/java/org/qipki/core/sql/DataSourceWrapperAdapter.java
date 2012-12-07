@@ -22,10 +22,10 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * A simple connection wrapper (for overriding)
+ * A simple DataSource wrapper (for overriding)
  */
 public class DataSourceWrapperAdapter
-        implements DataSource
+    implements DataSource
 {
 
     protected final DataSource ds;
@@ -37,67 +37,72 @@ public class DataSourceWrapperAdapter
 
     @Override
     public Connection getConnection()
-            throws SQLException
+        throws SQLException
     {
         return ds.getConnection();
     }
 
     @Override
     public Connection getConnection( String username, String password )
-            throws SQLException
+        throws SQLException
     {
         return ds.getConnection( username, password );
     }
 
     @Override
     public PrintWriter getLogWriter()
-            throws SQLException
+        throws SQLException
     {
         return ds.getLogWriter();
     }
 
     @Override
     public void setLogWriter( PrintWriter out )
-            throws SQLException
+        throws SQLException
     {
         ds.setLogWriter( out );
     }
 
     @Override
     public void setLoginTimeout( int seconds )
-            throws SQLException
+        throws SQLException
     {
         ds.setLoginTimeout( seconds );
     }
 
     @Override
     public int getLoginTimeout()
-            throws SQLException
+        throws SQLException
     {
         return ds.getLoginTimeout();
     }
 
     @Override
     public <T> T unwrap( Class<T> iface )
-            throws SQLException
+        throws SQLException
     {
         return ds.unwrap( iface );
     }
 
     @Override
     public boolean isWrapperFor( Class<?> iface )
-            throws SQLException
+        throws SQLException
     {
         return ds.isWrapperFor( iface );
     }
 
     public Logger getParentLogger()
-            throws SQLFeatureNotSupportedException
+        throws SQLFeatureNotSupportedException
     {
-        try {
+        try
+        {
             Method method = ds.getClass().getMethod( "getParentLogger" );
-            return ( Logger ) method.invoke( ds );
-        } catch ( Exception ex ) {
+            System.err.println( "WARN Using reflection in " + getClass().getName()
+                                + " to support new DataSource methods added in Java7." );
+            return (Logger) method.invoke( ds );
+        }
+        catch( Exception ex )
+        {
             throw new SQLFeatureNotSupportedException( "Wrapped DataSource do not support new methods added in Java7", ex );
         }
     }

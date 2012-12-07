@@ -14,7 +14,7 @@
 package org.qipki.ca.application;
 
 public class WrongParametersException
-        extends RuntimeException
+    extends RuntimeException
 {
 
     private static final long serialVersionUID = 1L;

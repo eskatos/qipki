@@ -21,7 +21,6 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.value.ValueBuilder;
 import org.qi4j.api.value.ValueBuilderFactory;
-
 import org.qipki.commons.crypto.states.KeyEscrowPolicy;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
 import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
@@ -36,7 +35,7 @@ import org.qipki.crypto.x509.RevocationReason;
 
 @Mixins( ParamsFactory.Mixin.class )
 public interface ParamsFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     CryptoStoreFactoryParamsValue createCryptoStoreFactoryParams( String name, KeyStoreType storeType, char[] password );
@@ -73,7 +72,7 @@ public interface ParamsFactory
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements ParamsFactory
+        implements ParamsFactory
     {
 
         @Structure

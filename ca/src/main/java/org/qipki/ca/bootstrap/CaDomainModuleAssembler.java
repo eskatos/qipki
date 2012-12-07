@@ -18,7 +18,6 @@ import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.library.uowfile.bootstrap.UoWFileAssembler;
-
 import org.qipki.ca.domain.ca.CAFactory;
 import org.qipki.ca.domain.ca.CARepository;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentEntity;
@@ -48,13 +47,13 @@ import org.qipki.core.bootstrap.AutomaticReindexingAssembler;
 import org.qipki.core.sideeffects.TracingSideEffect;
 
 public class CaDomainModuleAssembler
-        implements Assembler
+    implements Assembler
 {
 
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         // Entities
         module.entities( CryptoStoreEntity.class,
@@ -66,7 +65,7 @@ public class CaDomainModuleAssembler
                          X509Entity.class,
                          RevocationEntity.class,
                          EscrowedKeyPairEntity.class ).
-                visibleIn( Visibility.application );
+            visibleIn( Visibility.application );
 
         // Services
         module.services( CryptoStoreRepository.class,
@@ -82,13 +81,13 @@ public class CaDomainModuleAssembler
                          RevocationFactory.class,
                          EscrowedKeyPairFactory.class,
                          EscrowedKeyPairRepository.class ).
-                visibleIn( Visibility.application ).
-                withSideEffects( TracingSideEffect.class );
+            visibleIn( Visibility.application ).
+            withSideEffects( TracingSideEffect.class );
 
         module.services( CryptoStoreFileService.class,
                          EscrowedKeyPairFileService.class,
                          CRLFileService.class ).
-                visibleIn( Visibility.module );
+            visibleIn( Visibility.module );
 
         // UoWFile handling
         new UoWFileAssembler( Visibility.module ).assemble( module );

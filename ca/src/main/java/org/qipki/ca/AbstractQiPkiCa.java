@@ -16,14 +16,13 @@ package org.qipki.ca;
 import org.qi4j.api.structure.Application;
 import org.qi4j.api.structure.Module;
 import org.qi4j.bootstrap.ApplicationAssembler;
-
 import org.qipki.ca.application.contexts.RootContext;
 import org.qipki.ca.bootstrap.CaAssemblyNames;
 import org.qipki.core.AbstractQiPkiApplication;
 import org.qipki.core.bootstrap.ModuleFinder;
 
 public class AbstractQiPkiCa
-        extends AbstractQiPkiApplication<RootContext>
+    extends AbstractQiPkiApplication<RootContext>
 {
 
     private static ModuleFinder dciFinder = new ModuleFinder()

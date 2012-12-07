@@ -14,11 +14,10 @@
 package org.qipki.ca.domain.escrowedkeypair;
 
 import java.security.KeyPair;
-
 import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 
 public interface EscrowedKeyPairBehavior
-        extends HasUoWFileLifecycle
+    extends HasUoWFileLifecycle
 {
 
     KeyPair keyPair();

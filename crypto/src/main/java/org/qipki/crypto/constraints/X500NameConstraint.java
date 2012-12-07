@@ -13,7 +13,6 @@
  */
 package org.qipki.crypto.constraints;
 
-import org.bouncycastle.asn1.x509.X509Name;
 import org.qi4j.api.constraint.Constraint;
 import org.qipki.crypto.x509.DistinguishedName;
 
@@ -29,7 +28,7 @@ public class X500NameConstraint
     {
         try
         {
-            new X509Name( value );
+            new org.bouncycastle.asn1.x500.X500Name( value );
             new DistinguishedName( value );
             return true;
         }

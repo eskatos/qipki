@@ -13,13 +13,12 @@
  */
 package org.qipki.commons.rest.values.representations;
 
-import org.qipki.commons.crypto.states.X509State;
-
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.commons.crypto.states.X509State;
 
 public interface X509Value
-        extends RestValue, X509State, ValueComposite
+    extends RestValue, X509State, ValueComposite
 {
 
     Property<String> pemUri();

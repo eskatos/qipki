@@ -17,13 +17,12 @@ import org.qi4j.api.association.Association;
 import org.qi4j.api.entity.Identity;
 import org.qi4j.api.entity.Queryable;
 import org.qi4j.api.property.Property;
-
-import org.qipki.commons.crypto.states.X509State;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.x509profile.X509Profile;
+import org.qipki.commons.crypto.states.X509State;
 
 public interface X509
-        extends X509State, Identity, X509Behavior
+    extends X509State, Identity, X509Behavior
 {
 
     @Queryable( false )

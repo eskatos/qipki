@@ -13,13 +13,15 @@
  */
 package org.qipki.ca.domain.ca.root;
 
-import org.qipki.ca.domain.ca.CAMixin;
-
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
+import org.qipki.ca.domain.ca.CAMixin;
 
-@Mixins( { CAMixin.class, RootCAMixin.class } )
+@Mixins(
+{
+    CAMixin.class, RootCAMixin.class
+} )
 public interface RootCAEntity
-        extends RootCA, EntityComposite
+    extends RootCA, EntityComposite
 {
 }

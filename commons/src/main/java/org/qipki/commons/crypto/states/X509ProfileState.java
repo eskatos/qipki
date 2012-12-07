@@ -13,19 +13,18 @@
  */
 package org.qipki.commons.crypto.states;
 
-import org.qipki.commons.fragments.HasName;
+import org.qi4j.api.common.Optional;
+import org.qi4j.api.entity.Queryable;
+import org.qi4j.api.property.Property;
 import org.qipki.commons.crypto.values.x509.BasicConstraintsValue;
 import org.qipki.commons.crypto.values.x509.ExtendedKeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.KeyUsagesValue;
 import org.qipki.commons.crypto.values.x509.NameConstraintsValue;
 import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
-
-import org.qi4j.api.common.Optional;
-import org.qi4j.api.entity.Queryable;
-import org.qi4j.api.property.Property;
+import org.qipki.commons.fragments.HasName;
 
 public interface X509ProfileState
-        extends HasName
+    extends HasName
 {
 
     @Queryable( false )

@@ -13,13 +13,15 @@
  */
 package org.qipki.ca.domain.ca.sub;
 
-import org.qipki.ca.domain.ca.CAMixin;
-
 import org.qi4j.api.entity.EntityComposite;
 import org.qi4j.api.mixin.Mixins;
+import org.qipki.ca.domain.ca.CAMixin;
 
-@Mixins( { CAMixin.class, SubCAMixin.class } )
+@Mixins(
+{
+    CAMixin.class, SubCAMixin.class
+} )
 public interface SubCAEntity
-        extends SubCA, EntityComposite
+    extends SubCA, EntityComposite
 {
 }

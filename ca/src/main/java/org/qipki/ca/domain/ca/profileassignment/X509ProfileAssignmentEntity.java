@@ -16,6 +16,6 @@ package org.qipki.ca.domain.ca.profileassignment;
 import org.qi4j.api.entity.EntityComposite;
 
 public interface X509ProfileAssignmentEntity
-        extends X509ProfileAssignment, EntityComposite
+    extends X509ProfileAssignment, EntityComposite
 {
 }

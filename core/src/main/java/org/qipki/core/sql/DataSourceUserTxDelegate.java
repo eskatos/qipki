@@ -19,12 +19,11 @@ import java.sql.Savepoint;
 import javax.sql.DataSource;
 
 /**
- * An object that allows Qi4J connections to be wrapped so that commit() and rollback() are handled by the user transaction.
- *
- * FIXME : proof of concept / to be completed !
+ * An object that allows Qi4J connections to be wrapped so that commit() and rollback() are handled by the user
+ * transaction, ie. a container.
  */
 public class DataSourceUserTxDelegate
-        extends DataSourceWrapperAdapter
+    extends DataSourceWrapperAdapter
 {
 
     public DataSourceUserTxDelegate( DataSource dataSource )
@@ -34,22 +33,20 @@ public class DataSourceUserTxDelegate
 
     @Override
     public Connection getConnection()
-            throws SQLException
+        throws SQLException
     {
-        return new ConnectionUserTxDelegate( ds.getConnection() )
-        {
-        };
+        return new ConnectionUserTxDelegate( ds.getConnection() );
     }
 
     @Override
     public Connection getConnection( String username, String password )
-            throws SQLException
+        throws SQLException
     {
         return new ConnectionUserTxDelegate( ds.getConnection( username, password ) );
     }
 
     private static class ConnectionUserTxDelegate
-            extends ConnectionWrapperAdapter
+        extends ConnectionWrapperAdapter
     {
 
         public ConnectionUserTxDelegate( Connection connection )
@@ -59,21 +56,21 @@ public class DataSourceUserTxDelegate
 
         @Override
         public void commit()
-                throws SQLException
+            throws SQLException
         {
             // the actual commit will be performed by the UserTransaction (probably container...)
         }
 
         @Override
         public void rollback()
-                throws SQLException
+            throws SQLException
         {
             // the actual rollback will be performed by the UserTransaction (probably container...)
         }
 
         @Override
         public void rollback( Savepoint savepoint )
-                throws SQLException
+            throws SQLException
         {
             // the actual rollback will be performed by the UserTransaction (probably container...)
         }

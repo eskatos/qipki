@@ -13,12 +13,11 @@
  */
 package org.qipki.commons.rest.values;
 
+import org.qi4j.api.property.Property;
 import org.qipki.commons.rest.values.representations.RestValue;
 
-import org.qi4j.api.property.Property;
-
 public interface CaApiURIsValue
-        extends RestValue
+    extends RestValue
 {
 
     Property<String> cryptoInspectorUri();

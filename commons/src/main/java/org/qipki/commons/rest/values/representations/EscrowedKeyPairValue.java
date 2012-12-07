@@ -14,15 +14,13 @@
 package org.qipki.commons.rest.values.representations;
 
 import java.util.List;
-
-import org.qipki.commons.crypto.states.EscrowedKeyPairState;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.commons.crypto.states.EscrowedKeyPairState;
 
 public interface EscrowedKeyPairValue
-        extends RestValue, EscrowedKeyPairState, ValueComposite
+    extends RestValue, EscrowedKeyPairState, ValueComposite
 {
 
     Property<String> recoveryUri();

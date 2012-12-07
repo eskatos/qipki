@@ -13,16 +13,15 @@
  */
 package org.qipki.ca.application.contexts.cryptostore;
 
+import org.qi4j.api.query.Query;
 import org.qipki.ca.domain.cryptostore.CryptoStore;
 import org.qipki.ca.domain.cryptostore.CryptoStoreFactory;
 import org.qipki.ca.domain.cryptostore.CryptoStoreRepository;
 import org.qipki.core.dci.Context;
 import org.qipki.crypto.storage.KeyStoreType;
 
-import org.qi4j.api.query.Query;
-
 public class CryptoStoreListContext
-        extends Context
+    extends Context
 {
 
     public Query<CryptoStore> list( int start )

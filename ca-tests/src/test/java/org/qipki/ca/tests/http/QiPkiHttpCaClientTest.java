@@ -13,24 +13,23 @@
  */
 package org.qipki.ca.tests.http;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.entitystore.memory.MemoryEntityStoreService;
-
 import org.qipki.client.ca.QiPkiCaHttpClientConfiguration;
-import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
 import org.qipki.client.ca.api.QiPkiHttpCaClient;
+import org.qipki.client.ca.bootstrap.QiPkiCaClientAssembler;
 import org.qipki.commons.rest.values.params.CryptoStoreFactoryParamsValue;
 import org.qipki.commons.rest.values.representations.CryptoStoreValue;
 import org.qipki.crypto.storage.KeyStoreType;
 
+import static org.junit.Assert.*;
+
 public class QiPkiHttpCaClientTest
-        extends AbstractQiPkiHttpCaTest
+    extends AbstractQiPkiHttpCaTest
 {
 
     @BeforeClass
@@ -44,7 +43,7 @@ public class QiPkiHttpCaClientTest
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         super.assemble( module );
         ModuleAssembly config = module.layer().module( "config" );
@@ -64,7 +63,8 @@ public class QiPkiHttpCaClientTest
     public void test()
     {
         Iterable<CryptoStoreValue> cryptoStores = caClient.cryptoStore().list( 0 );
-        for ( CryptoStoreValue eachCryptoStore : cryptoStores ) {
+        for( CryptoStoreValue eachCryptoStore : cryptoStores )
+        {
             String csName = eachCryptoStore.name().get();
             System.out.println( "CryptoStore: " + eachCryptoStore.name().get() );
             CryptoStoreValue cs = caClient.cryptoStore().get( eachCryptoStore.uri().get() );

@@ -20,7 +20,7 @@ import java.util.List;
  * TODO Generate automatic message using missings and illegals
  */
 public class WrongParametersBuilder
-        extends Exception
+    extends Exception
 {
 
     private static final long serialVersionUID = 1L;

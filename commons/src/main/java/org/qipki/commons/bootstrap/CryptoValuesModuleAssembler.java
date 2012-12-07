@@ -13,6 +13,10 @@
  */
 package org.qipki.commons.bootstrap;
 
+import org.qi4j.api.common.Visibility;
+import org.qi4j.bootstrap.Assembler;
+import org.qi4j.bootstrap.AssemblyException;
+import org.qi4j.bootstrap.ModuleAssembly;
 import org.qipki.commons.crypto.services.CryptoValuesFactory;
 import org.qipki.commons.crypto.services.X509ExtensionsValueFactory;
 import org.qipki.commons.crypto.values.KeyPairSpecValue;
@@ -37,15 +41,8 @@ import org.qipki.commons.crypto.values.x509.SubjectKeyIdentifierValue;
 import org.qipki.commons.crypto.values.x509.X509GeneralNameValue;
 import org.qipki.commons.crypto.values.x509.X509GeneralSubtreeValue;
 
-import org.qi4j.api.common.Visibility;
-import org.qi4j.bootstrap.Assembler;
-import org.qi4j.bootstrap.AssemblyException;
-import org.qi4j.bootstrap.ModuleAssembly;
-import org.qipki.commons.crypto.values.HasCriticality;
-import org.qipki.commons.crypto.values.HasOID;
-
 public class CryptoValuesModuleAssembler
-        implements Assembler
+    implements Assembler
 {
 
     private final Visibility visibility;
@@ -62,38 +59,38 @@ public class CryptoValuesModuleAssembler
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         module.values(
-                ValidityIntervalValue.class,
-                KeyPairSpecValue.class,
-                X509GeneralNameValue.class,
-                X509GeneralSubtreeValue.class,
-                KeysExtensionsValue.class,
-                KeyUsagesValue.class,
-                ExtendedKeyUsagesValue.class,
-                NetscapeCertTypesValue.class,
-                SubjectKeyIdentifierValue.class,
-                AuthorityKeyIdentifierValue.class,
-                PrivateKeyUsageIntervalValue.class,
-                CRLDistributionPointsValue.class,
-                PoliciesExtensionsValue.class,
-                CertificatePoliciesValue.class,
-                CertificatePoliciesValue.PolicyInformationValue.class,
-                CertificatePoliciesValue.PolicyQualifierInfoValue.class,
-                PolicyMappingsValue.class,
-                PolicyMappingsValue.PolicyMappingValue.class,
-                NamesExtensionsValue.class,
-                AlternativeNamesValue.class,
-                ConstraintsExtensionsValue.class,
-                BasicConstraintsValue.class,
-                PolicyConstraintsValue.class,
-                PolicyConstraintsValue.PolicyConstraintValue.class,
-                NameConstraintsValue.class ).
-                visibleIn( visibility );
+            ValidityIntervalValue.class,
+            KeyPairSpecValue.class,
+            X509GeneralNameValue.class,
+            X509GeneralSubtreeValue.class,
+            KeysExtensionsValue.class,
+            KeyUsagesValue.class,
+            ExtendedKeyUsagesValue.class,
+            NetscapeCertTypesValue.class,
+            SubjectKeyIdentifierValue.class,
+            AuthorityKeyIdentifierValue.class,
+            PrivateKeyUsageIntervalValue.class,
+            CRLDistributionPointsValue.class,
+            PoliciesExtensionsValue.class,
+            CertificatePoliciesValue.class,
+            CertificatePoliciesValue.PolicyInformationValue.class,
+            CertificatePoliciesValue.PolicyQualifierInfoValue.class,
+            PolicyMappingsValue.class,
+            PolicyMappingsValue.PolicyMappingValue.class,
+            NamesExtensionsValue.class,
+            AlternativeNamesValue.class,
+            ConstraintsExtensionsValue.class,
+            BasicConstraintsValue.class,
+            PolicyConstraintsValue.class,
+            PolicyConstraintsValue.PolicyConstraintValue.class,
+            NameConstraintsValue.class ).
+            visibleIn( visibility );
         module.services( CryptoValuesFactory.class,
                          X509ExtensionsValueFactory.class ).
-                visibleIn( visibility );
+            visibleIn( visibility );
     }
 
 }

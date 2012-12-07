@@ -14,15 +14,13 @@
 package org.qipki.commons.crypto.values.x509;
 
 import java.util.Set;
-
-import org.qipki.commons.crypto.values.HasCriticality;
-
 import org.qi4j.api.common.UseDefaults;
 import org.qi4j.api.property.Property;
 import org.qi4j.api.value.ValueComposite;
+import org.qipki.commons.crypto.values.HasCriticality;
 
 public interface NameConstraintsValue
-        extends HasCriticality, ValueComposite
+    extends HasCriticality, ValueComposite
 {
 
     @UseDefaults

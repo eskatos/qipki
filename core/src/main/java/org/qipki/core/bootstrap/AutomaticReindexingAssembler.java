@@ -13,17 +13,16 @@
  */
 package org.qipki.core.bootstrap;
 
-import org.qipki.core.reindex.AutomaticReindexerService;
-
 import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
 import org.qi4j.index.reindexer.ReindexerConfiguration;
 import org.qi4j.index.reindexer.ReindexerService;
+import org.qipki.core.reindex.AutomaticReindexerService;
 
 public class AutomaticReindexingAssembler
-        implements Assembler
+    implements Assembler
 {
 
     private final Visibility visibility;
@@ -41,7 +40,7 @@ public class AutomaticReindexingAssembler
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly ma )
-            throws AssemblyException
+        throws AssemblyException
     {
         ma.services( ReindexerService.class ).visibleIn( visibility );
         ma.entities( ReindexerConfiguration.class ).visibleIn( visibility );

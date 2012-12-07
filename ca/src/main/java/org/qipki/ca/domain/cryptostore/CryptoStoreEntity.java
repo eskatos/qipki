@@ -19,6 +19,6 @@ import org.qi4j.library.uowfile.singular.HasUoWFileLifecycle;
 
 @Mixins( CryptoStoreMixin.class )
 public interface CryptoStoreEntity
-        extends CryptoStore, HasUoWFileLifecycle, EntityComposite
+    extends CryptoStore, HasUoWFileLifecycle, EntityComposite
 {
 }

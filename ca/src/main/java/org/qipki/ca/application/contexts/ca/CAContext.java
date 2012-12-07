@@ -18,7 +18,8 @@ import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.util.Iterator;
 import java.util.Map;
-
+import org.qi4j.api.unitofwork.UnitOfWork;
+import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignment;
 import org.qipki.ca.domain.ca.profileassignment.X509ProfileAssignmentFactory;
@@ -29,11 +30,8 @@ import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.storage.KeyStoreType;
 
-import org.qi4j.api.unitofwork.UnitOfWork;
-import org.qi4j.api.unitofwork.concern.UnitOfWorkRetry;
-
 public class CAContext
-        extends Context
+    extends Context
 {
 
     public CA ca()
@@ -48,7 +46,8 @@ public class CAContext
         CA ca = context.role( CA.class );
         // Remove existing assignments
         Iterator<X509ProfileAssignment> it = ca.allowedX509Profiles().iterator();
-        while ( it.hasNext() ) {
+        while( it.hasNext() )
+        {
             X509ProfileAssignment eachCurrentAssignment = it.next();
             it.remove();
             uow.remove( eachCurrentAssignment );
@@ -56,26 +55,36 @@ public class CAContext
         // Create and add submitted assignments
         X509ProfileAssignmentFactory profileAssignmentFactory = context.role( X509ProfileAssignmentFactory.class );
         X509ProfileRepository profileRepository = context.role( X509ProfileRepository.class );
-        for ( Map.Entry<String, KeyEscrowPolicy> eachEntry : profileAssignments.entrySet() ) {
-            ca.allowedX509Profiles().add( profileAssignmentFactory.create( eachEntry.getValue(), profileRepository.findByIdentity( eachEntry.getKey() ) ) );
+        for( Map.Entry<String, KeyEscrowPolicy> eachEntry : profileAssignments.entrySet() )
+        {
+            ca.allowedX509Profiles().add( profileAssignmentFactory.create(
+                eachEntry.getValue(),
+                profileRepository.findByIdentity( eachEntry.getKey() ) ) );
         }
         return ca;
     }
 
     public KeyStore exportCaKeyPair( char[] password, KeyStoreType keyStoreType )
     {
-        if ( keyStoreType == KeyStoreType.PKCS11 ) {
+        if( keyStoreType == KeyStoreType.PKCS11 )
+        {
             throw new UnsupportedOperationException( "Export in PKCS#11 format is not supported, cannot continue." );
         }
-        try {
+        try
+        {
             CA ca = context.role( CA.class );
             CryptIO cryptio = context.role( CryptIO.class );
             KeyStore keystore = cryptio.createEmptyKeyStore( keyStoreType );
             keystore.setEntry( ca.name().get(),
-                               new KeyStore.PrivateKeyEntry( ca.privateKey(), new Certificate[]{ ca.certificate() } ),
+                               new KeyStore.PrivateKeyEntry( ca.privateKey(), new Certificate[]
+                {
+                    ca.certificate()
+                } ),
                                new KeyStore.PasswordProtection( password ) );
             return keystore;
-        } catch ( KeyStoreException ex ) {
+        }
+        catch( KeyStoreException ex )
+        {
             throw new CryptoFailure( "Unable to store CA KeyPair for KeyStore export", ex );
         }
     }

@@ -15,7 +15,6 @@ package org.qipki.ca.application.contexts.x509profile;
 
 import org.qi4j.api.common.Optional;
 import org.qi4j.api.query.Query;
-
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.ca.domain.x509profile.X509ProfileFactory;
 import org.qipki.ca.domain.x509profile.X509ProfileRepository;
@@ -28,7 +27,7 @@ import org.qipki.commons.crypto.values.x509.NetscapeCertTypesValue;
 import org.qipki.core.dci.Context;
 
 public class X509ProfileListContext
-        extends Context
+    extends Context
 {
 
     public Query<X509Profile> list( int start )

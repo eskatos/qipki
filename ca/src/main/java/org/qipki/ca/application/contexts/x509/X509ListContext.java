@@ -15,9 +15,10 @@ package org.qipki.ca.application.contexts.x509;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
+import org.qi4j.api.injection.scope.Service;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.unitofwork.NoSuchEntityException;
 import org.qipki.ca.application.WrongParametersBuilder;
 import org.qipki.ca.domain.ca.CA;
 import org.qipki.ca.domain.ca.CARepository;
@@ -28,17 +29,13 @@ import org.qipki.ca.domain.x509.X509Factory;
 import org.qipki.ca.domain.x509.X509Repository;
 import org.qipki.ca.domain.x509profile.X509Profile;
 import org.qipki.ca.domain.x509profile.X509ProfileRepository;
-import org.qipki.crypto.io.CryptIO;
 import org.qipki.core.dci.Context;
+import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.x509.DistinguishedName;
 import org.qipki.crypto.x509.X509Generator;
 
-import org.qi4j.api.injection.scope.Service;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.unitofwork.NoSuchEntityException;
-
 public class X509ListContext
-        extends Context
+    extends Context
 {
 
     @Service
@@ -58,8 +55,8 @@ public class X509ListContext
 
     public X509 createX509( String caIdentity, String x509ProfileIdentity, PKCS10CertificationRequest pkcs10 )
     {
-        try {
-
+        try
+        {
             CA ca = context.role( CARepository.class ).findByIdentity( caIdentity );
             X509Profile x509Profile = context.role( X509ProfileRepository.class ).findByIdentity( x509ProfileIdentity );
 
@@ -67,16 +64,17 @@ public class X509ListContext
             X509 x509 = context.role( X509Factory.class ).create( cert, ca, x509Profile );
 
             return x509;
-
-        } catch ( NoSuchEntityException ex ) {
+        }
+        catch( NoSuchEntityException ex )
+        {
             throw new WrongParametersBuilder().title( "Invalid CA or X509Profile identity" ).build( ex );
         }
     }
 
     public X509 createX509( String caIdentity, String x509ProfileIdentity, String escrowedKeyPairIdentity, String distinguishedName )
     {
-        try {
-
+        try
+        {
             EscrowedKeyPair ekp = context.role( EscrowedKeyPairRepository.class ).findByIdentity( escrowedKeyPairIdentity );
 
             PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10( new DistinguishedName( distinguishedName ), ekp.keyPair() );
@@ -84,8 +82,9 @@ public class X509ListContext
             ekp.x509s().add( x509 );
 
             return x509;
-
-        } catch ( NoSuchEntityException ex ) {
+        }
+        catch( NoSuchEntityException ex )
+        {
             throw new WrongParametersBuilder().title( "Invalid CA or X509Profile or EscrowedKeyPair identity" ).build( ex );
         }
     }

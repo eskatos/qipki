@@ -17,6 +17,6 @@ import org.qipki.commons.crypto.values.HasCriticality;
 import org.qipki.commons.crypto.values.ValidityIntervalValue;
 
 public interface PrivateKeyUsageIntervalValue
-        extends HasCriticality, ValidityIntervalValue
+    extends HasCriticality, ValidityIntervalValue
 {
 }

@@ -34,7 +34,7 @@ import org.qipki.crypto.storage.KeyStoreType;
 @Mixins( QiPkiCaFixtures.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
 public interface QiPkiCaFixtures
-        extends ServiceComposite, ServiceActivation
+    extends ServiceComposite, ServiceActivation
 {
 
     String KEYSTORE_NAME = "Test KeyStore";
@@ -46,7 +46,7 @@ public interface QiPkiCaFixtures
     String SERVICES_CA_DN = "CN=services-test,OU=qipki,O=codeartisans";
 
     abstract class Mixin
-            implements QiPkiCaFixtures
+        implements QiPkiCaFixtures
     {
 
         @Structure
@@ -56,7 +56,7 @@ public interface QiPkiCaFixtures
 
         @Override
         public void activateService()
-                throws Exception
+            throws Exception
         {
             UnitOfWork uow = module.newUnitOfWork();
             RootContext rootCtx = newRootContext();
@@ -64,14 +64,17 @@ public interface QiPkiCaFixtures
             // Do we need to create fixtures
             Query<CryptoStore> csList = rootCtx.cryptoStoreListContext().list( 0 );
             boolean createFixtures = true;
-            for ( CryptoStore eachCS : csList ) {
-                if ( KEYSTORE_NAME.equals( eachCS.name().get() ) ) {
+            for( CryptoStore eachCS : csList )
+            {
+                if( KEYSTORE_NAME.equals( eachCS.name().get() ) )
+                {
                     createFixtures = false;
                     break;
                 }
             }
 
-            if ( createFixtures ) {
+            if( createFixtures )
+            {
 
                 // Create a test keystore
                 CryptoStore cryptoStore = rootCtx.cryptoStoreListContext().createCryptoStore( KEYSTORE_NAME, KeyStoreType.JKS, "changeit".toCharArray() );
@@ -105,7 +108,7 @@ public interface QiPkiCaFixtures
 
         @Override
         public void passivateService()
-                throws Exception
+            throws Exception
         {
         }
 

@@ -31,7 +31,7 @@ import org.qi4j.library.sql.dbcp.DBCPDataSourceServiceAssembler;
  * API.
  */
 public class DerbySesamePersistenceAssembler
-        implements PersistenceAssembler
+    implements PersistenceAssembler
 {
 
     private final String derbyConnectionString;
@@ -50,25 +50,25 @@ public class DerbySesamePersistenceAssembler
 
     @Override
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
         ModuleAssembly config = configModule == null ? module : configModule;
 
         // SQL DataSourceService
         new DBCPDataSourceServiceAssembler().
-                identifiedBy( "qipki-datasource-service" ).
-                visibleIn( Visibility.application ).
-                withConfig( config ).
-                withConfigVisibility( Visibility.application ).
-                assemble( module );
+            identifiedBy( "qipki-datasource-service" ).
+            visibleIn( Visibility.application ).
+            withConfig( config ).
+            withConfigVisibility( Visibility.application ).
+            assemble( module );
 
         // SQL DataSource
         new DataSourceAssembler().
-                withDataSourceServiceIdentity( "qipki-datasource-service" ).
-                identifiedBy( "qipki-datasource" ).
-                visibleIn( Visibility.application ).
-                withCircuitBreaker().
-                assemble( module );
+            withDataSourceServiceIdentity( "qipki-datasource-service" ).
+            identifiedBy( "qipki-datasource" ).
+            visibleIn( Visibility.application ).
+            withCircuitBreaker().
+            assemble( module );
         DataSourceConfiguration dsConfiguration = config.forMixin( DataSourceConfiguration.class ).declareDefaults();
         dsConfiguration.enabled().set( Boolean.TRUE );
         dsConfiguration.driver().set( "org.apache.derby.jdbc.EmbeddedDriver" ); // TODO FIXME Support both client and embedded driver!
@@ -76,10 +76,10 @@ public class DerbySesamePersistenceAssembler
 
         // SQL EntityStore
         new DerbySQLEntityStoreAssembler().
-                visibleIn( Visibility.application ).
-                withConfig( config ).
-                withConfigVisibility( Visibility.application ).
-                assemble( module );
+            visibleIn( Visibility.application ).
+            withConfig( config ).
+            withConfigVisibility( Visibility.application ).
+            assemble( module );
         SQLConfiguration sqlConfiguration = config.forMixin( SQLConfiguration.class ).declareDefaults();
         sqlConfiguration.schemaName().set( "qipki" );
 

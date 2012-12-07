@@ -14,14 +14,12 @@
 package org.qipki.ca.domain.cryptostore;
 
 import java.security.KeyStore;
-
 import org.qi4j.api.entity.EntityBuilder;
 import org.qi4j.api.injection.scope.Service;
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.api.unitofwork.UnitOfWorkFactory;
-
 import org.qipki.crypto.io.CryptIO;
 import org.qipki.crypto.storage.KeyStoreType;
 
@@ -31,13 +29,13 @@ import org.qipki.crypto.storage.KeyStoreType;
 @Mixins( CryptoStoreFactory.Mixin.class )
 @SuppressWarnings( "PublicInnerClass" )
 public interface CryptoStoreFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     CryptoStore create( String name, KeyStoreType storeType, char[] password );
 
     abstract class Mixin
-            implements CryptoStoreFactory
+        implements CryptoStoreFactory
     {
 
         @Structure

@@ -28,12 +28,12 @@ import org.slf4j.LoggerFactory;
 
 @Mixins( AutomaticReindexerService.Mixin.class )
 public interface AutomaticReindexerService
-        extends ServiceComposite, ServiceActivation
+    extends ServiceComposite, ServiceActivation
 {
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements AutomaticReindexerService
+        implements AutomaticReindexerService
     {
 
         private static final Logger LOGGER = LoggerFactory.getLogger( AutomaticReindexerService.class );
@@ -46,10 +46,11 @@ public interface AutomaticReindexerService
 
         @Override
         public void activateService()
-                throws Exception
+            throws Exception
         {
             Boolean doReindex = configuration.get().doReindexOnActivation().get();
-            if ( doReindex ) {
+            if( doReindex )
+            {
                 LOGGER.debug( "Will start automatic reindex now.." );
 
                 long start = System.currentTimeMillis();
@@ -60,14 +61,16 @@ public interface AutomaticReindexerService
                 uow.complete();
 
                 LOGGER.info( "Reindex ended successfully and took {}ms", System.currentTimeMillis() - start );
-            } else {
+            }
+            else
+            {
                 LOGGER.debug( "Reindex on activation is disabled, not doing anything" );
             }
         }
 
         @Override
         public void passivateService()
-                throws Exception
+            throws Exception
         {
         }
 

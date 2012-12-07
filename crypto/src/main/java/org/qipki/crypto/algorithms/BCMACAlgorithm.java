@@ -55,7 +55,7 @@ public enum BCMACAlgorithm
      * @see http://cr.yp.to/mac.html
      */
     Poly1305_AES( "Poly1305-AES" );
-    protected String algo;
+    private String algo;
 
     private BCMACAlgorithm( String algo )
     {
