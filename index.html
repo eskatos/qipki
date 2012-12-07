@@ -734,7 +734,7 @@ public void testOnStreams()
                         From Wikipedia, the free encyclopedia
                     </small>
                 </blockquote>
-                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from MacTest.java starting on line 45
+                <pre class="prettyprint lang-java"><code class="language-java">// Snippet extracted from MacTest.java starting on line 44
 
 @Test
 public void testMac()
@@ -744,12 +744,12 @@ public void testMac()
 
     // Alice
     String message = &quot;Oh Bob, MAC me!&quot;;
-    String aliceMAC = mac.hexMac( message, new MACParameters( HmacSHA256, signingKey ) );
+    String aliceMAC = mac.hexMac( message, new HMACParameters( HmacSHA256, signingKey ) );
 
     System.out.println( &quot;Alice: &quot; + message + &quot; [ &quot; + aliceMAC + &quot; ]&quot; );
 
     // Bob
-    String bobMAC = mac.hexMac( message, new MACParameters( HmacSHA256, signingKey ) );
+    String bobMAC = mac.hexMac( message, new HMACParameters( HmacSHA256, signingKey ) );
     assertEquals( aliceMAC, bobMAC );
 
     System.out.println( &quot;Bob: Alright Alice!&quot; + &quot; [ &quot; + bobMAC + &quot; ]&quot; );
