@@ -24,8 +24,7 @@
 QiPki is an effort to create Java developper tools to build cryptography into applications and heading towards building
 a suite of packaged cryptography services.
 
-This is indeed a technology project. Development tries to follow principles learned from DDD, DCI, ReST and more using
-the Qi4j engine and framework.
+Development tries to follow principles learned from DDD, DCI, ReST and more using the Qi4j engine and framework.
 
 Each component is built as a library and has a http service as restfull as possible using json format for data structures.
 
@@ -37,7 +36,7 @@ See [http://qipki.org](http://qipki.org)
 
 * Upstream update: Qi4j 2.0-SNAPSHOT
 
-### 1.0 - 2012/02/17
+### 1.0 - STABLE - 2012/02/17
 
 * KeyStores, EscrowedKeyPairs and CRLs are now stored on the filesystem thanks to the FileConfiguration API
 * Added CRL Distribution Point handling

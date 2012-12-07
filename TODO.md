@@ -28,27 +28,30 @@ We use the git branching model provided by
 
 ### Work in progress
 
-* (##--) Review Qi4j 2.0 SQL Support
-  * Merge my and Rickard support for DataSources
-  * Find a clever way to use FileConfiguration API to store databases in ~/data
-    for SGBDs that support it (Derby only ATM)
-  * Add HSQLDB support to have another embedded SGBD
-  * Use MySQL Java deployment facilities
-
-
-### Next steps
-
 * (#---) Enhance Crypto API
   * Review, test and document MACs
     * Still to write the SupportedTransformations test method for HMACs
     * Implement and test [CBC-MAC](http://en.wikipedia.org/wiki/CBC-MAC), use [openssl](http://stackoverflow.com/questions/2611251/openssl-hmac-using-aes-256-cbc) to create test data
   * Review, test and document signatures
   * Review, test and document X.509
-  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies,
-    maybe with optional JSR330 @Inject annotations for use with compatible IoC
-    containers like Guice or CDI
+  * Provide an artifact containing the CryptoAPI without any Qi4j dependencies
   * Add FlexiProvider based tests to testdrive the Provider independence
     http://www.flexiprovider.de/
+
+
+### Next steps
+
+* Change the way keys are handled
+  * Write behavioral mixins for entities using the crypto services
+  * Apply DCI for usecases modeling
+  * Add PKCS#11 KeyStore support
+  * Add encipered filesystem based storage
+  * Add a key wallet to officers with the keys they're allowed to use
+  * CAProfile allows, or not, issuance of escrowed certified keypairs
+    * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
+  * CAProfile allows, or not, certificate issuance for known escrowed keypairs
+  * Add a warning if a CA signs a PKCS#10
+
 
 ### After that
 
@@ -66,16 +69,6 @@ We use the git branching model provided by
   * Enhance unit test code lisibility for snippets
   * Crypto API
   * Embedded CA
-* Change the way keys are handled
-  * Write behavioral mixins for entities using the crypto services
-  * Apply DCI for usecases modeling
-  * Add PKCS#11 KeyStore support
-  * Add encipered filesystem based storage
-  * Add a key wallet to officers with the keys they're allowed to use
-  * CAProfile allows, or not, issuance of escrowed certified keypairs
-    * The CA gets an EscrowSecretKey to protect the escrowed certified keypairs
-  * CAProfile allows, or not, certificate issuance for known escrowed keypairs
-  * Add a warning if a CA signs a PKCS#10
 * Wrap client api as a small Qi4j Application usable without Qi4j imports
 * Create a CAProfile role
   * Needed to add rules to CAs that are use case driven and not standard driven
@@ -101,21 +94,6 @@ We use the git branching model provided by
     * See if providing two next-update implementations is worth the effort
       (Netscape and Microsoft ways)
 * (----) Use mocks in unit tests
-* (##--) Rework Qi4j HttpService
-  * Write unit tests for as much as possible of the configuration options
-    (vhosts, mutual authentication etc..)
-  * No more DefaultServlet
-    * Remove default servlet added by default
-    * Remove rootResourceBase from configuration
-    * Write a DefaultServletService & DefaultServletConfiguration
-    * Add assembly helpers to add DefaultServlet
-  * QUID?
-    * See how to restrict requests on a specific host (Host http header)
-    * What to expose on JMX? Jetty statistics?
-    * Add a pluggable SSLContextProviderService or something like that with
-      assembly facilities
-    * SecureJettyMixin would use SecureJettyConfiguration by default but use
-      SSLContextProviderService if present
 * (----) Use shiro for handling roles/permissions
   * Model with one root Role and Permissions, other Roles will emerge
     themselves later
@@ -147,16 +125,14 @@ We use the git branching model provided by
   * Use @Concerns to factorize http Resources (error handling, logging etc..)
 * Write a (Jamon|GroovyTemplate)StructureReflector in tools/reflect using
   [Jamon](http://www.jamon.org/(
-* Customize JSON serialization in resources with the help of Qi4j 2.0 pluggable
-  serialization
 * Implement http cache handling
   * @Cacheable Concern using a payload store
   * UoW hooks to fill in cache store with payload bytes along http metadatas
     for caching support (etag...) and remove invalid entries
 * Monitoring BoundedContext
   * Integrate [JavaMelody](http://code.google.com/p/javamelody/) with Qi4j
-    using a @Concern   
-  * What about integrating [GwtMeasure](http://code.google.com/p/gwt-measure/) with JavaMelody? 
+    using a @Concern
+  * What about integrating [GwtMeasure](http://code.google.com/p/gwt-measure/) with JavaMelody?
   * See how it would be possible to reuse the JMX world in a web UI
   * JMX client in web, in an applet, as a webstart?
   * JMX over websockets?
