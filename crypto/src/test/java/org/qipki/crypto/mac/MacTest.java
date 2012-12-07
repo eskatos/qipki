@@ -23,8 +23,23 @@ import static org.qipki.crypto.algorithms.MACAlgorithm.HmacSHA256;
 import static org.qipki.crypto.symetric.SymetricSigningGeneratorParameters.HmacSHA256_256;
 
 public class MacTest
-        extends AbstractQiPkiCryptoTest
+    extends AbstractQiPkiCryptoTest
 {
+
+    public static final String[] SAMPLES = new String[]
+    {
+        "Hello World",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam "
+        + "neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non "
+        + "mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet "
+        + "eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus "
+        + "commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras "
+        + "vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur "
+        + "vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus "
+        + "pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus "
+        + "tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar "
+        + "lobortis."
+    };
 
     // SNIPPET BEGIN crypto.mac.1
     @Test

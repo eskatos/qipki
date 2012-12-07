@@ -35,24 +35,34 @@ import org.qipki.crypto.symetric.SymetricGenerator;
 import org.qipki.crypto.symetric.SymetricGeneratorImpl;
 
 public class CipherTest
-        extends AbstractQiPkiCryptoTest
+    extends AbstractQiPkiCryptoTest
 {
 
-    public static final String[] SAMPLES = new String[]{
+    public static final String[] SAMPLES = new String[]
+    {
         "Hello World",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar lobortis."
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tristique dui vel leo porta commodo. Nam "
+        + "neque mauris, semper in rhoncus eget, fringilla in tellus. Nunc consequat felis eget turpis lacinia non "
+        + "mattis nunc mollis. Fusce nec quam mi. Fusce viverra, magna eu convallis aliquet, enim justo imperdiet "
+        + "eros, at ullamcorper eros orci in lorem. Fusce volutpat massa a turpis facilisis porta consequat lacus "
+        + "commodo. Pellentesque vulputate fermentum velit. Integer elementum ornare tortor quis consectetur. Cras "
+        + "vel orci sed nisl sollicitudin fringilla ac et libero. Nulla a eros est, nec volutpat mi. Curabitur "
+        + "vehicula mollis vulputate. Donec ligula erat, facilisis ut semper ac, lacinia vitae purus. Vivamus "
+        + "pharetra mauris eget tellus elementum elementum. Ut et justo purus, vitae elementum magna. Phasellus "
+        + "tortor orci, feugiat id venenatis sit amet, tempor id nisl. Donec venenatis enim vitae diam pulvinar "
+        + "lobortis."
     };
 
     @Test
     public void testAES128WithQi4j()
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         testAES128( symGenerator, cipherFactory );
     }
 
     @Test
     public void testAES128WithoutQi4j()
-            throws Exception
+        throws Exception
     {
         Security.addProvider( new BouncyCastleProvider() );
 
@@ -65,7 +75,7 @@ public class CipherTest
 
     // SNIPPET BEGIN crypto.cipher.block
     private void testAES128( SymetricGenerator symGenerator, CipherFactory cipherFactory )
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         // AES-128 key generation
         SecretKey key = symGenerator.generateCipheringKey( AES_128 );
@@ -86,7 +96,7 @@ public class CipherTest
     @Test
     // SNIPPET BEGIN crypto.cipher.stream
     public void testOnStreams()
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         // AES-128 key generation
         SecretKey key = symGenerator.generateCipheringKey( AES_128 );
