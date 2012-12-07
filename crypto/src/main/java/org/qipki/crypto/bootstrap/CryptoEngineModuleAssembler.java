@@ -17,25 +17,35 @@ import org.qi4j.api.common.Visibility;
 import org.qi4j.bootstrap.Assembler;
 import org.qi4j.bootstrap.AssemblyException;
 import org.qi4j.bootstrap.ModuleAssembly;
-
 import org.qipki.crypto.QiCryptoConfiguration;
 import org.qipki.crypto.QiCryptoEngine;
-import org.qipki.crypto.asymetric.AsymetricGeneratorService;
-import org.qipki.crypto.cipher.CipherFactoryService;
-import org.qipki.crypto.codec.CryptCodexService;
-import org.qipki.crypto.digest.DigesterService;
-import org.qipki.crypto.io.CryptIOService;
-import org.qipki.crypto.jce.JceDetectorService;
-import org.qipki.crypto.mac.MACService;
-import org.qipki.crypto.objects.KeyInformation;
+import org.qipki.crypto.asymetric.AsymetricGenerator;
+import org.qipki.crypto.asymetric.AsymetricGeneratorImpl;
+import org.qipki.crypto.cipher.CipherFactory;
+import org.qipki.crypto.cipher.CipherFactoryImpl;
+import org.qipki.crypto.codec.CryptCodex;
+import org.qipki.crypto.codec.CryptCodexImpl;
+import org.qipki.crypto.digest.Digester;
+import org.qipki.crypto.digest.DigesterImpl;
+import org.qipki.crypto.io.CryptIO;
+import org.qipki.crypto.io.CryptIOImpl;
+import org.qipki.crypto.jce.JceDetector;
+import org.qipki.crypto.jce.JceDetectorImpl;
+import org.qipki.crypto.mac.MAC;
+import org.qipki.crypto.mac.MACImpl;
 import org.qipki.crypto.objects.CryptObjectsFactory;
-import org.qipki.crypto.symetric.SymetricGeneratorService;
-import org.qipki.crypto.x509.X509ExtensionsBuilderService;
-import org.qipki.crypto.x509.X509ExtensionsReaderService;
-import org.qipki.crypto.x509.X509GeneratorService;
+import org.qipki.crypto.objects.KeyInformation;
+import org.qipki.crypto.symetric.SymetricGenerator;
+import org.qipki.crypto.symetric.SymetricGeneratorImpl;
+import org.qipki.crypto.x509.X509ExtensionsBuilder;
+import org.qipki.crypto.x509.X509ExtensionsBuilderImpl;
+import org.qipki.crypto.x509.X509ExtensionsReader;
+import org.qipki.crypto.x509.X509ExtensionsReaderImpl;
+import org.qipki.crypto.x509.X509Generator;
+import org.qipki.crypto.x509.X509GeneratorImpl;
 
 public class CryptoEngineModuleAssembler
-        implements Assembler
+    implements Assembler
 {
 
     private final Visibility visibility;
@@ -74,37 +84,38 @@ public class CryptoEngineModuleAssembler
     @Override
     @SuppressWarnings( "unchecked" )
     public void assemble( ModuleAssembly module )
-            throws AssemblyException
+        throws AssemblyException
     {
-        if ( configModule == null ) {
+        if( configModule == null )
+        {
             configModule = module;
         }
         onAssemble( module, visibility, configModule, configVisibility );
     }
 
     private void onAssemble( ModuleAssembly module, Visibility visibility, ModuleAssembly configModule, Visibility configVisibility )
-            throws AssemblyException
+        throws AssemblyException
     {
-        module.services( JceDetectorService.class,
-                         CryptObjectsFactory.class,
-                         CryptCodexService.class,
-                         X509GeneratorService.class,
-                         CryptIOService.class,
-                         DigesterService.class,
-                         MACService.class,
-                         SymetricGeneratorService.class,
-                         AsymetricGeneratorService.class,
-                         CipherFactoryService.class,
-                         X509ExtensionsReaderService.class,
-                         X509ExtensionsBuilderService.class ).
-                visibleIn( visibility );
+        module.services( JceDetector.class ).withMixins( JceDetectorImpl.class ).visibleIn( visibility );
+        module.services( CryptCodex.class ).withMixins( CryptCodexImpl.class ).visibleIn( visibility );
+        module.services( X509Generator.class ).withMixins( X509GeneratorImpl.class ).visibleIn( visibility );
+        module.services( CryptIO.class ).withMixins( CryptIOImpl.class ).visibleIn( visibility );
+        module.services( Digester.class ).withMixins( DigesterImpl.class ).visibleIn( visibility );
+        module.services( MAC.class ).withMixins( MACImpl.class ).visibleIn( visibility );
+        module.services( SymetricGenerator.class ).withMixins( SymetricGeneratorImpl.class ).visibleIn( visibility );
+        module.services( AsymetricGenerator.class ).withMixins( AsymetricGeneratorImpl.class ).visibleIn( visibility );
+        module.services( CipherFactory.class ).withMixins( CipherFactoryImpl.class ).visibleIn( visibility );
+        module.services( X509ExtensionsReader.class ).withMixins( X509ExtensionsReaderImpl.class ).visibleIn( visibility );
+        module.services( X509ExtensionsBuilder.class ).withMixins( X509ExtensionsBuilderImpl.class ).visibleIn( visibility );
+
+        module.services( CryptObjectsFactory.class ).visibleIn( visibility );
 
         module.objects( KeyInformation.class ).
-                visibleIn( visibility );
+            visibleIn( visibility );
 
         module.services( QiCryptoEngine.class ).
-                visibleIn( Visibility.module ).
-                instantiateOnStartup();
+            visibleIn( Visibility.module ).
+            instantiateOnStartup();
 
         configModule.entities( QiCryptoConfiguration.class ).visibleIn( configVisibility );
     }
