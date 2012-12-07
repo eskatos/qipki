@@ -15,36 +15,35 @@ package org.qipki.crypto;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class DefaultCryptoContext
-        implements CryptoContext
+    implements CryptoContext
 {
 
     private final String providerName;
     private final SecureRandom random;
 
     public DefaultCryptoContext()
-            throws NoSuchAlgorithmException
+        throws NoSuchAlgorithmException
     {
         this( BouncyCastleProvider.PROVIDER_NAME, "SHA1PRNG", 128 );
     }
 
     public DefaultCryptoContext( String randomAlgorithm )
-            throws NoSuchAlgorithmException
+        throws NoSuchAlgorithmException
     {
         this( BouncyCastleProvider.PROVIDER_NAME, randomAlgorithm, 128 );
     }
 
     public DefaultCryptoContext( String randomAlgorithm, int seedSize )
-            throws NoSuchAlgorithmException
+        throws NoSuchAlgorithmException
     {
         this( BouncyCastleProvider.PROVIDER_NAME, randomAlgorithm, seedSize );
     }
 
     public DefaultCryptoContext( String providerName, String randomAlgorithm, int seedSize )
-            throws NoSuchAlgorithmException
+        throws NoSuchAlgorithmException
     {
         this.providerName = providerName;
         this.random = SecureRandom.getInstance( "SHA1PRNG" );

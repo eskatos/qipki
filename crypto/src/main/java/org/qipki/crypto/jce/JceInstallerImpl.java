@@ -16,7 +16,7 @@ package org.qipki.crypto.jce;
 import java.net.URL;
 
 public class JceInstallerImpl
-        implements JceInstaller
+    implements JceInstaller
 {
 
     @Override

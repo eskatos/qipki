@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -42,21 +41,23 @@ import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.asn1.x509.X509Name;
-
 import org.qipki.crypto.CryptoFailure;
 
 public class X509ExtensionsBuilderImpl
-        implements X509ExtensionsBuilder
+    implements X509ExtensionsBuilder
 {
 
     @Override
     public SubjectKeyIdentifier buildSubjectKeyIdentifier( PublicKey publicKey )
     {
-        try {
+        try
+        {
             ByteArrayInputStream octets = new ByteArrayInputStream( publicKey.getEncoded() );
-            SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
+            SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo( (ASN1Sequence) new ASN1InputStream( octets ).readObject() );
             return new SubjectKeyIdentifier( spki );
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to build SubjectKeyIdentifier", ex );
         }
     }
@@ -64,11 +65,14 @@ public class X509ExtensionsBuilderImpl
     @Override
     public AuthorityKeyIdentifier buildAuthorityKeyIdentifier( PublicKey publicKey )
     {
-        try {
+        try
+        {
             ByteArrayInputStream octets = new ByteArrayInputStream( publicKey.getEncoded() );
-            SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo( ( ASN1Sequence ) new ASN1InputStream( octets ).readObject() );
+            SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo( (ASN1Sequence) new ASN1InputStream( octets ).readObject() );
             return new AuthorityKeyIdentifier( apki );
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to build AuthorityKeyIdentifier", ex );
         }
     }
@@ -115,14 +119,16 @@ public class X509ExtensionsBuilderImpl
     public CRLDistPoint buildCRLDistributionPoints( Map<X500Principal, Iterable<String>> crlDistPointsData )
     {
         List<DistributionPoint> distributionPoints = new ArrayList<DistributionPoint>();
-        for ( Map.Entry<X500Principal, Iterable<String>> eachIssuerEntry : crlDistPointsData.entrySet() ) {
+        for( Map.Entry<X500Principal, Iterable<String>> eachIssuerEntry : crlDistPointsData.entrySet() )
+        {
 
             GeneralName issuerName = new GeneralName( new X509Name( eachIssuerEntry.getKey().getName() ) );
             ASN1EncodableVector issuerVector = new ASN1EncodableVector();
             issuerVector.add( issuerName );
             GeneralNames issuerNames = new GeneralNames( new DERSequence( issuerVector ) );
 
-            for ( String eachEndpoint : eachIssuerEntry.getValue() ) {
+            for( String eachEndpoint : eachIssuerEntry.getValue() )
+            {
 
                 GeneralName endpointName = new GeneralName( GeneralName.uniformResourceIdentifier, new DERIA5String( eachEndpoint ) );
                 ASN1EncodableVector epVector = new ASN1EncodableVector();

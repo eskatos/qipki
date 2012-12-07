@@ -42,7 +42,8 @@ public enum RevocationReason
 
     public static RevocationReason valueOf( int reason )
     {
-        switch ( reason ) {
+        switch( reason )
+        {
             case CRLReason.unspecified:
                 return unspecified;
             case CRLReason.keyCompromise:

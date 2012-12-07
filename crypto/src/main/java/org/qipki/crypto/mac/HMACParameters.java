@@ -14,23 +14,24 @@
 package org.qipki.crypto.mac;
 
 import java.security.Key;
+import org.qipki.crypto.algorithms.HMACAlgorithm;
 
-import org.qipki.crypto.algorithms.MACAlgorithm;
-
-public class MACParameters
+/**
+ * Hash based MAC parameters.
+ */
+public class HMACParameters
 {
 
-    private final MACAlgorithm algo;
-
+    private final HMACAlgorithm algo;
     private final Key secretKey;
 
-    public MACParameters( MACAlgorithm algo, Key secretKey )
+    public HMACParameters( HMACAlgorithm algo, Key secretKey )
     {
         this.algo = algo;
         this.secretKey = secretKey;
     }
 
-    public MACAlgorithm algorithm()
+    public HMACAlgorithm algorithm()
     {
         return algo;
     }

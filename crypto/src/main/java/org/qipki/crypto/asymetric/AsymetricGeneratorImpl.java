@@ -16,15 +16,12 @@ package org.qipki.crypto.asymetric;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.qi4j.api.injection.scope.Service;
 import org.qipki.crypto.CryptoContext;
-
 import org.qipki.crypto.CryptoFailure;
 
 public class AsymetricGeneratorImpl
-        implements AsymetricGenerator
+    implements AsymetricGenerator
 {
 
     private final CryptoContext cryptoContext;
@@ -37,11 +34,14 @@ public class AsymetricGeneratorImpl
     @Override
     public KeyPair generateKeyPair( AsymetricGeneratorParameters params )
     {
-        try {
+        try
+        {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
             keyGen.initialize( params.keySize() );
             return keyGen.generateKeyPair();
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate " + params.algorithm().jcaString() + " " + params.keySize() + " KeyPair", ex );
         }
     }

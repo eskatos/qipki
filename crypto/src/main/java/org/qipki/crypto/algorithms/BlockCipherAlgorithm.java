@@ -14,12 +14,12 @@
 package org.qipki.crypto.algorithms;
 
 /**
- * Symetric Key Algorithm.
- * 
- * @see http://en.wikipedia.org/wiki/Symmetric_key_algorithms
+ * Block cipher Algorithm.
+ *
+ * @see http://en.wikipedia.org/wiki/Block_cipher
  */
-public enum SymetricAlgorithm
-        implements Algorithm
+public enum BlockCipherAlgorithm
+    implements Algorithm
 {
 
     /**
@@ -74,7 +74,7 @@ public enum SymetricAlgorithm
     DES( "DES" );
     private String jcaString;
 
-    private SymetricAlgorithm( String algo )
+    private BlockCipherAlgorithm( String algo )
     {
         this.jcaString = algo;
     }

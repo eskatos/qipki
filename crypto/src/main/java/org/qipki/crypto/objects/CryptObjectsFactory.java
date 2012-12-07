@@ -14,7 +14,6 @@
 package org.qipki.crypto.objects;
 
 import java.security.PublicKey;
-
 import org.qi4j.api.injection.scope.Structure;
 import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
@@ -22,14 +21,14 @@ import org.qi4j.api.structure.Module;
 
 @Mixins( CryptObjectsFactory.Mixin.class )
 public interface CryptObjectsFactory
-        extends ServiceComposite
+    extends ServiceComposite
 {
 
     KeyInformation newKeyInformationInstance( PublicKey publicKey );
 
     @SuppressWarnings( "PublicInnerClass" )
     abstract class Mixin
-            implements CryptObjectsFactory
+        implements CryptObjectsFactory
     {
 
         @Structure

@@ -14,12 +14,11 @@
 package org.qipki.crypto.mac;
 
 import javax.crypto.SecretKey;
+import org.junit.Test;
+import org.qipki.crypto.AbstractQiPkiCryptoTest;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-
-import org.qipki.crypto.AbstractQiPkiCryptoTest;
-import static org.qipki.crypto.algorithms.MACAlgorithm.HmacSHA256;
+import static org.qipki.crypto.algorithms.HMACAlgorithm.HmacSHA256;
 import static org.qipki.crypto.symetric.SymetricSigningGeneratorParameters.HmacSHA256_256;
 
 public class MacTest
@@ -50,12 +49,12 @@ public class MacTest
 
         // Alice
         String message = "Oh Bob, MAC me!";
-        String aliceMAC = mac.hexMac( message, new MACParameters( HmacSHA256, signingKey ) );
+        String aliceMAC = mac.hexMac( message, new HMACParameters( HmacSHA256, signingKey ) );
 
         System.out.println( "Alice: " + message + " [ " + aliceMAC + " ]" );
 
         // Bob
-        String bobMAC = mac.hexMac( message, new MACParameters( HmacSHA256, signingKey ) );
+        String bobMAC = mac.hexMac( message, new HMACParameters( HmacSHA256, signingKey ) );
         assertEquals( aliceMAC, bobMAC );
 
         System.out.println( "Bob: Alright Alice!" + " [ " + bobMAC + " ]" );

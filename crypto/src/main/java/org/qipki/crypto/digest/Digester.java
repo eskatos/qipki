@@ -49,12 +49,12 @@ public interface Digester
     String base64Digest( String data, DigestParameters params );
 
     byte[] digest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException;
+        throws UnsupportedEncodingException;
 
     String hexDigest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException;
+        throws UnsupportedEncodingException;
 
     String base64Digest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException;
+        throws UnsupportedEncodingException;
 
 }

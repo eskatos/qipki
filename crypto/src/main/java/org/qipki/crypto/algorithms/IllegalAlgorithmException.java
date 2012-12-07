@@ -16,7 +16,7 @@ package org.qipki.crypto.algorithms;
 import org.qipki.crypto.CryptoFailure;
 
 public class IllegalAlgorithmException
-        extends CryptoFailure
+    extends CryptoFailure
 {
 
     public IllegalAlgorithmException( String msg )

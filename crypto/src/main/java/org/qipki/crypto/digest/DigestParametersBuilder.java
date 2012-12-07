@@ -48,7 +48,8 @@ public class DigestParametersBuilder
 
     public DigestParameters build()
     {
-        if ( algorithm == null ) {
+        if( algorithm == null )
+        {
             throw new IllegalStateException( "Cannot build digest parameters without an algorithm" );
         }
         return new DigestParameters( algorithm, digester.generateSalt( saltLength ), iterations );

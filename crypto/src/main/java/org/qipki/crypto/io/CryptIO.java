@@ -20,9 +20,7 @@ import java.security.KeyStore;
 import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 import org.qipki.crypto.storage.KeyStoreType;
 
 public interface CryptIO

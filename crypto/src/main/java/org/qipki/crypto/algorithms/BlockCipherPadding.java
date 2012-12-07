@@ -15,14 +15,14 @@ package org.qipki.crypto.algorithms;
 
 /**
  * Block Cipher Padding Algorithms.
- * 
+ *
  * @see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Padding
  *
  * The NoPadding algorithm is not supported on purpose because it mandates that the input length is compatible with the
  * cipher algorithm. This decision tighten the whole api and so keep it simple.
  */
 public enum BlockCipherPadding
-        implements Algorithm
+    implements Algorithm
 {
 
     ZERO_BYTE( "ZeroBytePadding" ),

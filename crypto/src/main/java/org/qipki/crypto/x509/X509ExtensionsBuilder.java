@@ -17,7 +17,6 @@ import java.security.PublicKey;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.misc.NetscapeCertType;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;

@@ -35,7 +35,8 @@ public final class DistinguishedNameTemplate
     public DistinguishedName buildDN( final Map<String, String> data )
     {
         Map<String, String> escapedData = new HashMap<String, String>();
-        for ( Map.Entry<String, String> eachEntry : data.entrySet() ) {
+        for( Map.Entry<String, String> eachEntry : data.entrySet() )
+        {
             escapedData.put( eachEntry.getKey(), DistinguishedName.escapeRDNData( eachEntry.getValue() ) );
         }
         StringBuffer rendered = Strings.renderTemplate( new StringBuffer( template ), escapedData, true );

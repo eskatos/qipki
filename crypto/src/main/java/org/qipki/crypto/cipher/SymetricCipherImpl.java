@@ -29,35 +29,34 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.codeartisans.java.toolbox.io.IO;
-
 import org.qipki.crypto.CryptoFailure;
+import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.qipki.crypto.constants.IOConstants;
 import org.qipki.crypto.jca.Transformation;
 
 public class SymetricCipherImpl
-        implements SymetricCipher
+    implements SymetricCipher
 {
 
-    private static final EnumSet<SymetricAlgorithm> NO_SIC_CIPHER_ALGS = EnumSet.of( SymetricAlgorithm.Blowfish,
-                                                                                     SymetricAlgorithm.TripleDES,
-                                                                                     SymetricAlgorithm.CAST_128,
-                                                                                     SymetricAlgorithm.XTEA,
-                                                                                     SymetricAlgorithm.TEA,
-                                                                                     SymetricAlgorithm.DES );
+    private static final EnumSet<BlockCipherAlgorithm> NO_SIC_CIPHER_ALGS = EnumSet.of( BlockCipherAlgorithm.Blowfish,
+                                                                                        BlockCipherAlgorithm.TripleDES,
+                                                                                        BlockCipherAlgorithm.CAST_128,
+                                                                                        BlockCipherAlgorithm.XTEA,
+                                                                                        BlockCipherAlgorithm.TEA,
+                                                                                        BlockCipherAlgorithm.DES );
     private final SecureRandom random;
-    private final SymetricAlgorithm algo;
+    private final BlockCipherAlgorithm algo;
     private final BlockCipherModeOfOperation mode;
     private final BlockCipherPadding padding;
 
-    /* package */ SymetricCipherImpl( SecureRandom random, SymetricAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    /* package */ SymetricCipherImpl( SecureRandom random, BlockCipherAlgorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
-        if ( mode == BlockCipherModeOfOperation.SIC && NO_SIC_CIPHER_ALGS.contains( algo ) ) {
+        if( mode == BlockCipherModeOfOperation.SIC && NO_SIC_CIPHER_ALGS.contains( algo ) )
+        {
             throw new IllegalAlgorithmException( "SIC-Mode cannot be used with " + algo.name() + " because it can become a twotime-pad if the blocksize of the cipher is too small." );
         }
         this.random = random;
@@ -69,9 +68,12 @@ public class SymetricCipherImpl
     @Override
     public byte[] cipher( String data, Key key )
     {
-        try {
+        try
+        {
             return cipher( data.getBytes( IOConstants.UTF_8 ), key );
-        } catch ( UnsupportedEncodingException ex ) {
+        }
+        catch( UnsupportedEncodingException ex )
+        {
             throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
         }
     }
@@ -79,9 +81,12 @@ public class SymetricCipherImpl
     @Override
     public byte[] cipher( String data, byte[] key )
     {
-        try {
+        try
+        {
             return cipher( data.getBytes( IOConstants.UTF_8 ), key );
-        } catch ( UnsupportedEncodingException ex ) {
+        }
+        catch( UnsupportedEncodingException ex )
+        {
             throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
         }
     }
@@ -97,12 +102,15 @@ public class SymetricCipherImpl
     {
         InputStream in = new ByteArrayInputStream( data );
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
+        try
+        {
 
             cipher( in, out, key );
             return out.toByteArray();
 
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( out );
             IO.closeSilently( in );
         }
@@ -117,21 +125,29 @@ public class SymetricCipherImpl
     @Override
     public void cipher( InputStream in, OutputStream out, byte[] key )
     {
-        try {
+        try
+        {
 
             Cipher cipher;
-            if ( useIV() ) {
+            if( useIV() )
+            {
                 byte[] iv = generateIV();
                 cipher = buildCipher( Cipher.ENCRYPT_MODE, key, iv );
                 out.write( iv );
-            } else {
+            }
+            else
+            {
                 cipher = buildCipher( Cipher.ENCRYPT_MODE, key );
             }
             process( cipher, in, out );
 
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( ex.getMessage(), ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( ex.getMessage(), ex );
         }
     }
@@ -139,9 +155,12 @@ public class SymetricCipherImpl
     @Override
     public byte[] decipher( String ciphered, Key key )
     {
-        try {
+        try
+        {
             return decipher( ciphered.getBytes( IOConstants.UTF_8 ), key );
-        } catch ( UnsupportedEncodingException ex ) {
+        }
+        catch( UnsupportedEncodingException ex )
+        {
             throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
         }
     }
@@ -149,9 +168,12 @@ public class SymetricCipherImpl
     @Override
     public byte[] decipher( String ciphered, byte[] key )
     {
-        try {
+        try
+        {
             return decipher( ciphered.getBytes( IOConstants.UTF_8 ), key );
-        } catch ( UnsupportedEncodingException ex ) {
+        }
+        catch( UnsupportedEncodingException ex )
+        {
             throw new CryptoFailure( "UTF8 encoding not supported, something went wrong", ex );
         }
     }
@@ -167,12 +189,15 @@ public class SymetricCipherImpl
     {
         InputStream in = new ByteArrayInputStream( data );
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
+        try
+        {
 
             decipher( in, out, key );
             return out.toByteArray();
 
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( out );
             IO.closeSilently( in );
         }
@@ -187,30 +212,39 @@ public class SymetricCipherImpl
     @Override
     public void decipher( InputStream in, OutputStream out, byte[] key )
     {
-        try {
+        try
+        {
 
             Cipher cipher;
-            if ( useIV() ) {
+            if( useIV() )
+            {
                 byte[] iv = new byte[ getIVBytesLength() ];
                 int len = in.read( iv, 0, iv.length );
-                if ( len != iv.length ) {
+                if( len != iv.length )
+                {
                     throw new CryptoFailure( "Unable to read IV, not enough bytes" );
                 }
                 cipher = buildCipher( Cipher.DECRYPT_MODE, key, iv );
-            } else {
+            }
+            else
+            {
                 cipher = buildCipher( Cipher.DECRYPT_MODE, key );
             }
             process( cipher, in, out );
 
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( ex.getMessage(), ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( ex.getMessage(), ex );
         }
     }
 
     private void process( Cipher cipher, InputStream in, OutputStream out )
-            throws IOException, IllegalBlockSizeException, BadPaddingException
+        throws IOException, IllegalBlockSizeException, BadPaddingException
     {
         int blockSize = cipher.getBlockSize();
         int outputSize = cipher.getOutputSize( blockSize );
@@ -219,22 +253,32 @@ public class SymetricCipherImpl
 
         int inLen = 0;
         boolean done = false;
-        while ( !done ) {
+        while( !done )
+        {
             inLen = in.read( inBytes );
-            if ( inLen == blockSize ) {
-                try {
+            if( inLen == blockSize )
+            {
+                try
+                {
                     int outLength = cipher.update( inBytes, 0, blockSize, outBytes );
                     out.write( outBytes, 0, outLength );
-                } catch ( ShortBufferException ex ) {
+                }
+                catch( ShortBufferException ex )
+                {
                     throw new CryptoFailure( "The underlying cipher is a block cipher and the input data is too short to result in a new block.", ex );
                 }
-            } else {
+            }
+            else
+            {
                 done = true;
             }
         }
-        if ( inLen > 0 ) {
+        if( inLen > 0 )
+        {
             outBytes = cipher.doFinal( inBytes, 0, inLen );
-        } else {
+        }
+        else
+        {
             outBytes = cipher.doFinal();
         }
         out.write( outBytes );
@@ -242,7 +286,8 @@ public class SymetricCipherImpl
 
     private boolean useIV()
     {
-        switch ( mode ) {
+        switch( mode )
+        {
             case ECB:
                 return false;
             default:
@@ -252,19 +297,22 @@ public class SymetricCipherImpl
 
     private int getIVBytesLength()
     {
-        switch ( algo ) {
+        switch( algo )
+        {
             case Blowfish:
                 return 8;
             case TripleDES:
             case CAST_128:
             case XTEA:
             case TEA:
-                switch ( mode ) {
+                switch( mode )
+                {
                     case CBC:
                         return 8;
                 }
             case DES:
-                switch ( mode ) {
+                switch( mode )
+                {
                     case CBC:
                     case CFB:
                     case OFB:
@@ -288,7 +336,7 @@ public class SymetricCipherImpl
     }
 
     private Cipher buildCipher( int cipherMode, byte[] key, byte[] iv )
-            throws GeneralSecurityException
+        throws GeneralSecurityException
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
         cipher.init( cipherMode, new SecretKeySpec( key, algo.jcaString() ), new IvParameterSpec( iv ), random );
@@ -296,7 +344,7 @@ public class SymetricCipherImpl
     }
 
     private Cipher buildCipher( int cipherMode, byte[] key )
-            throws GeneralSecurityException
+        throws GeneralSecurityException
     {
         Cipher cipher = Cipher.getInstance( buildAlgorithmString() );
         // FIXME Find a way to provide the SecureRandom

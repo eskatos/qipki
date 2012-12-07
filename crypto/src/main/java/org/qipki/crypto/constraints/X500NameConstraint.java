@@ -14,13 +14,11 @@
 package org.qipki.crypto.constraints;
 
 import org.bouncycastle.asn1.x509.X509Name;
-
+import org.qi4j.api.constraint.Constraint;
 import org.qipki.crypto.x509.DistinguishedName;
 
-import org.qi4j.api.constraint.Constraint;
-
 public class X500NameConstraint
-        implements Constraint<X500Name, String>
+    implements Constraint<X500Name, String>
 {
 
     private static final long serialVersionUID = 1L;
@@ -29,11 +27,14 @@ public class X500NameConstraint
     @SuppressWarnings( "ResultOfObjectAllocationIgnored" )
     public boolean isValid( X500Name annotation, String value )
     {
-        try {
+        try
+        {
             new X509Name( value );
             new DistinguishedName( value );
             return true;
-        } catch ( IllegalArgumentException ignored ) {
+        }
+        catch( IllegalArgumentException ignored )
+        {
             return false;
         }
     }

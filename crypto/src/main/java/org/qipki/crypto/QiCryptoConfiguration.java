@@ -22,7 +22,7 @@ import org.qi4j.api.property.Property;
  * By default the provider is inserted on activate and removed on passivate.
  */
 public interface QiCryptoConfiguration
-        extends ConfigurationComposite
+    extends ConfigurationComposite
 {
 
     /**

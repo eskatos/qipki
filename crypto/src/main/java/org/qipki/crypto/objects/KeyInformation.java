@@ -17,11 +17,8 @@ import java.security.Key;
 import java.security.PublicKey;
 import java.security.interfaces.DSAKey;
 import java.security.interfaces.RSAKey;
-
 import javax.crypto.interfaces.DHKey;
-
 import org.qi4j.api.injection.scope.Uses;
-
 import org.qipki.crypto.CryptoFailure;
 
 public class KeyInformation
@@ -46,13 +43,19 @@ public class KeyInformation
 
     public int getKeySize()
     {
-        if ( PublicKey.class.isAssignableFrom( key.getClass() ) ) {
-            if ( RSAKey.class.isAssignableFrom( key.getClass() ) ) {
-                return ( ( RSAKey ) key ).getModulus().bitLength();
-            } else if ( DSAKey.class.isAssignableFrom( key.getClass() ) ) {
-                return ( ( DSAKey ) key ).getParams().getP().bitLength();
-            } else if ( DHKey.class.isAssignableFrom( key.getClass() ) ) {
-                return ( ( DHKey ) key ).getParams().getP().bitLength();
+        if( PublicKey.class.isAssignableFrom( key.getClass() ) )
+        {
+            if( RSAKey.class.isAssignableFrom( key.getClass() ) )
+            {
+                return ( (RSAKey) key ).getModulus().bitLength();
+            }
+            else if( DSAKey.class.isAssignableFrom( key.getClass() ) )
+            {
+                return ( (DSAKey) key ).getParams().getP().bitLength();
+            }
+            else if( DHKey.class.isAssignableFrom( key.getClass() ) )
+            {
+                return ( (DHKey) key ).getParams().getP().bitLength();
             }
             throw new CryptoFailure( "Unsupported PublicKey type" );
         }

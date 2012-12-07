@@ -77,16 +77,20 @@ public enum KeyStoreType
     public static KeyStoreType valueOfTypeString( String typeString )
     {
         NullArgumentException.ensureNotEmpty( "Type String", typeString );
-        if ( StringValue.JCEKS.equalsIgnoreCase( typeString ) ) {
+        if( StringValue.JCEKS.equalsIgnoreCase( typeString ) )
+        {
             return JCEKS;
         }
-        if ( StringValue.JKS.equalsIgnoreCase( typeString ) ) {
+        if( StringValue.JKS.equalsIgnoreCase( typeString ) )
+        {
             return JKS;
         }
-        if ( StringValue.PKCS12.equalsIgnoreCase( typeString ) ) {
+        if( StringValue.PKCS12.equalsIgnoreCase( typeString ) )
+        {
             return PKCS12;
         }
-        if ( StringValue.PKCS11.equalsIgnoreCase( typeString ) ) {
+        if( StringValue.PKCS11.equalsIgnoreCase( typeString ) )
+        {
             return PKCS11;
         }
         throw new IllegalArgumentException( "Unsupported KeyStoreType: " + typeString );

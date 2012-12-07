@@ -15,7 +15,6 @@ package org.qipki.crypto.x509;
 
 import java.util.Set;
 import java.util.Vector;
-
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 
 public enum ExtendedKeyUsage
@@ -74,7 +73,8 @@ public enum ExtendedKeyUsage
     public static Vector<KeyPurposeId> usage( Set<ExtendedKeyUsage> extKeyUsages )
     {
         Vector<KeyPurposeId> keyPurposes = new Vector<KeyPurposeId>( extKeyUsages.size() );
-        for ( ExtendedKeyUsage eachExtKeyUsage : extKeyUsages ) {
+        for( ExtendedKeyUsage eachExtKeyUsage : extKeyUsages )
+        {
             keyPurposes.add( eachExtKeyUsage.keyPurposeId );
         }
         return keyPurposes;

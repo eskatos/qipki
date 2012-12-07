@@ -43,7 +43,8 @@ public enum NetscapeCertType
     {
         Iterator<NetscapeCertType> it = certTypes.iterator();
         int usage = 0;
-        while ( it.hasNext() ) {
+        while( it.hasNext() )
+        {
             usage |= it.next().getIntValue();
         }
         return usage;

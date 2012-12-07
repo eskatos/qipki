@@ -22,7 +22,6 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Vector;
-
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSet;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
@@ -36,19 +35,16 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.algorithms.SignatureAlgorithm;
 import org.qipki.crypto.constants.Time;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-
 public class X509GeneratorImpl
-        implements X509Generator
+    implements X509Generator
 {
 
     private CryptoContext cryptoContext;
@@ -61,13 +57,16 @@ public class X509GeneratorImpl
     @Override
     public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair )
     {
-        try {
+        try
+        {
             return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.jcaString(),
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    null,
                                                    keyPair.getPrivate(),
                                                    cryptoContext.providerName() );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate PKCS#10", ex );
         }
     }
@@ -75,13 +74,16 @@ public class X509GeneratorImpl
     @Override
     public PKCS10CertificationRequest generatePKCS10( DistinguishedName distinguishedName, KeyPair keyPair, GeneralNames subjectAlternativeNames )
     {
-        try {
+        try
+        {
             return new PKCS10CertificationRequest( SignatureAlgorithm.SHA256withRSA.jcaString(),
                                                    distinguishedName.toX500Principal(), keyPair.getPublic(),
                                                    generateSANAttribute( subjectAlternativeNames ),
                                                    keyPair.getPrivate(),
                                                    cryptoContext.providerName() );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate PKCS#10", ex );
         }
     }
@@ -95,7 +97,8 @@ public class X509GeneratorImpl
                                                     Duration validity,
                                                     List<X509ExtensionHolder> x509Extensions )
     {
-        try {
+        try
+        {
 
             X509V3CertificateGenerator x509v3Generator = new X509V3CertificateGenerator();
 
@@ -109,15 +112,20 @@ public class X509GeneratorImpl
             x509v3Generator.setSignatureAlgorithm( SignatureAlgorithm.SHA256withRSA.jcaString() );
             x509v3Generator.setPublicKey( publicKey );
 
-            for ( X509ExtensionHolder eachExtensionHolder : x509Extensions ) {
+            for( X509ExtensionHolder eachExtensionHolder : x509Extensions )
+            {
                 x509v3Generator.addExtension( eachExtensionHolder.getDerOID(), eachExtensionHolder.isCritical(), eachExtensionHolder.getValue() );
             }
 
             return x509v3Generator.generate( privateKey, cryptoContext.providerName() );
 
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate X509Certificate", ex );
-        } catch ( IllegalStateException ex ) {
+        }
+        catch( IllegalStateException ex )
+        {
             throw new CryptoFailure( "Unable to generate X509Certificate", ex );
         }
     }
@@ -125,7 +133,8 @@ public class X509GeneratorImpl
     @Override
     public X509CRL generateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey )
     {
-        try {
+        try
+        {
             X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
             crlGen.setIssuerDN( caCertificate.getSubjectX500Principal() );
             crlGen.setThisUpdate( new DateTime().minus( Time.CLOCK_SKEW ).toDate() );
@@ -134,7 +143,9 @@ public class X509GeneratorImpl
             crlGen.addExtension( X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifierStructure( caCertificate ) );
             crlGen.addExtension( X509Extensions.CRLNumber, false, new CRLNumber( BigInteger.ONE ) );
             return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate CRL", ex );
         }
     }
@@ -142,7 +153,8 @@ public class X509GeneratorImpl
     @Override
     public X509CRL updateX509CRL( X509Certificate caCertificate, PrivateKey caPrivateKey, X509Certificate revokedCertificate, RevocationReason reason, X509CRL previousCRL, BigInteger lastCRLNumber )
     {
-        try {
+        try
+        {
             X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
             crlGen.setIssuerDN( caCertificate.getSubjectX500Principal() );
             DateTime skewedNow = new DateTime().minus( Time.CLOCK_SKEW );
@@ -154,15 +166,21 @@ public class X509GeneratorImpl
             crlGen.addCRL( previousCRL );
             crlGen.addCRLEntry( revokedCertificate.getSerialNumber(), skewedNow.toDate(), reason.reason() );
             return crlGen.generate( caPrivateKey, BouncyCastleProvider.PROVIDER_NAME );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to update CRL", ex );
         }
     }
 
-    @SuppressWarnings( { "UseOfObsoleteCollectionType", "unchecked" } )
+    @SuppressWarnings(
+    {
+        "UseOfObsoleteCollectionType", "unchecked"
+    } )
     private DERSet generateSANAttribute( GeneralNames subGeneralNames )
     {
-        if ( subGeneralNames == null ) {
+        if( subGeneralNames == null )
+        {
             return new DERSet();
         }
         Vector oids = new Vector();

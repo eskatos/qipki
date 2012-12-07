@@ -14,17 +14,14 @@
 package org.qipki.crypto.symetric;
 
 import java.security.GeneralSecurityException;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 
 public class SymetricGeneratorImpl
-        implements SymetricGenerator
+    implements SymetricGenerator
 {
 
     private final CryptoContext cryptoContext;
@@ -48,11 +45,14 @@ public class SymetricGeneratorImpl
 
     private SecretKey generateSecretKey( String algoJcaString, int keySize )
     {
-        try {
+        try
+        {
             KeyGenerator keyGen = KeyGenerator.getInstance( algoJcaString, cryptoContext.providerName() );
             keyGen.init( keySize );
             return keyGen.generateKey();
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to generate " + algoJcaString + " " + keySize + " SecretKey", ex );
         }
     }

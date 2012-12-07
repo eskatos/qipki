@@ -16,34 +16,64 @@ package org.qipki.crypto.mac;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * Hash and Block Cipher based Message Authentication Code.
+ */
 public interface MAC
 {
 
-    byte[] mac( InputStream data, MACParameters params );
+    byte[] mac( InputStream data, HMACParameters params );
 
-    String hexMac( InputStream data, MACParameters params );
+    String hexMac( InputStream data, HMACParameters params );
 
-    String base64Mac( InputStream data, MACParameters params );
+    String base64Mac( InputStream data, HMACParameters params );
 
-    byte[] mac( byte[] data, MACParameters params );
+    byte[] mac( byte[] data, HMACParameters params );
 
-    String hexMac( byte[] data, MACParameters params );
+    String hexMac( byte[] data, HMACParameters params );
 
-    String base64Mac( byte[] data, MACParameters params );
+    String base64Mac( byte[] data, HMACParameters params );
 
-    byte[] mac( String data, MACParameters params );
+    byte[] mac( String data, HMACParameters params );
 
-    String hexMac( String data, MACParameters params );
+    String hexMac( String data, HMACParameters params );
 
-    String base64Mac( String data, MACParameters params );
+    String base64Mac( String data, HMACParameters params );
 
-    byte[] mac( String data, String encoding, MACParameters params )
-            throws UnsupportedEncodingException;
+    byte[] mac( String data, String encoding, HMACParameters params )
+        throws UnsupportedEncodingException;
 
-    String hexMac( String data, String encoding, MACParameters params )
-            throws UnsupportedEncodingException;
+    String hexMac( String data, String encoding, HMACParameters params )
+        throws UnsupportedEncodingException;
 
-    String base64Mac( String data, String encoding, MACParameters params )
-            throws UnsupportedEncodingException;
+    String base64Mac( String data, String encoding, HMACParameters params )
+        throws UnsupportedEncodingException;
+
+    byte[] mac( InputStream data, BCMACParameters params );
+
+    String hexMac( InputStream data, BCMACParameters params );
+
+    String base64Mac( InputStream data, BCMACParameters params );
+
+    byte[] mac( byte[] data, BCMACParameters params );
+
+    String hexMac( byte[] data, BCMACParameters params );
+
+    String base64Mac( byte[] data, BCMACParameters params );
+
+    byte[] mac( String data, BCMACParameters params );
+
+    String hexMac( String data, BCMACParameters params );
+
+    String base64Mac( String data, BCMACParameters params );
+
+    byte[] mac( String data, String encoding, BCMACParameters params )
+        throws UnsupportedEncodingException;
+
+    String hexMac( String data, String encoding, BCMACParameters params )
+        throws UnsupportedEncodingException;
+
+    String base64Mac( String data, String encoding, BCMACParameters params )
+        throws UnsupportedEncodingException;
 
 }

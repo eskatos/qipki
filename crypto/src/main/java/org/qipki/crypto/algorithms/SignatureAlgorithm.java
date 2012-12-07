@@ -17,7 +17,7 @@ package org.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/Signature_(cryptography)
  */
 public enum SignatureAlgorithm
-        implements Algorithm
+    implements Algorithm
 {
 
     // DSA currently just supports SHA-1.

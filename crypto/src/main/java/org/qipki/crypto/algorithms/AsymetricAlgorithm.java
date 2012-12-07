@@ -17,7 +17,7 @@ package org.qipki.crypto.algorithms;
  * Asymetric cryptography algorithm.
  */
 public enum AsymetricAlgorithm
-        implements Algorithm
+    implements Algorithm
 {
 
     /**

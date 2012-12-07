@@ -13,32 +13,34 @@
  */
 package org.qipki.crypto.symetric;
 
-import org.qipki.crypto.algorithms.MACAlgorithm;
+import org.qipki.crypto.algorithms.Algorithm;
+import org.qipki.crypto.algorithms.BCMACAlgorithm;
+import org.qipki.crypto.algorithms.HMACAlgorithm;
 
 public class SymetricSigningGeneratorParameters
 {
 
-    public static final SymetricSigningGeneratorParameters HmacMD5_128 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacMD5, 128 );
-
-    public static final SymetricSigningGeneratorParameters HmacSHA1_128 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA1, 128 );
-
-    public static final SymetricSigningGeneratorParameters HmacSHA256_256 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA256, 256 );
-
-    public static final SymetricSigningGeneratorParameters HmacSHA384_384 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA384, 384 );
-
-    public static final SymetricSigningGeneratorParameters HmacSHA512_512 = new SymetricSigningGeneratorParameters( MACAlgorithm.HmacSHA512, 512 );
-
-    private final MACAlgorithm algorithm;
-
+    public static final SymetricSigningGeneratorParameters HmacMD5_128 = new SymetricSigningGeneratorParameters( HMACAlgorithm.HmacMD5, 128 );
+    public static final SymetricSigningGeneratorParameters HmacSHA1_128 = new SymetricSigningGeneratorParameters( HMACAlgorithm.HmacSHA1, 128 );
+    public static final SymetricSigningGeneratorParameters HmacSHA256_256 = new SymetricSigningGeneratorParameters( HMACAlgorithm.HmacSHA256, 256 );
+    public static final SymetricSigningGeneratorParameters HmacSHA384_384 = new SymetricSigningGeneratorParameters( HMACAlgorithm.HmacSHA384, 384 );
+    public static final SymetricSigningGeneratorParameters HmacSHA512_512 = new SymetricSigningGeneratorParameters( HMACAlgorithm.HmacSHA512, 512 );
+    private final Algorithm algorithm;
     private final int keySize;
 
-    public SymetricSigningGeneratorParameters( MACAlgorithm algorithm, int keySize )
+    public SymetricSigningGeneratorParameters( HMACAlgorithm algorithm, int keySize )
     {
         this.algorithm = algorithm;
         this.keySize = keySize;
     }
 
-    public MACAlgorithm algorithm()
+    public SymetricSigningGeneratorParameters( BCMACAlgorithm algorithm, int keySize )
+    {
+        this.algorithm = algorithm;
+        this.keySize = keySize;
+    }
+
+    public Algorithm algorithm()
     {
         return algorithm;
     }

@@ -14,8 +14,6 @@
 package org.qipki.crypto.jca;
 
 import org.qipki.crypto.algorithms.Algorithm;
-import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
-import org.qipki.crypto.algorithms.BlockCipherPadding;
 
 /**
  * Represent a JCA "transformation".
@@ -25,27 +23,43 @@ import org.qipki.crypto.algorithms.BlockCipherPadding;
 public final class Transformation
 {
 
-    private final Algorithm algo;
-    private BlockCipherModeOfOperation mode;
-    private BlockCipherPadding padding;
+    private final Algorithm[] algorithms;
 
     public Transformation( Algorithm algo )
     {
-        this.algo = algo;
+        this.algorithms = new Algorithm[]
+        {
+            algo
+        };
     }
 
-    public Transformation( Algorithm algo, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    public Transformation( Algorithm algo0, Algorithm algo1 )
     {
-        this.algo = algo;
-        this.mode = mode;
-        this.padding = padding;
+        this.algorithms = new Algorithm[]
+        {
+            algo0, algo1
+        };
+    }
+
+    public Transformation( Algorithm algo0, Algorithm algo1, Algorithm algo2 )
+    {
+        this.algorithms = new Algorithm[]
+        {
+            algo0, algo1, algo2
+        };
     }
 
     public String jcaTransformation()
     {
-        StringBuilder sb = new StringBuilder( algo.jcaString() );
-        if ( mode != null && padding != null ) {
-            sb.append( "/" ).append( mode.jcaString() ).append( "/" ).append( padding.jcaString() );
+        StringBuilder sb = new StringBuilder();
+        for( int i = 0; i < algorithms.length; i++ )
+        {
+            Algorithm algo = algorithms[i];
+            sb.append( algo.jcaString() );
+            if( i < algorithms.length - 1 )
+            {
+                sb.append( "/" );
+            }
         }
         return sb.toString();
     }

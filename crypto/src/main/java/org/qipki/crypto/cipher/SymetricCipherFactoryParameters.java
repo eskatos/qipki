@@ -15,27 +15,27 @@ package org.qipki.crypto.cipher;
 
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
+import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 
 public class SymetricCipherFactoryParameters
 {
 
-    public static final SymetricCipherFactoryParameters AES_CBC_PKCS5 = new SymetricCipherFactoryParameters( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS5 );
-    public static final SymetricCipherFactoryParameters AES_CBC_PKCS7 = new SymetricCipherFactoryParameters( SymetricAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS7 );
-    public static final SymetricCipherFactoryParameters AES_SIC_PKCS5 = new SymetricCipherFactoryParameters( SymetricAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS5 );
-    public static final SymetricCipherFactoryParameters AES_SIC_PKCS7 = new SymetricCipherFactoryParameters( SymetricAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS7 );
-    private final SymetricAlgorithm algorithm;
+    public static final SymetricCipherFactoryParameters AES_CBC_PKCS5 = new SymetricCipherFactoryParameters( BlockCipherAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS5 );
+    public static final SymetricCipherFactoryParameters AES_CBC_PKCS7 = new SymetricCipherFactoryParameters( BlockCipherAlgorithm.AES, BlockCipherModeOfOperation.CBC, BlockCipherPadding.PKCS7 );
+    public static final SymetricCipherFactoryParameters AES_SIC_PKCS5 = new SymetricCipherFactoryParameters( BlockCipherAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS5 );
+    public static final SymetricCipherFactoryParameters AES_SIC_PKCS7 = new SymetricCipherFactoryParameters( BlockCipherAlgorithm.AES, BlockCipherModeOfOperation.SIC, BlockCipherPadding.PKCS7 );
+    private final BlockCipherAlgorithm algorithm;
     private final BlockCipherModeOfOperation mode;
     private final BlockCipherPadding padding;
 
-    public SymetricCipherFactoryParameters( SymetricAlgorithm algorithm, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
+    public SymetricCipherFactoryParameters( BlockCipherAlgorithm algorithm, BlockCipherModeOfOperation mode, BlockCipherPadding padding )
     {
         this.algorithm = algorithm;
         this.mode = mode;
         this.padding = padding;
     }
 
-    public SymetricAlgorithm algorithm()
+    public BlockCipherAlgorithm algorithm()
     {
         return algorithm;
     }

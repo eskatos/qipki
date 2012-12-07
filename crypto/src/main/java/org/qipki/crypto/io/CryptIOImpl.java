@@ -29,23 +29,19 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
-
 import org.codeartisans.java.toolbox.io.IO;
-
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.constants.IOConstants;
 import org.qipki.crypto.storage.KeyStoreType;
 
 public class CryptIOImpl
-        implements CryptIO
+    implements CryptIO
 {
 
     private final CryptoContext cryptoContext;
@@ -58,13 +54,18 @@ public class CryptIOImpl
     @Override
     public KeyStore createEmptyKeyStore( KeyStoreType storeType )
     {
-        try {
+        try
+        {
             KeyStore keystore = getKeyStoreInstance( storeType );
             keystore.load( null, null );
             return keystore;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to create empty " + storeType + " KeyStore", ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to create empty " + storeType + " KeyStore", ex );
         }
     }
@@ -73,15 +74,22 @@ public class CryptIOImpl
     public void writeKeyStore( KeyStore keystore, char[] password, File file )
     {
         FileOutputStream output = null;
-        try {
+        try
+        {
             output = new FileOutputStream( file );
             keystore.store( output, password );
             output.flush();
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to store KeyStore in " + file, ex );
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( output );
         }
     }
@@ -90,16 +98,23 @@ public class CryptIOImpl
     public KeyStore readKeyStore( File file, KeyStoreType storeType, char[] password )
     {
         FileInputStream input = null;
-        try {
+        try
+        {
             input = new FileInputStream( file );
             KeyStore keystore = getKeyStoreInstance( storeType );
             keystore.load( input, password );
             return keystore;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to load KeyStore from " + file, ex );
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( input );
         }
     }
@@ -108,16 +123,23 @@ public class CryptIOImpl
     public String base64Encode( KeyStore keystore, char[] password )
     {
         ByteArrayOutputStream baos = null;
-        try {
+        try
+        {
             baos = new ByteArrayOutputStream();
             keystore.store( baos, password );
             baos.flush();
             return new String( Base64.encode( baos.toByteArray() ), IOConstants.UTF_8 );
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to Base64 encode KeyStore", ex );
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( baos );
         }
     }
@@ -125,13 +147,18 @@ public class CryptIOImpl
     @Override
     public KeyStore base64DecodeKeyStore( String payload, KeyStoreType storeType, char[] password )
     {
-        try {
+        try
+        {
             KeyStore keystore = getKeyStoreInstance( storeType );
             keystore.load( new ByteArrayInputStream( Base64.decode( payload.getBytes( IOConstants.UTF_8 ) ) ), password );
             return keystore;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to Base64 decode KeyStore", ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to Base64 decode KeyStore", ex );
         }
     }
@@ -139,9 +166,12 @@ public class CryptIOImpl
     @Override
     public X509Certificate readX509PEM( Reader reader )
     {
-        try {
-            return ( X509Certificate ) new PEMReader( reader ).readObject();
-        } catch ( IOException ex ) {
+        try
+        {
+            return (X509Certificate) new PEMReader( reader ).readObject();
+        }
+        catch( IOException ex )
+        {
             throw new IllegalArgumentException( "Unable to read X509Certificate from PEM", ex );
         }
     }
@@ -149,9 +179,12 @@ public class CryptIOImpl
     @Override
     public PKCS10CertificationRequest readPKCS10PEM( Reader reader )
     {
-        try {
-            return ( PKCS10CertificationRequest ) new PEMReader( reader ).readObject();
-        } catch ( IOException ex ) {
+        try
+        {
+            return (PKCS10CertificationRequest) new PEMReader( reader ).readObject();
+        }
+        catch( IOException ex )
+        {
             throw new IllegalArgumentException( "Unable to read PKCS#10 from PEM", ex );
         }
     }
@@ -159,9 +192,12 @@ public class CryptIOImpl
     @Override
     public X509CRL readCRLPEM( Reader reader )
     {
-        try {
-            return ( X509CRL ) new PEMReader( reader ).readObject();
-        } catch ( IOException ex ) {
+        try
+        {
+            return (X509CRL) new PEMReader( reader ).readObject();
+        }
+        catch( IOException ex )
+        {
             throw new IllegalArgumentException( "Unable to read CRL from PEM", ex );
         }
     }
@@ -169,9 +205,12 @@ public class CryptIOImpl
     @Override
     public KeyPair readKeyPairPEM( Reader reader )
     {
-        try {
-            return ( KeyPair ) new PEMReader( reader ).readObject();
-        } catch ( IOException ex ) {
+        try
+        {
+            return (KeyPair) new PEMReader( reader ).readObject();
+        }
+        catch( IOException ex )
+        {
             throw new IllegalArgumentException( "Unable to read KeyPair from PEM", ex );
         }
     }
@@ -214,21 +253,25 @@ public class CryptIOImpl
 
     private CharSequence asPEM( String ilk, Object object )
     {
-        try {
+        try
+        {
             StringWriter sw = new StringWriter();
             PEMWriter pemWriter = new PEMWriter( sw, cryptoContext.providerName() );
             pemWriter.writeObject( object );
             pemWriter.flush();
             return sw.getBuffer();
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to write " + ilk + " as PEM", ex );
         }
     }
 
     private KeyStore getKeyStoreInstance( KeyStoreType storeType )
-            throws KeyStoreException, NoSuchProviderException
+        throws KeyStoreException, NoSuchProviderException
     {
-        if ( KeyStoreType.PKCS12 == storeType ) {
+        if( KeyStoreType.PKCS12 == storeType )
+        {
             return KeyStore.getInstance( storeType.typeString(), cryptoContext.providerName() );
         }
         return KeyStore.getInstance( storeType.typeString() );

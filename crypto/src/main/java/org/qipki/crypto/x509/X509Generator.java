@@ -20,10 +20,8 @@ import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.List;
-
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-
 import org.joda.time.Duration;
 
 public interface X509Generator

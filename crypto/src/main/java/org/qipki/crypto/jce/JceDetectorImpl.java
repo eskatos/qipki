@@ -15,24 +15,19 @@ package org.qipki.crypto.jce;
 
 import java.security.InvalidKeyException;
 import javax.crypto.SecretKey;
-
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoFailure;
-import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
-import org.qipki.crypto.algorithms.BlockCipherPadding;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
-import org.qipki.crypto.cipher.SymetricCipher;
 import org.qipki.crypto.cipher.CipherFactory;
+import org.qipki.crypto.cipher.SymetricCipher;
 import org.qipki.crypto.cipher.SymetricCipherFactoryParameters;
-import org.qipki.crypto.symetric.SymetricGenerator;
 import org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters;
+import org.qipki.crypto.symetric.SymetricGenerator;
 
 /**
  * Implementation of {@link JceDetector} that generate and try to use a 256bits AES key.
  */
 public class JceDetectorImpl
-        implements JceDetector
+    implements JceDetector
 {
 
     private final SymetricGenerator symGen;
@@ -47,13 +42,19 @@ public class JceDetectorImpl
     @Override
     public boolean areJceInstalled()
     {
-        try {
+        try
+        {
             SecretKey key = symGen.generateCipheringKey( SymetricCipheringGeneratorParameters.AES_256 );
             SymetricCipher aesSicPkcs7 = cipherFactory.newSymetricCipher( SymetricCipherFactoryParameters.AES_SIC_PKCS7 );
-            aesSicPkcs7.cipher( new byte[]{}, key );
+            aesSicPkcs7.cipher( new byte[]
+                {
+                }, key );
             return true;
-        } catch ( CryptoFailure ex ) {
-            if ( ex.getCause() != null && InvalidKeyException.class.isAssignableFrom( ex.getCause().getClass() ) ) {
+        }
+        catch( CryptoFailure ex )
+        {
+            if( ex.getCause() != null && InvalidKeyException.class.isAssignableFrom( ex.getCause().getClass() ) )
+            {
                 return false;
             }
             return true;
@@ -63,7 +64,8 @@ public class JceDetectorImpl
     @Override
     public void ensureJceAreInstalled()
     {
-        if ( !areJceInstalled() ) {
+        if( !areJceInstalled() )
+        {
             throw new CryptoFailure( "JCE must be installed" );
         }
     }

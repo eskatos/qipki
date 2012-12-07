@@ -14,7 +14,7 @@
 package org.qipki.crypto;
 
 public class CryptoFailure
-        extends RuntimeException
+    extends RuntimeException
 {
 
     private static final long serialVersionUID = 1L;

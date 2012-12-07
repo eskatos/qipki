@@ -14,21 +14,29 @@
 package org.qipki.crypto;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.crypto.SecretKey;
+import org.bouncycastle.crypto.BlockCipher;
+import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.macs.CBCBlockCipherMac;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.qipki.crypto.algorithms.BCMACAlgorithm;
+import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 import org.qipki.crypto.algorithms.BlockCipherModeOfOperation;
 import org.qipki.crypto.algorithms.BlockCipherPadding;
+import org.qipki.crypto.algorithms.HMACAlgorithm;
 import org.qipki.crypto.algorithms.IllegalAlgorithmException;
-import org.qipki.crypto.algorithms.MACAlgorithm;
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
 import org.qipki.crypto.cipher.CipherTest;
 import org.qipki.crypto.cipher.SymetricCipher;
 import org.qipki.crypto.cipher.SymetricCipherFactoryParameters;
 import org.qipki.crypto.constants.IOConstants;
 import org.qipki.crypto.jca.Transformation;
-import org.qipki.crypto.mac.MACParameters;
+import org.qipki.crypto.mac.BCMACParameters;
+import org.qipki.crypto.mac.HMACParameters;
 import org.qipki.crypto.mac.MacTest;
 import org.qipki.crypto.symetric.SymetricCipheringGeneratorParameters;
 import org.qipki.crypto.symetric.SymetricSigningGeneratorParameters;
@@ -42,10 +50,25 @@ public class SupportedTransformationsTest
     private static final boolean DEBUG = false;
 
     @Test
+    @Ignore( "CBC-MAC and CMAC support is a work in progress" )
+    public void test()
+        throws NoSuchAlgorithmException, NoSuchProviderException
+    {
+        BlockCipher cipher = new AESEngine();
+        CBCBlockCipherMac plop = new CBCBlockCipherMac( cipher );
+        System.out.println( plop.getAlgorithmName() );
+
+        int keySize = 128;
+        SecretKey signingKey = symGenerator.generateSigningKey( new SymetricSigningGeneratorParameters( BCMACAlgorithm.CBC_MAC, keySize ) );
+        String hexMac = mac.hexMac( MacTest.SAMPLES[0], new BCMACParameters( BCMACAlgorithm.CBC_MAC, BlockCipherAlgorithm.AES, signingKey ) );
+        System.out.println( hexMac );
+    }
+
+    @Test
     public void testAllHMACAlgorithms()
     {
         List<String> notSupported = new ArrayList<String>();
-        for( MACAlgorithm eachAlgo : MACAlgorithm.values() )
+        for( HMACAlgorithm eachAlgo : HMACAlgorithm.values() )
         {
             String transformation = new Transformation( eachAlgo ).jcaTransformation();
             if( DEBUG )
@@ -59,7 +82,7 @@ public class SupportedTransformationsTest
 
                 for( String eachSample : MacTest.SAMPLES )
                 {
-                    String hexMac = mac.hexMac( eachSample, new MACParameters( eachAlgo, key ) );
+                    String hexMac = mac.hexMac( eachSample, new HMACParameters( eachAlgo, key ) );
                 }
             }
             catch( UnsupportedOperationException ex )
@@ -89,11 +112,61 @@ public class SupportedTransformationsTest
     }
 
     @Test
+    public void testAllBCMACAlgorithms()
+    {
+        List<String> notSupported = new ArrayList<String>();
+        for( BCMACAlgorithm bcMacAlgo : BCMACAlgorithm.values() )
+        {
+            for( BlockCipherAlgorithm bcAlgo : BlockCipherAlgorithm.values() )
+            {
+                String transformation = new Transformation( bcMacAlgo, bcAlgo ).jcaTransformation();
+                if( DEBUG )
+                {
+                    System.out.println( ">> " + transformation );
+                }
+                int keySize = 128;
+                try
+                {
+                    SecretKey key = symGenerator.generateSigningKey( new SymetricSigningGeneratorParameters( bcMacAlgo, keySize ) );
+
+                    for( String eachSample : MacTest.SAMPLES )
+                    {
+                        String hexMac = mac.hexMac( eachSample, new BCMACParameters( bcMacAlgo, bcAlgo, key ) );
+                    }
+                }
+                catch( UnsupportedOperationException ex )
+                {
+                    if( DEBUG )
+                    {
+                        System.out.println( ">> " + transformation + " is NOT supported with " + keySize + "bits keys => " + ex.getMessage() );
+                    }
+                    notSupported.add( transformation );
+                }
+                catch( CryptoFailure ex )
+                {
+                    if( DEBUG )
+                    {
+                        System.out.println( ">> " + transformation + " is NOT supported with " + keySize + "bits keys => " + ex.getMessage() );
+                    }
+                    notSupported.add( transformation );
+                }
+            }
+        }
+        System.out.println();
+        System.out.println( ">> MAC Algorithms NOT Supported" );
+        for( String eachNotSupported : notSupported )
+        {
+            System.out.println( " - " + eachNotSupported );
+        }
+        System.out.println();
+    }
+
+    @Test
     public void testAllSymetricCipherAlgorithms()
         throws UnsupportedEncodingException
     {
         List<String> notSupported = new ArrayList<String>();
-        for( SymetricAlgorithm eachAlgo : SymetricAlgorithm.values() )
+        for( BlockCipherAlgorithm eachAlgo : BlockCipherAlgorithm.values() )
         {
             for( BlockCipherModeOfOperation eachMode : BlockCipherModeOfOperation.values() )
             {
@@ -150,11 +223,6 @@ public class SupportedTransformationsTest
             System.out.println( " - " + eachNotSupported );
         }
         System.out.println();
-    }
-
-    @Test
-    public void testAllSecretKeyAlgorithms()
-    {
     }
 
 }

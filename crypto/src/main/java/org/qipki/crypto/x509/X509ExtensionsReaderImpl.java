@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
@@ -61,17 +60,14 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
-
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.qi4j.api.injection.scope.Service;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-
-import org.qi4j.api.injection.scope.Service;
-
 public class X509ExtensionsReaderImpl
-        implements X509ExtensionsReader
+    implements X509ExtensionsReader
 {
 
     private final CryptCodex cryptCodex;
@@ -87,28 +83,33 @@ public class X509ExtensionsReaderImpl
         final List<X509ExtensionHolder> extractedExtensions = new ArrayList<X509ExtensionHolder>();
         final CertificationRequestInfo certificationRequestInfo = pkcs10.getCertificationRequestInfo();
         final ASN1Set attributesAsn1Set = certificationRequestInfo.getAttributes();
-        if ( attributesAsn1Set == null ) {
+        if( attributesAsn1Set == null )
+        {
             return extractedExtensions;
         }
         // The `Extension Request` attribute is contained within an ASN.1 Set,
         // usually as the first element.
         X509Extensions requestedExtensions = null;
-        for ( int i = 0; i < attributesAsn1Set.size(); ++i ) {
+        for( int i = 0; i < attributesAsn1Set.size(); ++i )
+        {
             // There should be only only one attribute in the set. (that is, only
             // the `Extension Request`, but loop through to find it properly)
             final DEREncodable derEncodable = attributesAsn1Set.getObjectAt( i );
-            if ( derEncodable instanceof DERSequence ) {
-                final Attribute attribute = new Attribute( ( DERSequence ) attributesAsn1Set.getObjectAt( i ) );
+            if( derEncodable instanceof DERSequence )
+            {
+                final Attribute attribute = new Attribute( (DERSequence) attributesAsn1Set.getObjectAt( i ) );
 
-                if ( attribute.getAttrType().equals( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest ) ) {
+                if( attribute.getAttrType().equals( PKCSObjectIdentifiers.pkcs_9_at_extensionRequest ) )
+                {
                     // The `Extension Request` attribute is present.
                     final ASN1Set attributeValues = attribute.getAttrValues();
 
                     // The X509Extensions are contained as a value of the ASN.1 Set.
                     // WARN Assuming that it is the first value of the set.
-                    if ( attributeValues.size() >= 1 ) {
+                    if( attributeValues.size() >= 1 )
+                    {
                         DEREncodable extensionsDEREncodable = attributeValues.getObjectAt( 0 );
-                        ASN1Sequence extensionsASN1Sequence = ( ASN1Sequence ) extensionsDEREncodable;
+                        ASN1Sequence extensionsASN1Sequence = (ASN1Sequence) extensionsDEREncodable;
                         requestedExtensions = new X509Extensions( extensionsASN1Sequence );
                         // No need to search any more.
                         break;
@@ -116,10 +117,12 @@ public class X509ExtensionsReaderImpl
                 }
             }
         }
-        if ( requestedExtensions != null ) {
+        if( requestedExtensions != null )
+        {
             Enumeration<?> e = requestedExtensions.oids();
-            while ( e.hasMoreElements() ) {
-                DERObjectIdentifier oid = ( DERObjectIdentifier ) e.nextElement();
+            while( e.hasMoreElements() )
+            {
+                DERObjectIdentifier oid = (DERObjectIdentifier) e.nextElement();
                 X509Extension extension = requestedExtensions.getExtension( oid );
                 extractedExtensions.add( new X509ExtensionHolder( oid, extension.isCritical(), X509Extension.convertValueToObject( extension ) ) );
             }
@@ -130,14 +133,18 @@ public class X509ExtensionsReaderImpl
     @Override
     public AuthorityKeyIdentifier getAuthorityKeyIdentifier( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.AuthorityKeyIdentifier.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            DEROctetString oct = ( DEROctetString ) ( new ASN1InputStream( new ByteArrayInputStream( value ) ).readObject() );
-            return new AuthorityKeyIdentifier( ( ASN1Sequence ) new ASN1InputStream( new ByteArrayInputStream( oct.getOctets() ) ).readObject() );
-        } catch ( IOException ex ) {
+            DEROctetString oct = (DEROctetString) ( new ASN1InputStream( new ByteArrayInputStream( value ) ).readObject() );
+            return new AuthorityKeyIdentifier( (ASN1Sequence) new ASN1InputStream( new ByteArrayInputStream( oct.getOctets() ) ).readObject() );
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract AuthorityKeyIdentifier from X509Certificate extensions", ex );
         }
     }
@@ -145,14 +152,18 @@ public class X509ExtensionsReaderImpl
     @Override
     public byte[] getSubjectKeyIdentifier( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.SubjectKeyIdentifier.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            byte[] octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
+            byte[] octets = ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets();
             return SubjectKeyIdentifier.getInstance( ASN1Object.fromByteArray( octets ) ).getKeyIdentifier();
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract SubjectKeyIdentifier from X509Certificate extensions", ex );
         }
     }
@@ -163,10 +174,13 @@ public class X509ExtensionsReaderImpl
     {
         Set<KeyUsage> keyUsages = new LinkedHashSet<KeyUsage>();
         boolean[] keyUsagesBools = cert.getKeyUsage();
-        if ( keyUsagesBools != null ) {
+        if( keyUsagesBools != null )
+        {
             KeyUsage[] allKeyUsages = KeyUsage.values();
-            for ( int idx = 0; idx < keyUsagesBools.length; idx++ ) {
-                if ( keyUsagesBools[idx] ) {
+            for( int idx = 0; idx < keyUsagesBools.length; idx++ )
+            {
+                if( keyUsagesBools[idx] )
+                {
                     keyUsages.add( allKeyUsages[idx] );
                 }
             }
@@ -178,21 +192,27 @@ public class X509ExtensionsReaderImpl
     @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<ExtendedKeyUsage> getExtendedKeyUsages( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.ExtendedKeyUsage.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return Collections.emptySet();
             }
-            byte[] asn1octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
-            org.bouncycastle.asn1.x509.ExtendedKeyUsage usages = org.bouncycastle.asn1.x509.ExtendedKeyUsage.getInstance( ( ASN1Sequence ) ASN1Sequence.fromByteArray( asn1octets ) );
+            byte[] asn1octets = ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets();
+            org.bouncycastle.asn1.x509.ExtendedKeyUsage usages = org.bouncycastle.asn1.x509.ExtendedKeyUsage.getInstance( (ASN1Sequence) ASN1Sequence.fromByteArray( asn1octets ) );
             Set<ExtendedKeyUsage> keyUsages = new LinkedHashSet<ExtendedKeyUsage>();
-            for ( ExtendedKeyUsage eachPossible : ExtendedKeyUsage.values() ) {
-                if ( usages.hasKeyPurposeId( eachPossible.getKeyPurposeId() ) ) {
+            for( ExtendedKeyUsage eachPossible : ExtendedKeyUsage.values() )
+            {
+                if( usages.hasKeyPurposeId( eachPossible.getKeyPurposeId() ) )
+                {
                     keyUsages.add( eachPossible );
                 }
             }
             return keyUsages;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract ExtendedKeyUsages from X509Certificate extensions", ex );
         }
     }
@@ -201,21 +221,27 @@ public class X509ExtensionsReaderImpl
     @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<NetscapeCertType> getNetscapeCertTypes( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( MiscObjectIdentifiers.netscapeCertType.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return Collections.emptySet();
             }
-            byte[] asn1octets = ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets();
-            int nctIntValue = new org.bouncycastle.asn1.misc.NetscapeCertType( ( DERBitString ) ASN1Object.fromByteArray( asn1octets ) ).intValue();
+            byte[] asn1octets = ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets();
+            int nctIntValue = new org.bouncycastle.asn1.misc.NetscapeCertType( (DERBitString) ASN1Object.fromByteArray( asn1octets ) ).intValue();
             Set<NetscapeCertType> netscapeCertTypes = new LinkedHashSet<NetscapeCertType>();
-            for ( NetscapeCertType eachCertType : NetscapeCertType.values() ) {
-                if ( ( nctIntValue & eachCertType.getIntValue() ) == eachCertType.getIntValue() ) {
+            for( NetscapeCertType eachCertType : NetscapeCertType.values() )
+            {
+                if( ( nctIntValue & eachCertType.getIntValue() ) == eachCertType.getIntValue() )
+                {
                     netscapeCertTypes.add( eachCertType );
                 }
             }
             return netscapeCertTypes;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract NetscapeCertType from X509Certificate extensions", ex );
         }
     }
@@ -223,13 +249,17 @@ public class X509ExtensionsReaderImpl
     @Override
     public String getNetscapeCertComment( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( MiscObjectIdentifiers.netscapeCertComment.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
             return ASN1Object.fromByteArray( value ).toString();
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract NetscapeCertComment from X509Certificate extensions", ex );
         }
     }
@@ -237,9 +267,11 @@ public class X509ExtensionsReaderImpl
     @Override
     public Interval getPrivateKeyUsagePeriod( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.PrivateKeyUsagePeriod.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
             PrivateKeyUsagePeriod privKeyUsagePeriod = PrivateKeyUsagePeriod.getInstance( ASN1Object.fromByteArray( value ) );
@@ -247,9 +279,13 @@ public class X509ExtensionsReaderImpl
             Date notBefore = derDateFormat.parse( privKeyUsagePeriod.getNotBefore().getTime() );
             Date notAfter = derDateFormat.parse( privKeyUsagePeriod.getNotAfter().getTime() );
             return new Interval( new DateTime( notBefore ), new DateTime( notAfter ) );
-        } catch ( ParseException ex ) {
+        }
+        catch( ParseException ex )
+        {
             throw new CryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract PrivateKeyUsagePeriod from X509Certificate extensions", ex );
         }
     }
@@ -257,14 +293,18 @@ public class X509ExtensionsReaderImpl
     @Override
     public DistributionPoint[] getCRLDistributionPoints( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.CRLDistributionPoints.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
             CRLDistPoint crlDistPoints = CRLDistPoint.getInstance( X509ExtensionUtil.fromExtensionValue( value ) );
             return crlDistPoints.getDistributionPoints();
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract CRLDistributionPoints from X509Certificate extensions", ex );
         }
 
@@ -273,19 +313,24 @@ public class X509ExtensionsReaderImpl
     @Override
     public Set<PolicyInformation> getCertificatePolicies( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.CertificatePolicies.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return Collections.emptySet();
             }
-            ASN1Sequence policiesSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
+            ASN1Sequence policiesSequence = (ASN1Sequence) ASN1Object.fromByteArray( value );
             Set<PolicyInformation> certPolicies = new LinkedHashSet<PolicyInformation>();
-            for ( int idx = 0; idx < policiesSequence.size(); idx++ ) {
+            for( int idx = 0; idx < policiesSequence.size(); idx++ )
+            {
                 PolicyInformation policy = PolicyInformation.getInstance( policiesSequence.getObjectAt( idx ) );
                 certPolicies.add( policy );
             }
             return certPolicies;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract CertificatePolicies from X509Certificate extensions", ex );
         }
     }
@@ -294,26 +339,33 @@ public class X509ExtensionsReaderImpl
     @Override
     public Set<PolicyMapping> getPolicyMappings( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.PolicyMappings.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return Collections.emptySet();
             }
-            ASN1Sequence mappingsSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
+            ASN1Sequence mappingsSequence = (ASN1Sequence) ASN1Object.fromByteArray( value );
             Set<PolicyMapping> mappings = new LinkedHashSet<PolicyMapping>();
-            for ( int idx = 0; idx < mappingsSequence.size(); idx++ ) {
-                ASN1Sequence seq = ( ASN1Sequence ) mappingsSequence.getObjectAt( idx );
+            for( int idx = 0; idx < mappingsSequence.size(); idx++ )
+            {
+                ASN1Sequence seq = (ASN1Sequence) mappingsSequence.getObjectAt( idx );
                 PolicyMapping mapping = new PolicyMapping();
-                if ( seq.size() > 0 ) {
-                    mapping.setIssuerDomainPolicyOID( ( ( DERObjectIdentifier ) seq.getObjectAt( 0 ) ).getId() );
+                if( seq.size() > 0 )
+                {
+                    mapping.setIssuerDomainPolicyOID( ( (DERObjectIdentifier) seq.getObjectAt( 0 ) ).getId() );
                 }
-                if ( seq.size() > 1 ) {
-                    mapping.setIssuerDomainPolicyOID( ( ( DERObjectIdentifier ) seq.getObjectAt( 1 ) ).getId() );
+                if( seq.size() > 1 )
+                {
+                    mapping.setIssuerDomainPolicyOID( ( (DERObjectIdentifier) seq.getObjectAt( 1 ) ).getId() );
                 }
                 mappings.add( mapping );
             }
             return mappings;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract PolicyMappings from X509Certificate extensions", ex );
         }
     }
@@ -321,13 +373,17 @@ public class X509ExtensionsReaderImpl
     @Override
     public GeneralNames getSubjectAlternativeNames( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.SubjectAlternativeName.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
-        } catch ( IOException ex ) {
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract SubjectAlternativeName from X509Certificate extensions", ex );
         }
     }
@@ -335,13 +391,17 @@ public class X509ExtensionsReaderImpl
     @Override
     public GeneralNames getIssuerAlternativeNames( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.IssuerAlternativeName.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
-        } catch ( IOException ex ) {
+            return GeneralNames.getInstance( ASN1Object.fromByteArray( ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract IssuerAlternativeName from X509Certificate extensions", ex );
         }
     }
@@ -349,14 +409,18 @@ public class X509ExtensionsReaderImpl
     @Override
     public BasicConstraints getBasicConstraints( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.BasicConstraints.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            return BasicConstraints.getInstance( ASN1Object.fromByteArray( ( ( ASN1OctetString ) ASN1Object.fromByteArray( value ) ).getOctets() ) );
+            return BasicConstraints.getInstance( ASN1Object.fromByteArray( ( (ASN1OctetString) ASN1Object.fromByteArray( value ) ).getOctets() ) );
             // return BasicConstraints.getInstance( ASN1Object.fromByteArray( value ) );
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract BasicConstraints from X509Certificate extensions", ex );
         }
     }
@@ -364,13 +428,17 @@ public class X509ExtensionsReaderImpl
     @Override
     public NameConstraints getNameConstraints( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.NameConstraints.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return null;
             }
-            return new NameConstraints( ( ASN1Sequence ) ASN1Object.fromByteArray( value ) );
-        } catch ( IOException ex ) {
+            return new NameConstraints( (ASN1Sequence) ASN1Object.fromByteArray( value ) );
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract NameConstraints from X509Certificate extensions", ex );
         }
     }
@@ -378,18 +446,22 @@ public class X509ExtensionsReaderImpl
     @Override
     public Set<PolicyConstraint> getPolicyConstraints( X509Certificate cert )
     {
-        try {
+        try
+        {
             byte[] value = cert.getExtensionValue( X509Extensions.PolicyConstraints.getId() );
-            if ( value == null ) {
+            if( value == null )
+            {
                 return Collections.emptySet();
             }
-            ASN1Sequence constraintsSequence = ( ASN1Sequence ) ASN1Object.fromByteArray( value );
+            ASN1Sequence constraintsSequence = (ASN1Sequence) ASN1Object.fromByteArray( value );
             Set<PolicyConstraint> constraints = new LinkedHashSet<PolicyConstraint>();
-            for ( int idx = 0; idx < constraintsSequence.size(); idx++ ) {
-                DERTaggedObject asn1Constraint = ( DERTaggedObject ) constraintsSequence.getObjectAt( idx );
-                DERInteger skipCerts = new DERInteger( ( ( DEROctetString ) asn1Constraint.getObject() ).getOctets() );
+            for( int idx = 0; idx < constraintsSequence.size(); idx++ )
+            {
+                DERTaggedObject asn1Constraint = (DERTaggedObject) constraintsSequence.getObjectAt( idx );
+                DERInteger skipCerts = new DERInteger( ( (DEROctetString) asn1Constraint.getObject() ).getOctets() );
                 PolicyConstraint constraint = new PolicyConstraint();
-                switch ( asn1Constraint.getTagNo() ) {
+                switch( asn1Constraint.getTagNo() )
+                {
                     case 0:
                         constraint.setRequireExplicitPolicy( skipCerts.getValue().intValue() );
                         break;
@@ -399,7 +471,9 @@ public class X509ExtensionsReaderImpl
                 constraints.add( constraint );
             }
             return constraints;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to extract PolicyConstraints from X509Certificate extensions", ex );
         }
     }
@@ -408,13 +482,16 @@ public class X509ExtensionsReaderImpl
     @SuppressWarnings( "SetReplaceableByEnumSet" )
     public Set<RevocationReason> getRevocationReasons( ReasonFlags reasonFlags )
     {
-        if ( reasonFlags == null ) {
+        if( reasonFlags == null )
+        {
             return Collections.emptySet();
         }
         int reasons = reasonFlags.intValue();
         Set<RevocationReason> revocationReasons = new LinkedHashSet<RevocationReason>();
-        for ( RevocationReason eachPossibleReason : RevocationReason.values() ) {
-            if ( ( reasons & eachPossibleReason.reason() ) == eachPossibleReason.reason() ) {
+        for( RevocationReason eachPossibleReason : RevocationReason.values() )
+        {
+            if( ( reasons & eachPossibleReason.reason() ) == eachPossibleReason.reason() )
+            {
                 revocationReasons.add( eachPossibleReason );
             }
         }
@@ -425,11 +502,13 @@ public class X509ExtensionsReaderImpl
     @SuppressWarnings( "MapReplaceableByEnumMap" )
     public Map<X509GeneralName, String> asMap( GeneralNames generalNames )
     {
-        if ( generalNames == null ) {
+        if( generalNames == null )
+        {
             return Collections.emptyMap();
         }
         Map<X509GeneralName, String> map = new LinkedHashMap<X509GeneralName, String>();
-        for ( GeneralName eachGeneralName : generalNames.getNames() ) {
+        for( GeneralName eachGeneralName : generalNames.getNames() )
+        {
             Map.Entry<X509GeneralName, String> entry = asImmutableMapEntry( eachGeneralName );
             map.put( entry.getKey(), entry.getValue() );
         }
@@ -442,9 +521,10 @@ public class X509ExtensionsReaderImpl
         int nameType = generalName.getTagNo();
         X509GeneralName x509GeneralName = null;
         String value = null;
-        switch ( nameType ) {
+        switch( nameType )
+        {
             case GeneralName.otherName:
-                ASN1Sequence otherName = ( ASN1Sequence ) generalName.getName();
+                ASN1Sequence otherName = (ASN1Sequence) generalName.getName();
                 // String oid = ( ( DERObjectIdentifier ) otherName.getObjectAt( 0 ) ).getId();
                 x509GeneralName = X509GeneralName.otherName;
                 value = cryptCodex.toString( otherName.getObjectAt( 1 ) );
@@ -471,19 +551,21 @@ public class X509ExtensionsReaderImpl
                 break;
             case GeneralName.directoryName:
                 x509GeneralName = X509GeneralName.directoryName;
-                value = new X500Principal( ( ( X509Name ) generalName.getName() ).toString() ).getName( X500Principal.CANONICAL );
+                value = new X500Principal( ( (X509Name) generalName.getName() ).toString() ).getName( X500Principal.CANONICAL );
                 break;
             case GeneralName.uniformResourceIdentifier:
                 x509GeneralName = X509GeneralName.uniformResourceIdentifier;
                 value = generalName.getName().toString();
                 break;
             case GeneralName.iPAddress: // What about IPv6 addresses ?
-                ASN1OctetString iPAddress = ( ASN1OctetString ) generalName.getName();
+                ASN1OctetString iPAddress = (ASN1OctetString) generalName.getName();
                 byte[] iPAddressBytes = iPAddress.getOctets();
                 StringBuilder sb = new StringBuilder();
-                for ( int idx = 0; idx < iPAddressBytes.length; idx++ ) {
+                for( int idx = 0; idx < iPAddressBytes.length; idx++ )
+                {
                     sb.append( iPAddressBytes[idx] & 0xFF );
-                    if ( idx + 1 < iPAddressBytes.length ) {
+                    if( idx + 1 < iPAddressBytes.length )
+                    {
                         sb.append( "." );
                     }
                 }
@@ -498,7 +580,7 @@ public class X509ExtensionsReaderImpl
     }
 
     private static class ImmutableMapEntry
-            implements Map.Entry<X509GeneralName, String>
+        implements Map.Entry<X509GeneralName, String>
     {
 
         private final X509GeneralName key;

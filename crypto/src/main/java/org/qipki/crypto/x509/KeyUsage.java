@@ -47,7 +47,8 @@ public enum KeyUsage
     {
         Iterator<KeyUsage> it = keyUsages.iterator();
         int usage = 0;
-        while ( it.hasNext() ) {
+        while( it.hasNext() )
+        {
             usage |= it.next().usage();
         }
         return usage;

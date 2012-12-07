@@ -38,7 +38,7 @@ import sun.security.x509.X500Name;
  * RFC3383 - http://www.ietf.org/rfc/rfc3383.txt
  *      2002 -  Internet Assigned Numbers Authority (IANA) Considerations for the Lightweight Directory Access Protocol (LDAP)
  *      Especially the section B.3 in Appendix B titled : Object Identifier Descriptors
- * 
+ *
  */
 public final class DistinguishedName
 {
@@ -96,22 +96,29 @@ public final class DistinguishedName
     public String toString( Format format )
     {
         X500Principal ppalToUse = x500Principal;
-        if ( removeEmptyRDNs ) {
-            try {
+        if( removeEmptyRDNs )
+        {
+            try
+            {
                 X500Name x500Name = X500Name.asX500Name( x500Principal );
                 List<RDN> rdns = new ArrayList<RDN>();
-                for ( RDN eachRDN : x500Name.rdns() ) {
-                    if ( !isEmpty( eachRDN ) ) {
+                for( RDN eachRDN : x500Name.rdns() )
+                {
+                    if( !isEmpty( eachRDN ) )
+                    {
                         rdns.add( eachRDN );
                     }
                 }
                 X500Name afterX500Name = new X500Name( rdns.toArray( new RDN[ rdns.size() ] ) );
                 ppalToUse = new X500Principal( afterX500Name.getRFC2253Name( ADDITIONAL_KEYWORDS ), ADDITIONAL_KEYWORDS );
-            } catch ( IOException ignored ) {
+            }
+            catch( IOException ignored )
+            {
                 // Should not happen, we already passed this data into java APIs
             }
         }
-        switch ( format ) {
+        switch( format )
+        {
             case RFC1779:
                 return ppalToUse.getName( X500Principal.RFC1779 );
             case RFC2253:
@@ -134,9 +141,12 @@ public final class DistinguishedName
 
     private boolean isEmpty( RDN rdn )
     {
-        if ( rdn.size() > 0 ) {
-            for ( AVA eachAVA : rdn.avas() ) {
-                if ( !Strings.isEmpty( eachAVA.getValueString() ) ) {
+        if( rdn.size() > 0 )
+        {
+            for( AVA eachAVA : rdn.avas() )
+            {
+                if( !Strings.isEmpty( eachAVA.getValueString() ) )
+                {
                     return false;
                 }
             }
@@ -151,12 +161,15 @@ public final class DistinguishedName
 
     public static String escapeRDNData( String data )
     {
-        if ( data == null ) {
+        if( data == null )
+        {
             return null;
         }
         StringBuilder sb = new StringBuilder();
-        for ( char eachChar : data.toCharArray() ) {
-            if ( RFC2253_ESCAPED_CHARS.indexOf( eachChar ) != -1 ) {
+        for( char eachChar : data.toCharArray() )
+        {
+            if( RFC2253_ESCAPED_CHARS.indexOf( eachChar ) != -1 )
+            {
                 sb.append( '\\' );
             }
             sb.append( eachChar );
@@ -173,7 +186,8 @@ public final class DistinguishedName
      */
     public static final LinkedHashMap<String, String> RFC3383_OID_MAPPINGS = new LinkedHashMap<String, String>();
 
-    static {
+    static
+    {
         // WARNING !
         // Last inserted mappings have precedence when going from X500Principal to String
         // There are several keywords for the same OID
@@ -352,7 +366,8 @@ public final class DistinguishedName
         RFC3383_OID_MAPPINGS.put( "2.5.4.4", "SN" ); // [RFC2256]
         RFC3383_OID_MAPPINGS.put( "2.5.4.8", "ST" ); // [RFC2256]
 
-        for ( Map.Entry<String, String> eachRfc3383Attr : RFC3383_OID_MAPPINGS.entrySet() ) {
+        for( Map.Entry<String, String> eachRfc3383Attr : RFC3383_OID_MAPPINGS.entrySet() )
+        {
             ADDITIONAL_KEYWORDS.put( eachRfc3383Attr.getValue().toUpperCase(), eachRfc3383Attr.getKey() );
         }
         ADDITIONAL_KEYWORDS.put( "E", PKCS9Attribute.EMAIL_ADDRESS_OID.toString() );

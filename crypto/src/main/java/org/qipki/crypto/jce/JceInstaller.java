@@ -14,7 +14,6 @@
 package org.qipki.crypto.jce;
 
 import java.net.URL;
-import org.codeartisans.java.toolbox.async.Callback;
 
 /**
  * Unlimited Strength Jurisdiction Policy File installer.

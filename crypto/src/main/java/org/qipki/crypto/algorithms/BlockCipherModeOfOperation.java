@@ -15,11 +15,11 @@ package org.qipki.crypto.algorithms;
 
 /**
  * Block Cipher Mode Of Operation.
- * 
+ *
  * See http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation
  */
 public enum BlockCipherModeOfOperation
-        implements Algorithm
+    implements Algorithm
 {
 
     /**

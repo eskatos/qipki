@@ -22,18 +22,15 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-
 import org.codeartisans.java.toolbox.io.IO;
-
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoContext;
 import org.qipki.crypto.CryptoFailure;
 import org.qipki.crypto.codec.CryptCodex;
 import org.qipki.crypto.constants.IOConstants;
 
 public class DigesterImpl
-        implements Digester
+    implements Digester
 {
 
     private static final int BUFFER_SIZE = 128;
@@ -63,25 +60,33 @@ public class DigesterImpl
     @Override
     public byte[] digest( InputStream data, DigestParameters params )
     {
-        try {
+        try
+        {
             MessageDigest digest = MessageDigest.getInstance( params.algorithm().jcaString(), cryptoContext.providerName() );
-            if ( params.salt() != null ) {
+            if( params.salt() != null )
+            {
                 digest.update( params.salt() );
             }
             byte[] buffer = new byte[ BUFFER_SIZE ];
             int length = 0;
-            while ( ( length = data.read( buffer ) ) != -1 ) {
+            while( ( length = data.read( buffer ) ) != -1 )
+            {
                 digest.update( buffer, 0, length );
             }
             byte[] hashed = digest.digest();
-            for ( int idx = 1; idx < params.iterations(); idx++ ) {
+            for( int idx = 1; idx < params.iterations(); idx++ )
+            {
                 digest.reset();
                 hashed = digest.digest( hashed );
             }
             return hashed;
-        } catch ( IOException ex ) {
+        }
+        catch( IOException ex )
+        {
             throw new CryptoFailure( "Unable to read data to digest with " + params.algorithm().jcaString(), ex );
-        } catch ( GeneralSecurityException ex ) {
+        }
+        catch( GeneralSecurityException ex )
+        {
             throw new CryptoFailure( "Unable to digest using " + params.algorithm().jcaString(), ex );
         }
     }
@@ -120,12 +125,17 @@ public class DigesterImpl
     public byte[] digest( File data, DigestParameters params )
     {
         InputStream input = null;
-        try {
+        try
+        {
             input = new FileInputStream( data );
             return digest( input, params );
-        } catch ( FileNotFoundException ex ) {
+        }
+        catch( FileNotFoundException ex )
+        {
             throw new CryptoFailure( "Unable to digest a file: " + ex.getMessage(), ex );
-        } finally {
+        }
+        finally
+        {
             IO.closeSilently( input );
         }
     }
@@ -145,9 +155,12 @@ public class DigesterImpl
     @Override
     public byte[] digest( String data, DigestParameters params )
     {
-        try {
+        try
+        {
             return digest( data, IOConstants.UTF_8, params );
-        } catch ( UnsupportedEncodingException ex ) {
+        }
+        catch( UnsupportedEncodingException ex )
+        {
             throw new CryptoFailure( "UTF-8 not supported! o_O ", ex );
         }
     }
@@ -166,21 +179,21 @@ public class DigesterImpl
 
     @Override
     public byte[] digest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         return digest( data.getBytes( encoding ), params );
     }
 
     @Override
     public String hexDigest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         return cryptCodex.toHexString( digest( data, encoding, params ) );
     }
 
     @Override
     public String base64Digest( String data, String encoding, DigestParameters params )
-            throws UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         return cryptCodex.toBase64String( digest( data, encoding, params ) );
     }

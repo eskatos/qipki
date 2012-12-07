@@ -13,23 +13,23 @@
  */
 package org.qipki.crypto.symetric;
 
-import org.qipki.crypto.algorithms.SymetricAlgorithm;
+import org.qipki.crypto.algorithms.BlockCipherAlgorithm;
 
 public class SymetricCipheringGeneratorParameters
 {
 
-    public static final SymetricCipheringGeneratorParameters AES_128 = new SymetricCipheringGeneratorParameters( SymetricAlgorithm.AES, 128 );
-    public static final SymetricCipheringGeneratorParameters AES_256 = new SymetricCipheringGeneratorParameters( SymetricAlgorithm.AES, 256 );
-    private final SymetricAlgorithm algo;
+    public static final SymetricCipheringGeneratorParameters AES_128 = new SymetricCipheringGeneratorParameters( BlockCipherAlgorithm.AES, 128 );
+    public static final SymetricCipheringGeneratorParameters AES_256 = new SymetricCipheringGeneratorParameters( BlockCipherAlgorithm.AES, 256 );
+    private final BlockCipherAlgorithm algo;
     private final int keySize;
 
-    public SymetricCipheringGeneratorParameters( SymetricAlgorithm algo, int keySize )
+    public SymetricCipheringGeneratorParameters( BlockCipherAlgorithm algo, int keySize )
     {
         this.algo = algo;
         this.keySize = keySize;
     }
 
-    public SymetricAlgorithm algorithm()
+    public BlockCipherAlgorithm algorithm()
     {
         return algo;
     }

@@ -14,11 +14,10 @@
 package org.qipki.crypto.cipher;
 
 import org.qi4j.api.injection.scope.Service;
-
 import org.qipki.crypto.CryptoContext;
 
 public class CipherFactoryImpl
-        implements CipherFactory
+    implements CipherFactory
 {
 
     private final CryptoContext cryptoContext;

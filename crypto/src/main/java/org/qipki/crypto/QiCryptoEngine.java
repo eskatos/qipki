@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 @Mixins( QiCryptoEngine.Mixin.class )
 public interface QiCryptoEngine
-        extends CryptoContext, ServiceComposite, ServiceActivation
+    extends CryptoContext, ServiceComposite, ServiceActivation
 {
 
     abstract class Mixin
-            implements QiCryptoEngine
+        implements QiCryptoEngine
     {
 
         private static final Logger LOGGER = LoggerFactory.getLogger( QiCryptoEngine.Mixin.class );
@@ -54,41 +54,52 @@ public interface QiCryptoEngine
 
         @Override
         public void activateService()
-                throws Exception
+            throws Exception
         {
             loadConfiguration();
-            if ( insertProviderOnActivate ) {
-                if ( Security.getProvider( providerName ) == null ) {
+            if( insertProviderOnActivate )
+            {
+                if( Security.getProvider( providerName ) == null )
+                {
 
                     Security.addProvider( providerClass.newInstance() );
 
-                    if ( LOGGER.isDebugEnabled() ) {
+                    if( LOGGER.isDebugEnabled() )
+                    {
                         LOGGER.debug( "Inserted {} with name: {}", providerClass, providerName );
                     }
-                } else if ( LOGGER.isDebugEnabled() ) {
+                }
+                else if( LOGGER.isDebugEnabled() )
+                {
                     LOGGER.debug( "A Provider is already registered with the name {}. Doing nothing.", providerName );
                 }
             }
             secureRandom = SecureRandom.getInstance( randomAlgorithm );
             secureRandom.setSeed( secureRandom.generateSeed( randomSeedSize ) );
-            if ( ensureJce ) {
+            if( ensureJce )
+            {
                 // TODO
             }
         }
 
         @Override
         public void passivateService()
-                throws Exception
+            throws Exception
         {
-            if ( removeProviderOnPassivate ) {
-                if ( Security.getProvider( providerName ) == null ) {
+            if( removeProviderOnPassivate )
+            {
+                if( Security.getProvider( providerName ) == null )
+                {
 
                     Security.removeProvider( providerName );
 
-                    if ( LOGGER.isDebugEnabled() ) {
+                    if( LOGGER.isDebugEnabled() )
+                    {
                         LOGGER.debug( "Removed Provider named {}", providerName );
                     }
-                } else if ( LOGGER.isDebugEnabled() ) {
+                }
+                else if( LOGGER.isDebugEnabled() )
+                {
                     LOGGER.debug( "No Provider registered with the name {}. Doing nothing.", providerName );
                 }
             }
@@ -103,41 +114,49 @@ public interface QiCryptoEngine
         }
 
         private void loadConfiguration()
-                throws ClassNotFoundException
+            throws ClassNotFoundException
         {
             configuration.refresh();
             QiCryptoConfiguration config = configuration.get();
 
             ensureJce = config.ensureJCE().get();
-            if ( ensureJce == null ) {
+            if( ensureJce == null )
+            {
                 ensureJce = Boolean.TRUE;
             }
 
             insertProviderOnActivate = config.insertProviderOnActivate().get();
-            if ( insertProviderOnActivate == null ) {
+            if( insertProviderOnActivate == null )
+            {
                 insertProviderOnActivate = Boolean.TRUE;
             }
             removeProviderOnPassivate = config.removeProviderOnPassivate().get();
-            if ( removeProviderOnPassivate == null ) {
+            if( removeProviderOnPassivate == null )
+            {
                 removeProviderOnPassivate = Boolean.TRUE;
             }
 
             providerName = config.providerName().get();
             String providerClassName = config.providerClass().get();
-            if ( Strings.isEmpty( providerName ) || Strings.isEmpty( providerClassName ) ) {
+            if( Strings.isEmpty( providerName ) || Strings.isEmpty( providerClassName ) )
+            {
                 providerName = BouncyCastleProvider.PROVIDER_NAME;
                 providerClass = BouncyCastleProvider.class;
-            } else {
-                providerClass = ( Class<? extends Provider> ) Class.forName( providerClassName );
+            }
+            else
+            {
+                providerClass = (Class<? extends Provider>) Class.forName( providerClassName );
             }
 
             randomAlgorithm = config.randomAlgorithm().get();
-            if ( Strings.isEmpty( randomAlgorithm ) ) {
+            if( Strings.isEmpty( randomAlgorithm ) )
+            {
                 randomAlgorithm = "SHA1PRNG";
             }
 
             randomSeedSize = config.randomSeedSize().get();
-            if ( randomSeedSize == null ) {
+            if( randomSeedSize == null )
+            {
                 randomSeedSize = 128;
             }
         }

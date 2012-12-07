@@ -14,7 +14,7 @@
 package org.qipki.crypto.algorithms;
 
 public enum AsymetricCipherPadding
-        implements Algorithm
+    implements Algorithm
 {
 
     PKCS1( "PKCS1Padding" ),

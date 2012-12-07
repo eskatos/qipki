@@ -30,8 +30,9 @@ We use the git branching model provided by
 
 * (#---) Enhance Crypto API
   * Review, test and document MACs
-    * Still to write the SupportedTransformations test method for HMACs
+    * [DONE] Still to write the SupportedTransformations test method for HMACs
     * Implement and test [CBC-MAC](http://en.wikipedia.org/wiki/CBC-MAC), use [openssl](http://stackoverflow.com/questions/2611251/openssl-hmac-using-aes-256-cbc) to create test data
+    * Implement and test CMAC
   * Review, test and document signatures
   * Review, test and document X.509
   * Provide an artifact containing the CryptoAPI without any Qi4j dependencies

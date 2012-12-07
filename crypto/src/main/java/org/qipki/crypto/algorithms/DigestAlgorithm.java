@@ -17,7 +17,7 @@ package org.qipki.crypto.algorithms;
  * @see http://en.wikipedia.org/wiki/Hash_algorithm
  */
 public enum DigestAlgorithm
-        implements Algorithm
+    implements Algorithm
 {
 
     /**
