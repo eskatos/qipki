@@ -27,11 +27,15 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
@@ -71,6 +75,8 @@ import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.qipki.commons.crypto.values.x509.X509GeneralNameValue;
+import org.qipki.crypto.x509.X509GeneralName;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -271,7 +277,11 @@ public class QiPkiHttpCaTest
         KeyPair keyPair = asymGenerator.generateKeyPair( new AsymetricGeneratorParameters( AsymetricAlgorithm.RSA, 512 ) );
         PKCS10CertificationRequest pkcs10 = x509Generator.generatePKCS10(
                 new DistinguishedName( "CN=qipki" ), keyPair,
-                new GeneralNames( new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ) ) );
+                new GeneralNames( new DERSequence( new ASN1Encodable[]
+                {
+                    new GeneralName( GeneralName.rfc822Name, "qipki@codeartisans.org" ),
+                    new GeneralName( GeneralName.dNSName, "qipki.org" )
+                } ) ) );
         String pkcs10PEM = cryptio.asPEM( pkcs10 ).toString();
         LOGGER.debug( "Will request a new X509 with the following PKCS#10: " + pkcs10PEM );
         X509FactoryParamsValue x509FactoryParams = paramsFactory.createX509FactoryParams( ca.uri().get(), sslClientProfile.uri().get(), pkcs10PEM );
@@ -292,6 +302,14 @@ public class QiPkiHttpCaTest
 
         assertTrue( newX509Detail.keysExtensions().get().extendedKeyUsages().get().extendedKeyUsages().get().contains( ExtendedKeyUsage.clientAuth ) );
         assertTrue( newX509Detail.keysExtensions().get().netscapeCertTypes().get().netscapeCertTypes().get().contains( NetscapeCertType.sslClient ) );
+        assertEquals( 2, newX509Detail.namesExtensions().get().subjectAlternativeNames().get().alternativeNames().get().size() );
+        Iterator<X509GeneralNameValue> sanIterator = newX509Detail.namesExtensions().get().subjectAlternativeNames().get().alternativeNames().get().iterator();
+        X509GeneralNameValue rfc822San = sanIterator.next();
+        X509GeneralNameValue dnsSan = sanIterator.next();
+        assertEquals( X509GeneralName.rfc822Name, rfc822San.nameType().get() );
+        assertEquals( "qipki@codeartisans.org", rfc822San.nameValue().get() );
+        assertEquals( X509GeneralName.dNSName, dnsSan.nameType().get() );
+        assertEquals( "qipki.org", dnsSan.nameValue().get() );
 
 
         // Get X509 list
